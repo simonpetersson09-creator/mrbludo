@@ -81,6 +81,36 @@ function SettingsPage() {
         </div>
 
         <Section title={t("profile")}>
+          <div className="flex items-center gap-3 rounded-2xl border border-border/40 bg-secondary/50 p-3">
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              aria-label={t("changeAvatar")}
+              disabled={busy}
+              className="group relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary/30 to-primary/10 ring-2 ring-primary/30 ring-offset-2 ring-offset-background transition active:scale-95 disabled:opacity-60"
+            >
+              {avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : <User className="h-6 w-6 text-primary/70" />}
+              <span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 group-active:opacity-100">
+                <Camera className="h-6 w-6 text-white" />
+              </span>
+            </button>
+            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={pick} />
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-display text-sm font-bold">{s.name}</p>
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                <button type="button" onClick={() => fileRef.current?.click()} disabled={busy}
+                  className="min-h-9 rounded-full bg-primary/15 px-2.5 py-1.5 text-xs font-semibold text-primary transition-colors active:bg-primary/25 disabled:opacity-60">
+                  {t("changeAvatar")}
+                </button>
+                {avatar && (
+                  <button type="button" onClick={removePicture} disabled={busy}
+                    className="min-h-9 rounded-full bg-destructive/10 px-2.5 py-1.5 text-xs font-semibold text-destructive transition-colors active:bg-destructive/20 disabled:opacity-60">
+                    {t("removeAvatar")}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
           <Card>
             {editingName ? (
               <div className="flex items-center gap-3 px-3 py-2.5">
