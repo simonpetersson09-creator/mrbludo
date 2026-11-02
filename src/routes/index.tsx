@@ -1,24 +1,55 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { BarChart3, BookOpen, Play, Settings, Users, Zap } from "lucide-react";
+import { createGame } from "@/lib/ludo/engine";
+import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
+import heroImg from "@/assets/ludo-hero.jpg";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Mr. B Ludo – klassiskt Ludo för mobilen" },
+      { name: "description", content: "Spela klassiskt Ludo mot datorn eller vänner. Från skaparna av Mr. B Yatzy." },
+      { property: "og:title", content: "Mr. B Ludo" },
+      { property: "og:description", content: "Spela klassiskt Ludo mot datorn eller vänner." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: HomePage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function HomePage() {
+  const navigate = useNavigate();
+  const [hasGame, setHasGame] = useState(false);
+  useEffect(() => setHasGame(!!loadGame()), []);
+
+  const quick = () => {
+    const name = loadSettings().name;
+    saveGame(createGame([
+      { id: "p0", name, color: 0, isBot: false },
+      { id: "p1", name: "Dator Gul", color: 2, isBot: true },
+    ]));
+    navigate({ to: "/play" });
+  };
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="app-screen flex flex-col items-center">
+      <img src={heroImg} alt="" width={720} height={720} className="mt-2 h-40 w-40 rounded-3xl object-cover shadow-2xl" />
+      <h1 className="brand-title mt-4 text-4xl">Mr. B Ludo</h1>
+      <p className="mb-6 text-sm text-muted-foreground">Klassiskt Ludo – fyra pjäser, en tärning</p>
+      <div className="home-stack">
+        {hasGame && (
+          <Link to="/play" className="home-action home-action-success"><Play size={16} /> Fortsätt pågående match</Link>
+        )}
+        <button className="home-action" onClick={quick}><Zap size={16} /> Snabbmatch mot datorn</button>
+        <Link to="/setup" className="home-action"><Users size={16} /> Ny match (2–4 spelare)</Link>
+        <div className="mt-3 grid grid-cols-3 gap-[7px]">
+          <Link to="/stats" className="home-action home-action-ghost"><BarChart3 size={16} /> Statistik</Link>
+          <Link to="/rules" className="home-action home-action-ghost"><BookOpen size={16} /> Regler</Link>
+          <Link to="/settings" className="home-action home-action-ghost"><Settings size={16} /></Link>
+        </div>
+      </div>
+    </main>
   );
 }

@@ -1,0 +1,477 @@
+/**
+ * Animation driver for a single die.
+ *
+ * Design notes:
+ * - Runs entirely inside `useFrame`; it never calls `setState`, so a rolling
+ *   die triggers zero React re-renders.
+ * - All vector/quaternion objects are allocated once per die (refs), so the
+ *   frame loop performs no allocations and produces no GC pressure.
+ * - The final orientation is computed up-front from the requested value, so
+ *   the die is guaranteed to land on the correct face.
+ */
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Group, Quaternion, Vector3 } from "three";
+import {
+  bounceHeight,
+  easeOutCubic,
+  easeOutQuart,
+  getFaceQuaternion,
+  randomAxis,
+  randomInt,
+} from "./diceRotations";
+import type { DiceValue } from "./types";
+import { isDiceAwaiting, setDieFlying } from "./await-store";
+
+/** Respects the OS "reduce motion" setting; animations become near-instant. */
+export function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return reduced;
+}
+
+interface Options {
+  value: DiceValue;
+  /** Toggling this to `true` starts a new roll. */
+  rolling: boolean;
+  /** Held dice keep their orientation and skip the animation entirely. */
+  held: boolean;
+  /** Base duration in seconds. */
+  duration: number;
+  /** Die index, used to stagger and vary the animation. */
+  index: number;
+  /** Die size, used to scale the bounce height. */
+  size: number;
+  /** World vector pointing right on screen — the entry direction. */
+  screenRight?: [number, number, number] | undefined;
+  /** World vector pointing up on screen — the bounce direction. */
+  screenUp?: [number, number, number] | undefined;
+  /**
+   * Bump this number to play the "clear the table" reset: the dice sweep out
+   * to the right (the direction they enter from), then glide back in on a
+   * neutral orientation. Used when a turn ends.
+   */
+  resetKey?: number;
+  cleared?: boolean;
+}
+
+
+const DEFAULT_RIGHT: [number, number, number] = [1, 0, 0];
+const DEFAULT_UP: [number, number, number] = [0, 1, 0];
+
+const easeInCubic = (t: number) => t * t * t;
+
+/** Point in the roll (0–1) where a die waits for a server-decided value. */
+const AWAIT_HOLD_T = 0.55;
+/** Radians per second of extra tumble while waiting. */
+const AWAIT_SPIN_SPEED = 9;
+const IDENTITY = new Quaternion();
+
+
+export function useDiceAnimation({
+  value,
+  rolling,
+  held,
+  duration,
+  index,
+  size,
+  screenRight = DEFAULT_RIGHT,
+  screenUp = DEFAULT_UP,
+  resetKey = 0,
+  cleared = false,
+}: Options) {
+
+  const groupRef = useRef<Group>(null);
+  /** Non-rotated outer group: carries the fly-in/bounce translation. */
+  const travelRef = useRef<Group>(null);
+  const reducedMotion = usePrefersReducedMotion();
+  const previousResetKey = useRef(resetKey);
+  const initiallyCleared = useRef(cleared);
+
+  // Per-die scratch objects — allocated once, mutated in place every frame.
+  const state = useMemo(
+    () => ({
+      target: new Quaternion(),
+      offsetA: new Quaternion(),
+      offsetB: new Quaternion(),
+      axisA: randomAxis(new Vector3()),
+      axisB: randomAxis(new Vector3()),
+      right: new Vector3(1, 0, 0),
+      up: new Vector3(0, 1, 0),
+      move: new Vector3(),
+      /** Orientation a smooth catch-up settle starts from. */
+      settleFrom: new Quaternion(),
+      settleT: 0,
+      settling: false,
+      turnsA: 2,
+      turnsB: 1,
+      elapsed: 0,
+      duration,
+      delay: 0,
+      animating: false,
+      /** How far off-screen (to the right) the die starts. */
+      entry: 0,
+      /** Value the die is currently resting on (-1 = never settled). */
+      settledValue: -1 as number,
+      /** Value the currently running animation resolves to. */
+      rollValue: -1 as number,
+      /* --- turn-reset sweep ------------------------------------------- */
+      /** True while leaving the table or waiting off-screen for the next roll. */
+      sweeping: false,
+      sweepT: 0,
+      sweepDelay: 0,
+      sweepDuration: 0.78,
+      sweepDistance: 0,
+      /** Orientation the sweep starts from (current resting pose). */
+      sweepFrom: new Quaternion(),
+      sweepSpin: new Quaternion(),
+      sweepAxis: randomAxis(new Vector3()),
+      /** A roll requested while the sweep is still on its way out. */
+      pendingRoll: false,
+      /* --- server-decided rolls ------------------------------------- */
+      /** Pose correction after a mid-flight re-aim; decays to identity. */
+      corr: new Quaternion(),
+      corrNow: new Quaternion(),
+      corrT0: 1,
+      /** Extra spin while waiting for the server's value. */
+      spin: 0,
+      spinQ: new Quaternion(),
+      waiting: false,
+      scratch: new Quaternion(),
+    }),
+    [duration],
+  );
+
+  /**
+   * Make `target * corr * offsets(t)` equal the pose currently on screen, so
+   * changing target (or dropping the waiting spin) never makes the die jump.
+   */
+  const rebase = (current: Quaternion, t: number) => {
+    const a = (1 - easeOutCubic(t)) * state.turnsA * Math.PI * 2;
+    const b = (1 - easeOutQuart(t)) * state.turnsB * Math.PI * 2;
+    state.offsetA.setFromAxisAngle(state.axisA, a);
+    state.offsetB.setFromAxisAngle(state.axisB, b);
+    // offsets = A * B  →  corr = target⁻¹ * current * (A * B)⁻¹
+    state.scratch.copy(state.offsetA).multiply(state.offsetB).invert();
+    state.corr.copy(state.target).invert().multiply(current).multiply(state.scratch);
+    state.corrT0 = t;
+    state.spin = 0;
+  };
+
+
+  /** Snap immediately to the requested face (used on mount and for held dice). */
+  const settle = () => {
+    const group = groupRef.current;
+    if (!group) return;
+    getFaceQuaternion(value, randomInt(0, 3), state.target);
+    group.quaternion.copy(state.target);
+    travelRef.current?.position.set(0, 0, 0);
+    state.settledValue = value;
+  };
+
+  /**
+   * Turn reset: sweep the dice off to the right and keep them there. The next
+   * player's first real roll is the only motion that brings them back in.
+   *
+   * NOTE: this effect is declared *before* the roll effect on purpose. When a
+   * turn ends, the new (reset) dice values and the bumped `resetKey` arrive in
+   * the same commit; running the sweep first means `state.sweeping` is already
+   * true when the value effect runs, so it can never hard-snap the die to the
+   * new number while it is still on screen.
+   */
+  useEffect(() => {
+    const changed = previousResetKey.current !== resetKey;
+    previousResetKey.current = resetKey;
+    const restoreCleared = initiallyCleared.current;
+    initiallyCleared.current = false;
+    if (!changed && !restoreCleared) return;
+    const group = groupRef.current;
+    if (!group) return;
+
+    state.sweepFrom.copy(group.quaternion);
+    // Land straight, without the random yaw variation used after a roll.
+    getFaceQuaternion(value, 0, state.target);
+    randomAxis(state.sweepAxis);
+    state.sweepT = changed ? 0 : 0.8;
+    // All five dice must leave on the same clock. A per-die delay here made
+    // some dice still visible while others had already started the next roll.
+    state.sweepDelay = 0;
+    state.sweepDuration = reducedMotion ? 0.01 : 0.8;
+    state.sweepDistance = size * 11;
+    state.settling = false;
+    state.animating = false;
+    state.pendingRoll = false;
+    state.sweeping = true;
+    state.settledValue = value;
+    setDieFlying(index, false);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetKey]);
+
+  // Start / restart a roll whenever `rolling` flips on (held dice are skipped).
+  useEffect(() => {
+    const group = groupRef.current;
+    if (!group) return;
+
+    if (!rolling || held) {
+      // If a queued first roll ended while frames were suspended, the game
+      // now owns valid dice. Restore them, but keep a genuinely cleared table
+      // hidden until its next roll. A held die must never wait for a new flight.
+      if (state.sweeping && !cleared && (state.pendingRoll || held)) {
+        state.sweeping = false;
+        state.pendingRoll = false;
+        state.settling = false;
+        settle();
+        setDieFlying(index, false);
+      }
+      if (state.animating) {
+        // Interrupted mid-roll (rolling window ended early, or the die was
+        // held while tumbling): glide to the exact target orientation over a
+        // few frames instead of hard-snapping, which reads as the number
+        // suddenly changing after the die looked like it had landed.
+        state.settleFrom.copy(group.quaternion);
+        state.settleT = 0;
+        state.settling = true;
+        state.settledValue = state.rollValue;
+        state.animating = false;
+      }
+      // Never re-snap a die that already shows the requested value: doing so
+      // would pick a new random yaw and make the number appear to change when
+      // the roll finishes.
+      if (state.sweeping) {
+        // A value change while leaving or waiting off-screen must not touch
+        // the visible pose. It only updates the next roll's landing target.
+        getFaceQuaternion(value, 0, state.target);
+        state.settledValue = value;
+      } else if (state.settledValue !== value) {
+        state.settling = false;
+        settle();
+      }
+
+      state.animating = false;
+      state.pendingRoll = false;
+      return;
+    }
+
+    // The dice values for a remote player arrive from the server *after* the
+    // roll has already started locally. That must only re-aim the landing
+    // face — restarting the flight would teleport the die back off-screen and
+    // throw it in a second time (the "dice disappear for half a second" bug).
+    if (state.animating || state.pendingRoll) {
+      if (state.rollValue === value) return;
+      getFaceQuaternion(value, randomInt(0, 3), state.target);
+      state.rollValue = value;
+      // Mid-flight re-aim: keep the visible pose continuous instead of
+      // jumping to the new target (seen as a twitch near the end).
+      if (state.animating) {
+        const tNow = Math.min(Math.max((state.elapsed - state.delay) / state.duration, 0), 1);
+        rebase(group.quaternion, tNow);
+      }
+      return;
+    }
+
+    getFaceQuaternion(value, randomInt(0, 3), state.target);
+    randomAxis(state.axisA);
+    randomAxis(state.axisB);
+    state.corr.identity();
+    state.corrT0 = 1;
+    state.spin = 0;
+    state.waiting = false;
+    // Livelier tumble: more revolutions while still landing exactly on target.
+    state.turnsA = randomInt(3, 5);
+    state.turnsB = randomInt(2, 3);
+    state.elapsed = 0;
+    // Keep the total (delay + duration) well inside a ~1.6 s roll window, with
+    // margin for dropped frames, so `rolling` rarely cuts the animation short.
+    state.duration = reducedMotion ? 0.18 : duration * (0.8 + Math.random() * 0.1);
+    state.delay = reducedMotion ? 0 : index * 0.04;
+    // Every die enters from off-screen right, with a little per-die variance.
+    state.entry = reducedMotion ? 0 : size * (11 + Math.random() * 2.5);
+
+    // A roll starting during the hand-off waits until the die is fully outside,
+    // then uses the exact same entry animation as every other roll.
+    state.settling = false;
+    if (state.sweeping && !reducedMotion) {
+      // Queue the roll without changing the shared sweep clock. Re-seeding or
+      // accelerating each die independently caused the brief split/vanish at
+      // an AI hand-off. All five now reach the off-screen hand-over together.
+      state.pendingRoll = true;
+      state.animating = false;
+    } else {
+      state.sweeping = false;
+      state.pendingRoll = false;
+      state.animating = true;
+      setDieFlying(index, true);
+    }
+    state.elapsed = 0;
+
+    state.rollValue = value;
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rolling, held, value, duration, reducedMotion, index, size, cleared]);
+
+  // A die unmounted mid-flight must not block the next landing signal.
+  useEffect(() => () => setDieFlying(index, false), [index]);
+
+
+
+  useFrame((_, delta) => {
+    const group = groupRef.current;
+    if (!group) return;
+
+    if (state.sweeping) {
+      state.right.set(screenRight[0], screenRight[1], screenRight[2]).normalize();
+      state.up.set(screenUp[0], screenUp[1], screenUp[2]).normalize();
+
+      state.sweepT += Math.min(delta, 1 / 20);
+      const t = Math.min(
+        Math.max((state.sweepT - state.sweepDelay) / state.sweepDuration, 0),
+        1,
+      );
+
+      // 0 → 0.44: accelerate off-screen right. At 0.44 the die waits outside
+      // until the next player's first real roll starts; there is no fake return.
+      const OUT = 0.44;
+      let offset: number;
+      let lift: number;
+      let angle: number;
+      if (t < OUT) {
+        const k = easeInCubic(t / OUT);
+        offset = state.sweepDistance * k;
+        lift = size * 0.22 * Math.sin(Math.PI * k);
+        angle = k * Math.PI * 1.2;
+        // Keep the exact face the die landed on all the way out — the number
+        // must not change while the die is still visible.
+        group.quaternion.copy(state.sweepFrom);
+
+      } else {
+        offset = state.sweepDistance;
+        lift = 0;
+        angle = Math.PI * 1.2;
+        group.quaternion.copy(state.sweepFrom);
+      }
+      state.sweepSpin.setFromAxisAngle(state.sweepAxis, angle);
+      group.quaternion.multiply(state.sweepSpin);
+
+      const travelSweep = travelRef.current;
+      if (travelSweep) {
+        state.move
+          .copy(state.right)
+          .multiplyScalar(offset)
+          .addScaledVector(state.up, lift);
+        travelSweep.position.copy(state.move);
+      }
+
+      // Queued roll: hand over the moment the die is off-screen, entering from
+      // exactly where it is, so the fly-in matches a normal roll one-to-one.
+      if (state.pendingRoll && t >= OUT) {
+        // Start with the same entry distance and stagger used by every other
+        // roll. The hand-over itself happens while all dice are off-screen.
+        state.entry = reducedMotion ? 0 : size * (11 + Math.random() * 2.5);
+        state.delay = reducedMotion ? 0 : index * 0.04;
+        state.sweeping = false;
+        state.pendingRoll = false;
+        state.animating = true;
+        setDieFlying(index, true);
+        state.elapsed = 0;
+        return;
+      }
+
+      // With no queued roll, deliberately remain off-screen. Clearing the
+      // sweep here used to bring the reset dice back before AI Kast 1, after
+      // which the real roll threw them in a second time.
+      return;
+    }
+
+
+    if (state.settling) {
+      state.settleT = Math.min(state.settleT + Math.min(delta, 1 / 20) / 0.22, 1);
+      group.quaternion
+        .copy(state.settleFrom)
+        .slerp(state.target, easeOutCubic(state.settleT));
+      const travelNow = travelRef.current;
+      if (travelNow) travelNow.position.multiplyScalar(1 - easeOutCubic(state.settleT));
+      if (state.settleT >= 1) {
+        group.quaternion.copy(state.target);
+        travelNow?.position.set(0, 0, 0);
+        state.settling = false;
+        setDieFlying(index, false);
+      }
+      return;
+    }
+
+    if (!state.animating) return;
+
+    state.right.set(screenRight[0], screenRight[1], screenRight[2]).normalize();
+    state.up.set(screenUp[0], screenUp[1], screenUp[2]).normalize();
+
+    const dt = Math.min(delta, 1 / 20); // clamp to survive frame drops
+    state.elapsed += dt;
+    let t = Math.min(Math.max((state.elapsed - state.delay) / state.duration, 0), 1);
+
+    // Server hasn't decided the value yet: keep tumbling in place just before
+    // the landing phase. When it arrives, fold the extra spin into the
+    // correction so the motion continues without any jump.
+    if (isDiceAwaiting() && t > AWAIT_HOLD_T) {
+      state.elapsed = state.delay + AWAIT_HOLD_T * state.duration;
+      t = AWAIT_HOLD_T;
+      state.spin += dt * AWAIT_SPIN_SPEED;
+      state.waiting = true;
+    } else if (state.waiting) {
+      state.waiting = false;
+      rebase(group.quaternion, t);
+    }
+
+    // Two decaying rotations around independent axes -> natural tumbling.
+    // Both use whole turns, so they resolve to identity exactly at t = 1,
+    // which guarantees the requested face ends up upwards.
+    const a = (1 - easeOutCubic(t)) * state.turnsA * Math.PI * 2;
+    const b = (1 - easeOutQuart(t)) * state.turnsB * Math.PI * 2;
+    state.offsetA.setFromAxisAngle(state.axisA, a);
+    state.offsetB.setFromAxisAngle(state.axisB, b);
+    // Correction left over from a re-aim; decays to identity by t = 1 so the
+    // die still lands exactly on its target face.
+    const k = state.corrT0 >= 1 ? 1 : Math.min(Math.max((t - state.corrT0) / (1 - state.corrT0), 0), 1);
+    state.corrNow.copy(state.corr).slerp(IDENTITY, easeOutCubic(k));
+    state.spinQ.setFromAxisAngle(state.axisB, state.spin);
+    group.quaternion
+      .copy(state.target)
+      .multiply(state.corrNow)
+      .multiply(state.spinQ)
+      .multiply(state.offsetA)
+      .multiply(state.offsetB);
+
+    // Slide in from the right: the horizontal travel resolves at t = 0.7,
+    // exactly where `bounceHeight` switches from the toss arc to the single
+    // damped bounce, so the die lands and settles in one continuous motion.
+    const th = Math.min(t / 0.7, 1);
+    const travelOffset = state.entry * (1 - easeOutCubic(th));
+    const lift = bounceHeight(t, size * 0.6);
+
+    const travel = travelRef.current;
+    if (travel) {
+      state.move
+        .copy(state.right)
+        .multiplyScalar(travelOffset)
+        .addScaledVector(state.up, lift);
+      travel.position.copy(state.move);
+    }
+
+    if (t >= 1) {
+      group.quaternion.copy(state.target);
+      travel?.position.set(0, 0, 0);
+      state.animating = false;
+      state.settledValue = state.rollValue;
+      setDieFlying(index, false);
+    }
+  });
+
+  return { groupRef, travelRef };
+}

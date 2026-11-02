@@ -5,27 +5,18 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * Mr. B Ludo design system – same identity as Mr. B Yatzy:
+ * deep teal table, warm gold accents, Inter + Space Grotesk.
  */
 
 @theme inline {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -45,100 +36,92 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-gold: var(--game-gold);
+  --color-gold-light: var(--game-gold-light);
+  --color-info: var(--game-info);
+  --color-success: var(--game-success);
+  --color-surface: var(--game-surface);
+  --color-ludo-red: var(--ludo-red);
+  --color-ludo-green: var(--ludo-green);
+  --color-ludo-yellow: var(--ludo-yellow);
+  --color-ludo-blue: var(--ludo-blue);
+  --color-board: var(--board);
+  --color-board-line: var(--board-line);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
-}
-
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --radius: 0.875rem;
+  --background: hsl(195 50% 14%);
+  --foreground: hsl(38 30% 90%);
+  --card: hsl(195 42% 18%);
+  --card-foreground: hsl(38 30% 90%);
+  --popover: hsl(195 42% 18%);
+  --popover-foreground: hsl(38 30% 90%);
+  --primary: hsl(36 78% 55%);
+  --primary-foreground: hsl(195 50% 10%);
+  --secondary: hsl(195 38% 20%);
+  --secondary-foreground: hsl(38 25% 82%);
+  --muted: hsl(195 32% 22%);
+  --muted-foreground: hsl(195 15% 60%);
+  --accent: hsl(36 78% 55%);
+  --accent-foreground: hsl(195 50% 10%);
+  --destructive: hsl(0 65% 48%);
+  --destructive-foreground: hsl(38 30% 93%);
+  --border: hsl(195 28% 24%);
+  --input: hsl(195 28% 24%);
+  --ring: hsl(36 78% 55%);
+  --game-gold: hsl(36 78% 55%);
+  --game-gold-light: hsl(38 72% 68%);
+  --game-surface: hsl(195 40% 17%);
+  --game-success: hsl(160 55% 42%);
+  --game-success-light: hsl(160 58% 60%);
+  --game-info: hsl(200 65% 50%);
+  --game-info-light: hsl(195 80% 70%);
+  --ludo-red: hsl(350 65% 52%);
+  --ludo-green: hsl(155 60% 42%);
+  --ludo-yellow: hsl(42 85% 55%);
+  --ludo-blue: hsl(210 70% 52%);
+  --board: hsl(40 30% 96%);
+  --board-line: hsl(195 12% 72%);
 }
 
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
+  * { border-color: var(--color-border); }
+  html, body { background-color: var(--color-background); color: var(--color-foreground); font-family: var(--font-sans); -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
+  h1, h2, h3 { font-family: var(--font-display); }
+}
 
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-  }
+/* Shared sizes copied from Yatzy: 44px buttons, 14px text, 10px radius, 360px stack. */
+.home-stack { width: 100%; max-width: 360px; margin-inline: auto; display: flex; flex-direction: column; gap: 7px; }
+.home-action {
+  height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px;
+  border-radius: 10px; font-weight: 700; font-size: 14px; line-height: 1.15;
+  background: linear-gradient(to right, var(--game-info-light), var(--game-info));
+  color: var(--primary-foreground); box-shadow: 0 4px 16px color-mix(in oklab, var(--game-info) 30%, transparent);
+  transition: box-shadow .2s, transform .1s, opacity .2s;
+}
+.home-action:active { transform: scale(.98); box-shadow: 0 2px 8px color-mix(in oklab, var(--game-info) 20%, transparent); }
+.home-action:disabled { opacity: .45; }
+.home-action-gold { background: linear-gradient(to right, var(--game-gold-light), var(--game-gold)); box-shadow: 0 4px 14px color-mix(in oklab, var(--game-gold) 35%, transparent); }
+.home-action-success { background: linear-gradient(to right, var(--game-success-light), var(--game-success)); box-shadow: 0 4px 14px color-mix(in oklab, var(--game-success) 35%, transparent); }
+.home-action-ghost { background: var(--secondary); color: var(--secondary-foreground); box-shadow: none; border: 1px solid var(--border); }
+.home-action-danger { background: color-mix(in oklab, var(--destructive) 85%, var(--background)); color: var(--destructive-foreground); box-shadow: none; }
+
+.brand-title {
+  font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em;
+  background: linear-gradient(180deg, hsl(46 88% 82%), hsl(42 80% 66%) 55%, hsl(38 68% 54%));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+.app-screen { min-height: 100dvh; padding: calc(16px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); }
+.game-screen { height: 100dvh; overflow: hidden; display: flex; flex-direction: column; padding: calc(8px + env(safe-area-inset-top)) 10px calc(10px + env(safe-area-inset-bottom)); gap: 8px; }
+
+.piece { transition: transform 260ms cubic-bezier(.3,.8,.4,1); }
+.piece-legal circle.piece-ring { animation: piece-pulse 900ms ease-in-out infinite; }
+@keyframes piece-pulse { 0%,100% { opacity: .35; r: .46; } 50% { opacity: 1; r: .52; } }
+.capture-flash { animation: capture 500ms ease-out; }
+@keyframes capture { 0% { opacity: 1; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.6); } }
+@media (prefers-reduced-motion: reduce) {
+  .piece { transition: none; }
+  .piece-legal circle.piece-ring { animation: none; opacity: 1; }
 }
