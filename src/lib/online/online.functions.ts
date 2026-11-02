@@ -63,7 +63,7 @@ async function commit(db: Admin, matchId: string, version: number, prev: GameSta
     ...(finished ? { status: "finished", finished_at: now, verified: next.players.length >= 2 } : {}),
   }).eq("id", matchId).eq("version", version).eq("status", "playing").select("id");
   if (error) throw error;
-  if (!data?.length) throw new MatchError("conflict", "Matchen ändrades samtidigt – försök igen");
+  if (!data?.length) throw new MatchError("conflict");
   const deltas = statDeltas(prev, next);
   for (const [uid, d] of Object.entries(deltas)) {
     const { data: s } = await db.from("player_stats").select("*").eq("user_id", uid).maybeSingle();
@@ -79,7 +79,7 @@ async function commit(db: Admin, matchId: string, version: number, prev: GameSta
 }
 
 function fail(e: unknown): never {
-  if (e instanceof MatchError) throw new Error(e.message);
+  if (e instanceof MatchError) throw new Error("err:" + e.code);
   throw e;
 }
 
@@ -99,9 +99,9 @@ export const getMe = createServerFn({ method: "POST" }).middleware([requireSupab
 export const updateProfile = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((d: { display_name: string; avatar: string; country: string }) => {
     const name = String(d.display_name ?? "").trim().slice(0, 20);
-    if (name.length < 2) throw new Error("Namnet måste ha minst 2 tecken");
+    if (name.length < 2) throw new Error("err:name_short");
     const country = String(d.country ?? "").toUpperCase();
-    if (!/^[A-Z]{2}$/.test(country)) throw new Error("Ogiltigt land");
+    if (!/^[A-Z]{2}$/.test(country)) throw new Error("err:invalid_country");
     return { display_name: name, avatar: String(d.avatar ?? "🎲").slice(0, 8), country };
   })
   .handler(async ({ data, context }) => {
@@ -124,7 +124,7 @@ export const createMatch = createServerFn({ method: "POST" }).middleware([requir
         return m;
       }
     }
-    throw new Error("Kunde inte skapa match");
+    throw new Error("err:create_failed");
   });
 
 export const joinByCode = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
@@ -132,11 +132,11 @@ export const joinByCode = createServerFn({ method: "POST" }).middleware([require
   .handler(async ({ data, context }) => {
     const db = await admin();
     const { data: m } = await db.from("matches").select("id, status, max_players").eq("code", data.code).maybeSingle();
-    if (!m) throw new Error("Ingen match med den koden");
+    if (!m) throw new Error("err:no_match_code");
     const { data: mine } = await db.from("match_players").select("seat").eq("match_id", m.id).eq("user_id", context.userId).maybeSingle();
     if (mine) return { id: m.id };
-    if (m.status !== "waiting") throw new Error("Matchen har redan börjat");
-    if (!(await seatUser(db, m.id, m.max_players, context.userId))) throw new Error("Matchen är full");
+    if (m.status !== "waiting") throw new Error("err:already_started");
+    if (!(await seatUser(db, m.id, m.max_players, context.userId))) throw new Error("err:match_full");
     await maybeAutostart(db, m.id);
     return { id: m.id };
   });
@@ -167,10 +167,10 @@ export const startMatch = createServerFn({ method: "POST" }).middleware([require
   .handler(async ({ data, context }) => {
     const db = await admin();
     const { data: m } = await db.from("matches").select("*").eq("id", data.matchId).single();
-    if (!m || m.host_id !== context.userId) throw new Error("Bara värden kan starta");
+    if (!m || m.host_id !== context.userId) throw new Error("err:host_only");
     if (m.status !== "waiting") return { ok: true };
     const { data: seats } = await db.from("match_players").select("user_id, seat, display_name").eq("match_id", m.id);
-    if ((seats?.length ?? 0) < 2) throw new Error("Minst 2 spelare krävs");
+    if ((seats?.length ?? 0) < 2) throw new Error("err:min_players");
     await doStart(db, m.id, m.version, seats!);
     return { ok: true };
   });
@@ -202,15 +202,15 @@ export const leaveMatch = createServerFn({ method: "POST" }).middleware([require
 export const act = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
   .inputValidator((d: { matchId: string; version: number; action: Action }) => {
     const a = d.action;
-    if (!a || !["roll", "move", "forfeit"].includes(a.kind)) throw new Error("Bad action");
+    if (!a || !["roll", "move", "forfeit"].includes(a.kind)) throw new Error("err:bad_action");
     const action: Action = a.kind === "move" ? { kind: "move", piece: Math.trunc(Number(a.piece)) } : { kind: a.kind };
     return { matchId: String(d.matchId), version: Math.trunc(Number(d.version)), action };
   })
   .handler(async ({ data, context }) => {
     const db = await admin();
     const { data: m } = await db.from("matches").select("*").eq("id", data.matchId).single();
-    if (!m || m.status !== "playing") throw new Error("Matchen är inte igång");
-    if (m.version !== data.version) throw new Error("Matchen ändrades samtidigt – försök igen");
+    if (!m || m.status !== "playing") throw new Error("err:not_playing");
+    if (m.version !== data.version) throw new Error("err:conflict");
     const prev = m.state as unknown as GameState;
     try {
       const next = performAction(prev, context.userId, data.action, secureRoll);
@@ -250,8 +250,8 @@ export const sendFriendRequest = createServerFn({ method: "POST" }).middleware([
   .handler(async ({ data, context }) => {
     const db = await admin();
     const { data: target } = await db.from("profiles").select("id").eq("friend_code", data.friendCode).maybeSingle();
-    if (!target) throw new Error("Hittade ingen spelare med den koden");
-    if (target.id === context.userId) throw new Error("Det är din egen kod");
+    if (!target) throw new Error("err:no_player_code");
+    if (target.id === context.userId) throw new Error("err:own_code");
     const { data: existing } = await db.from("friendships").select("*")
       .or(`and(requester.eq.${context.userId},addressee.eq.${target.id}),and(requester.eq.${target.id},addressee.eq.${context.userId})`).maybeSingle();
     if (existing) {
@@ -268,7 +268,7 @@ export const respondFriend = createServerFn({ method: "POST" }).middleware([requ
   .handler(async ({ data, context }) => {
     const db = await admin();
     const { data: f } = await db.from("friendships").select("*").eq("id", data.id).single();
-    if (!f || (f.addressee !== context.userId && f.requester !== context.userId)) throw new Error("Saknas");
+    if (!f || (f.addressee !== context.userId && f.requester !== context.userId)) throw new Error("err:missing");
     if (data.accept && f.addressee === context.userId) await db.from("friendships").update({ status: "accepted" }).eq("id", f.id);
     else await db.from("friendships").delete().eq("id", f.id);
     return { ok: true };
@@ -296,9 +296,9 @@ export const inviteFriend = createServerFn({ method: "POST" }).middleware([requi
     const db = await admin();
     const { data: f } = await db.from("friendships").select("id").eq("status", "accepted")
       .or(`and(requester.eq.${context.userId},addressee.eq.${data.userId}),and(requester.eq.${data.userId},addressee.eq.${context.userId})`).maybeSingle();
-    if (!f) throw new Error("Ni är inte vänner");
+    if (!f) throw new Error("err:not_friends");
     const { data: me } = await db.from("match_players").select("seat").eq("match_id", data.matchId).eq("user_id", context.userId).maybeSingle();
-    if (!me) throw new Error("Du är inte med i matchen");
+    if (!me) throw new Error("err:not_in_match");
     await db.from("match_invites").insert({ match_id: data.matchId, from_user: context.userId, to_user: data.userId });
     return { ok: true };
   });
@@ -308,12 +308,12 @@ export const respondInvite = createServerFn({ method: "POST" }).middleware([requ
   .handler(async ({ data, context }) => {
     const db = await admin();
     const { data: inv } = await db.from("match_invites").select("*").eq("id", data.id).single();
-    if (!inv || inv.to_user !== context.userId) throw new Error("Saknas");
+    if (!inv || inv.to_user !== context.userId) throw new Error("err:missing");
     await db.from("match_invites").update({ status: data.accept ? "accepted" : "declined" }).eq("id", inv.id);
     if (!data.accept) return { matchId: null };
     const { data: m } = await db.from("matches").select("id, status, max_players").eq("id", inv.match_id).single();
-    if (!m || m.status !== "waiting") throw new Error("Matchen har redan börjat");
-    if (!(await seatUser(db, m.id, m.max_players, context.userId))) throw new Error("Matchen är full");
+    if (!m || m.status !== "waiting") throw new Error("err:already_started");
+    if (!(await seatUser(db, m.id, m.max_players, context.userId))) throw new Error("err:match_full");
     await maybeAutostart(db, m.id);
     return { matchId: m.id };
   });
@@ -349,7 +349,7 @@ export const logEvent = createServerFn({ method: "POST" }).middleware([requireSu
 
 export const adminOverview = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
-  if (!isAdmin) throw new Error("Forbidden");
+  if (!isAdmin) throw new Error("err:forbidden");
   const db = await admin();
   const day = 86_400_000;
   const now = Date.now();
