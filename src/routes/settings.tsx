@@ -1,7 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ArrowLeft, Check } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState, type ReactNode } from "react";
+import { ArrowLeft, BarChart3, Check, ChevronRight, Globe, Gauge, User, Vibrate } from "lucide-react";
 import { loadSettings, saveSettings, type Settings } from "@/lib/ludo/storage";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 
@@ -19,47 +18,130 @@ export const Route = createFileRoute("/settings")({
   component: SettingsPage,
 });
 
+// Layout ported from Yatzy's SettingsPage (sections, cards, rows, toggle).
+function Section({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div className="space-y-1.5">
+      <p className="select-none px-2 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground/80">{title}</p>
+      <div className="space-y-1.5">{children}</div>
+    </div>
+  );
+}
+function Card({ children }: { children: ReactNode }) {
+  return <div className="overflow-hidden rounded-2xl border border-border/40 bg-secondary/50">{children}</div>;
+}
+const rowCls = "flex min-h-11 w-full items-center gap-3 px-3 py-2.5 text-left transition-colors active:bg-secondary/60";
+
 function SettingsPage() {
   const { t, lang } = useTranslation();
+  const navigate = useNavigate();
   const [s, setS] = useState<Settings | null>(null);
+  const [editingName, setEditingName] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   useEffect(() => setS(loadSettings()), []);
   if (!s) return <main className="app-screen" />;
   const update = (patch: Partial<Settings>) => { const n = { ...s, ...patch }; setS(n); saveSettings(n); };
+  const current = LANGUAGES.find((l) => l.code === lang);
+
   return (
     <main className="app-screen">
-      <div className="home-stack">
-        <Link to="/" className="mb-2 flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft size={16} /> {t("back")}</Link>
-        <h1 className="brand-title mb-3 text-3xl">{t("settingsTitle")}</h1>
-        <label className="text-xs text-muted-foreground" htmlFor="name">{t("yourName")}</label>
-        <input id="name" maxLength={16} className="h-11 rounded-[10px] border bg-card px-3 text-sm outline-none focus:border-gold" value={s.name} onChange={(e) => update({ name: e.target.value })} />
-
-        <p className="mt-3 text-xs text-muted-foreground">{t("languageLabel")}</p>
-        <div className="grid grid-cols-2 gap-[7px]">
-          {LANGUAGES.map((l) => (
-            <button
-              key={l.code}
-              className={`flex h-11 items-center gap-2 rounded-[10px] border px-3 text-left text-sm ${l.code === lang ? "border-gold bg-card font-semibold" : "bg-surface"}`}
-              onClick={() => setLanguage(l.code)}
-            >
-              <span>{l.flag}</span>
-              <span className="min-w-0 flex-1 truncate">{l.label}</span>
-              {l.code === lang && <Check size={14} className="shrink-0 text-gold" />}
-            </button>
-          ))}
+      <div className="mx-auto mt-3 max-w-sm space-y-4">
+        <div className="flex items-center gap-3">
+          <button onClick={() => navigate({ to: "/" })} aria-label={t("back")} className="-ml-2 rounded-xl p-2.5 transition-colors active:bg-secondary/80">
+            <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+          </button>
+          <h1 className="font-display text-2xl font-bold">{t("settingsTitle")}</h1>
         </div>
 
-        <p className="mt-3 text-xs text-muted-foreground">{t("botSpeed")}</p>
-        <div className="grid grid-cols-3 gap-[7px]">
-          {(["slow", "normal", "fast"] as const).map((v) => (
-            <button key={v} className={`home-action ${s.botSpeed === v ? "home-action-gold" : "home-action-ghost"}`} onClick={() => update({ botSpeed: v })}>
-              {v === "slow" ? t("speedSlow") : v === "normal" ? t("speedNormal") : t("speedFast")}
+        <Section title={t("profile")}>
+          <Card>
+            {editingName ? (
+              <div className="flex items-center gap-3 px-3 py-2.5">
+                <User className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <input
+                  autoFocus maxLength={16} value={s.name} aria-label={t("yourName")}
+                  onChange={(e) => update({ name: e.target.value })}
+                  onKeyDown={(e) => e.key === "Enter" && setEditingName(false)}
+                  className="flex-1 border-b border-primary/40 bg-transparent py-1 text-sm font-medium transition-colors focus:border-primary focus:outline-none"
+                />
+                <button onClick={() => setEditingName(false)} aria-label="OK" className="rounded-lg bg-primary/15 p-1.5 active:bg-primary/25">
+                  <Check className="h-4 w-4 text-primary" />
+                </button>
+              </div>
+            ) : (
+              <button className={rowCls} onClick={() => setEditingName(true)}>
+                <User className="h-4 w-4 text-muted-foreground" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium">{t("yourName")}</p>
+                  <p className="truncate text-xs text-muted-foreground">{s.name}</p>
+                </div>
+              </button>
+            )}
+          </Card>
+        </Section>
+
+        <Section title={t("botSpeed")}>
+          <Card>
+            <div className="flex items-center gap-3 px-3 py-2.5">
+              <Gauge className="h-4 w-4 shrink-0 text-primary" />
+              <div className="grid flex-1 grid-cols-3 gap-1.5">
+                {(["slow", "normal", "fast"] as const).map((v) => (
+                  <button key={v} onClick={() => update({ botSpeed: v })}
+                    className={`min-h-9 rounded-full px-2 text-xs font-semibold transition-colors ${s.botSpeed === v ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}>
+                    {v === "slow" ? t("speedSlow") : v === "normal" ? t("speedNormal") : t("speedFast")}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="border-t border-border/40" />
+            <button type="button" role="switch" aria-checked={s.haptics} className={rowCls} onClick={() => update({ haptics: !s.haptics })}>
+              <Vibrate className="h-4 w-4 text-primary" />
+              <p className="flex-1 text-sm font-medium">{t("haptics")}</p>
+              <span className={`relative h-6 w-10 shrink-0 rounded-full transition-colors ${s.haptics ? "bg-primary" : "border border-border bg-secondary"}`}>
+                <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-foreground shadow transition-all ${s.haptics ? "left-[18px]" : "left-0.5"}`} />
+              </span>
             </button>
-          ))}
-        </div>
-        <div className="mt-3 flex h-11 items-center justify-between rounded-[10px] border bg-card px-3 text-sm">
-          <span>{t("haptics")}</span>
-          <Switch checked={s.haptics} onCheckedChange={(v) => update({ haptics: v })} />
-        </div>
+          </Card>
+        </Section>
+
+        <Section title={t("languageLabel")}>
+          <Card>
+            <button className={rowCls} aria-expanded={langOpen} onClick={() => setLangOpen((o) => !o)}>
+              <Globe className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium">{t("languageLabel")}</p>
+                <p className="truncate text-xs text-muted-foreground">{current?.flag} {current?.label}</p>
+              </div>
+              <ChevronRight className={`h-4 w-4 text-muted-foreground transition-transform ${langOpen ? "rotate-90" : ""}`} />
+            </button>
+            {langOpen && (
+              <div className="max-h-72 overflow-y-auto overscroll-contain border-t border-border/40">
+                {LANGUAGES.map((l, i) => (
+                  <button key={l.code} onClick={() => setLanguage(l.code)}
+                    className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors active:bg-secondary/60 ${i > 0 ? "border-t border-border/40" : ""}`}>
+                    <span className="text-xl leading-none">{l.flag}</span>
+                    <span className="flex-1 text-sm font-medium">{l.label}</span>
+                    {l.code === lang && (
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary">
+                        <Check className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </Card>
+        </Section>
+
+        <Section title={t("stats")}>
+          <Card>
+            <Link to="/stats" className={rowCls}>
+              <BarChart3 className="h-4 w-4 text-primary" />
+              <span className="flex-1 text-sm font-medium">{t("statsTitle")}</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </Link>
+          </Card>
+        </Section>
       </div>
     </main>
   );
