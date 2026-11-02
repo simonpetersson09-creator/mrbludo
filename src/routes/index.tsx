@@ -6,7 +6,7 @@ import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 import { QuickMatchSearch } from "@/components/ludo/QuickMatchSearch";
 import { HomeStats } from "@/components/ludo/HomeStats";
-import heroImg from "@/assets/ludo-hero.jpg";
+import mrBDie from "@/assets/mr-b-die.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
