@@ -9,6 +9,10 @@ import {
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { logEvent } from "@/lib/online/online.functions";
+import { deviceId, platform } from "@/lib/online/telemetry";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -115,11 +119,24 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  useEffect(() => {
+    const ping = () => logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
+    supabase.auth.getSession().then(({ data }) => { if (data.session) ping(); });
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      router.invalidate();
+      if (event === "SIGNED_IN") ping();
+      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [router, queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <Toaster position="top-center" />
     </QueryClientProvider>
   );
 }
