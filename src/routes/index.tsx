@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { BarChart3, BookOpen, Globe, Play, Settings, Users, Zap } from "lucide-react";
+import { BarChart3, BookOpen, Play, Settings, Users } from "lucide-react";
 import { createGame } from "@/lib/ludo/engine";
 import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
 import { useTranslation } from "@/lib/i18n";
