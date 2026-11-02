@@ -1,7 +1,7 @@
 import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput } from "./online-inputs";
 import type { GameState } from "@/lib/ludo/engine";
 import {
-  DROP_SECONDS, MatchError, TURN_SECONDS, autoStep, makeCode, performAction, secureRoll, startState, statDeltas,
+  BOT_SECONDS, DROP_SECONDS, MatchError, TURN_SECONDS, autoStep, makeCode, performAction, secureRoll, startState, statDeltas,
   type Action,
 } from "./match-logic";
 
@@ -45,8 +45,8 @@ async function maybeAutostart(db: Admin, matchId: string) {
   if ((seats?.length ?? 0) >= m.max_players) await doStart(db, m.id, m.version, (seats ?? []));
 }
 
-async function doStart(db: Admin, matchId: string, version: number, seats: { user_id: string; seat: number; display_name: string }[]) {
-  const state = startState(seats);
+async function doStart(db: Admin, matchId: string, version: number, seats: { user_id: string; seat: number; display_name: string }[], total?: number) {
+  const state = startState(seats, total);
   const { data } = await db.from("matches")
     .update({ status: "playing", state: state as never, version: version + 1, turn_started_at: new Date().toISOString(), updated_at: new Date().toISOString() })
     .eq("id", matchId).eq("version", version).eq("status", "waiting").select("id");
@@ -150,6 +150,37 @@ export const quickMatchAction = async ({ data, context }: { data: ReturnType<typ
     return { id: m.id };
   };
 
+/**
+ * Yatzy's finalize step: after the search window, start with the humans found and
+ * computer seats for the rest; alone → leave so the client starts a local bot game.
+ */
+export const quickFinalizeAction = async ({ data, context }: { data: ReturnType<typeof startMatchInput>; context: OnlineContext }) => {
+    const db = await admin();
+    const { data: m } = await db.from("matches").select("*").eq("id", data.matchId).single();
+    if (!m) return { status: "none" as const };
+    const { data: seats } = await db.from("match_players").select("user_id, seat, display_name").eq("match_id", m.id);
+    if (!(seats ?? []).some((s) => s.user_id === context.userId)) return { status: "none" as const };
+    if (m.status === "playing") return { status: "started" as const };
+    if (m.status !== "waiting" || m.is_private) return { status: "none" as const };
+    if ((seats?.length ?? 0) < 2) {
+      await leaveMatchAction({ data: { matchId: m.id }, context });
+      return { status: "none" as const };
+    }
+    await doStart(db, m.id, m.version, seats ?? [], m.max_players);
+    return { status: "started" as const };
+  };
+
+export const quickStatusAction = async ({ data, context }: { data: ReturnType<typeof startMatchInput>; context: OnlineContext }) => {
+    const db = await admin();
+    const { data: m } = await db.from("matches").select("status").eq("id", data.matchId).single();
+    const { data: seats } = await db.from("match_players").select("user_id, display_name").eq("match_id", data.matchId);
+    return {
+      status: m?.status ?? "abandoned",
+      count: seats?.length ?? 0,
+      others: (seats ?? []).filter((s) => s.user_id !== context.userId).map((s) => s.display_name),
+    };
+  };
+
 export const startMatchAction = async ({ data, context }: { data: ReturnType<typeof startMatchInput>; context: OnlineContext }) => {
     const db = await admin();
     const { data: m } = await db.from("matches").select("*").eq("id", data.matchId).single();
@@ -205,6 +236,11 @@ export const heartbeatAction = async ({ data, context }: { data: ReturnType<type
     const cur = state.players[state.current];
     if (cur.id === context.userId) return { ok: true };
     const idle = (now - new Date(m.turn_started_at).getTime()) / 1000;
+    if (cur.isBot) {
+      if (idle < BOT_SECONDS) return { ok: true };
+      try { await commit(db, m.id, m.version, state, autoStep(state, secureRoll)); } catch { /* another client advanced it first */ }
+      return { ok: true };
+    }
     if (idle < TURN_SECONDS) return { ok: true };
     const { data: seat } = await db.from("match_players").select("last_seen").eq("match_id", m.id).eq("user_id", cur.id).single();
     const dropped = !seat || (now - new Date(seat.last_seen).getTime()) / 1000 > DROP_SECONDS;
