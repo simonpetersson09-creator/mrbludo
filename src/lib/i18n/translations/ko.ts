@@ -107,10 +107,8 @@ export const ko: Record<TranslationKey, string> = {
   checkEmail: "이메일을 확인하고 계정을 인증하세요",
   loginFailed: "로그인에 실패했습니다",
 
-  onlineTitle: "온라인",
   inviteFrom: "{name}의 초대",
   quickMatch: "빠른 대전",
-  createPrivate: "비공개 경기 만들기",
   matchCode: "경기 코드",
   friends: "친구",
   leaderboard: "순위표",
@@ -148,14 +146,10 @@ export const ko: Record<TranslationKey, string> = {
   statGaveUp: "포기",
 
   friendsTitle: "친구",
-  friendCode: "친구의 코드",
-  addFriend: "추가",
-  friendCodeHint: "내 코드는 프로필에 있습니다. 비공개 경기 대기실에서 친구를 초대하세요.",
   requests: "요청",
   friendList: "친구 목록 ({n})",
   noFriends: "아직 친구가 없습니다.",
   sent: "보냄",
-  requestSent: "친구 요청을 보냈습니다",
   nowFriends: "이제 친구입니다",
   accept: "수락",
 

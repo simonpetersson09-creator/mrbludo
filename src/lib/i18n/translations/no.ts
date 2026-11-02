@@ -107,10 +107,8 @@ export const no: Record<TranslationKey, string> = {
   checkEmail: "Sjekk e-posten din og bekreft kontoen",
   loginFailed: "Innloggingen mislyktes",
 
-  onlineTitle: "På nett",
   inviteFrom: "{name} inviterer deg",
   quickMatch: "Hurtigkamp",
-  createPrivate: "Opprett privat kamp",
   matchCode: "Kampkode",
   friends: "Venner",
   leaderboard: "Toppliste",
@@ -148,14 +146,10 @@ export const no: Record<TranslationKey, string> = {
   statGaveUp: "Ga opp",
 
   friendsTitle: "Venner",
-  friendCode: "Vennens kode",
-  addFriend: "Legg til",
-  friendCodeHint: "Din egen kode finner du på profilen din. Inviter venner fra ventrommet i en privat kamp.",
   requests: "Forespørsler",
   friendList: "Venneliste ({n})",
   noFriends: "Ingen venner ennå.",
   sent: "Sendte",
-  requestSent: "Venneforespørsel sendt",
   nowFriends: "Dere er nå venner",
   accept: "Godta",
 

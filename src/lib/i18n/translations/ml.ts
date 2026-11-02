@@ -107,10 +107,8 @@ export const ml: Record<TranslationKey, string> = {
   checkEmail: "നിന്റെ ഇമെയിൽ പരിശോധിച്ച് അക്കൗണ്ട് സ്ഥിരീകരിക്കൂ",
   loginFailed: "ലോഗിൻ പരാജയപ്പെട്ടു",
 
-  onlineTitle: "ഓൺലൈൻ",
   inviteFrom: "{name} നിന്നെ ക്ഷണിക്കുന്നു",
   quickMatch: "ദ്രുത മത്സരം",
-  createPrivate: "സ്വകാര്യ മത്സരം ഉണ്ടാക്കൂ",
   matchCode: "മത്സര കോഡ്",
   friends: "സുഹൃത്തുക്കൾ",
   leaderboard: "ലീഡർബോർഡ്",
@@ -148,14 +146,10 @@ export const ml: Record<TranslationKey, string> = {
   statGaveUp: "കീഴടങ്ങി",
 
   friendsTitle: "സുഹൃത്തുക്കൾ",
-  friendCode: "സുഹൃത്തിന്റെ കോഡ്",
-  addFriend: "ചേർക്കൂ",
-  friendCodeHint: "നിന്റെ സ്വന്തം കോഡ് പ്രൊഫൈലിലുണ്ട്. സ്വകാര്യ മത്സരത്തിന്റെ കാത്തിരിപ്പ് മുറിയിൽ നിന്ന് സുഹൃത്തുക്കളെ ക്ഷണിക്കൂ.",
   requests: "അഭ്യർത്ഥനകൾ",
   friendList: "സുഹൃത് പട്ടിക ({n})",
   noFriends: "ഇതുവരെ സുഹൃത്തുക്കളില്ല.",
   sent: "അയച്ചവ",
-  requestSent: "സൗഹൃദ അഭ്യർത്ഥന അയച്ചു",
   nowFriends: "നിങ്ങൾ ഇപ്പോൾ സുഹൃത്തുക്കളാണ്",
   accept: "സ്വീകരിക്കൂ",
 

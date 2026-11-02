@@ -107,10 +107,8 @@ export const mr: Record<TranslationKey, string> = {
   checkEmail: "तुमचा ईमेल तपासा आणि खाते निश्चित करा",
   loginFailed: "लॉग इन अयशस्वी",
 
-  onlineTitle: "ऑनलाइन",
   inviteFrom: "{name} तुम्हाला आमंत्रित करत आहे",
   quickMatch: "जलद सामना",
-  createPrivate: "खाजगी सामना तयार करा",
   matchCode: "सामना कोड",
   friends: "मित्र",
   leaderboard: "लीडरबोर्ड",
@@ -148,14 +146,10 @@ export const mr: Record<TranslationKey, string> = {
   statGaveUp: "हार मानली",
 
   friendsTitle: "मित्र",
-  friendCode: "मित्राचा कोड",
-  addFriend: "जोडा",
-  friendCodeHint: "तुमचा स्वतःचा कोड तुमच्या प्रोफाइलमध्ये आहे. खाजगी सामन्याच्या प्रतीक्षा कक्षातून मित्रांना आमंत्रित करा.",
   requests: "विनंत्या",
   friendList: "मित्र यादी ({n})",
   noFriends: "अजून मित्र नाहीत.",
   sent: "पाठवलेल्या",
-  requestSent: "मित्र विनंती पाठवली",
   nowFriends: "आता तुम्ही मित्र आहात",
   accept: "स्वीकारा",
 

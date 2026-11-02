@@ -107,10 +107,8 @@ export const da: Record<TranslationKey, string> = {
   checkEmail: "Tjek din e-mail og bekræft kontoen",
   loginFailed: "Login mislykkedes",
 
-  onlineTitle: "Online",
   inviteFrom: "{name} inviterer dig",
   quickMatch: "Hurtig kamp",
-  createPrivate: "Opret privat kamp",
   matchCode: "Kampkode",
   friends: "Venner",
   leaderboard: "Rangliste",
@@ -148,14 +146,10 @@ export const da: Record<TranslationKey, string> = {
   statGaveUp: "Gav op",
 
   friendsTitle: "Venner",
-  friendCode: "Vennens kode",
-  addFriend: "Tilføj",
-  friendCodeHint: "Din egen kode står på din profil. Inviter venner fra venterummet i en privat kamp.",
   requests: "Anmodninger",
   friendList: "Venneliste ({n})",
   noFriends: "Ingen venner endnu.",
   sent: "Sendte",
-  requestSent: "Venneanmodning sendt",
   nowFriends: "I er nu venner",
   accept: "Accepter",
 

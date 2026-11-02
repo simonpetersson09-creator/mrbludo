@@ -116,10 +116,8 @@ export const sv = {
   loginFailed: "Inloggningen misslyckades",
 
   // Online-lobby
-  onlineTitle: "Online",
   inviteFrom: "{name} bjuder in dig",
   quickMatch: "Snabbmatch",
-  createPrivate: "Skapa privat match",
   matchCode: "Matchkod",
   friends: "Vänner",
   leaderboard: "Topplista",
@@ -160,14 +158,10 @@ export const sv = {
 
   // Vänner
   friendsTitle: "Vänner",
-  friendCode: "Väns kod",
-  addFriend: "Lägg till",
-  friendCodeHint: "Din egen kod finns på din profil. Bjud in vänner från väntrummet i en privat match.",
   requests: "Förfrågningar",
   friendList: "Vänlista ({n})",
   noFriends: "Inga vänner ännu.",
   sent: "Skickade",
-  requestSent: "Vänförfrågan skickad",
   nowFriends: "Ni är nu vänner",
   accept: "Acceptera",
 

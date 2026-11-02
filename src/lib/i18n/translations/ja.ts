@@ -107,10 +107,8 @@ export const ja: Record<TranslationKey, string> = {
   checkEmail: "メールを確認してアカウントを承認してください",
   loginFailed: "ログインに失敗しました",
 
-  onlineTitle: "オンライン",
   inviteFrom: "{name}からの招待",
   quickMatch: "クイックマッチ",
-  createPrivate: "プライベート対局を作成",
   matchCode: "対局コード",
   friends: "フレンド",
   leaderboard: "ランキング",
@@ -148,14 +146,10 @@ export const ja: Record<TranslationKey, string> = {
   statGaveUp: "降参",
 
   friendsTitle: "フレンド",
-  friendCode: "フレンドのコード",
-  addFriend: "追加",
-  friendCodeHint: "自分のコードはプロフィールにあります。プライベート対局の待機室からフレンドを招待できます。",
   requests: "リクエスト",
   friendList: "フレンドリスト（{n}）",
   noFriends: "まだフレンドがいません。",
   sent: "送信済み",
-  requestSent: "フレンドリクエストを送りました",
   nowFriends: "フレンドになりました",
   accept: "承認",
 

@@ -107,10 +107,8 @@ export const vi: Record<TranslationKey, string> = {
   checkEmail: "Kiểm tra email và xác nhận tài khoản",
   loginFailed: "Đăng nhập thất bại",
 
-  onlineTitle: "Trực tuyến",
   inviteFrom: "{name} mời bạn",
   quickMatch: "Đấu nhanh",
-  createPrivate: "Tạo trận riêng tư",
   matchCode: "Mã trận",
   friends: "Bạn bè",
   leaderboard: "Bảng xếp hạng",
@@ -148,14 +146,10 @@ export const vi: Record<TranslationKey, string> = {
   statGaveUp: "Đầu hàng",
 
   friendsTitle: "Bạn bè",
-  friendCode: "Mã của bạn bè",
-  addFriend: "Thêm",
-  friendCodeHint: "Mã của bạn nằm trong hồ sơ. Mời bạn bè từ phòng chờ của trận riêng tư.",
   requests: "Lời mời",
   friendList: "Danh sách bạn ({n})",
   noFriends: "Chưa có bạn bè.",
   sent: "Đã gửi",
-  requestSent: "Đã gửi lời mời kết bạn",
   nowFriends: "Các bạn đã là bạn bè",
   accept: "Chấp nhận",
 

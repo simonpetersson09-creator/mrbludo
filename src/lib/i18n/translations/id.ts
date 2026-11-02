@@ -107,10 +107,8 @@ export const id: Record<TranslationKey, string> = {
   checkEmail: "Periksa emailmu dan konfirmasi akun",
   loginFailed: "Gagal masuk",
 
-  onlineTitle: "Online",
   inviteFrom: "{name} mengundangmu",
   quickMatch: "Pertandingan cepat",
-  createPrivate: "Buat pertandingan privat",
   matchCode: "Kode pertandingan",
   friends: "Teman",
   leaderboard: "Papan peringkat",
@@ -148,14 +146,10 @@ export const id: Record<TranslationKey, string> = {
   statGaveUp: "Menyerah",
 
   friendsTitle: "Teman",
-  friendCode: "Kode teman",
-  addFriend: "Tambah",
-  friendCodeHint: "Kodemu sendiri ada di profilmu. Undang teman dari ruang tunggu pertandingan privat.",
   requests: "Permintaan",
   friendList: "Daftar teman ({n})",
   noFriends: "Belum ada teman.",
   sent: "Terkirim",
-  requestSent: "Permintaan pertemanan terkirim",
   nowFriends: "Kalian sekarang berteman",
   accept: "Terima",
 

@@ -107,10 +107,8 @@ export const de: Record<TranslationKey, string> = {
   checkEmail: "Prüfe deine E-Mails und bestätige das Konto",
   loginFailed: "Anmeldung fehlgeschlagen",
 
-  onlineTitle: "Online",
   inviteFrom: "{name} lädt dich ein",
   quickMatch: "Schnellspiel",
-  createPrivate: "Privates Spiel erstellen",
   matchCode: "Spielcode",
   friends: "Freunde",
   leaderboard: "Bestenliste",
@@ -148,14 +146,10 @@ export const de: Record<TranslationKey, string> = {
   statGaveUp: "Aufgegeben",
 
   friendsTitle: "Freunde",
-  friendCode: "Code des Freundes",
-  addFriend: "Hinzufügen",
-  friendCodeHint: "Dein eigener Code steht in deinem Profil. Lade Freunde aus dem Warteraum eines privaten Spiels ein.",
   requests: "Anfragen",
   friendList: "Freundesliste ({n})",
   noFriends: "Noch keine Freunde.",
   sent: "Gesendet",
-  requestSent: "Freundschaftsanfrage gesendet",
   nowFriends: "Ihr seid jetzt Freunde",
   accept: "Annehmen",
 

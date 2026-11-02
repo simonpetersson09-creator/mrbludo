@@ -107,10 +107,8 @@ export const kn: Record<TranslationKey, string> = {
   checkEmail: "ನಿಮ್ಮ ಇಮೇಲ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಖಾತೆ ದೃಢೀಕರಿಸಿ",
   loginFailed: "ಲಾಗ್ ಇನ್ ವಿಫಲ",
 
-  onlineTitle: "ಆನ್‌ಲೈನ್",
   inviteFrom: "{name} ನಿಮ್ಮನ್ನು ಆಹ್ವಾನಿಸುತ್ತಾರೆ",
   quickMatch: "ತ್ವರಿತ ಪಂದ್ಯ",
-  createPrivate: "ಖಾಸಗಿ ಪಂದ್ಯ ರಚಿಸಿ",
   matchCode: "ಪಂದ್ಯ ಕೋಡ್",
   friends: "ಸ್ನೇಹಿತರು",
   leaderboard: "ಲీಡರ್‌ಬೋರ್ಡ್",
@@ -148,14 +146,10 @@ export const kn: Record<TranslationKey, string> = {
   statGaveUp: "ಹಾರು ಬಿಟ್ಟವು",
 
   friendsTitle: "ಸ್ನೇಹಿತರು",
-  friendCode: "ಸ್ನೇಹಿತರ ಕೋಡ್",
-  addFriend: "ಸೇರಿಸಿ",
-  friendCodeHint: "ನಿಮ್ಮ ಸ್ವಂತ ಕೋಡ್ ನಿಮ್ಮ ಪ್ರೊಫೈಲ್‌ನಲ್ಲಿದೆ. ಖಾಸಗಿ ಪಂದ್ಯದ ಕಾಯುವ ಕೊಠಡಿಯಿಂದ ಸ್ನೇಹಿತರನ್ನು ಆಹ್ವಾನಿಸಿ.",
   requests: "ವಿನಂತಿಗಳು",
   friendList: "ಸ್ನೇಹಿತರ ಪಟ್ಟಿ ({n})",
   noFriends: "ಇನ್ನೂ ಸ್ನೇಹಿತರಿಲ್ಲ.",
   sent: "ಕಳುಹಿಸಿದವು",
-  requestSent: "ಸ್ನೇಹ ವಿನಂತಿ ಕಳುಹಿಸಲಾಗಿದೆ",
   nowFriends: "ಈಗ ನೀವು ಸ್ನೇಹಿತರು",
   accept: "ಸ್ವೀಕರಿಸಿ",
 

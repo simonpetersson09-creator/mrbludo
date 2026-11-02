@@ -107,10 +107,8 @@ export const bn: Record<TranslationKey, string> = {
   checkEmail: "আপনার ইমেল দেখুন এবং অ্যাকাউন্ট নিশ্চিত করুন",
   loginFailed: "লগ ইন ব্যর্থ",
 
-  onlineTitle: "অনলাইন",
   inviteFrom: "{name} আপনাকে আমন্ত্রণ জানিয়েছে",
   quickMatch: "দ্রুত ম্যাচ",
-  createPrivate: "ব্যক্তিগত ম্যাচ তৈরি করুন",
   matchCode: "ম্যাচ কোড",
   friends: "বন্ধু",
   leaderboard: "লিডারবোর্ড",
@@ -148,14 +146,10 @@ export const bn: Record<TranslationKey, string> = {
   statGaveUp: "হার মানা",
 
   friendsTitle: "বন্ধু",
-  friendCode: "বন্ধুর কোড",
-  addFriend: "যোগ করুন",
-  friendCodeHint: "আপনার নিজের কোড আপনার প্রোফাইলে আছে। ব্যক্তিগত ম্যাচের অপেক্ষার কক্ষ থেকে বন্ধুদের আমন্ত্রণ জানান।",
   requests: "অনুরোধ",
   friendList: "বন্ধু তালিকা ({n})",
   noFriends: "এখনও কোনো বন্ধু নেই।",
   sent: "পাঠানো",
-  requestSent: "বন্ধু অনুরোধ পাঠানো হয়েছে",
   nowFriends: "আপনারা এখন বন্ধু",
   accept: "গ্রহণ করুন",
 

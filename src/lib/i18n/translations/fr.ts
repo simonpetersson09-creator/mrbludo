@@ -107,10 +107,8 @@ export const fr: Record<TranslationKey, string> = {
   checkEmail: "Vérifie tes e-mails et confirme ton compte",
   loginFailed: "Échec de la connexion",
 
-  onlineTitle: "En ligne",
   inviteFrom: "{name} t'invite",
   quickMatch: "Partie rapide",
-  createPrivate: "Créer une partie privée",
   matchCode: "Code de partie",
   friends: "Amis",
   leaderboard: "Classement",
@@ -148,14 +146,10 @@ export const fr: Record<TranslationKey, string> = {
   statGaveUp: "Abandons",
 
   friendsTitle: "Amis",
-  friendCode: "Code de l'ami",
-  addFriend: "Ajouter",
-  friendCodeHint: "Ton propre code se trouve sur ton profil. Invite des amis depuis la salle d'attente d'une partie privée.",
   requests: "Demandes",
   friendList: "Liste d'amis ({n})",
   noFriends: "Pas encore d'amis.",
   sent: "Envoyées",
-  requestSent: "Demande d'ami envoyée",
   nowFriends: "Vous êtes maintenant amis",
   accept: "Accepter",
 

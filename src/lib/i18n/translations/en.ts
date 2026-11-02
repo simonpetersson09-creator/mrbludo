@@ -107,10 +107,8 @@ export const en: Record<TranslationKey, string> = {
   checkEmail: "Check your email and confirm your account",
   loginFailed: "Sign-in failed",
 
-  onlineTitle: "Online",
   inviteFrom: "{name} invites you",
   quickMatch: "Quick match",
-  createPrivate: "Create private match",
   matchCode: "Match code",
   friends: "Friends",
   leaderboard: "Leaderboard",
@@ -148,14 +146,10 @@ export const en: Record<TranslationKey, string> = {
   statGaveUp: "Gave up",
 
   friendsTitle: "Friends",
-  friendCode: "Friend's code",
-  addFriend: "Add",
-  friendCodeHint: "Your own code is on your profile. Invite friends from the waiting room of a private match.",
   requests: "Requests",
   friendList: "Friend list ({n})",
   noFriends: "No friends yet.",
   sent: "Sent",
-  requestSent: "Friend request sent",
   nowFriends: "You are now friends",
   accept: "Accept",
 

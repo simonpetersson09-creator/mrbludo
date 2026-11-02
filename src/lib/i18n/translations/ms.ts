@@ -107,10 +107,8 @@ export const ms: Record<TranslationKey, string> = {
   checkEmail: "Semak e-mel anda dan sahkan akaun",
   loginFailed: "Log masuk gagal",
 
-  onlineTitle: "Dalam talian",
   inviteFrom: "{name} menjemput anda",
   quickMatch: "Perlawanan pantas",
-  createPrivate: "Cipta perlawanan peribadi",
   matchCode: "Kod perlawanan",
   friends: "Rakan",
   leaderboard: "Carta",
@@ -148,14 +146,10 @@ export const ms: Record<TranslationKey, string> = {
   statGaveUp: "Serah kalah",
 
   friendsTitle: "Rakan",
-  friendCode: "Kod rakan",
-  addFriend: "Tambah",
-  friendCodeHint: "Kod anda sendiri ada di profil anda. Jemput rakan dari bilik menunggu perlawanan peribadi.",
   requests: "Permintaan",
   friendList: "Senarai rakan ({n})",
   noFriends: "Belum ada rakan.",
   sent: "Dihantar",
-  requestSent: "Permintaan rakan dihantar",
   nowFriends: "Anda kini berkawan",
   accept: "Terima",
 

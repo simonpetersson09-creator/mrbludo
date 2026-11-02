@@ -107,10 +107,8 @@ export const ru: Record<TranslationKey, string> = {
   checkEmail: "Проверь почту и подтверди аккаунт",
   loginFailed: "Не удалось войти",
 
-  onlineTitle: "Онлайн",
   inviteFrom: "{name} приглашает тебя",
   quickMatch: "Быстрый матч",
-  createPrivate: "Создать приватный матч",
   matchCode: "Код матча",
   friends: "Друзья",
   leaderboard: "Рейтинг",
@@ -148,14 +146,10 @@ export const ru: Record<TranslationKey, string> = {
   statGaveUp: "Сдался",
 
   friendsTitle: "Друзья",
-  friendCode: "Код друга",
-  addFriend: "Добавить",
-  friendCodeHint: "Твой код указан в профиле. Приглашай друзей из комнаты ожидания приватного матча.",
   requests: "Запросы",
   friendList: "Список друзей ({n})",
   noFriends: "Пока нет друзей.",
   sent: "Отправленные",
-  requestSent: "Запрос в друзья отправлен",
   nowFriends: "Теперь вы друзья",
   accept: "Принять",
 

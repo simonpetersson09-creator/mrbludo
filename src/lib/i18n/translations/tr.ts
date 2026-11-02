@@ -107,10 +107,8 @@ export const tr: Record<TranslationKey, string> = {
   checkEmail: "E-postanı kontrol et ve hesabı onayla",
   loginFailed: "Giriş başarısız",
 
-  onlineTitle: "Çevrimiçi",
   inviteFrom: "{name} seni davet ediyor",
   quickMatch: "Hızlı maç",
-  createPrivate: "Özel maç oluştur",
   matchCode: "Maç kodu",
   friends: "Arkadaşlar",
   leaderboard: "Sıralama",
@@ -148,14 +146,10 @@ export const tr: Record<TranslationKey, string> = {
   statGaveUp: "Pes",
 
   friendsTitle: "Arkadaşlar",
-  friendCode: "Arkadaşın kodu",
-  addFriend: "Ekle",
-  friendCodeHint: "Kendi kodun profilinde. Özel maçın bekleme odasından arkadaşlarını davet et.",
   requests: "İstekler",
   friendList: "Arkadaş listesi ({n})",
   noFriends: "Henüz arkadaş yok.",
   sent: "Gönderilenler",
-  requestSent: "Arkadaşlık isteği gönderildi",
   nowFriends: "Artık arkadaşsınız",
   accept: "Kabul et",
 

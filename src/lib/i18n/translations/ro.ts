@@ -107,10 +107,8 @@ export const ro: Record<TranslationKey, string> = {
   checkEmail: "Verifică-ți e-mailul și confirmă contul",
   loginFailed: "Conectarea a eșuat",
 
-  onlineTitle: "Online",
   inviteFrom: "{name} te invită",
   quickMatch: "Meci rapid",
-  createPrivate: "Creează meci privat",
   matchCode: "Cod meci",
   friends: "Prieteni",
   leaderboard: "Clasament",
@@ -148,14 +146,10 @@ export const ro: Record<TranslationKey, string> = {
   statGaveUp: "Renunțări",
 
   friendsTitle: "Prieteni",
-  friendCode: "Codul prietenului",
-  addFriend: "Adaugă",
-  friendCodeHint: "Propriul cod se află pe profilul tău. Invită prieteni din sala de așteptare a unui meci privat.",
   requests: "Cereri",
   friendList: "Lista de prieteni ({n})",
   noFriends: "Încă niciun prieten.",
   sent: "Trimise",
-  requestSent: "Cerere de prietenie trimisă",
   nowFriends: "Acum sunteți prieteni",
   accept: "Acceptă",
 

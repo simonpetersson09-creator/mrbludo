@@ -107,10 +107,8 @@ export const or: Record<TranslationKey, string> = {
   checkEmail: "ତୁମର ଇମେଲ୍ ଦେଖ ଏବଂ ଆକାଉଣ୍ଟ ନିଶ୍ଚିତ କର",
   loginFailed: "ଲଗ୍ ଇନ୍ ବିଫଳ",
 
-  onlineTitle: "ଅନଲାଇନ୍",
   inviteFrom: "{name} ତୁମକୁ ନିମନ୍ତ୍ରଣ କରୁଛନ୍ତି",
   quickMatch: "ଦ୍ରୁତ ମ୍ୟାଚ୍",
-  createPrivate: "ବ୍ୟକ୍ତିଗତ ମ୍ୟାଚ୍ ତିଆରି କରନ୍ତୁ",
   matchCode: "ମ୍ୟାଚ୍ କୋଡ୍",
   friends: "ବନ୍ଧୁ",
   leaderboard: "ଲିଡରବୋର୍ଡ",
@@ -148,14 +146,10 @@ export const or: Record<TranslationKey, string> = {
   statGaveUp: "ହାର ମାନିଲେ",
 
   friendsTitle: "ବନ୍ଧୁ",
-  friendCode: "ବନ୍ଧୁଙ୍କ କୋଡ୍",
-  addFriend: "ଯୋଡନ୍ତୁ",
-  friendCodeHint: "ତୁମର ନିଜ କୋଡ୍ ତୁମ ପ୍ରୋଫାଇଲରେ ଅଛି। ବ୍ୟକ୍ତିଗତ ମ୍ୟାଚର ଅପେକ୍ଷା କକ୍ଷରୁ ବନ୍ଧୁମାନଙ୍କୁ ନିମନ୍ତ୍ରଣ କର।",
   requests: "ଅନୁରୋଧ",
   friendList: "ବନ୍ଧୁ ତାଲିକା ({n})",
   noFriends: "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ବନ୍ଧୁ ନାହାଁନ୍ତି।",
   sent: "ପଠାଯାଇଥିବା",
-  requestSent: "ବନ୍ଧୁ ଅନୁରୋଧ ପଠାଗଲା",
   nowFriends: "ବର୍ତ୍ତମାନ ତୁମେ ବନ୍ଧୁ",
   accept: "ଗ୍ରହଣ କରନ୍ତୁ",
 

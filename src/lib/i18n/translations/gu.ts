@@ -107,10 +107,8 @@ export const gu: Record<TranslationKey, string> = {
   checkEmail: "તમારો ઈમેલ તપાસો અને એકાઉન્ટ કન્ફર્મ કરો",
   loginFailed: "લોગ ઇન નિષ્ફળ",
 
-  onlineTitle: "ઓનલાઈન",
   inviteFrom: "{name} તમને આમંત્રિત કરે છે",
   quickMatch: "ઝડપી મેચ",
-  createPrivate: "ખાનગી મેચ બનાવો",
   matchCode: "મેચ કોડ",
   friends: "મિત્રો",
   leaderboard: "લીડરબોર્ડ",
@@ -148,14 +146,10 @@ export const gu: Record<TranslationKey, string> = {
   statGaveUp: "હાર માની",
 
   friendsTitle: "મિત્રો",
-  friendCode: "મિત્રનો કોડ",
-  addFriend: "ઉમેરો",
-  friendCodeHint: "તમારો પોતાનો કોડ તમારી પ્રોફાઇલમાં છે. ખાનગી મેચના પ્રતીક્ષા ખંડથી મિત્રોને આમંત્રિત કરો.",
   requests: "વિનંતીઓ",
   friendList: "મિત્ર યાદી ({n})",
   noFriends: "હજુ કોઈ મિત્ર નથી.",
   sent: "મોકલેલી",
-  requestSent: "ફ્રેન્ડ રિક્વેસ્ટ મોકલાઈ",
   nowFriends: "હવે તમે મિત્રો છો",
   accept: "સ્વીકારો",
 

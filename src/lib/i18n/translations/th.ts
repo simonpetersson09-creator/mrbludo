@@ -107,10 +107,8 @@ export const th: Record<TranslationKey, string> = {
   checkEmail: "ตรวจสอบอีเมลและยืนยันบัญชีของคุณ",
   loginFailed: "เข้าสู่ระบบไม่สำเร็จ",
 
-  onlineTitle: "ออนไลน์",
   inviteFrom: "{name} เชิญคุณ",
   quickMatch: "แมตช์ด่วน",
-  createPrivate: "สร้างแมตช์ส่วนตัว",
   matchCode: "รหัสแมตช์",
   friends: "เพื่อน",
   leaderboard: "กระดานอันดับ",
@@ -148,14 +146,10 @@ export const th: Record<TranslationKey, string> = {
   statGaveUp: "ยอมแพ้",
 
   friendsTitle: "เพื่อน",
-  friendCode: "รหัสของเพื่อน",
-  addFriend: "เพิ่ม",
-  friendCodeHint: "รหัสของคุณอยู่ในโปรไฟล์ เชิญเพื่อนจากห้องรอของแมตช์ส่วนตัว",
   requests: "คำขอ",
   friendList: "รายชื่อเพื่อน ({n})",
   noFriends: "ยังไม่มีเพื่อน",
   sent: "ส่งแล้ว",
-  requestSent: "ส่งคำขอเป็นเพื่อนแล้ว",
   nowFriends: "ตอนนี้คุณเป็นเพื่อนกันแล้ว",
   accept: "ยอมรับ",
 

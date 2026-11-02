@@ -107,10 +107,8 @@ export const pt: Record<TranslationKey, string> = {
   checkEmail: "Verifica o teu e-mail e confirma a conta",
   loginFailed: "Falha ao iniciar sessão",
 
-  onlineTitle: "Online",
   inviteFrom: "{name} convida-te",
   quickMatch: "Partida rápida",
-  createPrivate: "Criar partida privada",
   matchCode: "Código da partida",
   friends: "Amigos",
   leaderboard: "Classificação",
@@ -148,14 +146,10 @@ export const pt: Record<TranslationKey, string> = {
   statGaveUp: "Desistências",
 
   friendsTitle: "Amigos",
-  friendCode: "Código do amigo",
-  addFriend: "Adicionar",
-  friendCodeHint: "O teu próprio código está no teu perfil. Convida amigos a partir da sala de espera de uma partida privada.",
   requests: "Pedidos",
   friendList: "Lista de amigos ({n})",
   noFriends: "Ainda sem amigos.",
   sent: "Enviados",
-  requestSent: "Pedido de amizade enviado",
   nowFriends: "Agora são amigos",
   accept: "Aceitar",
 

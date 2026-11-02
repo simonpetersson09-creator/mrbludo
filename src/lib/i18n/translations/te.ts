@@ -107,10 +107,8 @@ export const te: Record<TranslationKey, string> = {
   checkEmail: "నీ ఇమెయిల్ చూసి ఖాతాను నిర్ధారించు",
   loginFailed: "లాగిన్ విఫలమైంది",
 
-  onlineTitle: "ఆన్‌లైన్",
   inviteFrom: "{name} మిమ్మల్ని ఆహ్వానిస్తున్నారు",
   quickMatch: "క్విక్ మ్యాచ్",
-  createPrivate: "ప్రైవేట్ మ్యాచ్ సృష్టించు",
   matchCode: "మ్యాచ్ కోడ్",
   friends: "స్నేహితులు",
   leaderboard: "లీడర్‌బోర్డ్",
@@ -148,14 +146,10 @@ export const te: Record<TranslationKey, string> = {
   statGaveUp: "ఓటమి ఒప్పుకున్నవి",
 
   friendsTitle: "స్నేహితులు",
-  friendCode: "స్నేహితుడి కోడ్",
-  addFriend: "జోడించు",
-  friendCodeHint: "నీ స్వంత కోడ్ నీ ప్రొఫైల్‌లో ఉంది. ప్రైవేట్ మ్యాచ్ వేచి ఉండే గది నుండి స్నేహితులను ఆహ్వానించు.",
   requests: "అభ్యర్థనలు",
   friendList: "స్నేహితుల జాబితా ({n})",
   noFriends: "ఇంకా స్నేహితులు లేరు.",
   sent: "పంపినవి",
-  requestSent: "స్నేహిత అభ్యర్థన పంపబడింది",
   nowFriends: "ఇప్పుడు మీరు స్నేహితులు",
   accept: "అంగీకరించు",
 

@@ -107,10 +107,8 @@ export const ta: Record<TranslationKey, string> = {
   checkEmail: "உன் மின்னஞ்சலைப் பார்த்து கணக்கை உறுதிப்படுத்து",
   loginFailed: "உள்நுழைவு தோல்வி",
 
-  onlineTitle: "ஆன்லைன்",
   inviteFrom: "{name} உன்னை அழைக்கிறார்",
   quickMatch: "விரைவு போட்டி",
-  createPrivate: "தனிப்பட்ட போட்டியை உருவாக்கு",
   matchCode: "போட்டி குறியீடு",
   friends: "நண்பர்கள்",
   leaderboard: "லீடர்போர்டு",
@@ -148,14 +146,10 @@ export const ta: Record<TranslationKey, string> = {
   statGaveUp: "சரணடைந்தவை",
 
   friendsTitle: "நண்பர்கள்",
-  friendCode: "நண்பரின் குறியீடு",
-  addFriend: "சேர்",
-  friendCodeHint: "உன் சொந்த குறியீடு உன் சுயவிவரத்தில் உள்ளது. தனிப்பட்ட போட்டியின் காத்திருப்பு அறையிலிருந்து நண்பர்களை அழை.",
   requests: "கோரிக்கைகள்",
   friendList: "நண்பர் பட்டியல் ({n})",
   noFriends: "இன்னும் நண்பர்கள் இல்லை.",
   sent: "அனுப்பியவை",
-  requestSent: "நண்பர் கோரிக்கை அனுப்பப்பட்டது",
   nowFriends: "இப்போது நீங்கள் நண்பர்கள்",
   accept: "ஏற்றுக்கொள்",
 

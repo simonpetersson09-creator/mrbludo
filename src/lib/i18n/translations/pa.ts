@@ -107,10 +107,8 @@ export const pa: Record<TranslationKey, string> = {
   checkEmail: "ਆਪਣੀ ਈਮੇਲ ਵੇਖੋ ਅਤੇ ਖਾਤਾ ਪਕਾ ਕਰੋ",
   loginFailed: "ਲੌਗ ਇਨ ਅਸਫਲ",
 
-  onlineTitle: "ਔਨਲਾਈਨ",
   inviteFrom: "{name} ਤੁਹਾਨੂੰ ਸੱਦਾ ਦਿੰਦਾ ਹੈ",
   quickMatch: "ਤੇਜ਼ ਮੈਚ",
-  createPrivate: "ਨਿੱਜੀ ਮੈਚ ਬਣਾਓ",
   matchCode: "ਮੈਚ ਕੋਡ",
   friends: "ਦੋਸਤ",
   leaderboard: "ਲੀਡਰਬੋਰਡ",
@@ -148,14 +146,10 @@ export const pa: Record<TranslationKey, string> = {
   statGaveUp: "ਹਾਰ ਮਨੀ",
 
   friendsTitle: "ਦੋਸਤ",
-  friendCode: "ਦੋਸਤ ਦਾ ਕੋਡ",
-  addFriend: "ਜੋੜੋ",
-  friendCodeHint: "ਤੁਹਾਡਾ ਆਪਣਾ ਕੋਡ ਤੁਹਾਡੀ ਪ੍ਰੋਫਾਈਲ ਵਿੱਚ ਹੈ। ਨਿੱਜੀ ਮੈਚ ਦੇ ਉਡੀਕ ਖ਼ਾਨੇ ਤੋਂ ਦੋਸਤਾਂ ਨੂੰ ਸੱਦੋ।",
   requests: "ਬੇਨਤੀਆਂ",
   friendList: "ਦੋਸਤ ਸੂਚੀ ({n})",
   noFriends: "ਹਾਲੇ ਕੋਈ ਦੋਸਤ ਨਹੀਂ।",
   sent: "ਭੇਜੀਆਂ",
-  requestSent: "ਦੋਸਤ ਬੇਨਤੀ ਭੇਜੀ ਗਈ",
   nowFriends: "ਹੁਣ ਤੁਸੀਂ ਦੋਸਤ ਹੋ",
   accept: "ਸਵੀਕਾਰੋ",
 
