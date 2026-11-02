@@ -116,10 +116,8 @@ export const sv = {
   loginFailed: "Inloggningen misslyckades",
 
   // Online-lobby
-  onlineTitle: "Online",
   inviteFrom: "{name} bjuder in dig",
   quickMatch: "Snabbmatch",
-  createPrivate: "Skapa privat match",
   matchCode: "Matchkod",
   friends: "Vänner",
   leaderboard: "Topplista",
@@ -160,14 +158,10 @@ export const sv = {
 
   // Vänner
   friendsTitle: "Vänner",
-  friendCode: "Väns kod",
-  addFriend: "Lägg till",
-  friendCodeHint: "Din egen kod finns på din profil. Bjud in vänner från väntrummet i en privat match.",
   requests: "Förfrågningar",
   friendList: "Vänlista ({n})",
   noFriends: "Inga vänner ännu.",
   sent: "Skickade",
-  requestSent: "Vänförfrågan skickad",
   nowFriends: "Ni är nu vänner",
   accept: "Acceptera",
 
@@ -265,6 +259,29 @@ export const sv = {
   notifInactive: "Notiser skickas inte ännu. Dina val sparas och används när notiser aktiveras.",
   deleteDataDescription: "Ditt namn, profilbild, statistik, vänner, inbjudningar och topplisteplaceringar raderas från telefonen och servern. Pågående onlinematcher avslutas för dig. Fortsätter du spela skapas en ny spelaridentitet.",
   deleteDataAcknowledge: "Jag förstår att detta inte kan ångras.",
+  scanQR: "Skanna QR-koden för att gå med",
+  errCameraBlocked: "Kameran är blockerad. Tillåt kameraåtkomst för Mr. B Ludo i Inställningar.",
+  errCameraNotFound: "Ingen kamera hittades på enheten.",
+  errCameraInUse: "Kameran används av en annan app. Stäng andra appar och försök igen.",
+  errCameraInsecure: "Kameran kräver en säker anslutning (HTTPS).",
+  lobbyCreateTitle: "Bjud in en vän",
+  lobbyCreateHint: "Du skapar matchen och får en kod. Skicka koden till din vän.",
+  lobbyJoinTitle: "Har du fått en kod?",
+  lobbyJoinHint: "Skriv in koden din vän skickade, eller skanna QR-koden.",
+  lobbyScanShort: "Skanna",
+  lobbyFriendsLink: "Spelat förut? Bjud in direkt från Vänner",
+  or: "eller",
+  createGame: "Skapa spel",
+  addFriendBtn: "Lägg till vän",
+  friendRequestSent: "Vänförfrågan skickad",
+  shareInvite: "Dela inbjudan",
+  shareInviteText: "Spela Ludo med mig! 🎲 Kod: {code}",
+  friendsListReminder: "Kom ihåg: det är bara Ludo. Skilsmässa är onödigt. 😄",
+  hofGamesTitle: "Veckans flitigaste",
+  hofGamesSubtitle: "Flest spelade matcher den här veckan",
+  hofMatches: "matcher",
+  hofEmpty: "Ingen har spelat än den här veckan",
+  topCountriesYearTitle: "Topp 10 länder {year}",
 };
 
 export type TranslationKey = keyof typeof sv;

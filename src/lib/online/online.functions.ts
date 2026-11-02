@@ -116,3 +116,8 @@ export const deletePlayerData = createServerFn({ method: "POST" }).middleware([r
   const { deletePlayerDataAction } = await import("./online-actions");
   return deletePlayerDataAction({ data, context });
 });
+
+export const getStatsBoards = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  const { getStatsBoardsAction } = await import("./online-actions");
+  return getStatsBoardsAction({ context });
+});

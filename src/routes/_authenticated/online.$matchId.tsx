@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Copy, Dice5, Flag, Home, Play, WifiOff } from "lucide-react";
+import { Check, Copy, Dice5, Flag, Home, Play, Share2, UserPlus, WifiOff } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
+import { matchQrValue } from "@/lib/online/match-code";
 import { toast } from "sonner";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
@@ -12,7 +14,7 @@ import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
 import { pieceCenter } from "@/lib/ludo/board";
-import { act, heartbeat, inviteFriend, leaveMatch, listFriends, startMatch } from "@/lib/online/online.functions";
+import { act, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, startMatch } from "@/lib/online/online.functions";
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { flag } from "@/lib/online/profile-options";
@@ -250,6 +252,9 @@ function OnlineMatchPage() {
                     <span className="h-3 w-3 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
                     <span className="flex-1 truncate">{p.name}</span>
                     <span className="text-xs text-muted-foreground">{p.forfeited ? t("gaveUp") : t("inGoal", { n: state.pieces[seat].filter((x) => x === GOAL).length })}</span>
+                    {!p.isBot && p.id !== userId && seatOf(p.id) && (
+                      <AddFriendButton matchId={match.id} userId={p.id} />
+                    )}
                   </li>
                 );
               })}
@@ -263,6 +268,24 @@ function OnlineMatchPage() {
         </div>
       )}
     </main>
+  );
+}
+
+/** Yatzy's result-screen "Lägg till vän": requests go only to players you just played with. */
+function AddFriendButton({ matchId, userId }: { matchId: string; userId: string }) {
+  const { t } = useTranslation();
+  const [state, setState] = useState<"idle" | "busy" | "sent">("idle");
+  const send = async () => {
+    setState("busy");
+    try { await sendFriendRequest({ data: { matchId, userId } }); setState("sent"); toast.success(t("friendRequestSent")); }
+    catch (e) { setState("idle"); toast.error(errorMessage(e, t)); }
+  };
+  if (state === "sent") return <span className="flex items-center gap-1 text-[11px] text-primary"><Check size={12} /> {t("friendRequestSent")}</span>;
+  return (
+    <button type="button" disabled={state === "busy"} onClick={send} aria-label={t("addFriendBtn")}
+      className="flex shrink-0 items-center gap-1 rounded-md bg-primary/15 px-2 py-1 text-[11px] font-semibold text-primary active:bg-primary/25 disabled:opacity-60">
+      <UserPlus size={12} /> {t("addFriendBtn")}
+    </button>
   );
 }
 
@@ -283,6 +306,14 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
   useEffect(() => { listFriends().then((r) => setFriends(r.friends.filter((f) => f.status === "accepted"))).catch(() => {}); }, []);
   const start = () => startMatch({ data: { matchId: match.id } }).catch((e) => toast.error(errorMessage(e, t)));
   const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => toast.success(t("inviteSent"))).catch((e) => toast.error(errorMessage(e, t)));
+  // Like Yatzy's "Dela inbjudan": the phone's share sheet, or copy when sharing is unavailable.
+  const share = async () => {
+    const text = t("shareInviteText", { code: match.code });
+    try {
+      if (navigator.share) { await navigator.share({ title: "Mr. B Ludo", text }); return; }
+    } catch (e) { if ((e as { name?: string })?.name === "AbortError") return; }
+    try { await navigator.clipboard?.writeText(text); toast.success(t("codeCopied")); } catch { /* nothing to do */ }
+  };
   if (match.status === "abandoned") return <main className="app-screen"><div className="home-stack"><p>{t("matchAbandoned")}</p><button className="home-action mt-3" onClick={onLeave}>{t("back")}</button></div></main>;
   return (
     <main className="app-screen">
@@ -294,6 +325,15 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
           <span className="font-display text-2xl font-bold tracking-[0.3em] text-gold">{match.code}</span>
           <Copy size={14} />
         </button>
+        {match.is_private && (
+          <>
+            <button className="home-action home-action-ghost mt-[7px]" onClick={share}><Share2 size={16} /> {t("shareInvite")}</button>
+            <div className="mx-auto mt-3 rounded-xl bg-foreground p-3" aria-label={t("scanQR")}>
+              <QRCodeSVG value={matchQrValue(match.code)} size={140} />
+            </div>
+            <p className="mt-1 text-center text-xs text-muted-foreground">{t("scanQR")}</p>
+          </>
+        )}
         <div className="mt-3 flex flex-col gap-[7px]">
           {Array.from({ length: match.max_players }, (_, i) => {
             const s = seats[i];

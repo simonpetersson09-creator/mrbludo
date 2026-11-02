@@ -285,6 +285,25 @@ export type Database = {
     }
     Functions: {
       get_my_ranks: { Args: never; Returns: Json }
+      get_top_countries: {
+        Args: { _limit?: number }
+        Returns: {
+          country: string
+          games: number
+          players: number
+        }[]
+      }
+      get_weekly_most_active: {
+        Args: { _limit?: number }
+        Returns: {
+          avatar: string
+          country: string
+          display_name: string
+          games: number
+          games_24h: number
+          user_id: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

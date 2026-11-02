@@ -34,6 +34,7 @@ export const Route = createFileRoute("/api/public/native")({ server: { handlers:
       switch (body.operation) {
         case "getMe": return reply(await actions.getMeAction({ context }));
         case "getMyRanks": return reply(await actions.getMyRanksAction({ context }));
+        case "getStatsBoards": return reply(await actions.getStatsBoardsAction({ context }));
         case "setAvatar": return reply(await actions.setAvatarAction({ data: inputs.setAvatarInput(body.data as Parameters<typeof inputs.setAvatarInput>[0]), context }));
         case "getAvatars": return reply(await actions.getAvatarsAction({ data: inputs.getAvatarsInput(body.data as Parameters<typeof inputs.getAvatarsInput>[0]), context }));
         case "deletePlayerData": return reply(await actions.deletePlayerDataAction({ data: inputs.deleteDataInput(body.data), context }));
