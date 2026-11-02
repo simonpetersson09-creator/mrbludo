@@ -25,16 +25,18 @@ function HomePage() {
   const { t, lang } = useTranslation();
   const [hasGame, setHasGame] = useState(false);
   const [showLangs, setShowLangs] = useState(false);
-  const [langUp, setLangUp] = useState(false);
-  const langRef = useRef<HTMLDivElement>(null);
+  const [langDown, setLangDown] = useState(false);
+  const langBtnRef = useRef<HTMLButtonElement>(null);
+  const langPopRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => setHasGame(!!loadGame()), []);
 
-  // Stäng språklistan vid klick utanför, och vänd uppåt om det är för trångt nedåt.
+  // Stäng språklistan när man klickar utanför knappen eller listan.
   useEffect(() => {
     if (!showLangs) return;
     const onDown = (e: Event) => {
-      if (!langRef.current?.contains(e.target as Node)) setShowLangs(false);
+      const node = e.target as Node;
+      if (!langBtnRef.current?.contains(node) && !langPopRef.current?.contains(node)) setShowLangs(false);
     };
     document.addEventListener("pointerdown", onDown);
     return () => document.removeEventListener("pointerdown", onDown);
@@ -42,8 +44,8 @@ function HomePage() {
 
   const toggleLangs = () => {
     if (!showLangs) {
-      const rect = langRef.current?.getBoundingClientRect();
-      if (rect) setLangUp(window.innerHeight - rect.bottom < 260);
+      const rect = langBtnRef.current?.getBoundingClientRect();
+      if (rect) setLangDown(rect.top < 280);
     }
     setShowLangs((v) => !v);
   };
