@@ -88,5 +88,6 @@ export const adminOverview = createServerFn({ method: "POST" }).middleware([requ
 });
 
 export const getMyRanks = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
-  return A.getMyRanksAction({ context });
+  const { getMyRanksAction } = await import("./online-actions");
+  return getMyRanksAction({ context });
 });

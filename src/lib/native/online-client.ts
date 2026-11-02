@@ -30,3 +30,4 @@ export const respondInvite = (args: Parameters<typeof Web.respondInvite>[0]) => 
 export const getLeaderboard = (args: Parameters<typeof Web.getLeaderboard>[0]) => invoke<Awaited<ReturnType<typeof Web.getLeaderboard>>>("getLeaderboard", args.data);
 export const logEvent = (args: Parameters<typeof Web.logEvent>[0]) => invoke<Awaited<ReturnType<typeof Web.logEvent>>>("logEvent", args.data);
 export const adminOverview = () => invoke<Awaited<ReturnType<typeof Web.adminOverview>>>("adminOverview");
+export const getMyRanks = () => invoke<Awaited<ReturnType<typeof Web.getMyRanks>>>("getMyRanks");

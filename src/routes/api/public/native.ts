@@ -31,6 +31,7 @@ export const Route = createFileRoute("/api/public/native")({ server: { handlers:
       const inputs = await import("@/lib/online/online-inputs");
       switch (body.operation) {
         case "getMe": return reply(await actions.getMeAction({ context }));
+        case "getMyRanks": return reply(await actions.getMyRanksAction({ context }));
         case "updateProfile": return reply(await actions.updateProfileAction({ data: inputs.updateProfileInput(body.data as Parameters<typeof inputs.updateProfileInput>[0]), context }));
         case "createMatch": return reply(await actions.createMatchAction({ data: inputs.createMatchInput(body.data as Parameters<typeof inputs.createMatchInput>[0]), context }));
         case "joinByCode": return reply(await actions.joinByCodeAction({ data: inputs.joinByCodeInput(body.data as Parameters<typeof inputs.joinByCodeInput>[0]), context }));
