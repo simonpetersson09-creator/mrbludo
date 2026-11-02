@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { getLeaderboard } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
+import { useTranslation, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/leaderboard")({
   head: () => ({
@@ -16,25 +17,26 @@ export const Route = createFileRoute("/_authenticated/leaderboard")({
   component: LeaderboardPage,
 });
 
-const TABS = [["wins", "Vinster"], ["played", "Matcher"], ["captures", "Utslagna"]] as const;
+const TABS: [string, TranslationKey][] = [["wins", "tabWins"], ["played", "tabPlayed"], ["captures", "tabCaptures"]];
 type Rows = Awaited<ReturnType<typeof getLeaderboard>>;
 
 function LeaderboardPage() {
-  const [sort, setSort] = useState<(typeof TABS)[number][0]>("wins");
+  const { t } = useTranslation();
+  const [sort, setSort] = useState<"wins" | "played" | "captures">("wins");
   const [rows, setRows] = useState<Rows | null>(null);
   useEffect(() => { setRows(null); getLeaderboard({ data: { sort } }).then(setRows).catch(() => setRows([])); }, [sort]);
   return (
     <main className="app-screen">
       <div className="home-stack">
-        <Link to="/online" className="mb-2 flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft size={16} /> Tillbaka</Link>
-        <h1 className="brand-title text-3xl">Topplista</h1>
-        <p className="mb-3 text-xs text-muted-foreground">Endast avslutade onlinematcher räknas.</p>
+        <Link to="/online" className="mb-2 flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft size={16} /> {t("back")}</Link>
+        <h1 className="brand-title text-3xl">{t("leaderboardTitle")}</h1>
+        <p className="mb-3 text-xs text-muted-foreground">{t("leaderboardNote")}</p>
         <div className="grid grid-cols-3 gap-[7px]">
-          {TABS.map(([k, l]) => <button key={k} className={`home-action ${k === sort ? "home-action-gold" : "home-action-ghost"}`} onClick={() => setSort(k)}>{l}</button>)}
+          {TABS.map(([k, l]) => <button key={k} className={`home-action ${k === sort ? "home-action-gold" : "home-action-ghost"}`} onClick={() => setSort(k as typeof sort)}>{t(l)}</button>)}
         </div>
         <ol className="mt-3 space-y-1.5 text-sm">
-          {rows == null && <li className="text-muted-foreground">Laddar…</li>}
-          {rows?.length === 0 && <li className="text-muted-foreground">Inga onlinematcher spelade ännu.</li>}
+          {rows == null && <li className="text-muted-foreground">{t("loading")}</li>}
+          {rows?.length === 0 && <li className="text-muted-foreground">{t("noOnlineMatches")}</li>}
           {rows?.map((r, i) => (
             <li key={r.user_id} className="flex items-center gap-2 rounded-lg bg-surface px-3 py-2">
               <span className="w-6 font-bold text-gold">{i + 1}.</span>
