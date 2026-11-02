@@ -26,7 +26,7 @@ describe("profile picture input", () => {
   });
 
   it("only asks for real player ids, once each", () => {
-    expect(getAvatarsInput({ userIds: [UUID, UUID, "not-a-uuid", ""]; }).userIds).toEqual([UUID]);
+    expect(getAvatarsInput({ userIds: [UUID, UUID, "not-a-uuid", ""] }).userIds).toEqual([UUID]);
   });
 
   it("never asks for more players than the page can show", () => {
