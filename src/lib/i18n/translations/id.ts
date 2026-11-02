@@ -56,6 +56,7 @@ export const id: Record<TranslationKey, string> = {
   turnTimeLeft: "Sisa {s} d untuk langkah",
   turnTimeOut: "Waktu habis – server memainkan langkah",
   forfeitTitle: "Menyerah dalam pertandingan?",
+  leaveMatchConfirm: "Keluar dari pertandingan? Pertandingan disimpan dan bisa dilanjutkan nanti.",
   forfeitBodyLocal: "Pertandingan berakhir dan dihitung sebagai kekalahan. Tidak bisa dibatalkan.",
   forfeitBodyOnline: "Kamu keluar dari pertandingan dan dihitung sebagai kekalahan. Tidak bisa dibatalkan.",
   keepPlaying: "Lanjut bermain",

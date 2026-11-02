@@ -52,6 +52,7 @@ export const hu: Record<TranslationKey, string> = {
   turnTimeLeft: "Még {s} mp a lépésre",
   turnTimeOut: "Lejárt az idő – a szerver lép helyetted",
   forfeitTitle: "Feladod a játékot?",
+  leaveMatchConfirm: "Kilépsz a meccsből? El lesz mentve, később folytathatod.",
   forfeitBodyLocal: "A játék véget ér, és vereségnek számít. Ezt nem lehet visszavonni.",
   forfeitBodyOnline: "Kilépsz a játékból, és ez vereségnek számít. Ezt nem lehet visszavonni.",
   keepPlaying: "Játék folytatása",

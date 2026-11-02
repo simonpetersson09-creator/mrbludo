@@ -52,6 +52,7 @@ export const ca: Record<TranslationKey, string> = {
   turnTimeLeft: "Queden {s} s per al moviment",
   turnTimeOut: "Temps esgotat – el servidor fa el moviment",
   forfeitTitle: "Vols abandonar la partida?",
+  leaveMatchConfirm: "Sortir de la partida? Es desa i podràs continuar més tard.",
   forfeitBodyLocal: "La partida s'acaba i compta com una derrota. No es pot desfer.",
   forfeitBodyOnline: "Surts de la partida i compta com una derrota. No es pot desfer.",
   keepPlaying: "Continua jugant",

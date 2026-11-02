@@ -58,6 +58,7 @@ try {
   } else if (["sync", "open", "build"].includes(action) && ["ios", "android"].includes(platform)) {
     if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web before sync or build");
     run("bunx", ["cap", "sync", platform]);
+    run("node", ["scripts/set-native-icons.mjs", platform]);
     if (action === "open") run("bunx", ["cap", "open", platform]);
     if (action === "build" && platform === "android") run(process.platform === "win32" ? "gradlew.bat" : "./gradlew", ["assembleDebug"], "android");
     if (action === "build" && platform === "ios") run("xcodebuild", ["-project", "ios/App/App.xcodeproj", "-scheme", "App", "-destination", "generic/platform=iOS Simulator", "CODE_SIGNING_ALLOWED=NO", "build"]);

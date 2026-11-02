@@ -17,6 +17,7 @@ import { flag } from "@/lib/online/profile-options";
 import { TURN_SECONDS } from "@/lib/online/match-logic";
 import { rememberOnlineMatch } from "@/lib/online/snapshot";
 import { RESUME_EVENT } from "@/lib/native/runtime";
+import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/online/$matchId")({
@@ -105,19 +106,30 @@ function OnlineMatchPage() {
     if (match.version <= animatedVersion.current) return;
     animatedVersion.current = match.version;
     const ev = state.lastEvent;
+    if (ev?.kind === "moved") void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
     if (ev?.kind !== "rolled") return;
     setFace(ev.value as DiceValue);
     const remaining = Math.max(350, ROLL_MS - (Date.now() - rollStart.current));
     setRolling(true);
-    const t = window.setTimeout(() => setRolling(false), rollStart.current ? remaining : ROLL_MS);
+    const t = window.setTimeout(() => { setRolling(false); void playDiceLandHaptic(); }, rollStart.current ? remaining : ROLL_MS);
     rollStart.current = 0;
     return () => window.clearTimeout(t);
   }, [match?.version]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Haptics for turn handover and win (same events as Yatzy's TurnTransition / success pulse).
+  const prevTurn = useRef(-1);
+  useEffect(() => {
+    if (!state || !userId) return;
+    const mine = state.players.findIndex((p) => p.id === userId);
+    if (state.phase === "finished") { if (prevTurn.current >= 0 && state.winner === mine) void playSuccessHaptic(); prevTurn.current = -2; return; }
+    if (prevTurn.current >= 0 && prevTurn.current !== state.current && state.current === mine) void playTurnHaptic();
+    prevTurn.current = state.current;
+  }, [state?.current, state?.phase, userId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const send = useCallback(async (action: { kind: "roll" } | { kind: "move"; piece: number }) => {
     if (!match || pending || offline) return;
     setPending(true);
-    if (action.kind === "roll") { rollStart.current = Date.now(); setRolling(true); }
+    if (action.kind === "roll") { rollStart.current = Date.now(); setRolling(true); void playLightHaptic(); }
     try {
       const r = await act({ data: { matchId, version: match.version, action } });
       if (r) setMatch((m) => (m && m.version < r.version ? { ...m, version: r.version, state: r.state, status: r.state.phase === "finished" ? "finished" : m.status } : m));

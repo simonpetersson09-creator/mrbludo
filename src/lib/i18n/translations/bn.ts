@@ -56,6 +56,7 @@ export const bn: Record<TranslationKey, string> = {
   turnTimeLeft: "চালের জন্য {s} সেকেন্ড বাকি",
   turnTimeOut: "সময় শেষ – সার্ভার চাল দেবে",
   forfeitTitle: "ম্যাচে হার মানবেন?",
+  leaveMatchConfirm: "ম্যাচ ছেড়ে যাবেন? এটি সংরক্ষিত থাকবে এবং পরে আবার খেলতে পারবেন।",
   forfeitBodyLocal: "ম্যাচ শেষ হবে এবং হার হিসেবে গণ্য হবে। এটি ফেরানো যাবে না।",
   forfeitBodyOnline: "আপনি ম্যাচ ছাড়বেন এবং এটি হার হিসেবে গণ্য হবে। এটি ফেরানো যাবে না।",
   keepPlaying: "খেলতে থাকুন",

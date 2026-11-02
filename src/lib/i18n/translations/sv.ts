@@ -60,6 +60,7 @@ export const sv = {
   turnTimeLeft: "{s} s kvar på draget",
   turnTimeOut: "Tiden är ute – servern spelar draget",
   forfeitTitle: "Ge upp matchen?",
+  leaveMatchConfirm: "Lämna matchen? Den sparas och du kan fortsätta senare.",
   forfeitBodyLocal: "Matchen avslutas och räknas som en förlust. Det går inte att ångra.",
   forfeitBodyOnline: "Du lämnar matchen och den räknas som en förlust. Det går inte att ångra.",
   keepPlaying: "Fortsätt spela",

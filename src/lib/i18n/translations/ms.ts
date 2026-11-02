@@ -56,6 +56,7 @@ export const ms: Record<TranslationKey, string> = {
   turnTimeLeft: "{s} s lagi untuk gerakan",
   turnTimeOut: "Masa tamat – pelayan memainkan gerakan",
   forfeitTitle: "Serah kalah dalam perlawanan?",
+  leaveMatchConfirm: "Tinggalkan perlawanan? Ia disimpan dan anda boleh sambung kemudian.",
   forfeitBodyLocal: "Perlawanan tamat dan dikira sebagai kekalahan. Tidak boleh dibatalkan.",
   forfeitBodyOnline: "Anda keluar dari perlawanan dan ia dikira sebagai kekalahan. Tidak boleh dibatalkan.",
   keepPlaying: "Terus bermain",

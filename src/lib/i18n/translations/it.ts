@@ -52,6 +52,7 @@ export const it: Record<TranslationKey, string> = {
   turnTimeLeft: "{s} s rimasti per la mossa",
   turnTimeOut: "Tempo scaduto – il server esegue la mossa",
   forfeitTitle: "Abbandonare la partita?",
+  leaveMatchConfirm: "Uscire dalla partita? Viene salvata e potrai continuare più tardi.",
   forfeitBodyLocal: "La partita termina e conta come una sconfitta. Non puoi annullare questa azione.",
   forfeitBodyOnline: "Lasci la partita e conta come una sconfitta. Non puoi annullare questa azione.",
   keepPlaying: "Continua a giocare",

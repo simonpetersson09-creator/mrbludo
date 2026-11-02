@@ -52,6 +52,7 @@ export const pl: Record<TranslationKey, string> = {
   turnTimeLeft: "Pozostało {s} s na ruch",
   turnTimeOut: "Czas minął – serwer wykonuje ruch",
   forfeitTitle: "Poddać grę?",
+  leaveMatchConfirm: "Opuścić mecz? Zostanie zapisany i możesz kontynuować później.",
   forfeitBodyLocal: "Gra się zakończy i zostanie zaliczona jako porażka. Nie można tego cofnąć.",
   forfeitBodyOnline: "Opuścisz grę i zostanie ona zaliczona jako porażka. Nie można tego cofnąć.",
   keepPlaying: "Graj dalej",

@@ -56,6 +56,7 @@ export const th: Record<TranslationKey, string> = {
   turnTimeLeft: "เหลือ {s} วินาทีสำหรับการเดิน",
   turnTimeOut: "หมดเวลา – เซิร์ฟเวอร์เดินแทน",
   forfeitTitle: "ยอมแพ้แมตช์นี้?",
+  leaveMatchConfirm: "ออกจากเกมไหม? เกมจะถูกบันทึกไว้และเล่นต่อได้ภายหลัง",
   forfeitBodyLocal: "แมตช์จะจบและนับเป็นความพ่ายแพ้ ยกเลิกไม่ได้",
   forfeitBodyOnline: "คุณจะออกจากแมตช์และนับเป็นความพ่ายแพ้ ยกเลิกไม่ได้",
   keepPlaying: "เล่นต่อ",

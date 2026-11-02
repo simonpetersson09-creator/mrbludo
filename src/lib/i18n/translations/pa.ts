@@ -56,6 +56,7 @@ export const pa: Record<TranslationKey, string> = {
   turnTimeLeft: "ਚਾਲ ਲਈ {s} ਸਕਿੰਟ ਬਾਕੀ",
   turnTimeOut: "ਸਮਾਂ ਖਤਮ – ਸਰਵਰ ਚਾਲ ਚਲੇਗਾ",
   forfeitTitle: "ਮੈਚ ਵਿੱਚ ਹਾਰ ਮਨੋਗੇ?",
+  leaveMatchConfirm: "ਮੈਚ ਛੱਡਣਾ ਹੈ? ਇਹ ਸੰਭਾਲਿਆ ਗਿਆ ਹੈ ਅਤੇ ਤੁਸੀਂ ਬਾਅਦ ਵਿੱਚ ਜਾਰੀ ਰੱਖ ਸਕਦੇ ਹੋ।",
   forfeitBodyLocal: "ਮੈਚ ਖਤਮ ਹੋਵੇਗਾ ਅਤੇ ਹਾਰ ਗਿਣਿਆ ਜਾਵੇਗਾ। ਇਹ ਵਾਪਸ ਨਹੀਂ ਲਿਆ ਜਾ ਸਕਦਾ।",
   forfeitBodyOnline: "ਤੁਸੀਂ ਮੈਚ ਛੱਡ ਦੋਗੇ ਅਤੇ ਇਹ ਹਾਰ ਗਿਣਿਆ ਜਾਵੇਗਾ। ਇਹ ਵਾਪਸ ਨਹੀਂ ਲਿਆ ਜਾ ਸਕਦਾ।",
   keepPlaying: "ਖੇਡਦੇ ਰਹੋ",

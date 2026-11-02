@@ -56,6 +56,7 @@ export const or: Record<TranslationKey, string> = {
   turnTimeLeft: "ଚାଲ ପାଇଁ {s} ସେକେଣ୍ଡ ବାକି",
   turnTimeOut: "ସମୟ ସରିଲା – ସର୍ଭର ଚାଲ ଚଲାଇବ",
   forfeitTitle: "ମ୍ୟାଚରେ ହାର ମାନିବେ?",
+  leaveMatchConfirm: "ମ୍ୟାଚ୍ ଛାଡିବେ କି? ଏହା ସଞ୍ଚିତ ଅଛି ଏବଂ ଆପଣ ପରେ ଜାରି ରଖିପାରିବେ।",
   forfeitBodyLocal: "ମ୍ୟାଚ୍ ଶେଷ ହେବ ଏବଂ ହାର ଭାବେ ଗଣାଯିବ। ଏହା ଫେରାଇ ହେବ ନାହିଁ।",
   forfeitBodyOnline: "ଆପଣ ମ୍ୟାଚ୍ ଛାଡ଼ିବେ ଏବଂ ଏହା ହାର ଭାବେ ଗଣାଯିବ। ଏହା ଫେରାଇ ହେବ ନାହିଁ।",
   keepPlaying: "ଖେଳିବା ଜାରି ରଖନ୍ତୁ",

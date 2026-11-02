@@ -56,6 +56,7 @@ export const fr: Record<TranslationKey, string> = {
   turnTimeLeft: "{s} s restantes pour jouer",
   turnTimeOut: "Temps écoulé – le serveur joue le coup",
   forfeitTitle: "Abandonner la partie ?",
+  leaveMatchConfirm: "Quitter la partie ? Elle est sauvegardée et tu pourras la reprendre plus tard.",
   forfeitBodyLocal: "La partie se termine et compte comme une défaite. Action irréversible.",
   forfeitBodyOnline: "Tu quittes la partie et elle compte comme une défaite. Action irréversible.",
   keepPlaying: "Continuer à jouer",

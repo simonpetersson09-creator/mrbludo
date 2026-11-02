@@ -56,6 +56,7 @@ export const en: Record<TranslationKey, string> = {
   turnTimeLeft: "{s} s left for the move",
   turnTimeOut: "Time is up – the server plays the move",
   forfeitTitle: "Give up the match?",
+  leaveMatchConfirm: "Leave the match? It is saved and you can continue later.",
   forfeitBodyLocal: "The match ends and counts as a loss. This cannot be undone.",
   forfeitBodyOnline: "You leave the match and it counts as a loss. This cannot be undone.",
   keepPlaying: "Keep playing",

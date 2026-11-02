@@ -9,6 +9,7 @@ import {
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { AndroidBackButton } from "@/components/AndroidBackButton";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/lib/auth/client";
 import { ensurePlayerSession } from "@/lib/auth/player";
@@ -94,7 +95,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
   shellComponent: RootShell,
@@ -120,6 +122,19 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  // After an app update, old code chunks disappear; reload once instead of showing a blank screen.
+  useEffect(() => {
+    const KEY = "mrb-ludo:v1:chunk-reload";
+    const onFail = (e: Event) => {
+      if (sessionStorage.getItem(KEY)) return;
+      e.preventDefault();
+      sessionStorage.setItem(KEY, "1");
+      window.location.reload();
+    };
+    window.addEventListener("vite:preloadError", onFail);
+    const clear = window.setTimeout(() => sessionStorage.removeItem(KEY), 10_000);
+    return () => { window.removeEventListener("vite:preloadError", onFail); window.clearTimeout(clear); };
+  }, []);
   useEffect(() => {
     const ping = () => logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
     // Admin login has its own credentials; ordinary app launch creates a player automatically.
@@ -141,6 +156,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <AndroidBackButton />
       <Outlet />
       <Toaster position="top-center" />
     </QueryClientProvider>

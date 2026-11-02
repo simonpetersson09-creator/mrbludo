@@ -56,6 +56,7 @@ export const de: Record<TranslationKey, string> = {
   turnTimeLeft: "Noch {s} s für den Zug",
   turnTimeOut: "Zeit um – der Server spielt den Zug",
   forfeitTitle: "Spiel aufgeben?",
+  leaveMatchConfirm: "Match verlassen? Es wird gespeichert und du kannst später weiterspielen.",
   forfeitBodyLocal: "Das Spiel endet und zählt als Niederlage. Das kann nicht rückgängig gemacht werden.",
   forfeitBodyOnline: "Du verlässt das Spiel und es zählt als Niederlage. Das kann nicht rückgängig gemacht werden.",
   keepPlaying: "Weiterspielen",

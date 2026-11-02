@@ -56,6 +56,7 @@ export const gu: Record<TranslationKey, string> = {
   turnTimeLeft: "ચાલ માટે {s} સેકન્ડ બાકી",
   turnTimeOut: "સમય પૂરો – સર્વર ચાલ ચાલશે",
   forfeitTitle: "મેચમાં હાર માનશો?",
+  leaveMatchConfirm: "મેચ છોડવી છે? તે સાચવેલી છે અને તમે પછી ચાલુ રાખી શકો છો.",
   forfeitBodyLocal: "મેચ પૂરી થશે અને હાર ગણાશે. તે પાછી લઈ શકાય નહીં.",
   forfeitBodyOnline: "તમે મેચ છોડશો અને તે હાર ગણાશે. તે પાછી લઈ શકાય નહીં.",
   keepPlaying: "રમતા રહો",

@@ -56,6 +56,7 @@ export const no: Record<TranslationKey, string> = {
   turnTimeLeft: "{s} s igjen på trekket",
   turnTimeOut: "Tiden er ute – serveren spiller trekket",
   forfeitTitle: "Gi opp kampen?",
+  leaveMatchConfirm: "Forlate kampen? Den lagres, og du kan fortsette senere.",
   forfeitBodyLocal: "Kampen avsluttes og teller som et tap. Det kan ikke angres.",
   forfeitBodyOnline: "Du forlater kampen og den teller som et tap. Det kan ikke angres.",
   keepPlaying: "Fortsett å spille",

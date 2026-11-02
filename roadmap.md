@@ -12,6 +12,8 @@
 - [x] Safe areas, lifecycle, network recovery and small-screen browser checks.
 - [x] Disabled advertising/push integration boundaries and build/verification scripts.
 - [x] Automated tests and precise physical-device/build limitations report in docs/native-verification.md.
+- [x] Yatzy-parity: Android back button, haptics, own app icon + splash pipeline.
+- [ ] Physical-device check of back button, vibration, icon/splash: blocked by phone builds.
 - [ ] Installable native binaries: blocked by Mac/Xcode or Java/Android SDK toolchains and device signing.
 - [ ] Published native online end-to-end: blocked by explicit website publication approval and a configured stable Ludo HTTPS origin.
 - [ ] Physical-device secure-storage, lifecycle and GPU verification: blocked by runnable phone builds and physical devices.
