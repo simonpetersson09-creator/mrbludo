@@ -181,7 +181,7 @@ export const quickFinalizeAction = async ({ data, context }: { data: ReturnType<
     await db.from("match_players").update({ last_seen: new Date().toISOString() }).eq("match_id", m.id).eq("user_id", context.userId);
     const live = new Set((await pruneQuickSeats(db, m.id)).map((r) => r.user_id));
     const liveSeats = (seats ?? []).filter((s) => live.has(s.user_id));
-    if (liveSeats.length < 2) { ?? 0) < 2) {
+    if (liveSeats.length < 2) {
       await leaveMatchAction({ data: { matchId: m.id }, context });
       return { status: "none" as const };
     }
