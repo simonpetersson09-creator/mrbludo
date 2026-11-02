@@ -41,7 +41,10 @@ function AdminLogin() {
           throw new Error("err:forbidden");
         }
         await navigate({ to: "/admin", replace: true });
-      } catch (e) { setError(errorMessage(e, t)); }
+      } catch (e) {
+        if (previous.session) await supabase.auth.setSession(previous.session).catch(() => {});
+        setError(errorMessage(e, t));
+      }
       finally { setPassword(""); setBusy(false); }
     }}>
       <input className="h-11 rounded-lg border bg-card px-3" type="email" autoComplete="username" aria-label={t("email")} placeholder={t("email")} value={email} onChange={e => setEmail(e.target.value)} required />
