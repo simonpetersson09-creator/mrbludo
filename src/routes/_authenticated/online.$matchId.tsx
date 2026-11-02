@@ -99,6 +99,14 @@ function OnlineMatchPage() {
 
   const state = (match?.state ?? null) as GameState | null;
 
+  // Computer seats (quick play) are played by the server; nudge it quickly on their turn.
+  const botTurn = !!state && state.phase !== "finished" && !!state.players[state.current]?.isBot;
+  useEffect(() => {
+    if (!botTurn) return;
+    const t = window.setTimeout(() => { heartbeat({ data: { matchId } }).then(load).catch(() => {}); }, 1300);
+    return () => window.clearTimeout(t);
+  }, [botTurn, match?.version, matchId, load]);
+
   // Animate the die whenever a new roll arrives (mine or an opponent's).
   useEffect(() => {
     if (!match || !state) return;
@@ -178,7 +186,7 @@ function OnlineMatchPage() {
           return (
             <div key={p.id} className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "border-gold bg-card" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}>
               <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
-              <span className="truncate font-semibold">{s?.avatar} {p.name}</span>
+              <span className="truncate font-semibold">{p.isBot ? "🤖" : s?.avatar} {p.name}</span>
               <span className="ml-auto shrink-0 text-muted-foreground">{away ? <WifiOff size={11} className="inline" /> : s ? flag(s.country) : ""} {state.pieces[i].filter((x) => x === GOAL).length}/4</span>
             </div>
           );

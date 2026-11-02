@@ -4,6 +4,7 @@ import { BarChart3, Check, Globe, Play, Settings, Users } from "lucide-react";
 import { createGame } from "@/lib/ludo/engine";
 import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
+import { QuickMatchSearch } from "@/components/ludo/QuickMatchSearch";
 import { HomeStats } from "@/components/ludo/HomeStats";
 import heroImg from "@/assets/ludo-hero.jpg";
 
@@ -51,12 +52,18 @@ function HomePage() {
     setShowLangs((v) => !v);
   };
 
-  const quick = () => {
+  const [showQuick, setShowQuick] = useState(false);
+  const [search, setSearch] = useState<number | null>(null);
+
+  // Nobody found online → local game with computer opponents (Yatzy fallback).
+  const startLocal = (players: number) => {
     const name = loadSettings().name;
-    saveGame(createGame([
-      { id: "p0", name, color: 0, isBot: false },
-      { id: "p1", name: t("computerColor", { color: t("colorYellow") }), color: 2, isBot: true },
-    ]));
+    const colors: Record<number, (0 | 1 | 2 | 3)[]> = { 2: [0, 2], 3: [0, 1, 2], 4: [0, 1, 2, 3] };
+    const colorKey = ["colorRed", "colorGreen", "colorYellow", "colorBlue"] as const;
+    const cs = colors[players];
+    saveGame(createGame(cs.map((c, i) => i === 0
+      ? { id: "p0", name, color: c, isBot: false }
+      : { id: `p${i}`, name: t("computerColor", { color: t(colorKey[c]) }), color: c, isBot: true })));
     navigate({ to: "/play" });
   };
 
@@ -69,7 +76,19 @@ function HomePage() {
         {hasGame && (
           <Link to="/play" className="home-action"><Play size={16} /> {t("resumeMatch")}</Link>
         )}
-        <button className="home-action font-display" onClick={quick}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
+        <button className="home-action font-display" aria-expanded={showQuick} onClick={() => setShowQuick((v) => !v)}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
+        {showQuick && (
+          <div className="space-y-2 overflow-hidden">
+            <p className="text-center text-sm font-medium text-muted-foreground">{t("selectPlayerCount")}</p>
+            <div className="flex gap-2">
+              {[1, 2, 3].map((n) => (
+                <button key={n} type="button" onClick={() => setSearch(n + 1)} className="flex flex-1 items-center justify-center rounded-xl bg-secondary px-2 py-3 text-center font-display text-xs font-bold leading-tight text-secondary-foreground transition-all hover:bg-secondary/80 active:scale-95 sm:text-sm">
+                  {n} {n === 1 ? t("opponent") : t("opponents")}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <Link to="/online" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">🌐</span><span>{t("playOnline")}</span></Link>
       </div>
       <div className="home-round-row">
@@ -110,6 +129,14 @@ function HomePage() {
         )}
       </div>
       <HomeStats />
+      {search && (
+        <QuickMatchSearch
+          players={search}
+          onCancel={() => setSearch(null)}
+          onNoMatch={() => { const n = search; setSearch(null); startLocal(n); }}
+          onMatch={(id) => { setSearch(null); navigate({ to: "/online/$matchId", params: { matchId: id } }); }}
+        />
+      )}
     </main>
   );
 }
