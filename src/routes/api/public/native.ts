@@ -12,7 +12,8 @@ export const Route = createFileRoute("/api/public/native")({ server: { handlers:
   POST: async ({ request }) => {
     const headers = cors(request);
     const reply = (data: unknown, status = 200) => Response.json(data, { status, headers });
-    if (request.headers.get("origin") && !allowedNativeOrigin(request.headers.get("origin"))) return reply({ error: "err:forbidden" }, 403);
+    const callerOrigin = request.headers.get("origin");
+    if (callerOrigin && callerOrigin !== new URL(request.url).origin && !allowedNativeOrigin(callerOrigin)) return reply({ error: "err:forbidden" }, 403);
     const token = request.headers.get("authorization")?.match(/^Bearer (.+)$/)?.[1];
     if (!token) return reply({ error: "err:forbidden" }, 401);
     const url = process.env['SUPABASE_URL'];
