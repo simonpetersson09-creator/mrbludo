@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Check, X } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/auth/client";
 import { listFriends, respondFriend, sendFriendRequest } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
 import { errorMessage, useTranslation } from "@/lib/i18n";
@@ -10,6 +10,8 @@ import { errorMessage, useTranslation } from "@/lib/i18n";
 export const Route = createFileRoute("/_authenticated/friends")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Vänner – Mr. B Ludo" },
       { name: "description", content: "Lägg till vänner med vänkod och bjud in dem till privata matcher." },
       { property: "og:title", content: "Vänner – Mr. B Ludo" },

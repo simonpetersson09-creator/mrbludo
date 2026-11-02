@@ -1,9 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Crown, Lock, LogOut, Trophy, User, Users, Zap } from "lucide-react";
+import { ArrowLeft, Crown, Lock, Trophy, User, Users, Zap } from "lucide-react";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/auth/client";
 import { createMatch, getMe, joinByCode, listFriends, quickMatch, respondInvite } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
 import { errorMessage, useTranslation } from "@/lib/i18n";
@@ -11,6 +10,8 @@ import { errorMessage, useTranslation } from "@/lib/i18n";
 export const Route = createFileRoute("/_authenticated/online/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Online – Mr. B Ludo" },
       { name: "description", content: "Snabbmatch, privata matcher med kod och inbjudningar från vänner." },
       { property: "og:title", content: "Online – Mr. B Ludo" },
@@ -25,7 +26,6 @@ type Inv = Awaited<ReturnType<typeof listFriends>>["invites"];
 
 function OnlineLobby() {
   const navigate = useNavigate();
-  const qc = useQueryClient();
   const { t } = useTranslation();
   const [me, setMe] = useState<Me | null>(null);
   const [invites, setInvites] = useState<Inv>([]);
@@ -52,18 +52,12 @@ function OnlineLobby() {
     finally { setBusy(false); }
   };
 
-  const signOut = async () => {
-    await qc.cancelQueries(); qc.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/", replace: true });
-  };
-
   return (
     <main className="app-screen">
       <div className="home-stack">
         <Link to="/" className="mb-2 flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft size={16} /> {t("back")}</Link>
-        <div className="flex items-center gap-2">
-          <h1 className="brand-title flex-1 text-3xl">{t("onlineTitle")}</h1>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+          <h1 className="brand-title min-w-0 text-3xl">{t("onlineTitle")}</h1>
           {me?.profile && <Link to="/profile" className="flex items-center gap-1 rounded-lg bg-surface px-2 py-1 text-sm"><span>{me.profile.avatar}</span><span className="max-w-[110px] truncate font-semibold">{me.profile.display_name}</span><span>{flag(me.profile.country)}</span></Link>}
         </div>
 
@@ -99,7 +93,6 @@ function OnlineLobby() {
           <Link to="/profile" className="home-action home-action-ghost"><User size={16} /> {t("profile")}</Link>
         </div>
         {me?.isAdmin && <Link to="/admin" className="home-action home-action-ghost mt-[7px]"><Crown size={16} /> {t("admin")}</Link>}
-        <button className="mt-4 flex items-center justify-center gap-1 text-sm text-muted-foreground" onClick={signOut}><LogOut size={14} /> {t("signOut")}</button>
       </div>
     </main>
   );

@@ -17,6 +17,8 @@ import { useTranslation, type TranslationKey } from "@/lib/i18n";
 export const Route = createFileRoute("/play")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Spela – Mr. B Ludo" },
       { name: "description", content: "Spela Ludo mot datorn eller vänner på samma enhet." },
       { property: "og:title", content: "Spela – Mr. B Ludo" },

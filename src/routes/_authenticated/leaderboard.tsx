@@ -8,6 +8,8 @@ import { useTranslation, type TranslationKey } from "@/lib/i18n";
 export const Route = createFileRoute("/_authenticated/leaderboard")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Topplista – Mr. B Ludo" },
       { name: "description", content: "Flest vinster, matcher och utslagna pjäser i verifierade onlinematcher." },
       { property: "og:title", content: "Topplista – Mr. B Ludo" },

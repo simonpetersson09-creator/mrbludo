@@ -1,5 +1,11 @@
 import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
-import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
+import { supabase } from "@/lib/auth/client";
+
+// Uses the same player client as the UI, including encrypted native sessions.
+const attachPlayerAuth = createMiddleware({ type: "function" }).client(async ({ next }) => {
+  const { data } = await supabase.auth.getSession();
+  return next({ headers: data.session ? { Authorization: `Bearer ${data.session.access_token}` } : {} });
+});
 
 import { renderErrorPage } from "./lib/error-page";
 
@@ -27,5 +33,5 @@ const csrfMiddleware = createCsrfMiddleware({
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [errorMiddleware, csrfMiddleware],
-  functionMiddleware: [attachSupabaseAuth],
+  functionMiddleware: [attachPlayerAuth],
 }));

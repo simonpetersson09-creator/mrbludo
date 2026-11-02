@@ -9,6 +9,8 @@ import { errorMessage, useTranslation } from "@/lib/i18n";
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Profil – Mr. B Ludo" },
       { name: "description", content: "Ditt spelarnamn, avatar, land och onlinestatistik." },
       { property: "og:title", content: "Profil – Mr. B Ludo" },

@@ -87,7 +87,9 @@ describe("i18n usage in source", () => {
   it("no dictionary key is unused (except generic helpers kept for reuse)", async () => {
     const used = usedKeys();
     // err* keys are looked up dynamically by errorMessage() from server error codes.
-    const isDynamic = (k: string) => k.startsWith("err");
+    // Helpers resolve genericError dynamically; old account copy remains only for backward dictionary compatibility.
+    const retiredAccountKeys = new Set(["signUp", "authHint", "continueGoogle", "orEmail", "noAccount", "haveAccount", "checkEmail", "loginFailed"]);
+    const isDynamic = (k: string) => k.startsWith("err") || k === "genericError" || retiredAccountKeys.has(k);
     const unused = svKeys.filter((k) => !used.has(k) && !isDynamic(k));
     expect(unused, `unused keys: ${unused.join(",")}`).toEqual([]);
   });

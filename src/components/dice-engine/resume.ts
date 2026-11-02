@@ -4,9 +4,11 @@ export function subscribeDiceResume(wake: () => void): () => void {
   document.addEventListener('visibilitychange', visible);
   window.addEventListener('pageshow', visible);
   window.addEventListener('focus', visible);
+  window.addEventListener('mrb-ludo:resume', visible);
   return () => {
     document.removeEventListener('visibilitychange', visible);
     window.removeEventListener('pageshow', visible);
     window.removeEventListener('focus', visible);
+    window.removeEventListener('mrb-ludo:resume', visible);
   };
 }

@@ -20,3 +20,8 @@
 - Clients sync via realtime plus a 5 s heartbeat that also refetches and lets the server auto-play idle turns (30 s) and forfeit dropped players (90 s).
 - i18n lives in `src/lib/i18n/`: `language.ts` (40 languages, detection, `mrb-ludo:v1:language` storage), `index.ts` (`t`/`useTranslation`, en→sv fallback, `errorMessage` for `err:*` server codes), `translations/*.ts` (sv.ts is the key source of truth; every dict must have identical keys and placeholders — enforced by `i18n.test.ts`, which also fails on unused/unknown keys).
 - Server functions throw stable `err:<code>` strings instead of user-facing text; clients translate via `errorMessage()`.
+- App-owned auth goes through `src/lib/auth/client.ts`: managed client on web, namespaced Keychain/Keystore storage on native; generated integration files remain untouched.
+- Ordinary startup deduplicates anonymous sign-in and never discards a saved identity on storage/network failure; server middleware verifies every private request.
+- Capacitor loads only an explicitly configured stable HTTPS Ludo origin because TanStack Start requires its server runtime; the bundled shell is not an offline game build.
+- Native platform projects contain no release signing credentials; build scripts refuse preview/HTTP origins and never publish.
+- AdMob and push remain inert adapter boundaries until activation is separately approved; no SDK initialization or permission request on launch.

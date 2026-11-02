@@ -8,6 +8,8 @@ import { useTranslation, type TranslationKey } from "@/lib/i18n";
 export const Route = createFileRoute("/setup")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Ny match – Mr. B Ludo" },
       { name: "description", content: "Välj antal spelare och datormotståndare för en ny Ludo-match." },
       { property: "og:title", content: "Ny match – Mr. B Ludo" },

@@ -8,6 +8,8 @@ import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 export const Route = createFileRoute("/settings")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Inställningar – Mr. B Ludo" },
       { name: "description", content: "Spelarnamn, språk, datorns tempo och vibration." },
       { property: "og:title", content: "Inställningar – Mr. B Ludo" },
