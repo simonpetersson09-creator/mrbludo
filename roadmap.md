@@ -1,4 +1,8 @@
 # Mr. B Ludo mobile preparation
+- [ ] Inspect Yatzy read-only native/offline/session reference before implementation.
+- [ ] Bundle local Ludo, AI, 40 languages, fonts and real 3D die for offline cold-start.
+- [ ] Bridge packaged native online calls to an isolated approved Ludo HTTPS service; no publication without approval.
+- [ ] Re-run offline start/restart/language/layout and online checks; document exact installation commands.
 - [x] Automatic anonymous identity; separate administrator login (successful admin login needs a provisioned administrator).
 - [x] Verify two anonymous players, reconnect and persistent match statistics in browser sessions.
 - [x] Capacitor iOS/Android shells with isolated identifiers and secure session storage integration.
