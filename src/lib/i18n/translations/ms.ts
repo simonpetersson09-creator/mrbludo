@@ -14,10 +14,8 @@ export const ms: Record<TranslationKey, string> = {
   tagline: "Ludo klasik – empat bidak, satu dadu",
   resumeMatch: "Sambung perlawanan semasa",
   quickMatchBot: "Perlawanan pantas lawan komputer",
-  newMatch: "Perlawanan baharu (2–4 pemain)",
   playOnline: "Main dalam talian",
   stats: "Statistik",
-  rules: "Peraturan",
   settings: "Tetapan",
 
   newMatchTitle: "Perlawanan baharu",

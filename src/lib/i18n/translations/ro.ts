@@ -14,10 +14,8 @@ export const ro: Record<TranslationKey, string> = {
   tagline: "Ludo clasic – patru piese, un zar",
   resumeMatch: "Continuă meciul în curs",
   quickMatchBot: "Meci rapid contra calculatorului",
-  newMatch: "Meci nou (2–4 jucători)",
   playOnline: "Joacă online",
   stats: "Statistici",
-  rules: "Reguli",
   settings: "Setări",
 
   newMatchTitle: "Meci nou",

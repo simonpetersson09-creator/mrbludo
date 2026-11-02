@@ -14,10 +14,8 @@ export const ta: Record<TranslationKey, string> = {
   tagline: "கிளாசிக் லூடோ – நான்கு காய்கள், ஒரு பகடை",
   resumeMatch: "நடந்த போட்டியைத் தொடர்",
   quickMatchBot: "கணினியுடன் விரைவு போட்டி",
-  newMatch: "புதிய போட்டி (2–4 வீரர்கள்)",
   playOnline: "ஆன்லைனில் விளையாடு",
   stats: "புள்ளிவிவரம்",
-  rules: "விதிகள்",
   settings: "அமைப்புகள்",
 
   newMatchTitle: "புதிய போட்டி",

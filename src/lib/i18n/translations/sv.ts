@@ -15,10 +15,8 @@ export const sv = {
   tagline: "Klassiskt Ludo – fyra pjäser, en tärning",
   resumeMatch: "Fortsätt pågående match",
   quickMatchBot: "Snabbspel",
-  newMatch: "Ny match",
   playOnline: "Spela med vän",
   stats: "Statistik",
-  rules: "Regler",
   settings: "Inställningar",
 
   // Ny match

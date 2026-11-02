@@ -14,10 +14,8 @@ export const mr: Record<TranslationKey, string> = {
   tagline: "क्लासिक लुडो – चार गोट्या, एक पासा",
   resumeMatch: "चालू सामना सुरू ठेवा",
   quickMatchBot: "संगणकाविरुद्ध जलद सामना",
-  newMatch: "नवीन सामना (2–4 खेळाडू)",
   playOnline: "ऑनलाइन खेळा",
   stats: "आकडेवारी",
-  rules: "नियम",
   settings: "सेटिंग्ज",
 
   newMatchTitle: "नवीन सामना",

@@ -14,10 +14,8 @@ export const te: Record<TranslationKey, string> = {
   tagline: "క్లాసిక్ లూడో – నాలుగు కాయలు, ఒక పాచిక",
   resumeMatch: "కొనసాగుతున్న మ్యాచ్ కొనసాగించు",
   quickMatchBot: "కంప్యూటర్‌తో క్విక్ మ్యాచ్",
-  newMatch: "కొత్త మ్యాచ్ (2–4 ఆటగాళ్లు)",
   playOnline: "ఆన్‌లైన్ ఆడు",
   stats: "గణాంకాలు",
-  rules: "నియమాలు",
   settings: "సెట్టింగ్స్",
 
   newMatchTitle: "కొత్త మ్యాచ్",

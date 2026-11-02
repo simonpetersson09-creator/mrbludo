@@ -14,10 +14,8 @@ export const bn: Record<TranslationKey, string> = {
   tagline: "ক্লাসিক লুডো – চারটি গুটি, একটি ছক্কা",
   resumeMatch: "চলমান ম্যাচ চালিয়ে যান",
   quickMatchBot: "কম্পিউটারের বিরুদ্ধে দ্রুত ম্যাচ",
-  newMatch: "নতুন ম্যাচ (2–4 খেলোয়াড়)",
   playOnline: "অনলাইনে খেলুন",
   stats: "পরিসংখ্যান",
-  rules: "নিয়ম",
   settings: "সেটিংস",
 
   newMatchTitle: "নতুন ম্যাচ",

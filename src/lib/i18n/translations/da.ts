@@ -14,10 +14,8 @@ export const da: Record<TranslationKey, string> = {
   tagline: "Klassisk Ludo – fire brikker, én terning",
   resumeMatch: "Fortsæt igangværende kamp",
   quickMatchBot: "Hurtig kamp mod computeren",
-  newMatch: "Ny kamp (2–4 spillere)",
   playOnline: "Spil online",
   stats: "Statistik",
-  rules: "Regler",
   settings: "Indstillinger",
 
   newMatchTitle: "Ny kamp",

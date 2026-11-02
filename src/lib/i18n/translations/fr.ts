@@ -14,10 +14,8 @@ export const fr: Record<TranslationKey, string> = {
   tagline: "Ludo classique – quatre pions, un dé",
   resumeMatch: "Reprendre la partie en cours",
   quickMatchBot: "Partie rapide contre l'ordinateur",
-  newMatch: "Nouvelle partie (2–4 joueurs)",
   playOnline: "Jouer en ligne",
   stats: "Statistiques",
-  rules: "Règles",
   settings: "Réglages",
 
   newMatchTitle: "Nouvelle partie",

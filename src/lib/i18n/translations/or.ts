@@ -14,10 +14,8 @@ export const or: Record<TranslationKey, string> = {
   tagline: "କ୍ଲାସିକ୍ ଲୁଡୋ – ଚାରିଗୁଟି ଗୁଟି, ଗୋଟିଏ ପାସା",
   resumeMatch: "ଚାଲୁଥିବା ମ୍ୟାଚ୍ ଜାରି ରଖନ୍ତୁ",
   quickMatchBot: "କମ୍ପ୍ୟୁଟର ବିରୁଦ୍ଧରେ ଦ୍ରୁତ ମ୍ୟାଚ୍",
-  newMatch: "ନୂଆ ମ୍ୟାଚ୍ (2–4 ଖେଳାଳି)",
   playOnline: "ଅନଲାଇନ୍ ଖେଳନ୍ତୁ",
   stats: "ପରିସଂଖ୍ୟାନ",
-  rules: "ନିୟମ",
   settings: "ସେଟିଂସ୍",
 
   newMatchTitle: "ନୂଆ ମ୍ୟାଚ୍",
