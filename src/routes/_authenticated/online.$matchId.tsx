@@ -299,7 +299,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
             const s = seats[i];
             return (
               <div key={i} className="flex h-[52px] items-center gap-2 rounded-[10px] border bg-card px-3 text-sm">
-                {s ? <><span className="text-lg">{s.avatar}</span><span className="flex-1 truncate font-semibold">{s.display_name} {flag(s.country)}</span>{s.user_id === match.host_id && <span className="text-xs text-gold">{t("host")}</span>}</>
+                {s ? <><PlayerAvatar emoji={s.avatar} image={pics[s.user_id]} className="h-7 w-7 text-lg" /><span className="flex-1 truncate font-semibold">{s.display_name} {flag(s.country)}</span>{s.user_id === match.host_id && <span className="text-xs text-gold">{t("host")}</span>}</>
                   : <span className="flex-1 text-muted-foreground">{t("waitingForPlayers")}</span>}
               </div>
             );
@@ -312,7 +312,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
           <h2 className="mt-4 text-sm font-semibold">{t("inviteFriends")}</h2>
           {friends.filter((f) => !seats.some((s) => s.user_id === f.user.id)).map((f) => (
             <div key={f.id} className="mt-[7px] flex items-center gap-2 rounded-[10px] bg-surface px-3 py-2 text-sm">
-              <span>{f.user.avatar}</span><span className="flex-1 truncate">{f.user.display_name}</span>
+              <PlayerAvatar emoji={f.user.avatar} image={pics[f.user.id]} className="h-6 w-6 text-base" /><span className="flex-1 truncate">{f.user.display_name}</span>
               <button className="rounded-md bg-gold px-2 py-1 text-xs font-bold text-background" onClick={() => invite(f.user.id)}>{t("invite")}</button>
             </div>
           ))}
