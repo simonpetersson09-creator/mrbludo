@@ -6,7 +6,7 @@ import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 import { QuickMatchSearch } from "@/components/ludo/QuickMatchSearch";
 import { HomeStats } from "@/components/ludo/HomeStats";
-import heroImg from "@/assets/ludo-hero.jpg";
+import mrBDie from "@/assets/mr-b-die.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -69,9 +69,11 @@ function HomePage() {
 
   return (
     <main className="app-screen flex flex-col items-center">
-      <img src={heroImg} alt="" width={720} height={720} className="mt-2 h-40 w-40 rounded-3xl object-cover shadow-2xl" />
-      <h1 className="brand-title mt-4 text-4xl">Mr. B Ludo</h1>
-      <p className="mb-6 text-sm text-muted-foreground">{t("tagline")}</p>
+      <div className="brand-logo mt-2 mb-2 inline-flex h-28 w-28 items-center justify-center sm:h-36 sm:w-36">
+        <img src={mrBDie} alt="" width={383} height={512} className="h-full w-full object-contain" loading="eager" decoding="async" />
+      </div>
+      <h1 className="brand-wordmark text-4xl sm:text-5xl">Mr B Ludo</h1>
+      <p className="brand-tagline mt-1 mb-6 text-center">{t("tagline")}</p>
       <div className="home-stack">
         {hasGame && (
           <Link to="/play" className="home-action"><Play size={16} /> {t("resumeMatch")}</Link>
