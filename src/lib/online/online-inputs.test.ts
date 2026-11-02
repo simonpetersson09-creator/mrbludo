@@ -21,8 +21,8 @@ describe("profile picture input", () => {
   });
 
   it("rejects a picture bigger than the stored limit", () => {
-    expect(() => setAvatarInput({ image: `data:image/jpeg;base64,${"A".repeat(120001)}` })).toThrow("err:image_too_large");
-    expect(setAvatarInput({ image: `data:image/jpeg;base64,${"A".repeat(119978)}` }).image.length).toBeLessThanOrEqual(120000);
+    expect(() => setAvatarInput({ image: `data:image/jpeg;base64,${"A".repeat(119978)}` })).toThrow("err:image_too_large");
+    expect(setAvatarInput({ image: `data:image/jpeg;base64,${"A".repeat(119977)}` }).image?.length).toBe(120000);
   });
 
   it("only asks for real player ids, once each", () => {
