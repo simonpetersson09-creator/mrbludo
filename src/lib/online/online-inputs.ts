@@ -1,0 +1,31 @@
+import type { Action } from "./match-logic";
+export const updateProfileInput = (d: { display_name: string; avatar: string; country: string }) => {
+    const name = String(d.display_name ?? "").trim().slice(0, 20);
+    if (name.length < 2) throw new Error("err:name_short");
+    const country = String(d.country ?? "").toUpperCase();
+    if (!/^[A-Z]{2}$/.test(country)) throw new Error("err:invalid_country");
+    return { display_name: name, avatar: String(d.avatar ?? "🎲").slice(0, 8), country };
+  };
+export const createMatchInput = (d: { isPrivate: boolean; maxPlayers: number }) => ({ isPrivate: !!d.isPrivate, maxPlayers: Math.min(4, Math.max(2, Math.round(Number(d.maxPlayers) || 4))) });
+export const joinByCodeInput = (d: { code: string }) => ({ code: String(d.code ?? "").trim().toUpperCase().slice(0, 8) });
+export const quickMatchInput = (d: { maxPlayers: number }) => ({ maxPlayers: Math.min(4, Math.max(2, Math.round(Number(d.maxPlayers) || 2))) });
+export const startMatchInput = (d: { matchId: string }) => ({ matchId: String(d.matchId) });
+export const leaveMatchInput = (d: { matchId: string }) => ({ matchId: String(d.matchId) });
+export const actInput = (d: { matchId: string; version: number; action: Action }) => {
+    const a = d.action;
+    if (!a || !["roll", "move", "forfeit"].includes(a.kind)) throw new Error("err:bad_action");
+    const action: Action = a.kind === "move" ? { kind: "move", piece: Math.trunc(Number(a.piece)) } : { kind: a.kind };
+    return { matchId: String(d.matchId), version: Math.trunc(Number(d.version)), action };
+  };
+export const heartbeatInput = (d: { matchId: string }) => ({ matchId: String(d.matchId) });
+export const sendFriendRequestInput = (d: { friendCode: string }) => ({ friendCode: String(d.friendCode ?? "").trim().toUpperCase().slice(0, 8) });
+export const respondFriendInput = (d: { id: string; accept: boolean }) => ({ id: String(d.id), accept: !!d.accept });
+export const inviteFriendInput = (d: { matchId: string; userId: string }) => ({ matchId: String(d.matchId), userId: String(d.userId) });
+export const respondInviteInput = (d: { id: string; accept: boolean }) => ({ id: String(d.id), accept: !!d.accept });
+export const getLeaderboardInput = (d: { sort: "wins" | "played" | "captures" }) => ({ sort: (["wins", "played", "captures"] as const).includes(d.sort) ? d.sort : "wins" });
+export const logEventInput = (d: { kind: string; deviceId?: string; platform?: string; detail?: Record<string, unknown> }) => {
+    const kind = ["session", "error"].includes(d.kind) ? d.kind : "session";
+    const platform = ["ios", "android", "web"].includes(String(d.platform)) ? String(d.platform) : "web";
+    const detail = JSON.parse(JSON.stringify(d.detail ?? {}).slice(0, 2000) || "{}");
+    return { kind, platform, deviceId: String(d.deviceId ?? "").slice(0, 64) || null, detail };
+  };
