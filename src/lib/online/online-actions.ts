@@ -1,4 +1,4 @@
-import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput } from "./online-inputs";
+import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput } from "./online-inputs";
 import type { GameState } from "@/lib/ludo/engine";
 import {
   BOT_SECONDS, DROP_SECONDS, MatchError, TURN_SECONDS, autoStep, makeCode, performAction, secureRoll, startState, statDeltas,

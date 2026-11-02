@@ -18,6 +18,21 @@ export const actInput = (d: { matchId: string; version: number; action: Action }
     return { matchId: String(d.matchId), version: Math.trunc(Number(d.version)), action };
   };
 export const heartbeatInput = (d: { matchId: string }) => ({ matchId: String(d.matchId) });
+// A profile picture is a small square JPEG made on the phone before it is sent.
+// Same accepted shape and size limit as Yatzy's server-side avatar check.
+const AVATAR_MAX_CHARS = 120000;
+export const setAvatarInput = (d: { image: string | null }) => {
+    if (d.image == null || d.image === "") return { image: null };
+    const img = String(d.image);
+    if (!/^data:image\/(jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(img)) throw new Error("err:bad_image");
+    if (img.length > AVATAR_MAX_CHARS) throw new Error("err:image_too_large");
+    return { image: img };
+  };
+export const getAvatarsInput = (d: { userIds: string[] }) => {
+    const ids = [...new Set((Array.isArray(d.userIds) ? d.userIds : []).map((s) => String(s)))].filter((s) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s));
+    if (!ids.length) throw new Error("err:missing");
+    return { userIds: ids.slice(0, 60) };
+  };
 export const sendFriendRequestInput = (d: { friendCode: string }) => ({ friendCode: String(d.friendCode ?? "").trim().toUpperCase().slice(0, 8) });
 export const respondFriendInput = (d: { id: string; accept: boolean }) => ({ id: String(d.id), accept: !!d.accept });
 export const inviteFriendInput = (d: { matchId: string; userId: string }) => ({ matchId: String(d.matchId), userId: String(d.userId) });
