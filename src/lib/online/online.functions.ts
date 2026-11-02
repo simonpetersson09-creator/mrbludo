@@ -101,3 +101,13 @@ export const quickStatus = createServerFn({ method: "POST" }).middleware([requir
   const { quickStatusAction } = await import("./online-actions");
   return quickStatusAction({ data, context });
 });
+
+export const setAvatar = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(setAvatarInput).handler(async ({ data, context }) => {
+  const { setAvatarAction } = await import("./online-actions");
+  return setAvatarAction({ data, context });
+});
+
+export const getAvatars = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(getAvatarsInput).handler(async ({ data, context }) => {
+  const { getAvatarsAction } = await import("./online-actions");
+  return getAvatarsAction({ data, context });
+});
