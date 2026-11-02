@@ -15,6 +15,13 @@
       "when": 1793650443658,
       "tag": "0001_ludo_my_ranks",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793656135536,
+      "tag": "0002_add_profile_avatar_image",
+      "breakpoints": true
     }
   ]
 }
