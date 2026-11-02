@@ -130,13 +130,29 @@ export const joinByCodeAction = async ({ data, context }: { data: ReturnType<typ
     return { id: m.id };
   };
 
+/** Quick play: drop seats whose searcher stopped polling (reload/closed app) so nobody is matched with a ghost. */
+const QUICK_STALE_MS = 10_000;
+async function pruneQuickSeats(db: Admin, matchId: string) {
+  const cutoff = new Date(Date.now() - QUICK_STALE_MS).toISOString();
+  await db.from("match_players").delete().eq("match_id", matchId).lt("last_seen", cutoff);
+  const { data: rest } = await db.from("match_players").select("user_id").eq("match_id", matchId).order("joined_at");
+  if (!rest?.length) await db.from("matches").update({ status: "abandoned" }).eq("id", matchId).eq("status", "waiting");
+  else await db.from("matches").update({ host_id: rest[0].user_id }).eq("id", matchId).eq("status", "waiting");
+  return rest ?? [];
+}
+
 export const quickMatchAction = async ({ data, context }: { data: ReturnType<typeof quickMatchInput>; context: OnlineContext }) => {
     const db = await admin();
+    // A new search replaces any earlier unfinished search by this player (double tap, reload).
+    const { data: mineWaiting } = await db.from("match_players").select("match_id, matches!inner(status, is_private)")
+      .eq("user_id", context.userId).eq("matches.status", "waiting").eq("matches.is_private", false);
+    for (const r of mineWaiting ?? []) await leaveMatchAction({ data: { matchId: r.match_id }, context });
     const since = new Date(Date.now() - 10 * 60_000).toISOString();
     const { data: open } = await db.from("matches").select("id, max_players, host_id")
       .eq("status", "waiting").eq("is_private", false).eq("max_players", data.maxPlayers)
       .gte("updated_at", since).order("created_at").limit(10);
     for (const m of open ?? []) {
+      if (!(await pruneQuickSeats(db, m.id)).length) continue;
       if (await seatUser(db, m.id, m.max_players, context.userId)) {
         await db.from("matches").update({ updated_at: new Date().toISOString() }).eq("id", m.id);
         await maybeAutostart(db, m.id);
@@ -162,16 +178,20 @@ export const quickFinalizeAction = async ({ data, context }: { data: ReturnType<
     if (!(seats ?? []).some((s) => s.user_id === context.userId)) return { status: "none" as const };
     if (m.status === "playing") return { status: "started" as const };
     if (m.status !== "waiting" || m.is_private) return { status: "none" as const };
-    if ((seats?.length ?? 0) < 2) {
+    await db.from("match_players").update({ last_seen: new Date().toISOString() }).eq("match_id", m.id).eq("user_id", context.userId);
+    const live = new Set((await pruneQuickSeats(db, m.id)).map((r) => r.user_id));
+    const liveSeats = (seats ?? []).filter((s) => live.has(s.user_id));
+    if (liveSeats.length < 2) {
       await leaveMatchAction({ data: { matchId: m.id }, context });
       return { status: "none" as const };
     }
-    await doStart(db, m.id, m.version, seats ?? [], m.max_players);
+    await doStart(db, m.id, m.version, liveSeats, m.max_players);
     return { status: "started" as const };
   };
 
 export const quickStatusAction = async ({ data, context }: { data: ReturnType<typeof startMatchInput>; context: OnlineContext }) => {
     const db = await admin();
+    await db.from("match_players").update({ last_seen: new Date().toISOString() }).eq("match_id", data.matchId).eq("user_id", context.userId);
     const { data: m } = await db.from("matches").select("status").eq("id", data.matchId).single();
     const { data: seats } = await db.from("match_players").select("user_id, display_name").eq("match_id", data.matchId);
     return {
