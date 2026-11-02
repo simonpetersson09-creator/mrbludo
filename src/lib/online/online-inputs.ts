@@ -44,3 +44,4 @@ export const logEventInput = (d: { kind: string; deviceId?: string; platform?: s
     const detail = JSON.parse(JSON.stringify(d.detail ?? {}).slice(0, 2000) || "{}");
     return { kind, platform, deviceId: String(d.deviceId ?? "").slice(0, 64) || null, detail };
   };
+export const deleteDataInput = (_d?: unknown) => ({ confirm: true as const });

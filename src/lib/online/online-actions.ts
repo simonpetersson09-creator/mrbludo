@@ -429,3 +429,26 @@ export const getAvatarsAction = async ({ data, context }: { data: ReturnType<typ
     for (const r of rows ?? []) out[r.id] = r.avatar_image;
     return out;
   };
+
+/** Erase the caller's player identity and personal data (Yatzy's "delete player data"). */
+export const deletePlayerDataAction = async ({ context }: { data?: unknown; context: OnlineContext }) => {
+    const db = await admin();
+    const uid = context.userId;
+    const { data: seats } = await db.from("match_players").select("match_id, matches(status)").eq("user_id", uid);
+    const active = (seats ?? []).filter((r) => (r.matches as { status?: string } | null)?.status === "active").map((r) => r.match_id);
+    // In a running match the seat stays (the board needs it) but loses the name and is treated as left.
+    if (active.length) await db.from("match_players").update({ display_name: "—", avatar: "🎲", left_at: new Date().toISOString() }).eq("user_id", uid).in("match_id", active);
+    let seatDelete = db.from("match_players").delete().eq("user_id", uid);
+    if (active.length) seatDelete = seatDelete.not("match_id", "in", `(${active.join(",")})`);
+    const results = await Promise.all([
+      seatDelete,
+      db.from("player_stats").delete().eq("user_id", uid),
+      db.from("friendships").delete().or(`requester.eq.${uid},addressee.eq.${uid}`),
+      db.from("match_invites").delete().or(`from_user.eq.${uid},to_user.eq.${uid}`),
+      db.from("app_events").delete().eq("user_id", uid),
+    ]);
+    if (results.some((r) => r.error)) throw new Error("err:delete_failed");
+    const { error } = await db.auth.admin.deleteUser(uid); // removes profile and roles too
+    if (error) throw new Error("err:delete_failed");
+    return { ok: true };
+  };

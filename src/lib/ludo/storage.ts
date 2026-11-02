@@ -41,3 +41,10 @@ export const saveSettings = (s: Settings) => write(SETTINGS, s);
 export const loadStats = () => read(STATS, DEFAULT_STATS);
 export const saveStats = (s: Stats) => write(STATS, s);
 export const resetStats = () => write(STATS, DEFAULT_STATS);
+
+// Notification choices (Yatzy's three toggles). Saved now; no push is sent until push is approved.
+export interface NotificationPrefs { turnNotifications: boolean; reminderNotifications: boolean; playReminders: boolean }
+const NOTIFS = NS + "notifications";
+const DEFAULT_NOTIFS: NotificationPrefs = { turnNotifications: true, reminderNotifications: true, playReminders: false };
+export const loadNotificationPrefs = () => read(NOTIFS, DEFAULT_NOTIFS);
+export const saveNotificationPrefs = (p: NotificationPrefs) => write(NOTIFS, p);
