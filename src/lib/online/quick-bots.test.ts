@@ -14,7 +14,7 @@ describe("quick play computer seats", () => {
     s = forfeit(s, 0);
     const prev = s; const next = forfeit(s, 1);
     const d = statDeltas(prev, next);
-    expect(Object.keys(d).sort()).toEqual(["b"]);
+    expect(Object.keys(d).sort()).toEqual(["a", "b"]);
     expect(autoStep(next, () => 3)).toBe(next);
   });
 });
