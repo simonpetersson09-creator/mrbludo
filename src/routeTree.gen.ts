@@ -22,6 +22,7 @@ import { Route as AuthenticatedFriendsRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenticated/leaderboard'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedOnlineIndexRouteImport } from './routes/_authenticated/online.index'
+import { Route as AuthenticatedOnlineMatchIdRouteImport } from './routes/_authenticated/online.$matchId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -89,6 +90,12 @@ const AuthenticatedOnlineIndexRoute =
     path: '/online/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOnlineMatchIdRoute =
+  AuthenticatedOnlineMatchIdRouteImport.update({
+    id: '/online/$matchId',
+    path: '/online/$matchId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/friends': typeof AuthenticatedFriendsRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/online/$matchId': typeof AuthenticatedOnlineMatchIdRoute
   '/online/': typeof AuthenticatedOnlineIndexRoute
 }
 export interface FileRoutesByTo {
@@ -116,6 +124,7 @@ export interface FileRoutesByTo {
   '/friends': typeof AuthenticatedFriendsRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/online/$matchId': typeof AuthenticatedOnlineMatchIdRoute
   '/online': typeof AuthenticatedOnlineIndexRoute
 }
 export interface FileRoutesById {
@@ -132,6 +141,7 @@ export interface FileRoutesById {
   '/_authenticated/friends': typeof AuthenticatedFriendsRoute
   '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/online/$matchId': typeof AuthenticatedOnlineMatchIdRoute
   '/_authenticated/online/': typeof AuthenticatedOnlineIndexRoute
 }
 export interface FileRouteTypes {
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/friends'
     | '/leaderboard'
     | '/profile'
+    | '/online/$matchId'
     | '/online/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/friends'
     | '/leaderboard'
     | '/profile'
+    | '/online/$matchId'
     | '/online'
   id:
     | '__root__'
@@ -177,6 +189,7 @@ export interface FileRouteTypes {
     | '/_authenticated/friends'
     | '/_authenticated/leaderboard'
     | '/_authenticated/profile'
+    | '/_authenticated/online/$matchId'
     | '/_authenticated/online/'
   fileRoutesById: FileRoutesById
 }
@@ -284,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnlineIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/online/$matchId': {
+      id: '/_authenticated/online/$matchId'
+      path: '/online/$matchId'
+      fullPath: '/online/$matchId'
+      preLoaderRoute: typeof AuthenticatedOnlineMatchIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -292,6 +312,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFriendsRoute: typeof AuthenticatedFriendsRoute
   AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedOnlineMatchIdRoute: typeof AuthenticatedOnlineMatchIdRoute
   AuthenticatedOnlineIndexRoute: typeof AuthenticatedOnlineIndexRoute
 }
 
@@ -300,6 +321,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFriendsRoute: AuthenticatedFriendsRoute,
   AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedOnlineMatchIdRoute: AuthenticatedOnlineMatchIdRoute,
   AuthenticatedOnlineIndexRoute: AuthenticatedOnlineIndexRoute,
 }
 

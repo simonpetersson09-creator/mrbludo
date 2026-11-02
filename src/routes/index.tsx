@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { BarChart3, BookOpen, Play, Settings, Users, Zap } from "lucide-react";
+import { BarChart3, BookOpen, Globe, Play, Settings, Users, Zap } from "lucide-react";
 import { createGame } from "@/lib/ludo/engine";
 import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
 import heroImg from "@/assets/ludo-hero.jpg";
@@ -44,6 +44,7 @@ function HomePage() {
         )}
         <button className="home-action" onClick={quick}><Zap size={16} /> Snabbmatch mot datorn</button>
         <Link to="/setup" className="home-action"><Users size={16} /> Ny match (2–4 spelare)</Link>
+        <Link to="/online" className="home-action home-action-gold"><Globe size={16} /> Spela online</Link>
         <div className="mt-3 grid grid-cols-3 gap-[7px]">
           <Link to="/stats" className="home-action home-action-ghost"><BarChart3 size={16} /> Statistik</Link>
           <Link to="/rules" className="home-action home-action-ghost"><BookOpen size={16} /> Regler</Link>
