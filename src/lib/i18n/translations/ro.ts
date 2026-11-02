@@ -216,4 +216,12 @@ export const ro: Record<TranslationKey, string> = {
   countryRankLabel: "Locul tău",
   countryRankLabelFull: "Locul tău în {country}",
   worldRankLabelFull: "Locul tău în lume",
+  selectPlayerCount: "Alege numărul de jucători",
+  opponent: "adversar",
+  opponents: "adversari",
+  searchingOpponent: "Căutăm un adversar…",
+  searchingOpponentHint: "Dacă nu găsim pe nimeni, joci cu calculatorul",
+  matchFoundTitle: "Adversar găsit!",
+  matchFoundVs: "Joci cu {name}",
+  cancelSearch: "Anulează",
 };

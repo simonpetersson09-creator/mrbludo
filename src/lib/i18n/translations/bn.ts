@@ -216,4 +216,12 @@ export const bn: Record<TranslationKey, string> = {
   countryRankLabel: "তোমার র‍্যাঙ্ক",
   countryRankLabelFull: "{country}-এ তোমার র‍্যাঙ্ক",
   worldRankLabelFull: "বিশ্বে তোমার র‍্যাঙ্ক",
+  selectPlayerCount: "খেলোয়াড়ের সংখ্যা বেছে নাও",
+  opponent: "প্রতিপক্ষ",
+  opponents: "প্রতিপক্ষ",
+  searchingOpponent: "প্রতিপক্ষ খোঁজা হচ্ছে…",
+  searchingOpponentHint: "কাউকে না পেলে কম্পিউটারের সাথে খেলবে",
+  matchFoundTitle: "প্রতিপক্ষ পাওয়া গেছে!",
+  matchFoundVs: "তোমার প্রতিপক্ষ: {name}",
+  cancelSearch: "বাতিল",
 };

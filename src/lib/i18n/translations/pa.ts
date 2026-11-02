@@ -216,4 +216,12 @@ export const pa: Record<TranslationKey, string> = {
   countryRankLabel: "ਤੁਹਾਡਾ ਦਰਜਾ",
   countryRankLabelFull: "{country} ਵਿੱਚ ਤੁਹਾਡਾ ਦਰਜਾ",
   worldRankLabelFull: "ਦੁਨੀਆ ਵਿੱਚ ਤੁਹਾਡਾ ਦਰਜਾ",
+  selectPlayerCount: "ਖਿਡਾਰੀਆਂ ਦੀ ਗਿਣਤੀ ਚੁਣੋ",
+  opponent: "ਵਿਰੋਧੀ",
+  opponents: "ਵਿਰੋਧੀ",
+  searchingOpponent: "ਵਿਰੋਧੀ ਲੱਭ ਰਹੇ…",
+  searchingOpponentHint: "ਕੋਈ ਨਾ ਮਿਲਿਆ ਤਾਂ ਕੰਪਿਊਟਰ ਨਾਲ ਖੇਡੋਗੇ",
+  matchFoundTitle: "ਵਿਰੋਧੀ ਮਿਲ ਗਿਆ!",
+  matchFoundVs: "ਤੁਹਾਡਾ ਵਿਰੋਧੀ: {name}",
+  cancelSearch: "ਰੱਦ ਕਰੋ",
 };

@@ -216,4 +216,12 @@ export const tr: Record<TranslationKey, string> = {
   countryRankLabel: "Sıralaman",
   countryRankLabelFull: "{country} sıralaman",
   worldRankLabelFull: "Dünya sıralaman",
+  selectPlayerCount: "Oyuncu sayısını seç",
+  opponent: "rakip",
+  opponents: "rakip",
+  searchingOpponent: "Rakip aranıyor…",
+  searchingOpponentHint: "Kimse bulunamazsa bilgisayarla oynarsın",
+  matchFoundTitle: "Rakip bulundu!",
+  matchFoundVs: "Rakibin: {name}",
+  cancelSearch: "İptal",
 };

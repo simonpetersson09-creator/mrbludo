@@ -201,4 +201,12 @@ export const hu: Record<TranslationKey, string> = {
   countryRankLabel: "Helyezésed",
   countryRankLabelFull: "Helyezésed itt: {country}",
   worldRankLabelFull: "Helyezésed a világon",
+  selectPlayerCount: "Válaszd ki a játékosok számát",
+  opponent: "ellenfél",
+  opponents: "ellenfél",
+  searchingOpponent: "Ellenfél keresése…",
+  searchingOpponentHint: "Ha nincs ellenfél, a gép ellen játszol",
+  matchFoundTitle: "Ellenfél megvan!",
+  matchFoundVs: "Ellenfeled: {name}",
+  cancelSearch: "Mégse",
 };

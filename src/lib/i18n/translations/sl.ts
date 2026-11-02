@@ -201,4 +201,12 @@ export const sl: Record<TranslationKey, string> = {
   countryRankLabel: "Tvoja uvrstitev",
   countryRankLabelFull: "Tvoja uvrstitev v državi {country}",
   worldRankLabelFull: "Tvoja svetovna uvrstitev",
+  selectPlayerCount: "Izberi število igralcev",
+  opponent: "nasprotnik",
+  opponents: "nasprotniki",
+  searchingOpponent: "Iščemo nasprotnika…",
+  searchingOpponentHint: "Če ne najdemo nikogar, igraš proti računalniku",
+  matchFoundTitle: "Nasprotnik najden!",
+  matchFoundVs: "Igraš proti: {name}",
+  cancelSearch: "Prekliči",
 };

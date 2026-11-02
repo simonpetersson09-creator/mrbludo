@@ -216,4 +216,12 @@ export const hi: Record<TranslationKey, string> = {
   countryRankLabel: "तुम्हारी रैंक",
   countryRankLabelFull: "{country} में तुम्हारी रैंक",
   worldRankLabelFull: "दुनिया में तुम्हारी रैंक",
+  selectPlayerCount: "खिलाड़ियों की संख्या चुनो",
+  opponent: "प्रतिद्वंद्वी",
+  opponents: "प्रतिद्वंद्वी",
+  searchingOpponent: "प्रतिद्वंद्वी ढूँढ रहे हैं…",
+  searchingOpponentHint: "कोई न मिला तो कंप्यूटर से खेलोगे",
+  matchFoundTitle: "विरोधी मिल गया!",
+  matchFoundVs: "आपका विरोधी: {name}",
+  cancelSearch: "रद्द करो",
 };

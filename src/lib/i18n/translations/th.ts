@@ -216,4 +216,12 @@ export const th: Record<TranslationKey, string> = {
   countryRankLabel: "อันดับคุณ",
   countryRankLabelFull: "อันดับคุณใน{country}",
   worldRankLabelFull: "อันดับคุณในโลก",
+  selectPlayerCount: "เลือกจำนวนผู้เล่น",
+  opponent: "คู่แข่ง",
+  opponents: "คู่แข่ง",
+  searchingOpponent: "กำลังหาคู่แข่ง…",
+  searchingOpponentHint: "ถ้าไม่เจอใคร จะได้เล่นกับคอมพิวเตอร์",
+  matchFoundTitle: "เจอคู่แข่งแล้ว!",
+  matchFoundVs: "คู่แข่งของคุณ: {name}",
+  cancelSearch: "ยกเลิก",
 };

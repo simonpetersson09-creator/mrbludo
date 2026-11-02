@@ -216,4 +216,12 @@ export const no: Record<TranslationKey, string> = {
   countryRankLabel: "Din rangering",
   countryRankLabelFull: "Din rangering i {country}",
   worldRankLabelFull: "Din rangering i verden",
+  selectPlayerCount: "Velg antall spillere",
+  opponent: "motstander",
+  opponents: "motstandere",
+  searchingOpponent: "Søker motstander…",
+  searchingOpponentHint: "Finnes ingen, spiller du mot datamaskinen",
+  matchFoundTitle: "Motspiller funnet!",
+  matchFoundVs: "Du møter {name}",
+  cancelSearch: "Avbryt",
 };

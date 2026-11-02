@@ -216,4 +216,12 @@ export const ru: Record<TranslationKey, string> = {
   countryRankLabel: "Твоё место",
   countryRankLabelFull: "Твоё место в стране: {country}",
   worldRankLabelFull: "Твоё место в мире",
+  selectPlayerCount: "Выбери число игроков",
+  opponent: "соперник",
+  opponents: "соперники",
+  searchingOpponent: "Ищем соперника…",
+  searchingOpponentHint: "Если никого не найдём, сыграешь с компьютером",
+  matchFoundTitle: "Соперник найден!",
+  matchFoundVs: "Твой соперник: {name}",
+  cancelSearch: "Отмена",
 };

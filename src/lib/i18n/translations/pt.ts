@@ -216,4 +216,12 @@ export const pt: Record<TranslationKey, string> = {
   countryRankLabel: "A tua posição",
   countryRankLabelFull: "A tua posição em {country}",
   worldRankLabelFull: "A tua posição mundial",
+  selectPlayerCount: "Escolhe o número de jogadores",
+  opponent: "adversário",
+  opponents: "adversários",
+  searchingOpponent: "A procurar adversário…",
+  searchingOpponentHint: "Se não houver ninguém, jogas contra o computador",
+  matchFoundTitle: "Adversário encontrado!",
+  matchFoundVs: "Vais jogar contra {name}",
+  cancelSearch: "Cancelar",
 };

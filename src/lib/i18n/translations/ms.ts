@@ -216,4 +216,12 @@ export const ms: Record<TranslationKey, string> = {
   countryRankLabel: "Kedudukan awak",
   countryRankLabelFull: "Kedudukan awak di {country}",
   worldRankLabelFull: "Kedudukan awak di dunia",
+  selectPlayerCount: "Pilih bilangan pemain",
+  opponent: "lawan",
+  opponents: "lawan",
+  searchingOpponent: "Mencari lawan…",
+  searchingOpponentHint: "Jika tiada pemain ditemui, awak lawan komputer",
+  matchFoundTitle: "Lawan ditemui!",
+  matchFoundVs: "Lawan awak: {name}",
+  cancelSearch: "Batal",
 };

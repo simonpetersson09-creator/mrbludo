@@ -216,4 +216,12 @@ export const gu: Record<TranslationKey, string> = {
   countryRankLabel: "તમારો ક્રમ",
   countryRankLabelFull: "{country}માં તમારો ક્રમ",
   worldRankLabelFull: "વિશ્વમાં તમારો ક્રમ",
+  selectPlayerCount: "ખેલાડીઓની સંખ્યા પસંદ કરો",
+  opponent: "હરીફ",
+  opponents: "હરીફો",
+  searchingOpponent: "હરીફ શોધાય છે…",
+  searchingOpponentHint: "કોઈ નહીં મળે તો કમ્પ્યુટર સામે રમશો",
+  matchFoundTitle: "પ્રતિસ્પર્ધી મળ્યો!",
+  matchFoundVs: "તમારો પ્રતિસ્પર્ધી: {name}",
+  cancelSearch: "રદ કરો",
 };
