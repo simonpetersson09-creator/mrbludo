@@ -274,7 +274,7 @@ export const sendFriendRequestAction = async ({ data, context }: { data: ReturnT
     if (data.userId === context.userId) throw new Error("err:own_code");
     // Yatzy's rule: only players who sat in the same online match can become friends.
     const { data: seats } = await db.from("match_players").select("user_id").eq("match_id", data.matchId).in("user_id", [context.userId, data.userId]);
-    if ((seats ?? []).length !== 2) throw new Error("err:not_played_together");
+    if ((seats ?? []).length !== 2) throw new Error("err:not_in_match");
     const { data: existing } = await db.from("friendships").select("*")
       .or(`and(requester.eq.${context.userId},addressee.eq.${data.userId}),and(requester.eq.${data.userId},addressee.eq.${context.userId})`).maybeSingle();
     if (existing) {
