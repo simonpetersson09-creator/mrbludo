@@ -90,6 +90,23 @@ function HomePage() {
           <span className="home-round-action"><BarChart3 className="h-4 w-4 sm:h-5 sm:w-5" /></span>
           <span className="home-round-label">{t("stats")}</span>
         </Link>
+        {showLangs && (
+          <div ref={langPopRef} className={`home-round-pop${langDown ? " home-round-pop-down" : ""}`} role="menu">
+            {LANGUAGES.map((l) => (
+              <button
+                key={l.code}
+                type="button"
+                role="menuitem"
+                className={`home-round-pop-item${l.code === lang ? " home-round-pop-item-active" : ""}`}
+                onClick={() => { setLanguage(l.code); setShowLangs(false); }}
+              >
+                <span aria-hidden="true">{l.flag}</span>
+                <span className="min-w-0 flex-1 truncate text-left">{l.label}</span>
+                {l.code === lang && <Check size={13} className="shrink-0" />}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
