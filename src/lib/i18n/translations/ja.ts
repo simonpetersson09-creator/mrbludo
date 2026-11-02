@@ -14,10 +14,8 @@ export const ja: Record<TranslationKey, string> = {
   tagline: "クラシックルド – 4つの駒、1つのサイコロ",
   resumeMatch: "途中の対局を続ける",
   quickMatchBot: "コンピューターとクイック対戦",
-  newMatch: "新しい対局（2～4人）",
   playOnline: "オンラインでプレイ",
   stats: "統計",
-  rules: "ルール",
   settings: "設定",
 
   newMatchTitle: "新しい対局",

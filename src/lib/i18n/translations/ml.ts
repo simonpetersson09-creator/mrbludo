@@ -14,10 +14,8 @@ export const ml: Record<TranslationKey, string> = {
   tagline: "ക്ലാസിക് ലൂഡോ – നാല് കായ്, ഒരു പാചകം",
   resumeMatch: "നിലവിലെ മത്സരം തുടരൂ",
   quickMatchBot: "കമ്പ്യൂട്ടറിനെതിരെ ദ്രുത മത്സരം",
-  newMatch: "പുതിയ മത്സരം (2–4 കളിക്കാർ)",
   playOnline: "ഓൺലൈനിൽ കളിക്കൂ",
   stats: "സ്ഥിതിവിവരക്കണക്ക്",
-  rules: "നിയമങ്ങൾ",
   settings: "സെറ്റിംഗ്സ്",
 
   newMatchTitle: "പുതിയ മത്സരം",

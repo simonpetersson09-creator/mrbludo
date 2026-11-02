@@ -14,10 +14,8 @@ export const hi: Record<TranslationKey, string> = {
   tagline: "क्लासिक लूडो – चार गोटियां, एक पासा",
   resumeMatch: "चल रहा मैच जारी रखें",
   quickMatchBot: "कंप्यूटर से त्वरित मैच",
-  newMatch: "नया मैच (2–4 खिलाड़ी)",
   playOnline: "ऑनलाइन खेलें",
   stats: "आंकड़े",
-  rules: "नियम",
   settings: "सेटिंग्स",
 
   newMatchTitle: "नया मैच",

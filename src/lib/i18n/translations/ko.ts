@@ -14,10 +14,8 @@ export const ko: Record<TranslationKey, string> = {
   tagline: "클래식 루도 – 말 4개, 주사위 1개",
   resumeMatch: "진행 중인 경기 계속하기",
   quickMatchBot: "컴퓨터와 빠른 대전",
-  newMatch: "새 경기 (2–4명)",
   playOnline: "온라인 플레이",
   stats: "통계",
-  rules: "규칙",
   settings: "설정",
 
   newMatchTitle: "새 경기",

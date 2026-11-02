@@ -14,10 +14,8 @@ export const vi: Record<TranslationKey, string> = {
   tagline: "Ludo cổ điển – bốn quân, một xúc xắc",
   resumeMatch: "Tiếp tục trận đang chơi",
   quickMatchBot: "Đấu nhanh với máy",
-  newMatch: "Trận mới (2–4 người chơi)",
   playOnline: "Chơi trực tuyến",
   stats: "Thống kê",
-  rules: "Luật chơi",
   settings: "Cài đặt",
 
   newMatchTitle: "Trận mới",

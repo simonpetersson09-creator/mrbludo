@@ -14,10 +14,8 @@ export const uk: Record<TranslationKey, string> = {
   tagline: "Класичне лудо – чотири фішки, один кубик",
   resumeMatch: "Продовжити поточний матч",
   quickMatchBot: "Швидкий матч проти комп'ютера",
-  newMatch: "Новий матч (2–4 гравці)",
   playOnline: "Грати онлайн",
   stats: "Статистика",
-  rules: "Правила",
   settings: "Налаштування",
 
   newMatchTitle: "Новий матч",
