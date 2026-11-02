@@ -111,7 +111,7 @@ function FriendsPage() {
           <div className="space-y-1.5">
             {accepted.map((f) => (
               <div key={f.id} className="flex w-full items-center gap-2.5 rounded-xl border border-border/50 bg-secondary/60 px-2.5 py-2">
-                <Avatar a={f.user.avatar} />
+                <PlayerAvatar emoji={f.user.avatar} image={pics[f.user.id]} className="h-9 w-9 border border-border/60 bg-secondary text-base" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-display text-sm font-bold text-foreground">{f.user.display_name} {flag(f.user.country)}</p>
                   <p className="text-[10px] leading-snug text-muted-foreground">
