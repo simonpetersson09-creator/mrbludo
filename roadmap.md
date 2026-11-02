@@ -1,19 +1,6 @@
-# Mr. B Ludo mobile preparation
-- [x] Audit remaining Yatzy native reference and Ludo file/plugin/version completeness.
-- [x] Add opt-in native startup/session/network/WebView diagnostics without sensitive data.
-- [x] Run available checks and write precise Android/iPhone installation instructions separating browser, build and physical verification.
-- [x] Inspect Yatzy read-only native/offline/session reference before implementation.
-- [x] Bundle local Ludo, AI, 40 languages, fonts and real 3D die for offline cold-start.
-- [x] Implement authenticated native transport sharing the same online handlers; publication remains unapproved.
-- [x] Re-run offline start/restart/language/layout and online checks; document exact installation commands.
-- [x] Automatic anonymous identity; separate administrator login (successful admin login needs a provisioned administrator).
-- [x] Verify two anonymous players, reconnect and persistent match statistics in browser sessions.
-- [x] Capacitor iOS/Android shells with isolated identifiers and secure session storage integration.
-- [x] Safe areas, lifecycle, network recovery and small-screen browser checks.
-- [x] Disabled advertising/push integration boundaries and build/verification scripts.
-- [x] Automated tests and precise physical-device/build limitations report in docs/native-verification.md.
-- [x] Yatzy-parity: Android back button, haptics, own app icon + splash pipeline.
-- [ ] Physical-device check of back button, vibration, icon/splash: blocked by phone builds.
-- [ ] Installable native binaries: blocked by Mac/Xcode or Java/Android SDK toolchains and device signing.
-- [ ] Published native online end-to-end: blocked by explicit website publication approval and a configured stable Ludo HTTPS origin.
-- [ ] Physical-device secure-storage, lifecycle and GPU verification: blocked by runnable phone builds and physical devices.
+# Roadmap
+- [ ] Friends like Yatzy: requests only to players met in an online match (result screen), one per pair, cancel own pending request; remove friend-code entry
+- [ ] Stats page: weekly most active (top 10) + top 10 countries
+- [ ] Play with friend page like Yatzy: create card + join card with code and QR scan; waiting room shows code + QR + share
+- [ ] Remove profile button
+- [ ] Start page "Spela med vän" button restyle/label
