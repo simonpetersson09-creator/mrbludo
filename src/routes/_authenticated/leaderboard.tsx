@@ -45,7 +45,7 @@ function LeaderboardPage() {
           {rows?.map((r, i) => (
             <li key={r.user_id} className="flex items-center gap-2 rounded-lg bg-surface px-3 py-2">
               <span className="w-6 font-bold text-gold">{i + 1}.</span>
-              <span>{r.profile?.avatar}</span>
+              <PlayerAvatar emoji={r.profile?.avatar ?? "🎲"} image={pics[r.user_id]} className="h-7 w-7 text-sm" />
               <span className="flex-1 truncate font-semibold">{r.profile?.display_name ?? "?"} {flag(r.profile?.country ?? "")}</span>
               <span className="font-bold">{r[sort]}</span>
             </li>
