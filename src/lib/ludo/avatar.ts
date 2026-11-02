@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAvatars, setAvatar } from "@/lib/online/online.functions";
+import { supabase } from "@/lib/auth/client";
 
 // Own profile picture. The phone keeps the copy it shows (so the picture also
 // works without internet), and the server keeps a copy other players can see.
@@ -56,6 +57,26 @@ export async function syncOwnAvatar(): Promise<boolean> {
   } catch {
     return false; // kept on the phone; retried the next time a screen asks
   }
+}
+
+/**
+ * A device that has never seen this player's picture takes the server copy
+ * instead of pushing "nothing" and erasing it.
+ */
+export async function adoptOwnAvatarFromServer(): Promise<void> {
+  if (getOwnAvatar()) return;
+  try { if (localStorage.getItem(SYNCED_KEY) !== null) return; } catch { return; }
+  const { data } = await supabase.auth.getUser();
+  const id = data?.user?.id;
+  if (!id) return;
+  const rows = await getAvatars({ data: { userIds: [id] } }).catch(() => ({}) as Record<string, string | null>);
+  const img = rows[id] ?? null;
+  if (!img) return;
+  try {
+    localStorage.setItem(AVATAR_KEY, img);
+    localStorage.setItem(SYNCED_KEY, fingerprint(img));
+  } catch { /* storage full/blocked: the server copy still works */ }
+  window.dispatchEvent(new Event(CHANGED));
 }
 
 /** Save on the phone at once, then let the server copy catch up in the background. */
