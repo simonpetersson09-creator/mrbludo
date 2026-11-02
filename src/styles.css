@@ -110,6 +110,7 @@
 }
 .home-action:active { transform: scale(.98); box-shadow: 0 2px 8px color-mix(in oklab, var(--game-info) 20%, transparent); }
 .home-action:disabled { opacity: .45; }
+.home-action-icon { font-size: 16px; line-height: 1; }
 .home-action-gold { background: linear-gradient(to right, var(--game-gold-light), var(--game-gold)); box-shadow: 0 4px 14px color-mix(in oklab, var(--game-gold) 35%, transparent); }
 .home-action-success { background: linear-gradient(to right, var(--game-success-light), var(--game-success)); box-shadow: 0 4px 14px color-mix(in oklab, var(--game-success) 35%, transparent); }
 .home-action-ghost { background: var(--secondary); color: var(--secondary-foreground); box-shadow: none; border: 1px solid var(--border); }
