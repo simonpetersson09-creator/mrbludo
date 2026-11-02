@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { BarChart3, BookOpen, Play, Settings, Users } from "lucide-react";
+import { Play } from "lucide-react";
 import { createGame } from "@/lib/ludo/engine";
 import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
 import { useTranslation } from "@/lib/i18n";
@@ -45,13 +45,9 @@ function HomePage() {
           <Link to="/play" className="home-action"><Play size={16} /> {t("resumeMatch")}</Link>
         )}
         <button className="home-action font-display" onClick={quick}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
-        <Link to="/setup" className="home-action font-display"><Users size={16} /> {t("newMatch")}</Link>
         <Link to="/online" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">🌐</span><span>{t("playOnline")}</span></Link>
-        <div className="mt-3 grid grid-cols-3 gap-[7px]">
-          <Link to="/stats" className="home-action home-action-ghost"><BarChart3 size={16} /> {t("stats")}</Link>
-          <Link to="/rules" className="home-action home-action-ghost"><BookOpen size={16} /> {t("rules")}</Link>
-          <Link to="/settings" aria-label={t("settings")} className="home-action home-action-ghost"><Settings size={16} /></Link>
-        </div>
+        <Link to="/stats" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">📊</span><span>{t("stats")}</span></Link>
+        <Link to="/settings" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">⚙️</span><span>{t("settings")}</span></Link>
       </div>
     </main>
   );
