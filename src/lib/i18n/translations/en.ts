@@ -13,9 +13,9 @@ export const en: Record<TranslationKey, string> = {
 
   tagline: "Classic Ludo – four pieces, one die",
   resumeMatch: "Continue current match",
-  quickMatchBot: "Quick match vs computer",
-  newMatch: "New match (2–4 players)",
-  playOnline: "Play online",
+  quickMatchBot: "Quick play",
+  newMatch: "New match",
+  playOnline: "Play with friends",
   stats: "Statistics",
   rules: "Rules",
   settings: "Settings",
