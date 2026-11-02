@@ -33,3 +33,5 @@ export const adminOverview = () => invoke<Awaited<ReturnType<typeof Web.adminOve
 export const getMyRanks = () => invoke<Awaited<ReturnType<typeof Web.getMyRanks>>>("getMyRanks");
 export const quickFinalize = (args: Parameters<typeof Web.quickFinalize>[0]) => invoke<Awaited<ReturnType<typeof Web.quickFinalize>>>("quickFinalize", args.data);
 export const quickStatus = (args: Parameters<typeof Web.quickStatus>[0]) => invoke<Awaited<ReturnType<typeof Web.quickStatus>>>("quickStatus", args.data);
+export const setAvatar = (args: Parameters<typeof Web.setAvatar>[0]) => invoke<Awaited<ReturnType<typeof Web.setAvatar>>>("setAvatar", args.data);
+export const getAvatars = (args: Parameters<typeof Web.getAvatars>[0]) => invoke<Awaited<ReturnType<typeof Web.getAvatars>>>("getAvatars", args.data);
