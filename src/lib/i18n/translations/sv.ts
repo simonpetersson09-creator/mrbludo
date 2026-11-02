@@ -4,15 +4,12 @@ export const sv = {
   back: "Tillbaka",
   loading: "Laddar…",
   save: "Spara",
-  cancel: "Avbryt",
-  add: "Lägg till",
   remove: "Ta bort",
   undo: "Ångra",
   join: "Gå med",
   decline: "Nej",
   invite: "Bjud in",
   genericError: "Något gick fel",
-  networkError: "Nätverksfel – försök igen",
 
   // Startsida
   tagline: "Klassiskt Ludo – fyra pjäser, en tärning",
