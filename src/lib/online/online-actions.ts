@@ -454,3 +454,12 @@ export const deletePlayerDataAction = async ({ context }: { data?: unknown; cont
     if (error) throw new Error("err:delete_failed");
     return { ok: true };
   };
+
+/** Yatzy's "Veckans flitigaste" and top 10 countries, from verified online matches only. */
+export const getStatsBoardsAction = async ({ context }: { context: OnlineContext }) => {
+    const [{ data: weekly }, { data: countries }] = await Promise.all([
+      context.supabase.rpc("get_weekly_most_active", { _limit: 10 }),
+      context.supabase.rpc("get_top_countries", { _limit: 10 }),
+    ]);
+    return { me: context.userId, weekly: weekly ?? [], countries: countries ?? [] };
+  };
