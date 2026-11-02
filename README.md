@@ -12,13 +12,13 @@ Open your project in the [Lovable editor](https://lovable.dev) and keep building
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Local development requires Node.js 22+ and Bun (this project uses `bun.lock`). Do not mix npm installation with the native Bun scripts.
 
 ```sh
 git clone <this-repository-url>
 cd <repository-name>
-npm i
-npm run dev
+bun install --frozen-lockfile
+bun run dev
 ```
 
 ## Built with
@@ -27,3 +27,7 @@ npm run dev
 - TypeScript
 - React
 - Tailwind CSS
+
+## Mobile installation and verification
+
+See [the Android/iPhone installation guide](docs/mobile-installation.md) for toolchain prerequisites, offline builds and temporary safe diagnostics. See [verified results and limits](docs/native-verification.md) for the distinction between browser checks, source/build checks and physical-device tests.
