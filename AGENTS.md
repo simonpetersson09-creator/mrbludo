@@ -14,3 +14,7 @@
 - `src/components/dice-engine/` is copied read-only-sourced from Mr. B Yatzy; keep it presentation-only and never re-link it to Yatzy resources.
 - All browser storage keys use the `mrb-ludo:v1:` namespace to stay isolated from Yatzy.
 - `noUncheckedIndexedAccess` is off: the board/engine index fixed-size arrays heavily.
+- Online play is server-authoritative: `src/lib/online/online.functions.ts` loads the match, applies `match-logic.ts` (which wraps the same engine as local play), and writes with an optimistic `version` check so concurrent/double actions fail instead of forking state.
+- Dice for online matches are generated only on the server (`secureRoll`); clients never send die values.
+- Match/stat/friend writes go through server functions with the admin client after auth; tables only expose member-scoped SELECT via RLS, so leaderboards can only be changed by finished online matches.
+- Clients sync via realtime plus a 5 s heartbeat that also refetches and lets the server auto-play idle turns (30 s) and forfeit dropped players (90 s).
