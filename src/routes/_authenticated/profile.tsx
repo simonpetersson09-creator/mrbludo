@@ -4,6 +4,7 @@ import { ArrowLeft, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { getMe, updateProfile } from "@/lib/online/online.functions";
 import { AVATARS, COUNTRIES, flag } from "@/lib/online/profile-options";
+import { loadProfileSnapshot, saveProfileSnapshot } from "@/lib/online/snapshot";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/profile")({
@@ -29,10 +30,12 @@ function ProfilePage() {
   const [avatar, setAvatar] = useState("🎲");
   const [country, setCountry] = useState("SE");
   useEffect(() => {
-    getMe().then((m) => { setMe(m); if (m.profile) { setName(m.profile.display_name); setAvatar(m.profile.avatar); setCountry(m.profile.country); } });
+    const apply = (m: Me) => { setMe(m); if (m.profile) { setName(m.profile.display_name); setAvatar(m.profile.avatar); setCountry(m.profile.country); } };
+    const cached = loadProfileSnapshot(); if (cached) apply(cached);
+    getMe().then(m => { saveProfileSnapshot(m); apply(m); }).catch(() => {});
   }, []);
   const save = async () => {
-    try { await updateProfile({ data: { display_name: name, avatar, country } }); toast.success(t("profileSaved")); }
+    try { await updateProfile({ data: { display_name: name, avatar, country } }); const fresh = await getMe(); saveProfileSnapshot(fresh); setMe(fresh); toast.success(t("profileSaved")); }
     catch (e) { toast.error(errorMessage(e, t) || t("saveFailed")); }
   };
   const s = me?.stats;

@@ -5,14 +5,10 @@ function run(command, args) {
   const result = spawnSync(command, args, { stdio: "inherit", env: process.env });
   if (result.error || result.status !== 0) process.exit(result.status || 1);
 }
-function verifyOrigin() {
-  const value = process.env.MRB_LUDO_NATIVE_ORIGIN;
-  if (!value) throw new Error("MRB_LUDO_NATIVE_ORIGIN must name the approved published Ludo site. Nothing is published automatically.");
-  const url = new URL(value);
-  if (url.protocol !== "https:" || url.username || url.password || url.pathname !== "/" || url.search || url.hash || /localhost|id-preview|yatzy/i.test(url.hostname)) throw new Error("Native origin is not an approved stable HTTPS site.");
-}
 try {
-  if (action === "verify") {
+  if (action === "web") {
+    run("bunx", ["vite", "build", "--config", "vite.native.config.ts"]);
+  } else if (action === "verify") {
     const android = readFileSync("android/app/src/main/AndroidManifest.xml", "utf8");
     const gradle = readFileSync("android/app/build.gradle", "utf8");
     const ios = readFileSync("ios/App/App.xcodeproj/project.pbxproj", "utf8");
@@ -25,10 +21,9 @@ try {
     console.log("Ludo identifiers, unsigned native projects, Android hardware acceleration and backup protection verified.");
     console.log("Mac/Xcode available:", existsSync("/Applications/Xcode.app"), "Android SDK configured:", !!(process.env.ANDROID_HOME || process.env.ANDROID_SDK_ROOT));
   } else if (["sync", "open", "build"].includes(action) && ["ios", "android"].includes(platform)) {
-    verifyOrigin();
     run("bunx", ["cap", "sync", platform]);
     if (action === "open") run("bunx", ["cap", "open", platform]);
     if (action === "build" && platform === "android") run("bash", ["-c", "cd android && ./gradlew assembleDebug"]);
     if (action === "build" && platform === "ios") run("xcodebuild", ["-project", "ios/App/App.xcodeproj", "-scheme", "App", "-destination", "generic/platform=iOS Simulator", "CODE_SIGNING_ALLOWED=NO", "build"]);
-  } else throw new Error("Use verify, sync ios|android, open ios|android or build ios|android");
+  } else throw new Error("Use web, verify, sync ios|android, open ios|android or build ios|android");
 } catch (error) { console.error(error.message); process.exit(1); }

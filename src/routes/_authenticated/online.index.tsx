@@ -4,6 +4,7 @@ import { ArrowLeft, Crown, Lock, Trophy, User, Users, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/auth/client";
 import { createMatch, getMe, joinByCode, listFriends, quickMatch, respondInvite } from "@/lib/online/online.functions";
+import { loadProfileSnapshot, saveProfileSnapshot, lastOnlineMatch } from "@/lib/online/snapshot";
 import { flag } from "@/lib/online/profile-options";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
@@ -32,9 +33,11 @@ function OnlineLobby() {
   const [size, setSize] = useState(2);
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
+  const [resumeId, setResumeId] = useState<string | null>(null);
 
   useEffect(() => {
-    getMe().then(setMe).catch(() => {});
+    setMe(loadProfileSnapshot()); setResumeId(lastOnlineMatch());
+    getMe().then(m => { setMe(m); saveProfileSnapshot(m); }).catch(() => {});
     const load = () => listFriends().then((r) => setInvites(r.invites)).catch(() => {});
     load();
     const ch = supabase.channel(`invites-${Math.random().toString(36).slice(2)}`)
@@ -73,6 +76,7 @@ function OnlineLobby() {
           </div>
         )}
 
+        {resumeId && <Link to="/online/$matchId" params={{ matchId: resumeId }} className="home-action home-action-success mt-3">{t("resumeMatch")}</Link>}
         <p className="mb-2 mt-4 text-sm text-muted-foreground">{t("playerCount")}</p>
         <div className="grid grid-cols-3 gap-[7px]">
           {[2, 3, 4].map((n) => (
