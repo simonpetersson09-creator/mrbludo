@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/auth/client";
 import { createMatch, inviteFriend, listFriends, respondFriend, sendFriendRequest } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
+import { useAvatarImages } from "@/lib/ludo/avatar";
+import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/friends")({
@@ -43,6 +45,7 @@ function FriendsPage() {
   const incoming = friends.filter((f) => f.status === "pending" && f.incoming);
   const outgoing = friends.filter((f) => f.status === "pending" && !f.incoming);
   const accepted = friends.filter((f) => f.status === "accepted");
+  const pics = useAvatarImages(friends.map((f) => f.user.id));
   const online = (ls: string | null) => !!ls && Date.now() - new Date(ls).getTime() < 5 * 60_000;
 
   const [inviting, setInviting] = useState<string | null>(null);
