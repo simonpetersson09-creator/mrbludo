@@ -30,3 +30,4 @@
 - Temporary native diagnostics are build-time opt-in and accept only allowlisted event/status labels plus elapsed time; never collect errors, URLs, identities, request data or credentials, and never persist or upload diagnostics.
 - Android back button (`src/components/AndroidBackButton.tsx` + pure `src/lib/native/back-policy.ts`) and haptics (`src/lib/native/haptics.ts`) are ports of Yatzy's equivalents; leaving a match via back never forfeits.
 - App icon/splash source is `resources/icon.png`; `scripts/make-icons.mjs` regenerates committed `resources/`, and `scripts/set-native-icons.mjs` (run by native sync) overwrites Capacitor defaults, mirroring Yatzy's pipeline.
+- Quick play mirrors Yatzy: 15 s search; ≥2 humans start online with server-played `bot:*` seats (never get stats, played via heartbeat); alone → local bot game.
