@@ -1,4 +1,7 @@
 # Mr. B Ludo mobile preparation
+- [x] Audit remaining Yatzy native reference and Ludo file/plugin/version completeness.
+- [x] Add opt-in native startup/session/network/WebView diagnostics without sensitive data.
+- [x] Run available checks and write precise Android/iPhone installation instructions separating browser, build and physical verification.
 - [x] Inspect Yatzy read-only native/offline/session reference before implementation.
 - [x] Bundle local Ludo, AI, 40 languages, fonts and real 3D die for offline cold-start.
 - [x] Implement authenticated native transport sharing the same online handlers; publication remains unapproved.

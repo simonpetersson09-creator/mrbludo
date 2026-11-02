@@ -1,6 +1,7 @@
 import { Capacitor } from "@capacitor/core";
 import type { PluginListenerHandle } from "@capacitor/core";
 import { supabase } from "@/lib/auth/client";
+import { nativeDiagnostic } from "./diagnostics";
 
 export const RESUME_EVENT = "mrb-ludo:resume";
 export async function startNativeRuntime(goHome: () => void) {
@@ -15,10 +16,12 @@ export async function startNativeRuntime(goHome: () => void) {
     window.dispatchEvent(new Event(RESUME_EVENT));
   };
   handles.push(await App.addListener("appStateChange", ({ isActive }) => {
+    nativeDiagnostic("lifecycle", isActive ? "active" : "background");
     if (isActive) resume();
     else { supabase.auth.stopAutoRefresh(); window.dispatchEvent(new Event("mrb-ludo:pause")); }
   }));
   handles.push(await Network.addListener("networkStatusChange", ({ connected }) => {
+    nativeDiagnostic("network", connected ? "online" : "offline");
     window.dispatchEvent(new Event(connected ? "online" : "offline"));
     if (connected) resume();
   }));
