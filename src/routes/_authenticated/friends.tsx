@@ -59,10 +59,6 @@ function FriendsPage() {
     } catch (e) { toast.error(errorMessage(e, t)); } finally { setInviting(null); }
   };
 
-  const Avatar = ({ a }: { a: string | null }) => (
-    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-secondary text-base">{a}</div>
-  );
-
   return (
     <main className="app-screen flex flex-col overflow-y-auto overscroll-contain px-5">
       <div className="mx-auto w-full max-w-md space-y-3 py-4">
@@ -85,7 +81,8 @@ function FriendsPage() {
             {incoming.map((f) => (
               <div key={f.id} className="flex items-center gap-3 rounded-xl border border-border bg-card/80 px-3 py-2">
                 <UserPlus className="h-4 w-4 shrink-0 text-primary" />
-                <p className="min-w-0 flex-1 truncate text-sm text-foreground">{f.user.avatar} {f.user.display_name} {flag(f.user.country)}</p>
+                <PlayerAvatar emoji={f.user.avatar} image={pics[f.user.id]} className="h-7 w-7 border border-border/60 bg-secondary text-sm" />
+                <p className="min-w-0 flex-1 truncate text-sm text-foreground">{f.user.display_name} {flag(f.user.country)}</p>
                 <div className="flex shrink-0 gap-1.5">
                   <button onClick={() => act(respondFriend({ data: { id: f.id, accept: false } }))} className="rounded-lg bg-secondary px-2.5 py-1 text-xs font-semibold text-foreground active:scale-95">{t("decline")}</button>
                   <button onClick={() => act(respondFriend({ data: { id: f.id, accept: true } }), t("nowFriends"))} className="rounded-lg bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground active:scale-95">{t("accept")}</button>
