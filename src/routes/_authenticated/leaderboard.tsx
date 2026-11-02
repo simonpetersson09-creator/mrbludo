@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { getLeaderboard } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
+import { useAvatarImages } from "@/lib/ludo/avatar";
+import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/leaderboard")({
@@ -27,6 +29,7 @@ function LeaderboardPage() {
   const [sort, setSort] = useState<"wins" | "played" | "captures">("wins");
   const [rows, setRows] = useState<Rows | null>(null);
   useEffect(() => { setRows(null); getLeaderboard({ data: { sort } }).then(setRows).catch(() => setRows([])); }, [sort]);
+  const pics = useAvatarImages((rows ?? []).map((r) => r.user_id));
   return (
     <main className="app-screen">
       <div className="home-stack">
