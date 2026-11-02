@@ -195,4 +195,10 @@ export const hu: Record<TranslationKey, string> = {
   errNotYourTurn: "Nem te következel",
   errBadPhase: "A kör nem megfelelő szakasza",
   errIllegal: "Érvénytelen lépés",
+  homeStatsTitle: "Statisztikáid – a kezdetektől",
+  statGamesShort: "Játszott",
+  statKnockedOut: "Kiütött",
+  countryRankLabel: "Helyezésed",
+  countryRankLabelFull: "Helyezésed itt: {country}",
+  worldRankLabelFull: "Helyezésed a világon",
 };

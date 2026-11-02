@@ -195,4 +195,10 @@ export const ca: Record<TranslationKey, string> = {
   errNotYourTurn: "No és el teu torn",
   errBadPhase: "Fase del torn incorrecta",
   errIllegal: "Moviment no vàlid",
+  homeStatsTitle: "Les teves xifres – de tots els temps",
+  statGamesShort: "Jugades",
+  statKnockedOut: "Eliminades",
+  countryRankLabel: "Posició",
+  countryRankLabelFull: "La teva posició a {country}",
+  worldRankLabelFull: "La teva posició al món",
 };

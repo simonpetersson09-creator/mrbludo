@@ -210,4 +210,10 @@ export const ja: Record<TranslationKey, string> = {
   errNotYourTurn: "あなたの番ではありません",
   errBadPhase: "ターンの手順が違います",
   errIllegal: "無効な手です",
+  homeStatsTitle: "あなたの通算記録",
+  statGamesShort: "対戦数",
+  statKnockedOut: "撃破数",
+  countryRankLabel: "国内順位",
+  countryRankLabelFull: "{country}での順位",
+  worldRankLabelFull: "世界での順位",
 };

@@ -210,4 +210,10 @@ export const ml: Record<TranslationKey, string> = {
   errNotYourTurn: "നിന്റെ ടേൺ അല്ല",
   errBadPhase: "ടേണിലെ തെറ്റായ ഘട്ടം",
   errIllegal: "അസാധുവായ നീക്കം",
+  homeStatsTitle: "നിങ്ങളുടെ കണക്കുകൾ – ഇതുവരെയുള്ളത്",
+  statGamesShort: "കളിച്ചത്",
+  statKnockedOut: "വെട്ടിയവ",
+  countryRankLabel: "നിങ്ങളുടെ റാങ്ക്",
+  countryRankLabelFull: "{country}: നിങ്ങളുടെ റാങ്ക്",
+  worldRankLabelFull: "നിങ്ങളുടെ ലോക റാങ്ക്",
 };

@@ -210,4 +210,10 @@ export const tr: Record<TranslationKey, string> = {
   errNotYourTurn: "Sıra sende değil",
   errBadPhase: "Sırada yanlış adım",
   errIllegal: "Geçersiz hamle",
+  homeStatsTitle: "Rakamların – tüm zamanlar",
+  statGamesShort: "Oynanan",
+  statKnockedOut: "Elenen",
+  countryRankLabel: "Sıralaman",
+  countryRankLabelFull: "{country} sıralaman",
+  worldRankLabelFull: "Dünya sıralaman",
 };

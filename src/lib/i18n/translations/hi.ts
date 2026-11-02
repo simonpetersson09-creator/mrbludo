@@ -210,4 +210,10 @@ export const hi: Record<TranslationKey, string> = {
   errNotYourTurn: "आपकी बारी नहीं है",
   errBadPhase: "बारी का गलत चरण",
   errIllegal: "अमान्य चाल",
+  homeStatsTitle: "तुम्हारे अब तक के आँकड़े",
+  statGamesShort: "खेले",
+  statKnockedOut: "काटी गईं",
+  countryRankLabel: "तुम्हारी रैंक",
+  countryRankLabelFull: "{country} में तुम्हारी रैंक",
+  worldRankLabelFull: "दुनिया में तुम्हारी रैंक",
 };

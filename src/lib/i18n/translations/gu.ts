@@ -210,4 +210,10 @@ export const gu: Record<TranslationKey, string> = {
   errNotYourTurn: "તમારો વારો નથી",
   errBadPhase: "વારાનો ખોટો તબક્કો",
   errIllegal: "અમાન્ય ચાલ",
+  homeStatsTitle: "તમારા આંકડા – અત્યાર સુધીના",
+  statGamesShort: "રમેલી",
+  statKnockedOut: "કાપેલા",
+  countryRankLabel: "તમારો ક્રમ",
+  countryRankLabelFull: "{country}માં તમારો ક્રમ",
+  worldRankLabelFull: "વિશ્વમાં તમારો ક્રમ",
 };

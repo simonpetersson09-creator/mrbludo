@@ -210,4 +210,10 @@ export const pt: Record<TranslationKey, string> = {
   errNotYourTurn: "Não é a tua vez",
   errBadPhase: "Passo errado no turno",
   errIllegal: "Jogada inválida",
+  homeStatsTitle: "Os teus números – desde sempre",
+  statGamesShort: "Jogadas",
+  statKnockedOut: "Capturadas",
+  countryRankLabel: "A tua posição",
+  countryRankLabelFull: "A tua posição em {country}",
+  worldRankLabelFull: "A tua posição mundial",
 };

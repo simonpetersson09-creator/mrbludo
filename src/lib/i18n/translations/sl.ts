@@ -195,4 +195,10 @@ export const sl: Record<TranslationKey, string> = {
   errNotYourTurn: "Nisi na vrsti",
   errBadPhase: "Napačna faza poteze",
   errIllegal: "Neveljavna poteza",
+  homeStatsTitle: "Tvoje številke – celotno obdobje",
+  statGamesShort: "Odigrano",
+  statKnockedOut: "Izbiti",
+  countryRankLabel: "Tvoja uvrstitev",
+  countryRankLabelFull: "Tvoja uvrstitev v državi {country}",
+  worldRankLabelFull: "Tvoja svetovna uvrstitev",
 };
