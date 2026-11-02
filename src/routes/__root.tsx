@@ -122,6 +122,19 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  // After an app update, old code chunks disappear; reload once instead of showing a blank screen.
+  useEffect(() => {
+    const KEY = "mrb-ludo:v1:chunk-reload";
+    const onFail = (e: Event) => {
+      if (sessionStorage.getItem(KEY)) return;
+      e.preventDefault();
+      sessionStorage.setItem(KEY, "1");
+      window.location.reload();
+    };
+    window.addEventListener("vite:preloadError", onFail);
+    const clear = window.setTimeout(() => sessionStorage.removeItem(KEY), 10_000);
+    return () => { window.removeEventListener("vite:preloadError", onFail); window.clearTimeout(clear); };
+  }, []);
   useEffect(() => {
     const ping = () => logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
     // Admin login has its own credentials; ordinary app launch creates a player automatically.
