@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, BarChart3, Camera, Check, ChevronRight, Globe, Gauge, User, Vibrate } from "lucide-react";
 import { toast } from "sonner";
 import { loadSettings, saveSettings, type Settings } from "@/lib/ludo/storage";
-import { fileToAvatarDataUrl, setOwnAvatar, syncOwnAvatar, useOwnAvatar } from "@/lib/ludo/avatar";
+import { adoptOwnAvatarFromServer, fileToAvatarDataUrl, setOwnAvatar, syncOwnAvatar, useOwnAvatar } from "@/lib/ludo/avatar";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/settings")({
@@ -43,8 +43,9 @@ function SettingsPage() {
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const avatar = useOwnAvatar();
-  // A picture saved while offline is uploaded as soon as the page is opened again.
-  useEffect(() => { void syncOwnAvatar(); }, []);
+  // A picture saved while offline is uploaded as soon as the page is opened again,
+  // and a device that has never seen the picture first takes the server copy.
+  useEffect(() => { void adoptOwnAvatarFromServer().then(() => syncOwnAvatar()); }, []);
   const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
