@@ -17,7 +17,7 @@
 - Anonymous sign-in enabled in Cloud; two fresh independent browser contexts entered online play without credentials, created/joined a private match and made a server-controlled roll.
 - One player went offline, reconnected and reloaded the same match. A legal forfeit finished the match and both saw the winner. Both profiles retained personal friend codes and finished-match statistics after reload. This was a forfeit completion, not a four-pieces-home completion.
 - Anonymous administrator access denied; successful privileged administrator login is not verified.
-- 33 automated tests passed, including rules, server match logic, language parity, first-launch deduplication/identity preservation, native origin isolation, cached-role safety, match shortcut persistence and disabled ads/push boundaries.
+- 35 automated tests passed, including rules, server match logic, language parity, first-launch deduplication/identity preservation, native origin isolation, cached-role safety, match shortcut persistence, opt-in diagnostics privacy and disabled ads/push boundaries.
 - Both platform projects generated and plugin sync succeeded. Native configuration checks verified identifiers, no supplied signing settings, Android acceleration and backup protection.
 - Browser layout at 320×568, 393×706, 844×390, 768×1024 and 1024×768: controls in bounds, no horizontal overflow, live 3D canvas and no page errors. Screenshots inspected. Browser rendering is not proof of native GPU behavior.
 
@@ -33,15 +33,17 @@ Ludo now follows the same local-bundle/build-then-sync principle and visualViewp
 - Real authenticated anonymous native API profile/stats read passed; missing bearer returns 401. Capacitor preflight receives allowed CORS headers; unknown origins receive no allowed-origin header in the dev server. A full packaged-native online match against a published origin remains unverified.
 
 ## Website and build blockers
-The URL tool confirms Ludo has only its own preview URL; published and primary URLs are absent. Nothing was published. Local offline installation no longer needs a published website. Packaged online play needs a separately approved publication and `VITE_MRB_LUDO_ONLINE_ORIGIN` set to that Ludo origin before packaging. Never use the Yatzy host or the editor preview as a release endpoint.
+The prior URL check showed only Ludo's preview URL; no service deployment/address has been supplied or configured since. Nothing was published. Local offline installation needs no published website. `VITE_MRB_LUDO_ONLINE_ORIGIN` is separately configured, not derived from the WebView or website address, but `/api/public/native` still needs a deployed Ludo Start server. Independent configuration is not an independently deployed backend host. Never use the Cloud database host, Yatzy host or editor preview as that route's release endpoint.
 
 Actual build attempts: Android stopped because Java/JAVA_HOME is missing (Android SDK is also absent); iOS stopped because xcodebuild is unavailable. Static package build, both Capacitor sync operations and native package verification passed. No APK, AAB or IPA was produced.
 
 ## Exact commands from a clean source checkout
+See [the concise installation guide](mobile-installation.md) for complete prerequisites, temporary diagnostics and physical-device acceptance checks. The script now checks required native files, Capacitor/plugin parity, both platforms' app version 1.0 (1), and copied configuration/package freshness. This checks references, not Swift/Java compilation. No missing required references were confirmed in the source audit. Native artifacts exist locally after sync and are generated/ignored in a clean checkout.
+
 Use Node 22+ and Bun; regenerate web assets before every sync.
 
 ```sh
-bun install
+bun install --frozen-lockfile
 bun run test
 bun run native:web
 bun run native:sync:android
@@ -49,7 +51,7 @@ bun run native:sync:ios
 bun run native:verify
 ```
 
-For approved online service configuration, set `VITE_MRB_LUDO_ONLINE_ORIGIN` in your build environment to the actual separately approved published Ludo HTTPS origin, then repeat `native:web` and sync. Leaving it unset creates an offline-capable package without an online endpoint; no fabricated URL is supplied.
+For approved online service configuration, set `VITE_MRB_LUDO_ONLINE_ORIGIN` to the separately approved reachable Ludo service origin, then repeat `native:web` and sync. Leaving it unset creates an offline-capable package without an online endpoint; no fabricated URL is supplied.
 
 Android with JDK 21+ and SDK/API 36 installed:
 ```sh

@@ -1,8 +1,8 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 const [action = "verify", platform] = process.argv.slice(2);
-function run(command, args) {
-  const result = spawnSync(command, args, { stdio: "inherit", env: process.env });
+function run(command, args, cwd) {
+  const result = spawnSync(command, args, { stdio: "inherit", env: process.env, cwd, shell: process.platform === "win32" });
   if (result.error) { console.error(`${command} is unavailable: ${result.error.message}`); process.exit(1); }
   if (result.status !== 0) process.exit(result.status || 1);
 }
@@ -59,7 +59,7 @@ try {
     if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web before sync or build");
     run("bunx", ["cap", "sync", platform]);
     if (action === "open") run("bunx", ["cap", "open", platform]);
-    if (action === "build" && platform === "android") run("bash", ["-c", "cd android && ./gradlew assembleDebug"]);
+    if (action === "build" && platform === "android") run(process.platform === "win32" ? "gradlew.bat" : "./gradlew", ["assembleDebug"], "android");
     if (action === "build" && platform === "ios") run("xcodebuild", ["-project", "ios/App/App.xcodeproj", "-scheme", "App", "-destination", "generic/platform=iOS Simulator", "CODE_SIGNING_ALLOWED=NO", "build"]);
   } else throw new Error("Use web, verify, sync ios|android, open ios|android or build ios|android");
 } catch (error) { console.error(error.message); process.exit(1); }
