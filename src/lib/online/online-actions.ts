@@ -271,18 +271,20 @@ export const heartbeatAction = async ({ data, context }: { data: ReturnType<type
 
 export const sendFriendRequestAction = async ({ data, context }: { data: ReturnType<typeof sendFriendRequestInput>; context: OnlineContext }) => {
     const db = await admin();
-    const { data: target } = await db.from("profiles").select("id").eq("friend_code", data.friendCode).maybeSingle();
-    if (!target) throw new Error("err:no_player_code");
-    if (target.id === context.userId) throw new Error("err:own_code");
+    if (data.userId === context.userId) throw new Error("err:own_code");
+    // Yatzy's rule: only players who sat in the same online match can become friends.
+    const { data: seats } = await db.from("match_players").select("user_id").eq("match_id", data.matchId).in("user_id", [context.userId, data.userId]);
+    if ((seats ?? []).length !== 2) throw new Error("err:not_played_together");
     const { data: existing } = await db.from("friendships").select("*")
-      .or(`and(requester.eq.${context.userId},addressee.eq.${target.id}),and(requester.eq.${target.id},addressee.eq.${context.userId})`).maybeSingle();
+      .or(`and(requester.eq.${context.userId},addressee.eq.${data.userId}),and(requester.eq.${data.userId},addressee.eq.${context.userId})`).maybeSingle();
     if (existing) {
+      // One request per pair; a crossing request simply accepts the other one.
       if (existing.status === "pending" && existing.addressee === context.userId)
         await db.from("friendships").update({ status: "accepted" }).eq("id", existing.id);
-      return { ok: true };
+      return { ok: true, already: true };
     }
-    await db.from("friendships").insert({ requester: context.userId, addressee: target.id });
-    return { ok: true };
+    await db.from("friendships").insert({ requester: context.userId, addressee: data.userId });
+    return { ok: true, already: false };
   };
 
 export const respondFriendAction = async ({ data, context }: { data: ReturnType<typeof respondFriendInput>; context: OnlineContext }) => {

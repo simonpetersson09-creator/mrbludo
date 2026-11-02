@@ -33,7 +33,13 @@ export const getAvatarsInput = (d: { userIds: string[] }) => {
     if (!ids.length) throw new Error("err:missing");
     return { userIds: ids.slice(0, 60) };
   };
-export const sendFriendRequestInput = (d: { friendCode: string }) => ({ friendCode: String(d.friendCode ?? "").trim().toUpperCase().slice(0, 8) });
+// Like Yatzy: a friend request goes to a player you have shared an online match with.
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+export const sendFriendRequestInput = (d: { matchId: string; userId: string }) => {
+    const matchId = String(d?.matchId ?? ""), userId = String(d?.userId ?? "");
+    if (!UUID.test(matchId) || !UUID.test(userId)) throw new Error("err:missing");
+    return { matchId, userId };
+  };
 export const respondFriendInput = (d: { id: string; accept: boolean }) => ({ id: String(d.id), accept: !!d.accept });
 export const inviteFriendInput = (d: { matchId: string; userId: string }) => ({ matchId: String(d.matchId), userId: String(d.userId) });
 export const respondInviteInput = (d: { id: string; accept: boolean }) => ({ id: String(d.id), accept: !!d.accept });
