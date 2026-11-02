@@ -341,3 +341,20 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
     errors: ev.filter((e) => e.kind === "error").slice(0, 30).map((e) => ({ at: e.created_at, platform: e.platform, detail: e.detail })),
   };
 };
+
+/** All-time numbers + Yatzy-style country/world placement (ranked by completed, non-forfeited verified matches). */
+export const getMyRanksAction = async ({ context }: { context: OnlineContext }) => {
+  const [{ data: stats }, { data: ranks }] = await Promise.all([
+    context.supabase.from("player_stats").select("played, wins, captures, forfeits").eq("user_id", context.userId).maybeSingle(),
+    context.supabase.rpc("get_my_ranks"),
+  ]);
+  const r = (ranks ?? {}) as { found?: boolean; country?: string | null; world_rank?: number | null; country_rank?: number | null };
+  return {
+    played: Math.max(0, (stats?.played ?? 0) - (stats?.forfeits ?? 0)),
+    wins: stats?.wins ?? 0,
+    captures: stats?.captures ?? 0,
+    country: r.country || null,
+    worldRank: r.found ? r.world_rank ?? null : null,
+    countryRank: r.found ? r.country_rank ?? null : null,
+  };
+};
