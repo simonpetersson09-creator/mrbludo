@@ -189,7 +189,8 @@ function OnlineMatchPage() {
           return (
             <div key={p.id} className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "border-gold bg-card" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}>
               <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
-              <span className="truncate font-semibold">{p.isBot ? "🤖" : s?.avatar} {p.name}</span>
+              {p.isBot ? <span className="shrink-0 text-sm">🤖</span> : <PlayerAvatar emoji={s?.avatar ?? "🎲"} image={pics[s?.user_id ?? ""]} className="h-5 w-5 text-xs" />}
+              <span className="truncate font-semibold">{p.name}</span>
               <span className="ml-auto shrink-0 text-muted-foreground">{away ? <WifiOff size={11} className="inline" /> : s ? flag(s.country) : ""} {state.pieces[i].filter((x) => x === GOAL).length}/4</span>
             </div>
           );
@@ -278,6 +279,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
   const { t } = useTranslation();
   const [friends, setFriends] = useState<Awaited<ReturnType<typeof listFriends>>["friends"]>([]);
   const isHost = match.host_id === userId;
+  const pics = useAvatarImages([...seats.map((s) => s.user_id), ...friends.map((f) => f.user.id)]);
   useEffect(() => { listFriends().then((r) => setFriends(r.friends.filter((f) => f.status === "accepted"))).catch(() => {}); }, []);
   const start = () => startMatch({ data: { matchId: match.id } }).catch((e) => toast.error(errorMessage(e, t)));
   const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => toast.success(t("inviteSent"))).catch((e) => toast.error(errorMessage(e, t)));
