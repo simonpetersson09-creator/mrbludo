@@ -209,4 +209,9 @@ export const cs: Record<TranslationKey, string> = {
   matchFoundTitle: "Soupeř nalezen!",
   matchFoundVs: "Hraješ proti: {name}",
   cancelSearch: "Zrušit",
+  changeAvatar: "Změnit obrázek",
+  removeAvatar: "Odebrat",
+  avatarSaved: "Avatar uložen",
+  avatarRemoved: "Avatar odebrán",
+  avatarLocalOnly: "Obrázek platí pouze na tomto zařízení",
 };

@@ -224,4 +224,9 @@ export const no: Record<TranslationKey, string> = {
   matchFoundTitle: "Motspiller funnet!",
   matchFoundVs: "Du møter {name}",
   cancelSearch: "Avbryt",
+  changeAvatar: "Bytt bilde",
+  removeAvatar: "Fjern",
+  avatarSaved: "Profilbilde lagret",
+  avatarRemoved: "Profilbilde fjernet",
+  avatarLocalOnly: "Bildet gjelder bare på denne enheten",
 };

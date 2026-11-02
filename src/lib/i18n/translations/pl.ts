@@ -209,4 +209,9 @@ export const pl: Record<TranslationKey, string> = {
   matchFoundTitle: "Znaleziono przeciwnika!",
   matchFoundVs: "Grasz z: {name}",
   cancelSearch: "Anuluj",
+  changeAvatar: "Zmień obraz",
+  removeAvatar: "Usuń",
+  avatarSaved: "Awatar zapisany",
+  avatarRemoved: "Awatar usunięty",
+  avatarLocalOnly: "Zdjęcie działa tylko na tym urządzeniu",
 };

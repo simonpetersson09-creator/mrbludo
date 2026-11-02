@@ -209,4 +209,9 @@ export const ca: Record<TranslationKey, string> = {
   matchFoundTitle: "Rival trobat!",
   matchFoundVs: "Jugues contra {name}",
   cancelSearch: "Cancel·la",
+  changeAvatar: "Canvia la imatge",
+  removeAvatar: "Elimina",
+  avatarSaved: "Avatar desat",
+  avatarRemoved: "Avatar eliminat",
+  avatarLocalOnly: "La imatge només s'aplica en aquest dispositiu",
 };

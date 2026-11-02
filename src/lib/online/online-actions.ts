@@ -1,4 +1,4 @@
-import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput } from "./online-inputs";
+import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput } from "./online-inputs";
 import type { GameState } from "@/lib/ludo/engine";
 import {
   BOT_SECONDS, DROP_SECONDS, MatchError, TURN_SECONDS, autoStep, makeCode, performAction, secureRoll, startState, statDeltas,
@@ -414,3 +414,18 @@ export const getMyRanksAction = async ({ context }: { context: OnlineContext }) 
     countryRank: r.found ? r.country_rank ?? null : null,
   };
 };
+
+/** Own profile picture. Written with the player's own session (RLS allows only own rows). */
+export const setAvatarAction = async ({ data, context }: { data: ReturnType<typeof setAvatarInput>; context: OnlineContext }) => {
+    const { error } = await context.supabase.from("profiles").update({ avatar_image: data.image }).eq("id", context.userId);
+    if (error) throw new Error("err:bad_image");
+    return { ok: true };
+  };
+
+/** Pictures for the players a screen is about to show, so list reads stay light. */
+export const getAvatarsAction = async ({ data, context }: { data: ReturnType<typeof getAvatarsInput>; context: OnlineContext }) => {
+    const { data: rows } = await context.supabase.from("profiles").select("id, avatar_image").in("id", data.userIds);
+    const out: Record<string, string | null> = {};
+    for (const r of rows ?? []) out[r.id] = r.avatar_image;
+    return out;
+  };

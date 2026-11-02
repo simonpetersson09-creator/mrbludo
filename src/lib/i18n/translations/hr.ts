@@ -209,4 +209,9 @@ export const hr: Record<TranslationKey, string> = {
   matchFoundTitle: "Protivnik pronađen!",
   matchFoundVs: "Igraš protiv: {name}",
   cancelSearch: "Odustani",
+  changeAvatar: "Promijeni sliku",
+  removeAvatar: "Ukloni",
+  avatarSaved: "Avatar spremljen",
+  avatarRemoved: "Avatar uklonjen",
+  avatarLocalOnly: "Slika vrijedi samo na ovom uređaju",
 };

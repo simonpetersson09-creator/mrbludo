@@ -224,4 +224,9 @@ export const gu: Record<TranslationKey, string> = {
   matchFoundTitle: "પ્રતિસ્પર્ધી મળ્યો!",
   matchFoundVs: "તમારો પ્રતિસ્પર્ધી: {name}",
   cancelSearch: "રદ કરો",
+  changeAvatar: "ફોટો બદલો",
+  removeAvatar: "દૂર કરો",
+  avatarSaved: "અવતાર સાચવ્યો",
+  avatarRemoved: "અવતાર દૂર કર્યો",
+  avatarLocalOnly: "છબી ફક્ત આ ઉપકરણ પર લાગુ પડે છે",
 };

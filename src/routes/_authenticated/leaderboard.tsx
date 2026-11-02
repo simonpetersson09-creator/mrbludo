@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { getLeaderboard } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
+import { useAvatarImages } from "@/lib/ludo/avatar";
+import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/leaderboard")({
@@ -27,6 +29,7 @@ function LeaderboardPage() {
   const [sort, setSort] = useState<"wins" | "played" | "captures">("wins");
   const [rows, setRows] = useState<Rows | null>(null);
   useEffect(() => { setRows(null); getLeaderboard({ data: { sort } }).then(setRows).catch(() => setRows([])); }, [sort]);
+  const pics = useAvatarImages((rows ?? []).map((r) => r.user_id));
   return (
     <main className="app-screen">
       <div className="home-stack">
@@ -42,7 +45,7 @@ function LeaderboardPage() {
           {rows?.map((r, i) => (
             <li key={r.user_id} className="flex items-center gap-2 rounded-lg bg-surface px-3 py-2">
               <span className="w-6 font-bold text-gold">{i + 1}.</span>
-              <span>{r.profile?.avatar}</span>
+              <PlayerAvatar emoji={r.profile?.avatar ?? "🎲"} image={pics[r.user_id]} className="h-7 w-7 text-sm" />
               <span className="flex-1 truncate font-semibold">{r.profile?.display_name ?? "?"} {flag(r.profile?.country ?? "")}</span>
               <span className="font-bold">{r[sort]}</span>
             </li>

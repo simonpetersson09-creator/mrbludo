@@ -209,4 +209,9 @@ export const fi: Record<TranslationKey, string> = {
   matchFoundTitle: "Vastustaja löytyi!",
   matchFoundVs: "Vastassasi on {name}",
   cancelSearch: "Peruuta",
+  changeAvatar: "Vaihda kuva",
+  removeAvatar: "Poista",
+  avatarSaved: "Profiilikuva tallennettu",
+  avatarRemoved: "Profiilikuva poistettu",
+  avatarLocalOnly: "Kuva toimii vain tällä laitteella",
 };

@@ -224,4 +224,9 @@ export const hi: Record<TranslationKey, string> = {
   matchFoundTitle: "विरोधी मिल गया!",
   matchFoundVs: "आपका विरोधी: {name}",
   cancelSearch: "रद्द करो",
+  changeAvatar: "तस्वीर बदलो",
+  removeAvatar: "हटाओ",
+  avatarSaved: "अवतार सेव हुआ",
+  avatarRemoved: "अवतार हट गया",
+  avatarLocalOnly: "यह चित्र केवल इस डिवाइस पर लागू होता है",
 };

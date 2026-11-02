@@ -224,4 +224,9 @@ export const ja: Record<TranslationKey, string> = {
   matchFoundTitle: "対戦相手が見つかった!",
   matchFoundVs: "対戦相手: {name}",
   cancelSearch: "キャンセル",
+  changeAvatar: "画像を変更",
+  removeAvatar: "削除",
+  avatarSaved: "アバターを保存したよ",
+  avatarRemoved: "アバターを削除したよ",
+  avatarLocalOnly: "この画像はこの端末でのみ有効です",
 };

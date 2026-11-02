@@ -25,13 +25,17 @@ export const Route = createFileRoute("/api/public/native")({ server: { handlers:
     const context = { supabase: db, userId: userData.user.id };
     try {
       const raw = await request.text();
-      if (raw.length > 12000) return reply({ error: "err:bad_action" }, 413);
+      if (raw.length > 200000) return reply({ error: "err:bad_action" }, 413);
       const body = JSON.parse(raw) as { operation?: unknown; data?: unknown };
+      // Only a profile picture carries a bigger body; every other operation stays small.
+      if (body.operation !== "setAvatar" && raw.length > 12000) return reply({ error: "err:bad_action" }, 413);
       const actions = await import("@/lib/online/online-actions");
       const inputs = await import("@/lib/online/online-inputs");
       switch (body.operation) {
         case "getMe": return reply(await actions.getMeAction({ context }));
         case "getMyRanks": return reply(await actions.getMyRanksAction({ context }));
+        case "setAvatar": return reply(await actions.setAvatarAction({ data: inputs.setAvatarInput(body.data as Parameters<typeof inputs.setAvatarInput>[0]), context }));
+        case "getAvatars": return reply(await actions.getAvatarsAction({ data: inputs.getAvatarsInput(body.data as Parameters<typeof inputs.getAvatarsInput>[0]), context }));
         case "quickFinalize": return reply(await actions.quickFinalizeAction({ data: inputs.startMatchInput(body.data as Parameters<typeof inputs.startMatchInput>[0]), context }));
         case "quickStatus": return reply(await actions.quickStatusAction({ data: inputs.startMatchInput(body.data as Parameters<typeof inputs.startMatchInput>[0]), context }));
         case "updateProfile": return reply(await actions.updateProfileAction({ data: inputs.updateProfileInput(body.data as Parameters<typeof inputs.updateProfileInput>[0]), context }));

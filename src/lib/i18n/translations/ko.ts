@@ -224,4 +224,9 @@ export const ko: Record<TranslationKey, string> = {
   matchFoundTitle: "상대를 찾았어!",
   matchFoundVs: "상대: {name}",
   cancelSearch: "취소",
+  changeAvatar: "사진 변경",
+  removeAvatar: "삭제",
+  avatarSaved: "아바타를 저장했어",
+  avatarRemoved: "아바타를 삭제했어",
+  avatarLocalOnly: "이미지는 이 기기에서만 적용됩니다",
 };

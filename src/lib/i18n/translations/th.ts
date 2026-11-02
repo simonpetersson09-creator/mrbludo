@@ -224,4 +224,9 @@ export const th: Record<TranslationKey, string> = {
   matchFoundTitle: "เจอคู่แข่งแล้ว!",
   matchFoundVs: "คู่แข่งของคุณ: {name}",
   cancelSearch: "ยกเลิก",
+  changeAvatar: "เปลี่ยนรูป",
+  removeAvatar: "ลบ",
+  avatarSaved: "บันทึกรูปแล้ว",
+  avatarRemoved: "ลบรูปแล้ว",
+  avatarLocalOnly: "รูปภาพใช้ได้เฉพาะบนอุปกรณ์นี้",
 };

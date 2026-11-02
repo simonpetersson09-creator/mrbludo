@@ -209,4 +209,9 @@ export const hu: Record<TranslationKey, string> = {
   matchFoundTitle: "Ellenfél megvan!",
   matchFoundVs: "Ellenfeled: {name}",
   cancelSearch: "Mégse",
+  changeAvatar: "Kép cseréje",
+  removeAvatar: "Eltávolítás",
+  avatarSaved: "Profilkép mentve",
+  avatarRemoved: "Profilkép eltávolítva",
+  avatarLocalOnly: "A kép csak ezen az eszközön érvényes",
 };

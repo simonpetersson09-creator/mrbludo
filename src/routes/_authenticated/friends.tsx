@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/auth/client";
 import { createMatch, inviteFriend, listFriends, respondFriend, sendFriendRequest } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
+import { useAvatarImages } from "@/lib/ludo/avatar";
+import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/friends")({
@@ -43,6 +45,7 @@ function FriendsPage() {
   const incoming = friends.filter((f) => f.status === "pending" && f.incoming);
   const outgoing = friends.filter((f) => f.status === "pending" && !f.incoming);
   const accepted = friends.filter((f) => f.status === "accepted");
+  const pics = useAvatarImages(friends.map((f) => f.user.id));
   const online = (ls: string | null) => !!ls && Date.now() - new Date(ls).getTime() < 5 * 60_000;
 
   const [inviting, setInviting] = useState<string | null>(null);
@@ -55,10 +58,6 @@ function FriendsPage() {
       navigate({ to: "/online/$matchId", params: { matchId: m.id } });
     } catch (e) { toast.error(errorMessage(e, t)); } finally { setInviting(null); }
   };
-
-  const Avatar = ({ a }: { a: string | null }) => (
-    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-secondary text-base">{a}</div>
-  );
 
   return (
     <main className="app-screen flex flex-col overflow-y-auto overscroll-contain px-5">
@@ -82,7 +81,8 @@ function FriendsPage() {
             {incoming.map((f) => (
               <div key={f.id} className="flex items-center gap-3 rounded-xl border border-border bg-card/80 px-3 py-2">
                 <UserPlus className="h-4 w-4 shrink-0 text-primary" />
-                <p className="min-w-0 flex-1 truncate text-sm text-foreground">{f.user.avatar} {f.user.display_name} {flag(f.user.country)}</p>
+                <PlayerAvatar emoji={f.user.avatar} image={pics[f.user.id]} className="h-7 w-7 border border-border/60 bg-secondary text-sm" />
+                <p className="min-w-0 flex-1 truncate text-sm text-foreground">{f.user.display_name} {flag(f.user.country)}</p>
                 <div className="flex shrink-0 gap-1.5">
                   <button onClick={() => act(respondFriend({ data: { id: f.id, accept: false } }))} className="rounded-lg bg-secondary px-2.5 py-1 text-xs font-semibold text-foreground active:scale-95">{t("decline")}</button>
                   <button onClick={() => act(respondFriend({ data: { id: f.id, accept: true } }), t("nowFriends"))} className="rounded-lg bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground active:scale-95">{t("accept")}</button>
@@ -111,7 +111,7 @@ function FriendsPage() {
           <div className="space-y-1.5">
             {accepted.map((f) => (
               <div key={f.id} className="flex w-full items-center gap-2.5 rounded-xl border border-border/50 bg-secondary/60 px-2.5 py-2">
-                <Avatar a={f.user.avatar} />
+                <PlayerAvatar emoji={f.user.avatar} image={pics[f.user.id]} className="h-9 w-9 border border-border/60 bg-secondary text-base" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-display text-sm font-bold text-foreground">{f.user.display_name} {flag(f.user.country)}</p>
                   <p className="text-[10px] leading-snug text-muted-foreground">

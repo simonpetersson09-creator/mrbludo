@@ -224,4 +224,9 @@ export const uk: Record<TranslationKey, string> = {
   matchFoundTitle: "Суперника знайдено!",
   matchFoundVs: "Твій суперник: {name}",
   cancelSearch: "Скасувати",
+  changeAvatar: "Змінити фото",
+  removeAvatar: "Видалити",
+  avatarSaved: "Аватар збережено",
+  avatarRemoved: "Аватар видалено",
+  avatarLocalOnly: "Зображення діє лише на цьому пристрої",
 };

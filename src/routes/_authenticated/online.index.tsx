@@ -6,6 +6,8 @@ import { supabase } from "@/lib/auth/client";
 import { createMatch, getMe, joinByCode, listFriends, quickMatch, respondInvite } from "@/lib/online/online.functions";
 import { loadProfileSnapshot, saveProfileSnapshot, lastOnlineMatch } from "@/lib/online/snapshot";
 import { flag } from "@/lib/online/profile-options";
+import { useOwnAvatar } from "@/lib/ludo/avatar";
+import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/online/")({
@@ -34,6 +36,7 @@ function OnlineLobby() {
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [resumeId, setResumeId] = useState<string | null>(null);
+  const own = useOwnAvatar();
 
   useEffect(() => {
     setMe(loadProfileSnapshot()); setResumeId(lastOnlineMatch());
@@ -61,7 +64,7 @@ function OnlineLobby() {
         <Link to="/" className="mb-2 flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft size={16} /> {t("back")}</Link>
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
           <h1 className="brand-title min-w-0 text-3xl">{t("onlineTitle")}</h1>
-          {me?.profile && <Link to="/profile" className="flex items-center gap-1 rounded-lg bg-surface px-2 py-1 text-sm"><span>{me.profile.avatar}</span><span className="max-w-[110px] truncate font-semibold">{me.profile.display_name}</span><span>{flag(me.profile.country)}</span></Link>}
+          {me?.profile && <Link to="/profile" className="flex items-center gap-1 rounded-lg bg-surface px-2 py-1 text-sm"><PlayerAvatar emoji={me.profile.avatar} image={own} className="h-6 w-6 text-sm" /><span className="max-w-[110px] truncate font-semibold">{me.profile.display_name}</span><span>{flag(me.profile.country)}</span></Link>}
         </div>
 
         {invites.length > 0 && (

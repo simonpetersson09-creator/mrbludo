@@ -209,4 +209,9 @@ export const nl: Record<TranslationKey, string> = {
   matchFoundTitle: "Tegenstander gevonden!",
   matchFoundVs: "Je speelt tegen {name}",
   cancelSearch: "Annuleren",
+  changeAvatar: "Afbeelding wijzigen",
+  removeAvatar: "Verwijderen",
+  avatarSaved: "Avatar opgeslagen",
+  avatarRemoved: "Avatar verwijderd",
+  avatarLocalOnly: "De foto geldt alleen op dit apparaat",
 };

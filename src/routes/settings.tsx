@@ -1,7 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
-import { ArrowLeft, BarChart3, Check, ChevronRight, Globe, Gauge, User, Vibrate } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ArrowLeft, BarChart3, Camera, Check, ChevronRight, Globe, Gauge, User, Vibrate } from "lucide-react";
+import { toast } from "sonner";
 import { loadSettings, saveSettings, type Settings } from "@/lib/ludo/storage";
+import { adoptOwnAvatarFromServer, fileToAvatarDataUrl, setOwnAvatar, syncOwnAvatar, useOwnAvatar } from "@/lib/ludo/avatar";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/settings")({
@@ -38,6 +40,32 @@ function SettingsPage() {
   const [s, setS] = useState<Settings | null>(null);
   const [editingName, setEditingName] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const avatar = useOwnAvatar();
+  // A picture saved while offline is uploaded as soon as the page is opened again,
+  // and a device that has never seen the picture first takes the server copy.
+  useEffect(() => { void adoptOwnAvatarFromServer().then(() => syncOwnAvatar()); }, []);
+  const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setBusy(true);
+    try {
+      const shared = await setOwnAvatar(await fileToAvatarDataUrl(file));
+      toast.success(shared ? t("avatarSaved") : t("avatarLocalOnly"));
+    } catch {
+      toast.error(t("genericError"));
+    } finally {
+      setBusy(false);
+    }
+  };
+  const removePicture = async () => {
+    setBusy(true);
+    const shared = await setOwnAvatar(null);
+    setBusy(false);
+    toast.success(shared ? t("avatarRemoved") : t("avatarLocalOnly"));
+  };
   useEffect(() => setS(loadSettings()), []);
   if (!s) return <main className="app-screen" />;
   const update = (patch: Partial<Settings>) => { const n = { ...s, ...patch }; setS(n); saveSettings(n); };
@@ -54,6 +82,36 @@ function SettingsPage() {
         </div>
 
         <Section title={t("profile")}>
+          <div className="flex items-center gap-3 rounded-2xl border border-border/40 bg-secondary/50 p-3">
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              aria-label={t("changeAvatar")}
+              disabled={busy}
+              className="group relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary/30 to-primary/10 ring-2 ring-primary/30 ring-offset-2 ring-offset-background transition active:scale-95 disabled:opacity-60"
+            >
+              {avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : <User className="h-6 w-6 text-primary/70" />}
+              <span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 group-active:opacity-100">
+                <Camera className="h-6 w-6 text-white" />
+              </span>
+            </button>
+            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={pick} />
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-display text-sm font-bold">{s.name}</p>
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                <button type="button" onClick={() => fileRef.current?.click()} disabled={busy}
+                  className="min-h-9 rounded-full bg-primary/15 px-2.5 py-1.5 text-xs font-semibold text-primary transition-colors active:bg-primary/25 disabled:opacity-60">
+                  {t("changeAvatar")}
+                </button>
+                {avatar && (
+                  <button type="button" onClick={removePicture} disabled={busy}
+                    className="min-h-9 rounded-full bg-destructive/10 px-2.5 py-1.5 text-xs font-semibold text-destructive transition-colors active:bg-destructive/20 disabled:opacity-60">
+                    {t("removeAvatar")}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
           <Card>
             {editingName ? (
               <div className="flex items-center gap-3 px-3 py-2.5">

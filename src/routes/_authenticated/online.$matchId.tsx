@@ -13,6 +13,8 @@ import type { DiceValue } from "@/components/dice-engine/types";
 import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
 import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, startMatch } from "@/lib/online/online.functions";
+import { useAvatarImages } from "@/lib/ludo/avatar";
+import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { flag } from "@/lib/online/profile-options";
 import { TURN_SECONDS } from "@/lib/online/match-logic";
 import { rememberOnlineMatch } from "@/lib/online/snapshot";
@@ -47,6 +49,7 @@ function OnlineMatchPage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [match, setMatch] = useState<MatchRow | null>(null);
   const [seats, setSeats] = useState<SeatRow[]>([]);
+  const pics = useAvatarImages(seats.map((s) => s.user_id));
   const [rolling, setRolling] = useState(false);
   const [face, setFace] = useState<DiceValue>(6);
   const [pending, setPending] = useState(false);
@@ -186,7 +189,8 @@ function OnlineMatchPage() {
           return (
             <div key={p.id} className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "border-gold bg-card" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}>
               <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
-              <span className="truncate font-semibold">{p.isBot ? "🤖" : s?.avatar} {p.name}</span>
+              {p.isBot ? <span className="shrink-0 text-sm">🤖</span> : <PlayerAvatar emoji={s?.avatar ?? "🎲"} image={pics[s?.user_id ?? ""]} className="h-5 w-5 text-xs" />}
+              <span className="truncate font-semibold">{p.name}</span>
               <span className="ml-auto shrink-0 text-muted-foreground">{away ? <WifiOff size={11} className="inline" /> : s ? flag(s.country) : ""} {state.pieces[i].filter((x) => x === GOAL).length}/4</span>
             </div>
           );
@@ -275,6 +279,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
   const { t } = useTranslation();
   const [friends, setFriends] = useState<Awaited<ReturnType<typeof listFriends>>["friends"]>([]);
   const isHost = match.host_id === userId;
+  const pics = useAvatarImages([...seats.map((s) => s.user_id), ...friends.map((f) => f.user.id)]);
   useEffect(() => { listFriends().then((r) => setFriends(r.friends.filter((f) => f.status === "accepted"))).catch(() => {}); }, []);
   const start = () => startMatch({ data: { matchId: match.id } }).catch((e) => toast.error(errorMessage(e, t)));
   const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => toast.success(t("inviteSent"))).catch((e) => toast.error(errorMessage(e, t)));
@@ -294,7 +299,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
             const s = seats[i];
             return (
               <div key={i} className="flex h-[52px] items-center gap-2 rounded-[10px] border bg-card px-3 text-sm">
-                {s ? <><span className="text-lg">{s.avatar}</span><span className="flex-1 truncate font-semibold">{s.display_name} {flag(s.country)}</span>{s.user_id === match.host_id && <span className="text-xs text-gold">{t("host")}</span>}</>
+                {s ? <><PlayerAvatar emoji={s.avatar} image={pics[s.user_id]} className="h-7 w-7 text-lg" /><span className="flex-1 truncate font-semibold">{s.display_name} {flag(s.country)}</span>{s.user_id === match.host_id && <span className="text-xs text-gold">{t("host")}</span>}</>
                   : <span className="flex-1 text-muted-foreground">{t("waitingForPlayers")}</span>}
               </div>
             );
@@ -307,7 +312,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
           <h2 className="mt-4 text-sm font-semibold">{t("inviteFriends")}</h2>
           {friends.filter((f) => !seats.some((s) => s.user_id === f.user.id)).map((f) => (
             <div key={f.id} className="mt-[7px] flex items-center gap-2 rounded-[10px] bg-surface px-3 py-2 text-sm">
-              <span>{f.user.avatar}</span><span className="flex-1 truncate">{f.user.display_name}</span>
+              <PlayerAvatar emoji={f.user.avatar} image={pics[f.user.id]} className="h-6 w-6 text-base" /><span className="flex-1 truncate">{f.user.display_name}</span>
               <button className="rounded-md bg-gold px-2 py-1 text-xs font-bold text-background" onClick={() => invite(f.user.id)}>{t("invite")}</button>
             </div>
           ))}
