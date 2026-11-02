@@ -31,6 +31,7 @@ function ProfilePage() {
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState("🎲");
   const [country, setCountry] = useState("SE");
+  const own = useOwnAvatar();
   useEffect(() => {
     const apply = (m: Me) => { setMe(m); if (m.profile) { setName(m.profile.display_name); setAvatar(m.profile.avatar); setCountry(m.profile.country); } };
     const cached = loadProfileSnapshot(); if (cached) apply(cached);
@@ -47,6 +48,10 @@ function ProfilePage() {
         <Link to="/online" className="mb-2 flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft size={16} /> {t("back")}</Link>
         <h1 className="brand-title mb-3 text-3xl">{t("profileTitle")}</h1>
         {!me ? <p className="text-sm text-muted-foreground">{t("loading")}</p> : (<>
+          <div className="mb-2 flex items-center gap-3">
+            <PlayerAvatar emoji={avatar} image={own} className="h-14 w-14 rounded-full border border-border/60 bg-surface text-2xl" />
+            <p className="text-xs text-muted-foreground">{t("yourFriendCode")}</p>
+          </div>
           <label className="text-xs text-muted-foreground" htmlFor="pname">{t("playerName")}</label>
           <input id="pname" maxLength={20} className="h-11 rounded-[10px] border bg-card px-3 text-sm outline-none focus:border-gold" value={name} onChange={(e) => setName(e.target.value)} />
           <p className="mt-3 text-xs text-muted-foreground">{t("avatar")}</p>
