@@ -84,9 +84,9 @@ describe("i18n usage in source", () => {
 
   it("no dictionary key is unused (except generic helpers kept for reuse)", async () => {
     const used = usedKeys();
-    // Keys used dynamically (built from arrays) or reserved for upcoming screens.
-    const allowedUnused = new Set<TranslationKey>(["cancel", "copied" as TranslationKey].filter((k) => svKeys.includes(k)));
-    const unused = svKeys.filter((k) => !used.has(k) && !allowedUnused.has(k));
+    // err* keys are looked up dynamically by errorMessage() from server error codes.
+    const isDynamic = (k: string) => k.startsWith("err");
+    const unused = svKeys.filter((k) => !used.has(k) && !isDynamic(k));
     expect(unused, `unused keys: ${unused.join(",")}`).toEqual([]);
   });
 });
