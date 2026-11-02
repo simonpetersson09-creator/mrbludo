@@ -6,6 +6,8 @@ import { supabase } from "@/lib/auth/client";
 import { createMatch, getMe, joinByCode, listFriends, quickMatch, respondInvite } from "@/lib/online/online.functions";
 import { loadProfileSnapshot, saveProfileSnapshot, lastOnlineMatch } from "@/lib/online/snapshot";
 import { flag } from "@/lib/online/profile-options";
+import { useOwnAvatar } from "@/lib/ludo/avatar";
+import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/online/")({
@@ -34,6 +36,7 @@ function OnlineLobby() {
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [resumeId, setResumeId] = useState<string | null>(null);
+  const own = useOwnAvatar();
 
   useEffect(() => {
     setMe(loadProfileSnapshot()); setResumeId(lastOnlineMatch());
