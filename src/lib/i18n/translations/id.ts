@@ -224,4 +224,9 @@ export const id: Record<TranslationKey, string> = {
   matchFoundTitle: "Lawan ditemukan!",
   matchFoundVs: "Lawanmu: {name}",
   cancelSearch: "Batal",
+  changeAvatar: "Ganti gambar",
+  removeAvatar: "Hapus",
+  avatarSaved: "Avatar disimpan",
+  avatarRemoved: "Avatar dihapus",
+  avatarLocalOnly: "Gambar hanya berlaku di perangkat ini",
 };

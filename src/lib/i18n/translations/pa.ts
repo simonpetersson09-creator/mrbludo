@@ -224,4 +224,9 @@ export const pa: Record<TranslationKey, string> = {
   matchFoundTitle: "ਵਿਰੋਧੀ ਮਿਲ ਗਿਆ!",
   matchFoundVs: "ਤੁਹਾਡਾ ਵਿਰੋਧੀ: {name}",
   cancelSearch: "ਰੱਦ ਕਰੋ",
+  changeAvatar: "ਤਸਵੀਰ ਬਦਲੋ",
+  removeAvatar: "ਹਟਾਓ",
+  avatarSaved: "ਅਵਤਾਰ ਸੇਵ ਹੋ ਗਿਆ",
+  avatarRemoved: "ਅਵਤਾਰ ਹਟਾ ਦਿੱਤਾ",
+  avatarLocalOnly: "ਤਸਵੀਰ ਸਿਰਫ਼ ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ ਲਾਗੂ ਹੁੰਦੀ ਹੈ",
 };

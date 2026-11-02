@@ -209,4 +209,9 @@ export const sk: Record<TranslationKey, string> = {
   matchFoundTitle: "Súper nájdený!",
   matchFoundVs: "Hráš proti: {name}",
   cancelSearch: "Zrušiť",
+  changeAvatar: "Zmeniť obrázok",
+  removeAvatar: "Odstrániť",
+  avatarSaved: "Avatar uložený",
+  avatarRemoved: "Avatar odstránený",
+  avatarLocalOnly: "Obrázok platí len na tomto zariadení",
 };

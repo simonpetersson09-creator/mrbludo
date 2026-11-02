@@ -224,4 +224,9 @@ export const bn: Record<TranslationKey, string> = {
   matchFoundTitle: "প্রতিপক্ষ পাওয়া গেছে!",
   matchFoundVs: "তোমার প্রতিপক্ষ: {name}",
   cancelSearch: "বাতিল",
+  changeAvatar: "ছবি বদলাও",
+  removeAvatar: "মুছে দাও",
+  avatarSaved: "অবতার সেভ হয়েছে",
+  avatarRemoved: "অবতার মুছে গেছে",
+  avatarLocalOnly: "ছবিটি শুধু এই ডিভাইসে প্রযোজ্য",
 };

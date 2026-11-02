@@ -224,4 +224,9 @@ export const te: Record<TranslationKey, string> = {
   matchFoundTitle: "ప్రత్యర్థి దొరికారు!",
   matchFoundVs: "మీ ప్రత్యర్థి: {name}",
   cancelSearch: "రద్దు",
+  changeAvatar: "చిత్రం మార్చు",
+  removeAvatar: "తీసేయి",
+  avatarSaved: "అవతార్ సేవ్ అయింది",
+  avatarRemoved: "అవతార్ తీసేశాం",
+  avatarLocalOnly: "చిత్రం ఈ పరికరంలో మాత్రమే వర్తిస్తుంది",
 };

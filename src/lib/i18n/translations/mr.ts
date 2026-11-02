@@ -224,4 +224,9 @@ export const mr: Record<TranslationKey, string> = {
   matchFoundTitle: "प्रतिस्पर्धी सापडला!",
   matchFoundVs: "तुझा प्रतिस्पर्धी: {name}",
   cancelSearch: "रद्द कर",
+  changeAvatar: "फोटो बदल",
+  removeAvatar: "काढून टाक",
+  avatarSaved: "अवतार सेव्ह केला",
+  avatarRemoved: "अवतार काढला",
+  avatarLocalOnly: "चित्र फक्त या उपकरणावर लागू होते",
 };

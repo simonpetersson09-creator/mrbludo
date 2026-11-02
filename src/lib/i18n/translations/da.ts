@@ -224,4 +224,9 @@ export const da: Record<TranslationKey, string> = {
   matchFoundTitle: "Modstander fundet!",
   matchFoundVs: "Du møder {name}",
   cancelSearch: "Annuller",
+  changeAvatar: "Skift billede",
+  removeAvatar: "Fjern",
+  avatarSaved: "Profilbillede gemt",
+  avatarRemoved: "Profilbillede fjernet",
+  avatarLocalOnly: "Billedet gælder kun på denne enhed",
 };

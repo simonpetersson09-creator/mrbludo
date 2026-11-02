@@ -209,4 +209,9 @@ export const el: Record<TranslationKey, string> = {
   matchFoundTitle: "Βρέθηκε αντίπαλος!",
   matchFoundVs: "Παίζεις με: {name}",
   cancelSearch: "Άκυρο",
+  changeAvatar: "Αλλαγή εικόνας",
+  removeAvatar: "Αφαίρεση",
+  avatarSaved: "Η εικόνα αποθηκεύτηκε",
+  avatarRemoved: "Η εικόνα αφαιρέθηκε",
+  avatarLocalOnly: "Η εικόνα ισχύει μόνο σε αυτή τη συσκευή",
 };

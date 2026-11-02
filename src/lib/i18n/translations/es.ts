@@ -224,4 +224,9 @@ export const es: Record<TranslationKey, string> = {
   matchFoundTitle: "¡Rival encontrado!",
   matchFoundVs: "Juegas contra {name}",
   cancelSearch: "Cancelar",
+  changeAvatar: "Cambiar imagen",
+  removeAvatar: "Quitar",
+  avatarSaved: "Avatar guardado",
+  avatarRemoved: "Avatar eliminado",
+  avatarLocalOnly: "La imagen solo se aplica en este dispositivo",
 };

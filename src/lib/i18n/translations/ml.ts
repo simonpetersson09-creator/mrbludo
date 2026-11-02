@@ -224,4 +224,9 @@ export const ml: Record<TranslationKey, string> = {
   matchFoundTitle: "എതിരാളിയെ കിട്ടി!",
   matchFoundVs: "നിങ്ങളുടെ എതിരാളി: {name}",
   cancelSearch: "റദ്ദാക്കൂ",
+  changeAvatar: "ചിത്രം മാറ്റൂ",
+  removeAvatar: "നീക്കൂ",
+  avatarSaved: "അവതാർ സേവ് ചെയ്തു",
+  avatarRemoved: "അവതാർ നീക്കി",
+  avatarLocalOnly: "ചിത്രം ഈ ഉപകരണത്തിൽ മാത്രം ബാധകം",
 };

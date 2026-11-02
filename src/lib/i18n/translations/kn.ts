@@ -224,4 +224,9 @@ export const kn: Record<TranslationKey, string> = {
   matchFoundTitle: "ಎದುರಾಳಿ ಸಿಕ್ಕರು!",
   matchFoundVs: "ನಿಮ್ಮ ಎದುರಾಳಿ: {name}",
   cancelSearch: "ರದ್ದು",
+  changeAvatar: "ಚಿತ್ರ ಬದಲಿಸು",
+  removeAvatar: "ತೆಗೆದುಹಾಕು",
+  avatarSaved: "ಅವತಾರ ಉಳಿಸಲಾಗಿದೆ",
+  avatarRemoved: "ಅವತಾರ ತೆಗೆದುಹಾಕಲಾಗಿದೆ",
+  avatarLocalOnly: "ಚಿತ್ರ ಈ ಸಾಧನದಲ್ಲಿ ಮಾತ್ರ ಅನ್ವಯಿಸುತ್ತದೆ",
 };

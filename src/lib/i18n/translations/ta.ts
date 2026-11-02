@@ -224,4 +224,9 @@ export const ta: Record<TranslationKey, string> = {
   matchFoundTitle: "எதிராளி கிடைத்தார்!",
   matchFoundVs: "உங்கள் எதிராளி: {name}",
   cancelSearch: "ரத்து",
+  changeAvatar: "படத்தை மாற்று",
+  removeAvatar: "நீக்கு",
+  avatarSaved: "படம் சேமிக்கப்பட்டது",
+  avatarRemoved: "படம் நீக்கப்பட்டது",
+  avatarLocalOnly: "படம் இந்த சாதனத்தில் மட்டுமே பொருந்தும்",
 };

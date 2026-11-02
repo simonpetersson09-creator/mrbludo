@@ -224,4 +224,9 @@ export const or: Record<TranslationKey, string> = {
   matchFoundTitle: "ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ ମିଳିଲେ!",
   matchFoundVs: "ଆପଣଙ୍କ ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ: {name}",
   cancelSearch: "ବାତିଲ",
+  changeAvatar: "ଛବି ବଦଳାଅ",
+  removeAvatar: "ହଟାଅ",
+  avatarSaved: "ଅବତାର ସଞ୍ଚିତ",
+  avatarRemoved: "ଅବତାର ହଟିଲା",
+  avatarLocalOnly: "ଛବି କେବଳ ଏହି ଉପକରଣରେ ପ୍ରଯୁଜ୍ୟ",
 };

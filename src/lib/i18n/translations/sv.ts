@@ -239,6 +239,11 @@ export const sv = {
   matchFoundTitle: "Motspelare hittad!",
   matchFoundVs: "Du möter {name}",
   cancelSearch: "Avbryt",
+  changeAvatar: "Byt bild",
+  removeAvatar: "Ta bort",
+  avatarSaved: "Profilbild sparad",
+  avatarRemoved: "Profilbild borttagen",
+  avatarLocalOnly: "Profilbilden gäller bara på den här enheten",
 };
 
 export type TranslationKey = keyof typeof sv;

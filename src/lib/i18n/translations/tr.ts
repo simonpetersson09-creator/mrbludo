@@ -224,4 +224,9 @@ export const tr: Record<TranslationKey, string> = {
   matchFoundTitle: "Rakip bulundu!",
   matchFoundVs: "Rakibin: {name}",
   cancelSearch: "İptal",
+  changeAvatar: "Resmi değiştir",
+  removeAvatar: "Kaldır",
+  avatarSaved: "Avatar kaydedildi",
+  avatarRemoved: "Avatar kaldırıldı",
+  avatarLocalOnly: "Görsel yalnızca bu cihazda geçerli",
 };

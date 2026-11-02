@@ -224,4 +224,9 @@ export const vi: Record<TranslationKey, string> = {
   matchFoundTitle: "Đã tìm thấy đối thủ!",
   matchFoundVs: "Đối thủ của bạn: {name}",
   cancelSearch: "Hủy",
+  changeAvatar: "Đổi ảnh",
+  removeAvatar: "Xóa",
+  avatarSaved: "Đã lưu ảnh đại diện",
+  avatarRemoved: "Đã xóa ảnh đại diện",
+  avatarLocalOnly: "Hình chỉ áp dụng trên thiết bị này",
 };

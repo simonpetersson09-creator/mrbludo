@@ -224,4 +224,9 @@ export const ro: Record<TranslationKey, string> = {
   matchFoundTitle: "Adversar găsit!",
   matchFoundVs: "Joci cu {name}",
   cancelSearch: "Anulează",
+  changeAvatar: "Schimbă imaginea",
+  removeAvatar: "Elimină",
+  avatarSaved: "Avatar salvat",
+  avatarRemoved: "Avatar eliminat",
+  avatarLocalOnly: "Imaginea se aplică doar pe acest dispozitiv",
 };
