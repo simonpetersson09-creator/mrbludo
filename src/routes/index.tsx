@@ -72,28 +72,11 @@ function HomePage() {
         <Link to="/online" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">🌐</span><span>{t("playOnline")}</span></Link>
       </div>
       <div className="home-round-row">
-        <div className="home-round-item" ref={langRef}>
-          <button type="button" className="home-round-action" aria-label={t("languageLabel")} aria-expanded={showLangs} onClick={toggleLangs}>
+        <div className="home-round-item">
+          <button ref={langBtnRef} type="button" className="home-round-action" aria-label={t("languageLabel")} aria-expanded={showLangs} onClick={toggleLangs}>
             <Globe className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
           <span className="home-round-label">{t("languageLabel")}</span>
-          {showLangs && (
-            <div className={`home-round-pop${langUp ? " home-round-pop-up" : ""}`} role="menu">
-              {LANGUAGES.map((l) => (
-                <button
-                  key={l.code}
-                  type="button"
-                  role="menuitem"
-                  className={`home-round-pop-item${l.code === lang ? " home-round-pop-item-active" : ""}`}
-                  onClick={() => { setLanguage(l.code); setShowLangs(false); }}
-                >
-                  <span aria-hidden="true">{l.flag}</span>
-                  <span className="min-w-0 flex-1 truncate text-left">{l.label}</span>
-                  {l.code === lang && <Check size={13} className="shrink-0" />}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
         <Link to="/settings" className="home-round-item">
           <span className="home-round-action"><Settings className="h-4 w-4 sm:h-5 sm:w-5" /></span>
