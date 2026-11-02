@@ -13,6 +13,8 @@ import type { DiceValue } from "@/components/dice-engine/types";
 import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
 import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, startMatch } from "@/lib/online/online.functions";
+import { useAvatarImages } from "@/lib/ludo/avatar";
+import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { flag } from "@/lib/online/profile-options";
 import { TURN_SECONDS } from "@/lib/online/match-logic";
 import { rememberOnlineMatch } from "@/lib/online/snapshot";
@@ -47,6 +49,7 @@ function OnlineMatchPage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [match, setMatch] = useState<MatchRow | null>(null);
   const [seats, setSeats] = useState<SeatRow[]>([]);
+  const pics = useAvatarImages(seats.map((s) => s.user_id));
   const [rolling, setRolling] = useState(false);
   const [face, setFace] = useState<DiceValue>(6);
   const [pending, setPending] = useState(false);
