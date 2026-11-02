@@ -38,7 +38,7 @@ function render(src, out, size, { circle = false, alpha = false } = {}) {
 function splash(out, w, h) {
   mkdirSync(dirname(out), { recursive: true });
   const s = Math.round(Math.min(w, h) * 0.38);
-  run(["-size", `${w}x${h}`, `xc:${BG}`, "(", MASTER, "-resize", `${s}x${s}`, ")", "-gravity", "center", "-composite", "-alpha", "off", out]);
+  run(["-size", `${w}x${h}`, `xc:${BG}`, "(", MASTER, "-resize", `${s}x${s}`, ")", "-gravity", "center", "-composite", "-alpha", "off", "-depth", "8", out]);
 }
 
 const source = process.argv[2];
