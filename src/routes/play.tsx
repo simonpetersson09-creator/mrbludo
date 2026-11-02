@@ -12,6 +12,7 @@ import { applyMove, applyRoll, forfeit, legalMoves, rollDie, absSquare, COLOR_KE
 import { chooseMove } from "@/lib/ludo/ai";
 import { pieceCenter } from "@/lib/ludo/board";
 import { clearGame, loadGame, loadSettings, loadStats, saveGame, saveStats } from "@/lib/ludo/storage";
+import { useTranslation, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/play")({
   head: () => ({
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/play")({
 const ROLL_MS = 1150;
 const BOT_DELAY = { slow: 1100, normal: 650, fast: 300 } as const;
 const COLOR_VAR = ["var(--ludo-red)", "var(--ludo-green)", "var(--ludo-yellow)", "var(--ludo-blue)"];
-const COLOR_SV = ["Röd", "Grön", "Gul", "Blå"];
+const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
 function vibrate(ms: number) {
   if (loadSettings().haptics && typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate?.(ms);
@@ -36,6 +37,7 @@ function vibrate(ms: number) {
 
 function PlayPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [state, setState] = useState<GameState | null>(null);
   const [rolling, setRolling] = useState(false);
   const [face, setFace] = useState<DiceValue>(6);
@@ -124,20 +126,20 @@ function PlayPage() {
   void absSquare;
 
   let status = "";
-  if (state.phase === "finished") status = `${state.players[state.winner!].name} vann!`;
-  else if (rolling) status = "Kastar…";
-  else if (me.isBot) status = `${me.name} tänker…`;
-  else if (state.phase === "move") status = legal.length === 1 ? "Tryck på den markerade pjäsen" : "Välj en pjäs";
-  else if (ev?.kind === "rolled" && ev.threeSixes && state.players[ev.player] === me) status = "Tre sexor – turen går vidare";
-  else if (ev?.kind === "rolled" && ev.noMoves && ev.player === state.current && ev.value === 6) status = "Inga drag – extra kast!";
-  else if (ev?.kind === "moved" && ev.extraRoll && ev.player === state.current) status = "Extra kast!";
-  else status = "Din tur – kasta tärningen";
+  if (state.phase === "finished") status = t("playerWon", { name: state.players[state.winner!].name });
+  else if (rolling) status = t("statusRolling");
+  else if (me.isBot) status = t("statusThinking", { name: me.name });
+  else if (state.phase === "move") status = legal.length === 1 ? t("tapPiece") : t("choosePiece");
+  else if (ev?.kind === "rolled" && ev.threeSixes && state.players[ev.player] === me) status = t("threeSixesTurn");
+  else if (ev?.kind === "rolled" && ev.noMoves && ev.player === state.current && ev.value === 6) status = t("noMovesExtra");
+  else if (ev?.kind === "moved" && ev.extraRoll && ev.player === state.current) status = t("extraRoll");
+  else status = t("yourTurn");
   let sub = "";
-  if (ev?.kind === "rolled" && ev.noMoves && ev.value !== 6) sub = `${state.players[ev.player].name} slog ${ev.value} – inga möjliga drag`;
-  else if (ev?.kind === "rolled" && ev.threeSixes) sub = `${state.players[ev.player].name} slog tre sexor`;
-  else if (ev?.kind === "moved" && ev.captured.length) sub = `${state.players[ev.player].name} slog ut ${ev.captured.map((c) => state.players[c.player].name).join(", ")}!`;
-  else if (ev?.kind === "moved" && ev.reachedGoal) sub = `${state.players[ev.player].name} fick en pjäs i mål`;
-  else if (ev?.kind === "forfeit") sub = `${state.players[ev.player].name} gav upp`;
+  if (ev?.kind === "rolled" && ev.noMoves && ev.value !== 6) sub = t("subNoMoves", { name: state.players[ev.player].name, value: ev.value });
+  else if (ev?.kind === "rolled" && ev.threeSixes) sub = t("subThreeSixes", { name: state.players[ev.player].name });
+  else if (ev?.kind === "moved" && ev.captured.length) sub = t("subCapture", { name: state.players[ev.player].name, names: ev.captured.map((c) => state.players[c.player].name).join(", ") });
+  else if (ev?.kind === "moved" && ev.reachedGoal) sub = t("subGoal", { name: state.players[ev.player].name });
+  else if (ev?.kind === "forfeit") sub = t("subForfeit", { name: state.players[ev.player].name });
 
   const canRoll = humanTurn && state.phase === "roll" && !rolling;
 
@@ -173,14 +175,14 @@ function PlayPage() {
         </div>
         <div className="flex min-w-0 flex-1 flex-col justify-end gap-[7px]">
           <button className="home-action home-action-gold" onClick={doRoll} disabled={!canRoll}>
-            <Dice5 size={16} /> Kasta
+            <Dice5 size={16} /> {t("roll")}
           </button>
           <div className="grid grid-cols-2 gap-[7px]">
             <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/" })}>
-              <Home size={16} /> Hem
+              <Home size={16} /> {t("home")}
             </button>
             <button className="home-action home-action-danger" onClick={() => setConfirmForfeit(true)} disabled={state.phase === "finished"}>
-              <Flag size={16} /> Ge upp
+              <Flag size={16} /> {t("forfeit")}
             </button>
           </div>
         </div>
@@ -189,11 +191,11 @@ function PlayPage() {
       <AlertDialog open={confirmForfeit} onOpenChange={setConfirmForfeit}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Ge upp matchen?</AlertDialogTitle>
-            <AlertDialogDescription>Matchen avslutas och räknas som en förlust. Det går inte att ångra.</AlertDialogDescription>
+            <AlertDialogTitle>{t("forfeitTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("forfeitBodyLocal")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Fortsätt spela</AlertDialogCancel>
+            <AlertDialogCancel>{t("keepPlaying")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 let s = state;
@@ -206,7 +208,7 @@ function PlayPage() {
                 setState(s);
               }}
             >
-              Ge upp
+              {t("forfeit")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -218,12 +220,13 @@ function PlayPage() {
 }
 
 function ResultOverlay({ state, onAgain, onHome }: { state: GameState; onAgain: () => void; onHome: () => void }) {
+  const { t } = useTranslation();
   const ranking = state.ranking ?? state.players.map((_, i) => i);
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm">
       <div className="w-full max-w-[360px] rounded-2xl border bg-card p-5 text-center shadow-2xl">
         <p className="text-4xl">🏆</p>
-        <h2 className="brand-title mt-1 text-2xl">{state.players[state.winner!].name} vann!</h2>
+        <h2 className="brand-title mt-1 text-2xl">{t("playerWon", { name: state.players[state.winner!].name })}</h2>
         <ol className="mt-4 space-y-1.5 text-left text-sm">
           {ranking.map((seat, place) => {
             const p = state.players[seat];
@@ -232,18 +235,18 @@ function ResultOverlay({ state, onAgain, onHome }: { state: GameState; onAgain: 
                 <span className="w-5 font-bold text-gold">{place + 1}.</span>
                 <span className="h-3 w-3 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
                 <span className="flex-1 truncate">{p.name}</span>
-                <span className="text-xs text-muted-foreground">{p.forfeited ? "Gav upp" : `${state.pieces[seat].filter((x) => x === 56).length}/4 i mål`}</span>
+                <span className="text-xs text-muted-foreground">{p.forfeited ? t("gaveUp") : t("inGoal", { n: state.pieces[seat].filter((x) => x === 56).length })}</span>
               </li>
             );
           })}
         </ol>
         <div className="home-stack mt-4">
-          <button className="home-action home-action-gold" onClick={onAgain}>Spela igen</button>
-          <button className="home-action home-action-ghost" onClick={onHome}>Hem</button>
+          <button className="home-action home-action-gold" onClick={onAgain}>{t("playAgain")}</button>
+          <button className="home-action home-action-ghost" onClick={onHome}>{t("home")}</button>
         </div>
       </div>
     </div>
   );
 }
 
-export { COLOR_SV, COLOR_KEYS };
+export { COLOR_NAME_KEYS, COLOR_KEYS };

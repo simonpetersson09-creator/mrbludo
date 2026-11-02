@@ -1,6 +1,9 @@
 import { memo } from "react";
-import { COLOR_KEYS, GOAL, type Color, type GameState } from "@/lib/ludo/engine";
+import { GOAL, type Color, type GameState } from "@/lib/ludo/engine";
 import { HOME_COLUMN, TRACK, YARD_ORIGIN, pieceCenter } from "@/lib/ludo/board";
+import { useTranslation, type TranslationKey } from "@/lib/i18n";
+
+const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
 const FILL: Record<Color, string> = {
   0: "var(--ludo-red)", 1: "var(--ludo-green)", 2: "var(--ludo-yellow)", 3: "var(--ludo-blue)",
@@ -14,6 +17,7 @@ interface Props {
 }
 
 function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
+  const { t } = useTranslation();
   const seatColors = new Set(state.players.map((p) => p.color));
 
   // Group pieces by spot so stacked pieces get a small offset.
@@ -32,7 +36,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
   });
 
   return (
-    <svg viewBox="0 0 15 15" className="h-full w-full select-none" role="img" aria-label="Ludo-bräde">
+    <svg viewBox="0 0 15 15" className="h-full w-full select-none" role="img" aria-label={t("boardAria")}>
       <defs>
         <radialGradient id="pieceShine" cx="35%" cy="30%" r="70%">
           <stop offset="0%" stopColor="white" stopOpacity="0.75" />
@@ -84,7 +88,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
           style={{ transform: `translate(${p.x}px, ${p.y}px)` }}
           onClick={p.legal ? () => onPick(p.idx) : undefined}
           role={p.legal ? "button" : undefined}
-          aria-label={p.legal ? `Flytta ${COLOR_KEYS[p.color]} pjäs ${p.idx + 1}` : undefined}
+          aria-label={p.legal ? t("movePieceAria", { color: t(COLOR_NAME_KEYS[p.color]), n: p.idx + 1 }) : undefined}
         >
           {p.legal && <circle className="piece-ring" r="0.5" fill="none" stroke="var(--game-gold)" strokeWidth="0.1" />}
           <ellipse cx="0.04" cy="0.16" rx="0.34" ry="0.16" fill="black" opacity="0.25" />

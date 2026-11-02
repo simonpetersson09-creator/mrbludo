@@ -15,6 +15,7 @@ import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, startMatch } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
 import { TURN_SECONDS } from "@/lib/online/match-logic";
+import { errorMessage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/online/$matchId")({
   head: () => ({
@@ -37,6 +38,7 @@ interface SeatRow { user_id: string; seat: number; display_name: string; avatar:
 function OnlineMatchPage() {
   const { matchId } = Route.useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [userId, setUserId] = useState<string | null>(null);
   const [match, setMatch] = useState<MatchRow | null>(null);
   const [seats, setSeats] = useState<SeatRow[]>([]);
@@ -111,12 +113,12 @@ function OnlineMatchPage() {
       if (r) setMatch((m) => (m && m.version < r.version ? { ...m, version: r.version, state: r.state, status: r.state.phase === "finished" ? "finished" : m.status } : m));
     } catch (e) {
       setRolling(false);
-      toast.error(e instanceof Error ? e.message : "Nätverksfel – försök igen");
+      toast.error(errorMessage(e, t));
       load();
     } finally { setPending(false); }
-  }, [match, matchId, pending, load]);
+  }, [match, matchId, pending, load, t]);
 
-  if (missing) return <main className="app-screen"><div className="home-stack"><p>Matchen finns inte eller så är du inte med i den.</p><button className="home-action mt-3" onClick={() => navigate({ to: "/online" })}>Till online</button></div></main>;
+  if (missing) return <main className="app-screen"><div className="home-stack"><p>{t("matchMissing")}</p><button className="home-action mt-3" onClick={() => navigate({ to: "/online" })}>{t("toOnline")}</button></div></main>;
   if (!match || !userId) return <div className="game-screen" />;
   if (match.status === "waiting" || match.status === "abandoned") return <WaitingRoom match={match} seats={seats} userId={userId} onLeave={async () => { await leaveMatch({ data: { matchId } }).catch(() => {}); navigate({ to: "/online" }); }} />;
   if (!state) return <div className="game-screen" />;
@@ -131,19 +133,19 @@ function OnlineMatchPage() {
   const seatOf = (id: string) => seats.find((s) => s.user_id === id);
 
   let status = "";
-  if (state.phase === "finished") status = `${state.players[state.winner!].name} vann!`;
-  else if (rolling) status = "Kastar…";
-  else if (!myTurn) status = `${me.name}s tur`;
-  else if (state.phase === "move") status = legal.length === 1 ? "Tryck på den markerade pjäsen" : "Välj en pjäs";
-  else if (ev?.kind === "moved" && ev.extraRoll && ev.player === state.current) status = "Extra kast!";
-  else status = "Din tur – kasta tärningen";
+  if (state.phase === "finished") status = t("playerWon", { name: state.players[state.winner!].name });
+  else if (rolling) status = t("statusRolling");
+  else if (!myTurn) status = t("theirTurn", { name: me.name });
+  else if (state.phase === "move") status = legal.length === 1 ? t("tapPiece") : t("choosePiece");
+  else if (ev?.kind === "moved" && ev.extraRoll && ev.player === state.current) status = t("extraRoll");
+  else status = t("yourTurn");
   let sub = "";
   if (rolling) sub = "";
-  else if (ev?.kind === "rolled" && ev.noMoves && ev.value !== 6) sub = `${state.players[ev.player].name} slog ${ev.value} – inga möjliga drag`;
-  else if (ev?.kind === "rolled" && ev.threeSixes) sub = `${state.players[ev.player].name} slog tre sexor`;
-  else if (ev?.kind === "moved" && ev.captured.length) sub = `${state.players[ev.player].name} slog ut ${ev.captured.map((c) => state.players[c.player].name).join(", ")}!`;
-  else if (ev?.kind === "moved" && ev.reachedGoal) sub = `${state.players[ev.player].name} fick en pjäs i mål`;
-  else if (ev?.kind === "forfeit") sub = `${state.players[ev.player].name} lämnade matchen`;
+  else if (ev?.kind === "rolled" && ev.noMoves && ev.value !== 6) sub = t("subNoMoves", { name: state.players[ev.player].name, value: ev.value });
+  else if (ev?.kind === "rolled" && ev.threeSixes) sub = t("subThreeSixes", { name: state.players[ev.player].name });
+  else if (ev?.kind === "moved" && ev.captured.length) sub = t("subCapture", { name: state.players[ev.player].name, names: ev.captured.map((c) => state.players[c.player].name).join(", ") });
+  else if (ev?.kind === "moved" && ev.reachedGoal) sub = t("subGoal", { name: state.players[ev.player].name });
+  else if (ev?.kind === "forfeit") sub = t("subLeft", { name: state.players[ev.player].name });
 
   return (
     <main className="game-screen">
@@ -168,7 +170,7 @@ function OnlineMatchPage() {
       </div>
 
       <div className="text-center" aria-live="polite">
-        <p className="font-display text-base font-bold" style={{ color: COLOR_VAR[me.color] }}>{offline ? "Återansluter…" : status}</p>
+        <p className="font-display text-base font-bold" style={{ color: COLOR_VAR[me.color] }}>{offline ? t("reconnecting") : status}</p>
         <p className="h-4 text-xs text-muted-foreground">{sub || (state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
       </div>
 
@@ -178,11 +180,11 @@ function OnlineMatchPage() {
         </div>
         <div className="flex min-w-0 flex-1 flex-col justify-end gap-[7px]">
           <button className="home-action home-action-gold" onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
-            <Dice5 size={16} /> Kasta
+            <Dice5 size={16} /> {t("roll")}
           </button>
           <div className="grid grid-cols-2 gap-[7px]">
-            <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/online" })}><Home size={16} /> Hem</button>
-            <button className="home-action home-action-danger" onClick={() => setConfirmForfeit(true)} disabled={state.phase === "finished" || mySeat < 0 || state.players[mySeat].forfeited}><Flag size={16} /> Ge upp</button>
+            <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/online" })}><Home size={16} /> {t("home")}</button>
+            <button className="home-action home-action-danger" onClick={() => setConfirmForfeit(true)} disabled={state.phase === "finished" || mySeat < 0 || state.players[mySeat].forfeited}><Flag size={16} /> {t("forfeit")}</button>
           </div>
         </div>
       </div>
@@ -190,12 +192,12 @@ function OnlineMatchPage() {
       <AlertDialog open={confirmForfeit} onOpenChange={setConfirmForfeit}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Ge upp matchen?</AlertDialogTitle>
-            <AlertDialogDescription>Du lämnar matchen och den räknas som en förlust. Det går inte att ångra.</AlertDialogDescription>
+            <AlertDialogTitle>{t("forfeitTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("forfeitBodyOnline")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Fortsätt spela</AlertDialogCancel>
-            <AlertDialogAction onClick={() => leaveMatch({ data: { matchId } }).then(load).catch((e) => toast.error(e.message))}>Ge upp</AlertDialogAction>
+            <AlertDialogCancel>{t("keepPlaying")}</AlertDialogCancel>
+            <AlertDialogAction onClick={() => leaveMatch({ data: { matchId } }).then(load).catch((e) => toast.error(errorMessage(e, t)))}>{t("forfeit")}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -204,7 +206,7 @@ function OnlineMatchPage() {
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm">
           <div className="w-full max-w-[360px] rounded-2xl border bg-card p-5 text-center shadow-2xl">
             <p className="text-4xl">🏆</p>
-            <h2 className="brand-title mt-1 text-2xl">{state.players[state.winner!].name} vann!</h2>
+            <h2 className="brand-title mt-1 text-2xl">{t("playerWon", { name: state.players[state.winner!].name })}</h2>
             <ol className="mt-4 space-y-1.5 text-left text-sm">
               {(state.ranking ?? state.players.map((_, i) => i)).map((seat, place) => {
                 const p = state.players[seat];
@@ -213,15 +215,15 @@ function OnlineMatchPage() {
                     <span className="w-5 font-bold text-gold">{place + 1}.</span>
                     <span className="h-3 w-3 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
                     <span className="flex-1 truncate">{p.name}</span>
-                    <span className="text-xs text-muted-foreground">{p.forfeited ? "Gav upp" : `${state.pieces[seat].filter((x) => x === GOAL).length}/4 i mål`}</span>
+                    <span className="text-xs text-muted-foreground">{p.forfeited ? t("gaveUp") : t("inGoal", { n: state.pieces[seat].filter((x) => x === GOAL).length })}</span>
                   </li>
                 );
               })}
             </ol>
-            <p className="mt-2 text-xs text-muted-foreground">Resultatet räknas på topplistan.</p>
+            <p className="mt-2 text-xs text-muted-foreground">{t("countsOnLeaderboard")}</p>
             <div className="home-stack mt-4">
-              <button className="home-action home-action-gold" onClick={() => navigate({ to: "/online" })}>Spela igen</button>
-              <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/" })}>Hem</button>
+              <button className="home-action home-action-gold" onClick={() => navigate({ to: "/online" })}>{t("playAgain")}</button>
+              <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/" })}>{t("home")}</button>
             </div>
           </div>
         </div>
@@ -231,27 +233,29 @@ function OnlineMatchPage() {
 }
 
 function TurnClock({ since }: { since: string | null }) {
+  const { t } = useTranslation();
   const [, tick] = useState(0);
   useEffect(() => { const t = window.setInterval(() => tick((n) => n + 1), 1000); return () => window.clearInterval(t); }, []);
   if (!since) return null;
   const left = Math.max(0, TURN_SECONDS - Math.floor((Date.now() - new Date(since).getTime()) / 1000));
-  return <>{left > 0 ? `${left} s kvar på draget` : "Tiden är ute – servern spelar draget"}</>;
+  return <>{left > 0 ? t("turnTimeLeft", { s: left }) : t("turnTimeOut")}</>;
 }
 
 function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats: SeatRow[]; userId: string; onLeave: () => void }) {
+  const { t } = useTranslation();
   const [friends, setFriends] = useState<Awaited<ReturnType<typeof listFriends>>["friends"]>([]);
   const isHost = match.host_id === userId;
   useEffect(() => { listFriends().then((r) => setFriends(r.friends.filter((f) => f.status === "accepted"))).catch(() => {}); }, []);
-  const start = () => startMatch({ data: { matchId: match.id } }).catch((e) => toast.error(e.message));
-  const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => toast.success("Inbjudan skickad")).catch((e) => toast.error(e.message));
-  if (match.status === "abandoned") return <main className="app-screen"><div className="home-stack"><p>Matchen avbröts.</p><button className="home-action mt-3" onClick={onLeave}>Tillbaka</button></div></main>;
+  const start = () => startMatch({ data: { matchId: match.id } }).catch((e) => toast.error(errorMessage(e, t)));
+  const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => toast.success(t("inviteSent"))).catch((e) => toast.error(errorMessage(e, t)));
+  if (match.status === "abandoned") return <main className="app-screen"><div className="home-stack"><p>{t("matchAbandoned")}</p><button className="home-action mt-3" onClick={onLeave}>{t("back")}</button></div></main>;
   return (
     <main className="app-screen">
       <div className="home-stack">
-        <h1 className="brand-title text-3xl">Väntrum</h1>
-        <p className="text-sm text-muted-foreground">{match.is_private ? "Privat match" : "Snabbmatch"} · {seats.length}/{match.max_players} spelare</p>
-        <button className="mt-3 flex items-center justify-center gap-2 rounded-[10px] border border-gold bg-card py-3" onClick={() => { navigator.clipboard?.writeText(match.code); toast.success("Koden kopierad"); }}>
-          <span className="text-xs text-muted-foreground">Matchkod</span>
+        <h1 className="brand-title text-3xl">{t("waitingRoom")}</h1>
+        <p className="text-sm text-muted-foreground">{match.is_private ? t("privateMatch") : t("quickMatch")} · {t("playersCount", { n: seats.length, max: match.max_players })}</p>
+        <button className="mt-3 flex items-center justify-center gap-2 rounded-[10px] border border-gold bg-card py-3" onClick={() => { navigator.clipboard?.writeText(match.code); toast.success(t("codeCopied")); }}>
+          <span className="text-xs text-muted-foreground">{t("matchCode")}</span>
           <span className="font-display text-2xl font-bold tracking-[0.3em] text-gold">{match.code}</span>
           <Copy size={14} />
         </button>
@@ -260,25 +264,25 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
             const s = seats[i];
             return (
               <div key={i} className="flex h-[52px] items-center gap-2 rounded-[10px] border bg-card px-3 text-sm">
-                {s ? <><span className="text-lg">{s.avatar}</span><span className="flex-1 truncate font-semibold">{s.display_name} {flag(s.country)}</span>{s.user_id === match.host_id && <span className="text-xs text-gold">Värd</span>}</>
-                  : <span className="flex-1 text-muted-foreground">Väntar på spelare…</span>}
+                {s ? <><span className="text-lg">{s.avatar}</span><span className="flex-1 truncate font-semibold">{s.display_name} {flag(s.country)}</span>{s.user_id === match.host_id && <span className="text-xs text-gold">{t("host")}</span>}</>
+                  : <span className="flex-1 text-muted-foreground">{t("waitingForPlayers")}</span>}
               </div>
             );
           })}
         </div>
         {isHost ? (
-          <button className="home-action home-action-success mt-4" disabled={seats.length < 2} onClick={start}><Play size={16} /> Starta nu ({seats.length} spelare)</button>
-        ) : <p className="mt-4 text-center text-sm text-muted-foreground">Värden startar matchen. Den startar automatiskt när alla platser är fyllda.</p>}
+          <button className="home-action home-action-success mt-4" disabled={seats.length < 2} onClick={start}><Play size={16} /> {t("startNow", { n: seats.length })}</button>
+        ) : <p className="mt-4 text-center text-sm text-muted-foreground">{t("hostStarts")}</p>}
         {friends.length > 0 && <>
-          <h2 className="mt-4 text-sm font-semibold">Bjud in vänner</h2>
+          <h2 className="mt-4 text-sm font-semibold">{t("inviteFriends")}</h2>
           {friends.filter((f) => !seats.some((s) => s.user_id === f.user.id)).map((f) => (
             <div key={f.id} className="mt-[7px] flex items-center gap-2 rounded-[10px] bg-surface px-3 py-2 text-sm">
               <span>{f.user.avatar}</span><span className="flex-1 truncate">{f.user.display_name}</span>
-              <button className="rounded-md bg-gold px-2 py-1 text-xs font-bold text-background" onClick={() => invite(f.user.id)}>Bjud in</button>
+              <button className="rounded-md bg-gold px-2 py-1 text-xs font-bold text-background" onClick={() => invite(f.user.id)}>{t("invite")}</button>
             </div>
           ))}
         </>}
-        <button className="home-action home-action-ghost mt-4" onClick={onLeave}>Lämna väntrummet</button>
+        <button className="home-action home-action-ghost mt-4" onClick={onLeave}>{t("leaveWaiting")}</button>
       </div>
     </main>
   );
