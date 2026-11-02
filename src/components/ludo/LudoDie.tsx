@@ -25,7 +25,7 @@ export function LudoDie({ value, rolling, pipColor, onTap, disabled }: Props) {
     >
       {mounted && (
         <Suspense fallback={null}>
-          <DiceScene className="absolute inset-0" values={[value]} rolling={rolling} fill={0.7} pipColor={pipColor} onToggleHold={disabled ? undefined : () => onTap()} />
+          <DiceScene className="absolute inset-0" values={[value]} rolling={rolling} fill={0.7} pipColor={pipColor} />
         </Suspense>
       )}
     </button>
