@@ -1,18 +1,29 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 const [action = "verify", platform] = process.argv.slice(2);
 function run(command, args) {
   const result = spawnSync(command, args, { stdio: "inherit", env: process.env });
-  if (result.error || result.status !== 0) process.exit(result.status || 1);
-}
-function verifyOrigin() {
-  const value = process.env.MRB_LUDO_NATIVE_ORIGIN;
-  if (!value) throw new Error("MRB_LUDO_NATIVE_ORIGIN must name the approved published Ludo site. Nothing is published automatically.");
-  const url = new URL(value);
-  if (url.protocol !== "https:" || url.username || url.password || url.pathname !== "/" || url.search || url.hash || /localhost|id-preview|yatzy/i.test(url.hostname)) throw new Error("Native origin is not an approved stable HTTPS site.");
+  if (result.error) { console.error(`${command} is unavailable: ${result.error.message}`); process.exit(1); }
+  if (result.status !== 0) process.exit(result.status || 1);
 }
 try {
-  if (action === "verify") {
+  if (action === "web") {
+    const origin = process.env.VITE_MRB_LUDO_ONLINE_ORIGIN;
+    if (origin) {
+      const parsed = new URL(origin);
+      if (parsed.protocol !== "https:" || /localhost|id-preview|yatzy/i.test(parsed.hostname) || parsed.username || parsed.password || parsed.pathname !== "/" || parsed.search || parsed.hash) throw new Error("Only the separately approved published Ludo HTTPS origin may be bundled");
+    }
+    run("bunx", ["vite", "build", "--config", "vite.native.config.ts"]);
+  } else if (action === "verify") {
+    const config = readFileSync("capacitor.config.ts", "utf8");
+    if (!config.includes('webDir: "dist-native"') || config.includes("server:")) throw new Error("Native app must launch the packaged game, not a remote website");
+    if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web first");
+    const files = readdirSync("dist-native/assets");
+    if (!files.some(f => f.endsWith("woff2")) || !files.some(f => f.startsWith("DiceScene"))) throw new Error("Bundled fonts or 3D die missing");
+    for (const file of files.filter(f => /\.(js|html|css)$/.test(f))) {
+      // The auth SDK contains a literal prefix detector; reject real keys, not that detector.
+      if (/ixzqnmocplgbsawuufsm|sb_secret_[A-Za-z0-9_-]{12,}|supabaseAdmin|SUPABASE_SERVICE_ROLE_KEY/.test(readFileSync(`dist-native/assets/${file}`, "utf8"))) throw new Error("Forbidden backend configuration in native package");
+    }
     const android = readFileSync("android/app/src/main/AndroidManifest.xml", "utf8");
     const gradle = readFileSync("android/app/build.gradle", "utf8");
     const ios = readFileSync("ios/App/App.xcodeproj/project.pbxproj", "utf8");
@@ -25,10 +36,10 @@ try {
     console.log("Ludo identifiers, unsigned native projects, Android hardware acceleration and backup protection verified.");
     console.log("Mac/Xcode available:", existsSync("/Applications/Xcode.app"), "Android SDK configured:", !!(process.env.ANDROID_HOME || process.env.ANDROID_SDK_ROOT));
   } else if (["sync", "open", "build"].includes(action) && ["ios", "android"].includes(platform)) {
-    verifyOrigin();
+    if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web before sync or build");
     run("bunx", ["cap", "sync", platform]);
     if (action === "open") run("bunx", ["cap", "open", platform]);
     if (action === "build" && platform === "android") run("bash", ["-c", "cd android && ./gradlew assembleDebug"]);
     if (action === "build" && platform === "ios") run("xcodebuild", ["-project", "ios/App/App.xcodeproj", "-scheme", "App", "-destination", "generic/platform=iOS Simulator", "CODE_SIGNING_ALLOWED=NO", "build"]);
-  } else throw new Error("Use verify, sync ios|android, open ios|android or build ios|android");
+  } else throw new Error("Use web, verify, sync ios|android, open ios|android or build ios|android");
 } catch (error) { console.error(error.message); process.exit(1); }

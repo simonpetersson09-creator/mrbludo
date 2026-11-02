@@ -1,0 +1,31 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Outlet, HeadContent, createRootRouteWithContext, useRouter } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { ensurePlayerSession } from "@/lib/auth/player";
+import { supabase } from "@/lib/auth/client";
+import { startNativeRuntime, RESUME_EVENT } from "@/lib/native/runtime";
+import { installViewportSync } from "@/lib/native/viewport";
+
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({ component: NativeRoot });
+function NativeRoot() {
+  const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  useEffect(() => {
+    let cleanup: (() => void) | undefined;
+    let stopped = false;
+    const viewportCleanup = installViewportSync();
+    const connect = () => { if (navigator.onLine) ensurePlayerSession().then(() => router.invalidate()).catch(() => {}); };
+    connect();
+    startNativeRuntime(() => { void router.navigate({ to: "/" }); }).then(fn => { if (stopped) fn(); else cleanup = fn; }).catch(() => {});
+    window.addEventListener("online", connect);
+    window.addEventListener(RESUME_EVENT, connect);
+    const { data } = supabase.auth.onAuthStateChange(event => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      router.invalidate();
+      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+    });
+    return () => { stopped = true; cleanup?.(); viewportCleanup(); data.subscription.unsubscribe(); window.removeEventListener("online", connect); window.removeEventListener(RESUME_EVENT, connect); };
+  }, [router, queryClient]);
+  return <QueryClientProvider client={queryClient}><HeadContent /><Outlet /><Toaster position="top-center" /></QueryClientProvider>;
+}

@@ -24,6 +24,7 @@ import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenti
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedOnlineIndexRouteImport } from './routes/_authenticated/online.index'
 import { Route as AuthenticatedOnlineMatchIdRouteImport } from './routes/_authenticated/online.$matchId'
+import { Route as ApiPublicNativeRouteImport } from './routes/api/public/native'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -102,6 +103,11 @@ const AuthenticatedOnlineMatchIdRoute =
     path: '/online/$matchId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicNativeRoute = ApiPublicNativeRouteImport.update({
+  id: '/api/public/native',
+  path: '/api/public/native',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/online/$matchId': typeof AuthenticatedOnlineMatchIdRoute
+  '/api/public/native': typeof ApiPublicNativeRoute
   '/online/': typeof AuthenticatedOnlineIndexRoute
 }
 export interface FileRoutesByTo {
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/online/$matchId': typeof AuthenticatedOnlineMatchIdRoute
+  '/api/public/native': typeof ApiPublicNativeRoute
   '/online': typeof AuthenticatedOnlineIndexRoute
 }
 export interface FileRoutesById {
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/online/$matchId': typeof AuthenticatedOnlineMatchIdRoute
+  '/api/public/native': typeof ApiPublicNativeRoute
   '/_authenticated/online/': typeof AuthenticatedOnlineIndexRoute
 }
 export interface FileRouteTypes {
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/profile'
     | '/online/$matchId'
+    | '/api/public/native'
     | '/online/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/profile'
     | '/online/$matchId'
+    | '/api/public/native'
     | '/online'
   id:
     | '__root__'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/_authenticated/leaderboard'
     | '/_authenticated/profile'
     | '/_authenticated/online/$matchId'
+    | '/api/public/native'
     | '/_authenticated/online/'
   fileRoutesById: FileRoutesById
 }
@@ -215,6 +227,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   SetupRoute: typeof SetupRoute
   StatsRoute: typeof StatsRoute
+  ApiPublicNativeRoute: typeof ApiPublicNativeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -324,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnlineMatchIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/native': {
+      id: '/api/public/native'
+      path: '/api/public/native'
+      fullPath: '/api/public/native'
+      preLoaderRoute: typeof ApiPublicNativeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -358,6 +378,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   SetupRoute: SetupRoute,
   StatsRoute: StatsRoute,
+  ApiPublicNativeRoute: ApiPublicNativeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

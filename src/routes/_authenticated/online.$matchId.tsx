@@ -15,6 +15,7 @@ import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, startMatch } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
 import { TURN_SECONDS } from "@/lib/online/match-logic";
+import { rememberOnlineMatch } from "@/lib/online/snapshot";
 import { RESUME_EVENT } from "@/lib/native/runtime";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
@@ -61,7 +62,8 @@ function OnlineMatchPage() {
     ]);
     if (error) { setOffline(true); return; }
     setOffline(false);
-    if (!m) { setMissing(true); return; }
+    if (!m) { setMissing(true); rememberOnlineMatch(null); return; }
+    if (m.status === "finished" || m.status === "abandoned") rememberOnlineMatch(null);
     setMatch((prev) => (prev && prev.version > m.version ? prev : (m as MatchRow)));
     setSeats((s ?? []) as SeatRow[]);
   }, [matchId]);
@@ -69,6 +71,7 @@ function OnlineMatchPage() {
   // Initial load + realtime + reconnection.
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id ?? null));
+    rememberOnlineMatch(matchId);
     load();
     const ch = supabase.channel(`match-${matchId}-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "matches", filter: `id=eq.${matchId}` }, load)
