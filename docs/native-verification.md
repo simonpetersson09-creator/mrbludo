@@ -14,6 +14,9 @@
 - `native:verify`, `native:sync:ios/android`, `native:open:ios/android`, `native:build:ios/android` commands.
 
 ## Actually verified here
+- Latest pass: 35 tests, native package generation, both platform syncs and expanded file/version/plugin checks passed. Repeated packaged-offline computer play, saved-game reload and Japanese selection with zero external requests or page errors. Current web app starts, navigates settings/rules and loads the actual die without request/page errors.
+- Latest authenticated native-bridge browser check: profile/stats returned 200 without administrator privilege; missing bearer returned 401; native preflight allowed, hostile-origin preflight had no allow-origin header (the dev layer returned 204). This checks development transport, not a physical phone or deployed service.
+- Temporary diagnostics privacy/opt-in/cap/cleanup tested automatically; actual native-console delivery and pre-entry/native WebView failures remain physical-device checks. Flag is absent by default and nothing is persisted/uploaded.
 - Anonymous sign-in enabled in Cloud; two fresh independent browser contexts entered online play without credentials, created/joined a private match and made a server-controlled roll.
 - One player went offline, reconnected and reloaded the same match. A legal forfeit finished the match and both saw the winner. Both profiles retained personal friend codes and finished-match statistics after reload. This was a forfeit completion, not a four-pieces-home completion.
 - Anonymous administrator access denied; successful privileged administrator login is not verified.
