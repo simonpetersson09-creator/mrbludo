@@ -9,6 +9,7 @@ import {
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { AndroidBackButton } from "@/components/AndroidBackButton";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/lib/auth/client";
 import { ensurePlayerSession } from "@/lib/auth/player";
@@ -141,6 +142,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <AndroidBackButton />
       <Outlet />
       <Toaster position="top-center" />
     </QueryClientProvider>

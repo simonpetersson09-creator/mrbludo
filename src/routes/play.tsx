@@ -10,6 +10,7 @@ import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { applyMove, applyRoll, forfeit, legalMoves, rollDie, absSquare, COLOR_KEYS, type GameState } from "@/lib/ludo/engine";
 import { chooseMove } from "@/lib/ludo/ai";
+import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { pieceCenter } from "@/lib/ludo/board";
 import { clearGame, loadGame, loadSettings, loadStats, saveGame, saveStats } from "@/lib/ludo/storage";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
@@ -33,9 +34,6 @@ const BOT_DELAY = { slow: 1100, normal: 650, fast: 300 } as const;
 const COLOR_VAR = ["var(--ludo-red)", "var(--ludo-green)", "var(--ludo-yellow)", "var(--ludo-blue)"];
 const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
-function vibrate(ms: number) {
-  if (loadSettings().haptics && typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate?.(ms);
-}
 
 function PlayPage() {
   const navigate = useNavigate();
@@ -66,9 +64,10 @@ function PlayPage() {
     const value = rollDie();
     setFace(value as DiceValue);
     setRolling(true);
-    vibrate(10);
+    void playLightHaptic();
     window.setTimeout(() => {
       setRolling(false);
+      void playDiceLandHaptic();
       setState((s) => (s && s.phase === "roll" ? applyRoll(s, value) : s));
       busy.current = false;
     }, ROLL_MS);
@@ -80,7 +79,7 @@ function PlayPage() {
       if (!s || s.phase !== "move" || !legalMoves(s).includes(piece)) return s;
       const next = applyMove(s, piece);
       const ev = next.lastEvent;
-      if (ev?.kind === "moved" && ev.captured.length) vibrate(30);
+      if (ev?.kind === "moved") void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
       return next;
     });
   }, []);
@@ -95,10 +94,19 @@ function PlayPage() {
     return () => window.clearTimeout(t);
   }, [state, me, rolling, doRoll, doMove, settings.botSpeed]);
 
+  // "Your turn" pulse when control returns to a human player (Yatzy TurnTransition)
+  const prevCurrent = useRef(-1);
+  useEffect(() => {
+    if (!state || state.phase === "finished") return;
+    if (prevCurrent.current !== -1 && prevCurrent.current !== state.current && !state.players[state.current].isBot) void playTurnHaptic();
+    prevCurrent.current = state.current;
+  }, [state?.current]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Stats on finish (human player 0 is the device owner)
   useEffect(() => {
     if (!state || state.phase !== "finished" || statsDone.current) return;
     statsDone.current = true;
+    if (state.winner === 0) void playSuccessHaptic();
     clearGame();
     const st = loadStats();
     st.played++;
