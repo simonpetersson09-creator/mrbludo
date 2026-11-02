@@ -56,6 +56,7 @@ export const ml: Record<TranslationKey, string> = {
   turnTimeLeft: "നീക്കത്തിന് {s} സെക്കൻഡ് ബാക്കി",
   turnTimeOut: "സമയം കഴിഞ്ഞു – സെർവർ നീക്കം ചെയ്യും",
   forfeitTitle: "മത്സരത്തിൽ കീഴടങ്ങുമോ?",
+  leaveMatchConfirm: "മത്സരം വിടണോ? ഇത് സേവ് ചെയ്യപ്പെടും, പിന്നീട് തുടരാം.",
   forfeitBodyLocal: "മത്സരം അവസാനിക്കും, തോൽവിയായി കണക്കാക്കും. പഴയപടിയാക്കാൻ കഴിയില്ല.",
   forfeitBodyOnline: "നീ മത്സരം വിടും, അത് തോൽവിയായി കണക്കാക്കും. പഴയപടിയാക്കാൻ കഴിയില്ല.",
   keepPlaying: "കളിച്ചുകൊണ്ടിരിക്കൂ",

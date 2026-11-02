@@ -56,6 +56,7 @@ export const mr: Record<TranslationKey, string> = {
   turnTimeLeft: "चालीसाठी {s} सेकंद शिल्लक",
   turnTimeOut: "वेळ संपली – सर्व्हर चाल चालेल",
   forfeitTitle: "सामन्यात हार मानायची?",
+  leaveMatchConfirm: "सामना सोडायचा? तो जतन केला जातो आणि तुम्ही नंतर पुढे खेळू शकता.",
   forfeitBodyLocal: "सामना संपेल आणि हार मोजली जाईल. हे मागे घेता येणार नाही.",
   forfeitBodyOnline: "तुम्ही सामना सोडाल आणि तो हार मोजला जाईल. हे मागे घेता येणार नाही.",
   keepPlaying: "खेळत राहा",

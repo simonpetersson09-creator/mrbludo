@@ -56,6 +56,7 @@ export const uk: Record<TranslationKey, string> = {
   turnTimeLeft: "Залишилось {s} с на хід",
   turnTimeOut: "Час вийшов – сервер робить хід",
   forfeitTitle: "Здатися в матчі?",
+  leaveMatchConfirm: "Вийти з матчу? Його збережено, і ви зможете продовжити пізніше.",
   forfeitBodyLocal: "Матч завершиться і зарахується як поразка. Це не можна скасувати.",
   forfeitBodyOnline: "Ти покинеш матч, і він зарахується як поразка. Це не можна скасувати.",
   keepPlaying: "Продовжити гру",

@@ -52,6 +52,7 @@ export const cs: Record<TranslationKey, string> = {
   turnTimeLeft: "Na tah zbývá {s} s",
   turnTimeOut: "Čas vypršel – tah provede server",
   forfeitTitle: "Vzdát hru?",
+  leaveMatchConfirm: "Opustit zápas? Uloží se a můžeš pokračovat později.",
   forfeitBodyLocal: "Hra skončí a započítá se jako prohra. Nelze to vzít zpět.",
   forfeitBodyOnline: "Opustíš hru a započítá se ti prohra. Nelze to vzít zpět.",
   keepPlaying: "Pokračovat ve hře",

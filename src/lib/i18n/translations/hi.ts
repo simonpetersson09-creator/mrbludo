@@ -56,6 +56,7 @@ export const hi: Record<TranslationKey, string> = {
   turnTimeLeft: "चाल के लिए {s} सेकंड शेष",
   turnTimeOut: "समय खत्म – सर्वर चाल चलेगा",
   forfeitTitle: "मैच में हार मानें?",
+  leaveMatchConfirm: "मैच छोड़ें? यह सहेजा गया है और आप बाद में जारी रख सकते हैं।",
   forfeitBodyLocal: "मैच समाप्त होगा और हार गिना जाएगा। इसे वापस नहीं लिया जा सकता।",
   forfeitBodyOnline: "आप मैच छोड़ देंगे और यह हार गिना जाएगा। इसे वापस नहीं लिया जा सकता।",
   keepPlaying: "खेलते रहें",

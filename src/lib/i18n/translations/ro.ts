@@ -56,6 +56,7 @@ export const ro: Record<TranslationKey, string> = {
   turnTimeLeft: "{s} s rămase pentru mutare",
   turnTimeOut: "Timpul a expirat – serverul joacă mutarea",
   forfeitTitle: "Renunți la meci?",
+  leaveMatchConfirm: "Părăsești meciul? Este salvat și poți continua mai târziu.",
   forfeitBodyLocal: "Meciul se termină și contează ca înfrângere. Nu poate fi anulat.",
   forfeitBodyOnline: "Părăsești meciul și contează ca înfrângere. Nu poate fi anulat.",
   keepPlaying: "Continuă să joci",

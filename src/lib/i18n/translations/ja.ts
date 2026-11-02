@@ -56,6 +56,7 @@ export const ja: Record<TranslationKey, string> = {
   turnTimeLeft: "残り{s}秒",
   turnTimeOut: "時間切れ – サーバーが自動で動かします",
   forfeitTitle: "対局を降参しますか？",
+  leaveMatchConfirm: "試合を離れますか？保存されるので、後で続けられます。",
   forfeitBodyLocal: "対局は終了し、敗北として記録されます。取り消せません。",
   forfeitBodyOnline: "対局から離脱し、敗北として記録されます。取り消せません。",
   keepPlaying: "続ける",

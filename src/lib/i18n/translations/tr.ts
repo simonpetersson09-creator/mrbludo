@@ -56,6 +56,7 @@ export const tr: Record<TranslationKey, string> = {
   turnTimeLeft: "Hamle için {s} sn kaldı",
   turnTimeOut: "Süre doldu – sunucu hamleyi oynuyor",
   forfeitTitle: "Maçtan pes edilsin mi?",
+  leaveMatchConfirm: "Maçtan çıkılsın mı? Kaydedilir, daha sonra devam edebilirsin.",
   forfeitBodyLocal: "Maç biter ve yenilgi sayılır. Geri alınamaz.",
   forfeitBodyOnline: "Maçtan ayrılırsın ve yenilgi sayılır. Geri alınamaz.",
   keepPlaying: "Oynamaya devam et",

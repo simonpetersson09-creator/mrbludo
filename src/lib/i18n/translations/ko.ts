@@ -56,6 +56,7 @@ export const ko: Record<TranslationKey, string> = {
   turnTimeLeft: "남은 시간 {s}초",
   turnTimeOut: "시간 초과 – 서버가 대신 둡니다",
   forfeitTitle: "경기를 포기할까요?",
+  leaveMatchConfirm: "경기를 나가시겠어요? 저장되므로 나중에 이어서 할 수 있습니다.",
   forfeitBodyLocal: "경기가 종료되고 패배로 기록됩니다. 되돌릴 수 없습니다.",
   forfeitBodyOnline: "경기에서 나가며 패배로 기록됩니다. 되돌릴 수 없습니다.",
   keepPlaying: "계속하기",

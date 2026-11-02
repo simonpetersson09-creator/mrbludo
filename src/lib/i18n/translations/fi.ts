@@ -52,6 +52,7 @@ export const fi: Record<TranslationKey, string> = {
   turnTimeLeft: "Vuoroa jäljellä {s} s",
   turnTimeOut: "Aika loppui – palvelin tekee siirron",
   forfeitTitle: "Luovutetaanko peli?",
+  leaveMatchConfirm: "Poistutaanko ottelusta? Se tallennetaan ja voit jatkaa myöhemmin.",
   forfeitBodyLocal: "Peli päättyy ja lasketaan tappioksi. Tätä ei voi kumota.",
   forfeitBodyOnline: "Poistut pelistä, ja se lasketaan tappioksi. Tätä ei voi kumota.",
   keepPlaying: "Jatka pelaamista",
