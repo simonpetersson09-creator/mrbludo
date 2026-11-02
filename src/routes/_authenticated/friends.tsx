@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Loader2, UserPlus, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/auth/client";
-import { createMatch, inviteFriend, listFriends, respondFriend, sendFriendRequest } from "@/lib/online/online.functions";
+import { createMatch, inviteFriend, listFriends, respondFriend } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_authenticated/friends")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { title: "Vänner – Mr. B Ludo" },
-      { name: "description", content: "Lägg till vänner med vänkod och bjud in dem till privata matcher." },
+      { name: "description", content: "Dina vänner från onlinematcher – bjud in dem till privata matcher." },
       { property: "og:title", content: "Vänner – Mr. B Ludo" },
       { property: "og:description", content: "Lägg till vänner och spela privata matcher." },
     ],
@@ -29,7 +29,6 @@ function FriendsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [data, setData] = useState<Data | null>(null);
-  const [code, setCode] = useState("");
   const load = useCallback(() => listFriends().then(setData).catch(() => {}), []);
   useEffect(() => {
     load();
@@ -68,12 +67,8 @@ function FriendsPage() {
           </Link>
           <h1 className="font-display text-lg font-black text-foreground">{t("friendsTitle")}</h1>
         </div>
-        <p className="-mt-1 px-4 text-center text-[10px] text-muted-foreground">{t("friendCodeHint")}</p>
+        <p className="-mt-1 px-4 text-center text-[10px] text-muted-foreground">{t("friendsListReminder")}</p>
 
-        <form className="flex gap-[7px]" onSubmit={(e) => { e.preventDefault(); act(sendFriendRequest({ data: { friendCode: code } }), t("requestSent")); setCode(""); }}>
-          <input aria-label={t("friendCode")} placeholder={t("friendCode")} maxLength={8} className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-card/80 px-3 text-sm font-semibold uppercase tracking-widest outline-none focus:border-primary" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} />
-          <button className="home-action w-28" type="submit" disabled={code.length < 4}>{t("addFriend")}</button>
-        </form>
 
         {(incoming.length > 0 || outgoing.length > 0) && (
           <div className="space-y-2">
