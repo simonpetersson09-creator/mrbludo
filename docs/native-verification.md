@@ -17,7 +17,7 @@
 - Anonymous sign-in enabled in Cloud; two fresh independent browser contexts entered online play without credentials, created/joined a private match and made a server-controlled roll.
 - One player went offline, reconnected and reloaded the same match. A legal forfeit finished the match and both saw the winner. Both profiles retained personal friend codes and finished-match statistics after reload. This was a forfeit completion, not a four-pieces-home completion.
 - Anonymous administrator access denied; successful privileged administrator login is not verified.
-- 31 automated tests passed, including rules, server match logic, language parity, first-launch deduplication/identity preservation, native origin isolation and disabled ads/push boundaries.
+- 33 automated tests passed, including rules, server match logic, language parity, first-launch deduplication/identity preservation, native origin isolation, cached-role safety, match shortcut persistence and disabled ads/push boundaries.
 - Both platform projects generated and plugin sync succeeded. Native configuration checks verified identifiers, no supplied signing settings, Android acceleration and backup protection.
 - Browser layout at 320×568, 393×706, 844×390, 768×1024 and 1024×768: controls in bounds, no horizontal overflow, live 3D canvas and no page errors. Screenshots inspected. Browser rendering is not proof of native GPU behavior.
 
