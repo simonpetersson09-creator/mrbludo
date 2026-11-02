@@ -11,7 +11,14 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "native:verify": "node scripts/native.mjs verify",
+    "native:sync:ios": "node scripts/native.mjs sync ios",
+    "native:sync:android": "node scripts/native.mjs sync android",
+    "native:build:ios": "node scripts/native.mjs build ios",
+    "native:build:android": "node scripts/native.mjs build android",
+    "native:open:ios": "node scripts/native.mjs open ios",
+    "native:open:android": "node scripts/native.mjs open android"
   },
   "overrides": {
     "rolldown": "1.2.1"
