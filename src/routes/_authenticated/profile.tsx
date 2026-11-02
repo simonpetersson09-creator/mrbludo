@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { getMe, updateProfile } from "@/lib/online/online.functions";
 import { AVATARS, COUNTRIES, flag } from "@/lib/online/profile-options";
 import { loadProfileSnapshot, saveProfileSnapshot } from "@/lib/online/snapshot";
+import { useOwnAvatar } from "@/lib/ludo/avatar";
+import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/profile")({
