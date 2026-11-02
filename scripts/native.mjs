@@ -21,7 +21,8 @@ try {
     const files = readdirSync("dist-native/assets");
     if (!files.some(f => f.endsWith("woff2")) || !files.some(f => f.startsWith("DiceScene"))) throw new Error("Bundled fonts or 3D die missing");
     for (const file of files.filter(f => /\.(js|html|css)$/.test(f))) {
-      if (/ixzqnmocplgbsawuufsm|sb_secret_|supabaseAdmin|SUPABASE_SERVICE_ROLE_KEY/.test(readFileSync(`dist-native/assets/${file}`, "utf8"))) throw new Error("Forbidden backend configuration in native package");
+      // The auth SDK contains a literal prefix detector; reject real keys, not that detector.
+      if (/ixzqnmocplgbsawuufsm|sb_secret_[A-Za-z0-9_-]{12,}|supabaseAdmin|SUPABASE_SERVICE_ROLE_KEY/.test(readFileSync(`dist-native/assets/${file}`, "utf8"))) throw new Error("Forbidden backend configuration in native package");
     }
     const android = readFileSync("android/app/src/main/AndroidManifest.xml", "utf8");
     const gradle = readFileSync("android/app/build.gradle", "utf8");
