@@ -57,9 +57,11 @@ describe("i18n dictionaries", () => {
 });
 
 describe("i18n usage in source", () => {
-  /** Collect every t("key") call in src (routes + components). */
+  /** Collect every quoted dictionary key referenced in src (routes + components),
+   *  including keys passed via arrays like RULE_KEYS / COLOR_NAME_KEYS / TABS. */
   function usedKeys(): Set<string> {
     const used = new Set<string>();
+    const keySet = new Set<string>(svKeys);
     const walk = (dir: string) => {
       for (const e of readdirSync(dir, { withFileTypes: true })) {
         if (e.name === "node_modules" || e.name.startsWith(".") || e.name === "i18n") continue;
@@ -67,7 +69,7 @@ describe("i18n usage in source", () => {
         if (e.isDirectory()) walk(p);
         else if (/\.(tsx?|ts)$/.test(e.name) && !e.name.endsWith(".test.ts")) {
           const src = readFileSync(p, "utf8");
-          for (const m of src.matchAll(/\bt\(\s*"([a-zA-Z0-9_]+)"/g)) used.add(m[1]);
+          for (const m of src.matchAll(/"([a-zA-Z][a-zA-Z0-9_]*)"/g)) if (keySet.has(m[1])) used.add(m[1]);
         }
       }
     };
