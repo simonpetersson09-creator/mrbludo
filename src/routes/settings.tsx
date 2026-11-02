@@ -1,7 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
-import { ArrowLeft, BarChart3, Check, ChevronRight, Globe, Gauge, User, Vibrate } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ArrowLeft, BarChart3, Camera, Check, ChevronRight, Globe, Gauge, User, Vibrate } from "lucide-react";
+import { toast } from "sonner";
 import { loadSettings, saveSettings, type Settings } from "@/lib/ludo/storage";
+import { fileToAvatarDataUrl, setOwnAvatar, syncOwnAvatar, useOwnAvatar } from "@/lib/ludo/avatar";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/settings")({
