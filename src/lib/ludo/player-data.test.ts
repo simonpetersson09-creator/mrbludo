@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { vi } from "vitest";
+vi.mock("@/lib/online/online.functions", () => ({ deletePlayerData: vi.fn() }));
+vi.mock("@/lib/auth/client", () => ({ supabase: { auth: { signOut: vi.fn() } } }));
 import { isPlayerStorageKey } from "./player-data";
 
 describe("delete player data", () => {

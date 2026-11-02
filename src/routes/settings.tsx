@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowLeft, BarChart3, Camera, Check, ChevronRight, Globe, Gauge, User, Vibrate } from "lucide-react";
+import { ArrowLeft, BarChart3, Bell, BellRing, Camera, Check, ChevronRight, Dices, Globe, Gauge, ShieldCheck, Trash2, User, Vibrate } from "lucide-react";
+import { DeletePlayerDataDialog } from "@/components/ludo/DeletePlayerDataDialog";
 import { toast } from "sonner";
-import { loadSettings, saveSettings, type Settings } from "@/lib/ludo/storage";
+import { loadNotificationPrefs, loadSettings, resetStats, saveNotificationPrefs, saveSettings, type NotificationPrefs, type Settings } from "@/lib/ludo/storage";
 import { adoptOwnAvatarFromServer, fileToAvatarDataUrl, setOwnAvatar, syncOwnAvatar, useOwnAvatar } from "@/lib/ludo/avatar";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 
@@ -32,6 +33,20 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 function Card({ children }: { children: ReactNode }) {
   return <div className="overflow-hidden rounded-2xl border border-border/40 bg-secondary/50">{children}</div>;
 }
+function ToggleRow({ icon, label, description, value, onChange }: { icon: ReactNode; label: string; description?: string; value: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <button type="button" role="switch" aria-checked={value} className={rowCls} onClick={() => onChange(!value)}>
+      {icon}
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium">{label}</p>
+        {description && <p className="text-xs text-muted-foreground">{description}</p>}
+      </div>
+      <span className={`relative h-6 w-10 shrink-0 rounded-full transition-colors ${value ? "bg-primary" : "border border-border bg-secondary"}`}>
+        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-foreground shadow transition-all ${value ? "left-[18px]" : "left-0.5"}`} />
+      </span>
+    </button>
+  );
+}
 const rowCls = "flex min-h-11 w-full items-center gap-3 px-3 py-2.5 text-left transition-colors active:bg-secondary/60";
 
 function SettingsPage() {
@@ -41,6 +56,21 @@ function SettingsPage() {
   const [editingName, setEditingName] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [notifs, setNotifs] = useState<NotificationPrefs | null>(null);
+  const [adsOpen, setAdsOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  useEffect(() => setNotifs(loadNotificationPrefs()), []);
+  const updateNotif = (key: keyof NotificationPrefs, value: boolean) => {
+    if (!notifs) return;
+    const next = { ...notifs, [key]: value };
+    setNotifs(next);
+    saveNotificationPrefs(next);
+  };
+  const doResetStats = () => {
+    if (!confirm(t("resetStatsConfirm"))) return;
+    resetStats();
+    toast.success(t("resetDone"));
+  };
   const fileRef = useRef<HTMLInputElement>(null);
   const avatar = useOwnAvatar();
   // A picture saved while offline is uploaded as soon as the page is opened again,
@@ -200,6 +230,44 @@ function SettingsPage() {
             </Link>
           </Card>
         </Section>
+
+        {notifs && (
+          <Section title={t("notifications")}>
+            <p className="px-2 text-xs text-muted-foreground">{t("notifInactive")}</p>
+            <Card>
+              <ToggleRow icon={<Bell className="h-4 w-4 shrink-0 text-primary" />} label={t("notifTurnLabel")} description={t("notifTurnDesc")} value={notifs.turnNotifications} onChange={(v) => updateNotif("turnNotifications", v)} />
+              <div className="border-t border-border/40" />
+              <ToggleRow icon={<BellRing className="h-4 w-4 shrink-0 text-primary" />} label={t("notifReminderLabel")} description={t("notifReminderDesc")} value={notifs.reminderNotifications} onChange={(v) => updateNotif("reminderNotifications", v)} />
+              <div className="border-t border-border/40" />
+              <ToggleRow icon={<Dices className="h-4 w-4 shrink-0 text-primary" />} label={t("notifPlayReminderLabel")} description={t("notifPlayReminderDesc")} value={notifs.playReminders} onChange={(v) => updateNotif("playReminders", v)} />
+            </Card>
+          </Section>
+        )}
+
+        <Section title={t("adPrivacy")}>
+          <Card>
+            <button type="button" className={rowCls} aria-expanded={adsOpen} onClick={() => setAdsOpen((o) => !o)}>
+              <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
+              <span className="flex-1 text-sm font-medium">{t("adPrivacy")}</span>
+              <ChevronRight className={`h-4 w-4 text-muted-foreground transition-transform ${adsOpen ? "rotate-90" : ""}`} />
+            </button>
+            {adsOpen && <p className="border-t border-border/40 px-3 py-3 text-sm text-muted-foreground">{t("adsOffInfo")}</p>}
+          </Card>
+        </Section>
+
+        <Card>
+          <button type="button" className={`${rowCls} active:bg-destructive/10`} onClick={doResetStats}>
+            <Trash2 className="h-4 w-4 shrink-0 text-destructive" />
+            <span className="text-sm font-medium text-destructive">{t("resetStats")}</span>
+          </button>
+        </Card>
+        <Card>
+          <button type="button" className={`${rowCls} active:bg-destructive/10`} onClick={() => setDeleteOpen(true)}>
+            <Trash2 className="h-4 w-4 shrink-0 text-destructive" />
+            <span className="text-sm font-medium text-destructive">{t("deleteData")}</span>
+          </button>
+        </Card>
+        <DeletePlayerDataDialog open={deleteOpen} onClose={() => setDeleteOpen(false)} />
       </div>
     </main>
   );
