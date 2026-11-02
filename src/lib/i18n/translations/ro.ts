@@ -210,4 +210,10 @@ export const ro: Record<TranslationKey, string> = {
   errNotYourTurn: "Nu este rândul tău",
   errBadPhase: "Pas greșit în tură",
   errIllegal: "Mutare invalidă",
+  homeStatsTitle: "Cifrele tale – de la început",
+  statGamesShort: "Jucate",
+  statKnockedOut: "Eliminate",
+  countryRankLabel: "Locul tău",
+  countryRankLabelFull: "Locul tău în {country}",
+  worldRankLabelFull: "Locul tău în lume",
 };

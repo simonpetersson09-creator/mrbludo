@@ -47,6 +47,9 @@
   --color-gold: var(--game-gold);
   --color-gold-light: var(--game-gold-light);
   --color-info: var(--game-info);
+  --color-info-light: var(--game-info-light);
+  --color-info-dark: var(--game-info-dark);
+  --color-gold-dark: var(--game-gold-dark);
   --color-success: var(--game-success);
   --color-surface: var(--game-surface);
   --color-ludo-red: var(--ludo-red);
@@ -80,11 +83,13 @@
   --ring: hsl(36 78% 55%);
   --game-gold: hsl(36 78% 55%);
   --game-gold-light: hsl(38 72% 68%);
+  --game-gold-dark: hsl(32 80% 40%);
   --game-surface: hsl(195 40% 17%);
   --game-success: hsl(160 55% 42%);
   --game-success-light: hsl(160 58% 60%);
   --game-info: hsl(200 65% 50%);
   --game-info-light: hsl(195 80% 70%);
+  --game-info-dark: hsl(230 70% 45%);
   --ludo-red: hsl(350 65% 52%);
   --ludo-green: hsl(155 60% 42%);
   --ludo-yellow: hsl(42 85% 55%);

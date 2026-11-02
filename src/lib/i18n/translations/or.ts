@@ -210,4 +210,10 @@ export const or: Record<TranslationKey, string> = {
   errNotYourTurn: "ତୁମର ପାଳି ନୁହେଁ",
   errBadPhase: "ପାଳିର ଭୁଲ ପର୍ଯ୍ୟାୟ",
   errIllegal: "ଅବୈଧ ଚାଲ",
+  homeStatsTitle: "ଆପଣଙ୍କ ପରିସଂଖ୍ୟାନ – ଆରମ୍ଭରୁ ଏଯାଏଁ",
+  statGamesShort: "ଖେଳିଛ",
+  statKnockedOut: "କଟା",
+  countryRankLabel: "ତୁମ ସ୍ଥାନ",
+  countryRankLabelFull: "{country}ରେ ତୁମ ସ୍ଥାନ",
+  worldRankLabelFull: "ବିଶ୍ୱରେ ତୁମ ସ୍ଥାନ",
 };

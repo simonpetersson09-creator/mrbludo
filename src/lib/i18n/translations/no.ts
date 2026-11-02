@@ -210,4 +210,10 @@ export const no: Record<TranslationKey, string> = {
   errNotYourTurn: "Det er ikke din tur",
   errBadPhase: "Feil steg i turen",
   errIllegal: "Ugyldig trekk",
+  homeStatsTitle: "Dine tall – gjennom tidene",
+  statGamesShort: "Spilte",
+  statKnockedOut: "Slått ut",
+  countryRankLabel: "Din rangering",
+  countryRankLabelFull: "Din rangering i {country}",
+  worldRankLabelFull: "Din rangering i verden",
 };

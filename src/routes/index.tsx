@@ -4,6 +4,7 @@ import { BarChart3, Check, Globe, Play, Settings, Users } from "lucide-react";
 import { createGame } from "@/lib/ludo/engine";
 import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
+import { HomeStats } from "@/components/ludo/HomeStats";
 import heroImg from "@/assets/ludo-hero.jpg";
 
 export const Route = createFileRoute("/")({
@@ -108,6 +109,7 @@ function HomePage() {
           </div>
         )}
       </div>
+      <HomeStats />
     </main>
   );
 }

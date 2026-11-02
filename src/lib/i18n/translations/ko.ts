@@ -210,4 +210,10 @@ export const ko: Record<TranslationKey, string> = {
   errNotYourTurn: "당신의 차례가 아닙니다",
   errBadPhase: "턴의 단계가 잘못되었습니다",
   errIllegal: "잘못된 수입니다",
+  homeStatsTitle: "내 기록 – 전체 기간",
+  statGamesShort: "플레이",
+  statKnockedOut: "잡은 말",
+  countryRankLabel: "내 순위",
+  countryRankLabelFull: "{country} 내 순위",
+  worldRankLabelFull: "내 세계 순위",
 };

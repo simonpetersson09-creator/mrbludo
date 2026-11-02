@@ -195,4 +195,10 @@ export const cs: Record<TranslationKey, string> = {
   errNotYourTurn: "Nejsi na tahu",
   errBadPhase: "Nesprávná fáze tahu",
   errIllegal: "Neplatný tah",
+  homeStatsTitle: "Tvé statistiky – za celou dobu",
+  statGamesShort: "Odehráno",
+  statKnockedOut: "Vyhozené",
+  countryRankLabel: "Tvé pořadí",
+  countryRankLabelFull: "Tvé pořadí v zemi {country}",
+  worldRankLabelFull: "Tvé světové pořadí",
 };

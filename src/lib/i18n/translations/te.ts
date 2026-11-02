@@ -210,4 +210,10 @@ export const te: Record<TranslationKey, string> = {
   errNotYourTurn: "ఇది నీ టర్న్ కాదు",
   errBadPhase: "టర్న్‌లో తప్పు దశ",
   errIllegal: "చెల్లని కదలిక",
+  homeStatsTitle: "మీ గణాంకాలు – ఇప్పటివరకు",
+  statGamesShort: "ఆడినవి",
+  statKnockedOut: "కొట్టినవి",
+  countryRankLabel: "నీ ర్యాంక్",
+  countryRankLabelFull: "{country}లో నీ ర్యాంక్",
+  worldRankLabelFull: "ప్రపంచంలో నీ ర్యాంక్",
 };

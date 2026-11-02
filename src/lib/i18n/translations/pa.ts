@@ -210,4 +210,10 @@ export const pa: Record<TranslationKey, string> = {
   errNotYourTurn: "ਤੁਹਾਡੀ ਵਾਰੀ ਨਹੀਂ",
   errBadPhase: "ਵਾਰੀ ਦਾ ਗ਼ਲਤ ਪੜਾਅ",
   errIllegal: "ਗ਼ਲਤ ਚਾਲ",
+  homeStatsTitle: "ਤੁਹਾਡੇ ਅੰਕੜੇ – ਹੁਣ ਤੱਕ ਦੇ",
+  statGamesShort: "ਖੇਡੇ",
+  statKnockedOut: "ਕੱਟੀਆਂ",
+  countryRankLabel: "ਤੁਹਾਡਾ ਦਰਜਾ",
+  countryRankLabelFull: "{country} ਵਿੱਚ ਤੁਹਾਡਾ ਦਰਜਾ",
+  worldRankLabelFull: "ਦੁਨੀਆ ਵਿੱਚ ਤੁਹਾਡਾ ਦਰਜਾ",
 };

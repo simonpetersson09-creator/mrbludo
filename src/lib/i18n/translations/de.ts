@@ -210,4 +210,10 @@ export const de: Record<TranslationKey, string> = {
   errNotYourTurn: "Du bist nicht dran",
   errBadPhase: "Falscher Schritt im Zug",
   errIllegal: "Ungültiger Zug",
+  homeStatsTitle: "Deine Zahlen – gesamter Zeitraum",
+  statGamesShort: "Gespielt",
+  statKnockedOut: "Geschlagen",
+  countryRankLabel: "Dein Rang",
+  countryRankLabelFull: "Dein Rang in {country}",
+  worldRankLabelFull: "Dein Rang in der Welt",
 };

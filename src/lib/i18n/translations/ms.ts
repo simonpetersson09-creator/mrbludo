@@ -210,4 +210,10 @@ export const ms: Record<TranslationKey, string> = {
   errNotYourTurn: "Bukan giliran anda",
   errBadPhase: "Langkah giliran salah",
   errIllegal: "Gerakan tidak sah",
+  homeStatsTitle: "Statistik awak – sepanjang masa",
+  statGamesShort: "Dimainkan",
+  statKnockedOut: "Ditewaskan",
+  countryRankLabel: "Kedudukan awak",
+  countryRankLabelFull: "Kedudukan awak di {country}",
+  worldRankLabelFull: "Kedudukan awak di dunia",
 };

@@ -210,4 +210,10 @@ export const kn: Record<TranslationKey, string> = {
   errNotYourTurn: "ನಿಮ್ಮ ಸರದಿಯಲ್ಲ",
   errBadPhase: "ಸರದಿಯ ತಪ್ಪು ಹಂತ",
   errIllegal: "ಅಮಾನ್ಯ ಚಾಲನೆ",
+  homeStatsTitle: "ನಿಮ್ಮ ಅಂಕಿಅಂಶಗಳು – ಇದುವರೆಗಿನ ಒಟ್ಟು",
+  statGamesShort: "ಆಡಿದ ಆಟಗಳು",
+  statKnockedOut: "ಹೊಡೆದವು",
+  countryRankLabel: "ನಿನ್ನ ಸ್ಥಾನ",
+  countryRankLabelFull: "{country}ದಲ್ಲಿ ನಿನ್ನ ಸ್ಥಾನ",
+  worldRankLabelFull: "ವಿಶ್ವದಲ್ಲಿ ನಿನ್ನ ಸ್ಥಾನ",
 };
