@@ -40,6 +40,31 @@ function SettingsPage() {
   const [s, setS] = useState<Settings | null>(null);
   const [editingName, setEditingName] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const avatar = useOwnAvatar();
+  // A picture saved while offline is uploaded as soon as the page is opened again.
+  useEffect(() => { void syncOwnAvatar(); }, []);
+  const pick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setBusy(true);
+    try {
+      const shared = await setOwnAvatar(await fileToAvatarDataUrl(file));
+      toast.success(shared ? t("avatarSaved") : t("avatarLocalOnly"));
+    } catch {
+      toast.error(t("genericError"));
+    } finally {
+      setBusy(false);
+    }
+  };
+  const removePicture = async () => {
+    setBusy(true);
+    const shared = await setOwnAvatar(null);
+    setBusy(false);
+    toast.success(shared ? t("avatarRemoved") : t("avatarLocalOnly"));
+  };
   useEffect(() => setS(loadSettings()), []);
   if (!s) return <main className="app-screen" />;
   const update = (patch: Partial<Settings>) => { const n = { ...s, ...patch }; setS(n); saveSettings(n); };
