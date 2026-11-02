@@ -5,6 +5,8 @@ import { useTranslation, type TranslationKey } from "@/lib/i18n";
 export const Route = createFileRoute("/rules")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Regler – Mr. B Ludo" },
       { name: "description", content: "Så spelar du Ludo i Mr. B Ludo." },
       { property: "og:title", content: "Regler – Mr. B Ludo" },

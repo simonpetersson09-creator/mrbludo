@@ -7,6 +7,8 @@ import { useTranslation } from "@/lib/i18n";
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Admin – Mr. B Ludo" },
       { name: "description", content: "Matchstatistik, aktiva spelare, enheter, avhopp och fel." },
       { property: "og:title", content: "Admin – Mr. B Ludo" },

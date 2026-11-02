@@ -10,6 +10,8 @@ export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>) => ({ redirect: typeof s["redirect"] === "string" && s["redirect"].startsWith("/") && !s["redirect"].startsWith("//") ? s["redirect"] : "/online" }),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Logga in – Mr. B Ludo" },
       { name: "description", content: "Logga in för att spela Ludo online med vänner och topplistor." },
       { property: "og:title", content: "Logga in – Mr. B Ludo" },

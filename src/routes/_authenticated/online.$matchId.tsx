@@ -6,7 +6,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/auth/client";
 import { LudoBoard } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
@@ -15,11 +15,14 @@ import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, startMatch } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
 import { TURN_SECONDS } from "@/lib/online/match-logic";
+import { RESUME_EVENT } from "@/lib/native/runtime";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/online/$matchId")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Onlinematch – Mr. B Ludo" },
       { name: "description", content: "Väntrum och onlinematch i Mr. B Ludo." },
       { property: "og:title", content: "Onlinematch – Mr. B Ludo" },
@@ -71,15 +74,19 @@ function OnlineMatchPage() {
       .on("postgres_changes", { event: "*", schema: "public", table: "matches", filter: `id=eq.${matchId}` }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "match_players", filter: `match_id=eq.${matchId}` }, load)
       .subscribe((status) => { if (status === "SUBSCRIBED") load(); if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setOffline(true); });
-    const onBack = () => { if (document.visibilityState !== "hidden") load(); };
+    const onBack = () => { if (document.visibilityState !== "hidden") { heartbeat({ data: { matchId } }).then(load).catch(() => setOffline(true)); } };
+    const onOffline = () => setOffline(true);
+    window.addEventListener(RESUME_EVENT, onBack);
+    window.addEventListener("offline", onOffline);
     window.addEventListener("online", onBack);
     document.addEventListener("visibilitychange", onBack);
-    return () => { supabase.removeChannel(ch); window.removeEventListener("online", onBack); document.removeEventListener("visibilitychange", onBack); };
+    return () => { window.removeEventListener(RESUME_EVENT, onBack); window.removeEventListener("offline", onOffline); supabase.removeChannel(ch); window.removeEventListener("online", onBack); document.removeEventListener("visibilitychange", onBack); };
   }, [matchId, load]);
 
   // Heartbeat: keeps my seat alive and lets the server advance idle turns. Also a polling fallback.
   useEffect(() => {
     const t = window.setInterval(() => {
+      if (document.visibilityState === "hidden" || !navigator.onLine) return;
       heartbeat({ data: { matchId } }).then(() => { setOffline(false); load(); }).catch(() => setOffline(true));
     }, 5000);
     heartbeat({ data: { matchId } }).catch(() => {});
@@ -105,7 +112,7 @@ function OnlineMatchPage() {
   }, [match?.version]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const send = useCallback(async (action: { kind: "roll" } | { kind: "move"; piece: number }) => {
-    if (!match || pending) return;
+    if (!match || pending || offline) return;
     setPending(true);
     if (action.kind === "roll") { rollStart.current = Date.now(); setRolling(true); }
     try {
@@ -116,7 +123,7 @@ function OnlineMatchPage() {
       toast.error(errorMessage(e, t));
       load();
     } finally { setPending(false); }
-  }, [match, matchId, pending, load, t]);
+  }, [match, matchId, pending, offline, load, t]);
 
   if (missing) return <main className="app-screen"><div className="home-stack"><p>{t("matchMissing")}</p><button className="home-action mt-3" onClick={() => navigate({ to: "/online" })}>{t("toOnline")}</button></div></main>;
   if (!match || !userId) return <div className="game-screen" />;
@@ -127,7 +134,7 @@ function OnlineMatchPage() {
   const mySeat = state.players.findIndex((p) => p.id === userId);
   const myTurn = state.current === mySeat && state.phase !== "finished" && !state.players[mySeat]?.forfeited;
   const legal = myTurn && state.phase === "move" && !rolling ? legalMoves(state) : [];
-  const canRoll = myTurn && state.phase === "roll" && !rolling && !pending;
+  const canRoll = myTurn && state.phase === "roll" && !rolling && !pending && !offline;
   const ev = state.lastEvent;
   const captureAt = ev?.kind === "moved" && ev.captured.length ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece) as [number, number]) : null;
   const seatOf = (id: string) => seats.find((s) => s.user_id === id);

@@ -10,7 +10,9 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/auth/client";
+import { ensurePlayerSession } from "@/lib/auth/player";
+import { startNativeRuntime, RESUME_EVENT } from "@/lib/native/runtime";
 import { logEvent } from "@/lib/online/online.functions";
 import { deviceId, platform } from "@/lib/online/telemetry";
 
@@ -122,14 +124,20 @@ function RootComponent() {
   const router = useRouter();
   useEffect(() => {
     const ping = () => logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
-    supabase.auth.getSession().then(({ data }) => { if (data.session) ping(); });
+    // Admin login has its own credentials; ordinary app launch creates a player automatically.
+    if (window.location.pathname !== "/admin-login") ensurePlayerSession().then(ping).catch(() => {});
+    let dispose: (() => void) | undefined;
+    let stopped = false;
+    startNativeRuntime(() => { void router.navigate({ to: "/" }); }).then(cleanup => { if (stopped) cleanup(); else dispose = cleanup; }).catch(() => {});
+    const resume = () => { router.invalidate(); queryClient.invalidateQueries(); };
+    window.addEventListener(RESUME_EVENT, resume);
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
       if (event === "SIGNED_IN") ping();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });
-    return () => data.subscription.unsubscribe();
+    return () => { stopped = true; dispose?.(); window.removeEventListener(RESUME_EVENT, resume); data.subscription.unsubscribe(); };
   }, [router, queryClient]);
 
   return (
