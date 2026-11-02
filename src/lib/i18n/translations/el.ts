@@ -201,4 +201,12 @@ export const el: Record<TranslationKey, string> = {
   countryRankLabel: "Η θέση σου",
   countryRankLabelFull: "Η θέση σου στη χώρα: {country}",
   worldRankLabelFull: "Η θέση σου στον κόσμο",
+  selectPlayerCount: "Διάλεξε αριθμό παικτών",
+  opponent: "αντίπαλος",
+  opponents: "αντίπαλοι",
+  searchingOpponent: "Αναζήτηση αντιπάλου…",
+  searchingOpponentHint: "Αν δεν βρεθεί κανείς, παίζεις με τον υπολογιστή",
+  matchFoundTitle: "Βρέθηκε αντίπαλος!",
+  matchFoundVs: "Παίζεις με: {name}",
+  cancelSearch: "Άκυρο",
 };

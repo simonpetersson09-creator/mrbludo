@@ -22,11 +22,20 @@ export class MatchError extends Error {
   }
 }
 
-export function startState(seats: SeatInfo[]): GameState {
+/** Seconds the server waits before playing a computer seat's step. */
+export const BOT_SECONDS = 1;
+const BOT_NAMES = ["Lucky", "Sixer", "Dicey", "Rex", "Nova", "Bingo"];
+export const isBotId = (id: string) => id.startsWith("bot:");
+
+/** Humans sorted by seat; `total` > humans fills the rest with server-played computer seats (quick play). */
+export function startState(seats: SeatInfo[], total = seats.length): GameState {
   const sorted = [...seats].sort((a, b) => a.seat - b.seat);
-  const colors = SEAT_COLORS[sorted.length];
-  if (!colors) throw new Error("2–4 players required");
-  return createGame(sorted.map((s, i) => ({ id: s.user_id, name: s.display_name, color: colors[i], isBot: false })));
+  const n = Math.max(total, sorted.length);
+  const colors = SEAT_COLORS[n];
+  if (!colors || sorted.length < 1) throw new Error("2–4 players required");
+  const humans = sorted.map((s, i) => ({ id: s.user_id, name: s.display_name, color: colors[i], isBot: false }));
+  const bots = Array.from({ length: n - sorted.length }, (_, k) => ({ id: `bot:${k + 1}`, name: BOT_NAMES[k], color: colors[sorted.length + k], isBot: true }));
+  return createGame([...humans, ...bots]);
 }
 
 export function seatOf(state: GameState, userId: string): number {
@@ -67,11 +76,13 @@ export function statDeltas(prev: GameState, next: GameState): Record<string, Sta
   const ev = next.lastEvent;
   if (ev && ev !== prev.lastEvent && ev.kind === "moved") {
     const id = next.players[ev.player].id;
+    if (next.players[ev.player].isBot) return out;
     if (ev.captured.length) get(id).captures += ev.captured.length;
     if (ev.reachedGoal) get(id).pieces_home += 1;
   }
   if (prev.phase !== "finished" && next.phase === "finished") {
     next.players.forEach((p, i) => {
+      if (p.isBot) return;
       const d = get(p.id);
       d.played = 1;
       if (next.winner === i) d.wins = 1;

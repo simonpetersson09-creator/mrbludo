@@ -201,4 +201,12 @@ export const fi: Record<TranslationKey, string> = {
   countryRankLabel: "Sijoituksesi",
   countryRankLabelFull: "Sijoituksesi maassa {country}",
   worldRankLabelFull: "Sijoituksesi maailmassa",
+  selectPlayerCount: "Valitse pelaajien määrä",
+  opponent: "vastustaja",
+  opponents: "vastustajaa",
+  searchingOpponent: "Etsitään vastustajaa…",
+  searchingOpponentHint: "Jos ketään ei löydy, pelaat tietokonetta vastaan",
+  matchFoundTitle: "Vastustaja löytyi!",
+  matchFoundVs: "Vastassasi on {name}",
+  cancelSearch: "Peruuta",
 };

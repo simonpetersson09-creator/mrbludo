@@ -216,4 +216,12 @@ export const mr: Record<TranslationKey, string> = {
   countryRankLabel: "तुझा क्रमांक",
   countryRankLabelFull: "{country} मधील तुझा क्रमांक",
   worldRankLabelFull: "जगातील तुझा क्रमांक",
+  selectPlayerCount: "खेळाडूंची संख्या निवड",
+  opponent: "प्रतिस्पर्धी",
+  opponents: "प्रतिस्पर्धी",
+  searchingOpponent: "प्रतिस्पर्धी शोधतोय…",
+  searchingOpponentHint: "कोणी सापडलं नाही तर संगणकासोबत खेळशील",
+  matchFoundTitle: "प्रतिस्पर्धी सापडला!",
+  matchFoundVs: "तुझा प्रतिस्पर्धी: {name}",
+  cancelSearch: "रद्द कर",
 };

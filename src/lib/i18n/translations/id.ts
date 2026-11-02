@@ -216,4 +216,12 @@ export const id: Record<TranslationKey, string> = {
   countryRankLabel: "Peringkatmu",
   countryRankLabelFull: "Peringkatmu di {country}",
   worldRankLabelFull: "Peringkatmu di dunia",
+  selectPlayerCount: "Pilih jumlah pemain",
+  opponent: "lawan",
+  opponents: "lawan",
+  searchingOpponent: "Mencari lawan…",
+  searchingOpponentHint: "Kalau tak ada lawan, kamu melawan komputer",
+  matchFoundTitle: "Lawan ditemukan!",
+  matchFoundVs: "Lawanmu: {name}",
+  cancelSearch: "Batal",
 };

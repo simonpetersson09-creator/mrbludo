@@ -231,6 +231,14 @@ export const sv = {
   countryRankLabel: "Din placering",
   countryRankLabelFull: "Din placering i {country}",
   worldRankLabelFull: "Din placering i världen",
+  selectPlayerCount: "Välj antal spelare",
+  opponent: "motståndare",
+  opponents: "motståndare",
+  searchingOpponent: "Söker motståndare…",
+  searchingOpponentHint: "Hittas ingen spelar du mot datorn",
+  matchFoundTitle: "Motspelare hittad!",
+  matchFoundVs: "Du möter {name}",
+  cancelSearch: "Avbryt",
 };
 
 export type TranslationKey = keyof typeof sv;

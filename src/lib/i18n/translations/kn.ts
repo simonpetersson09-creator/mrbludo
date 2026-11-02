@@ -216,4 +216,12 @@ export const kn: Record<TranslationKey, string> = {
   countryRankLabel: "ನಿನ್ನ ಸ್ಥಾನ",
   countryRankLabelFull: "{country}ದಲ್ಲಿ ನಿನ್ನ ಸ್ಥಾನ",
   worldRankLabelFull: "ವಿಶ್ವದಲ್ಲಿ ನಿನ್ನ ಸ್ಥಾನ",
+  selectPlayerCount: "ಆಟಗಾರರ ಸಂಖ್ಯೆ ಆರಿಸು",
+  opponent: "ಎದುರಾಳಿ",
+  opponents: "ಎದುರಾಳಿಗಳು",
+  searchingOpponent: "ಎದುರಾಳಿಯನ್ನು ಹುಡುಕಲಾಗುತ್ತಿದೆ…",
+  searchingOpponentHint: "ಯಾರೂ ಸಿಗದಿದ್ದರೆ ಕಂಪ್ಯೂಟರ್ ಜೊತೆ ಆಡುವೆ",
+  matchFoundTitle: "ಎದುರಾಳಿ ಸಿಕ್ಕರು!",
+  matchFoundVs: "ನಿಮ್ಮ ಎದುರಾಳಿ: {name}",
+  cancelSearch: "ರದ್ದು",
 };

@@ -216,4 +216,12 @@ export const or: Record<TranslationKey, string> = {
   countryRankLabel: "ତୁମ ସ୍ଥାନ",
   countryRankLabelFull: "{country}ରେ ତୁମ ସ୍ଥାନ",
   worldRankLabelFull: "ବିଶ୍ୱରେ ତୁମ ସ୍ଥାନ",
+  selectPlayerCount: "ଖେଳାଳି ସଂଖ୍ୟା ବାଛ",
+  opponent: "ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ",
+  opponents: "ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ",
+  searchingOpponent: "ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ ଖୋଜୁଛି…",
+  searchingOpponentHint: "କେହି ନ ମିଳିଲେ କମ୍ପ୍ୟୁଟର୍ ସହ ଖେଳିବ",
+  matchFoundTitle: "ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ ମିଳିଲେ!",
+  matchFoundVs: "ଆପଣଙ୍କ ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ: {name}",
+  cancelSearch: "ବାତିଲ",
 };

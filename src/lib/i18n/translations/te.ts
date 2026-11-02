@@ -216,4 +216,12 @@ export const te: Record<TranslationKey, string> = {
   countryRankLabel: "నీ ర్యాంక్",
   countryRankLabelFull: "{country}లో నీ ర్యాంక్",
   worldRankLabelFull: "ప్రపంచంలో నీ ర్యాంక్",
+  selectPlayerCount: "ఆటగాళ్ల సంఖ్యను ఎంచుకో",
+  opponent: "ప్రత్యర్థి",
+  opponents: "ప్రత్యర్థులు",
+  searchingOpponent: "ప్రత్యర్థి కోసం వెతుకుతున్నాం…",
+  searchingOpponentHint: "ఎవరూ దొరక్కపోతే కంప్యూటర్‌తో ఆడతావు",
+  matchFoundTitle: "ప్రత్యర్థి దొరికారు!",
+  matchFoundVs: "మీ ప్రత్యర్థి: {name}",
+  cancelSearch: "రద్దు",
 };

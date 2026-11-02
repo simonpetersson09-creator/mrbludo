@@ -167,3 +167,21 @@
   .piece { transition: none; }
   .piece-legal circle.piece-ring { animation: none; opacity: 1; }
 }
+
+/* Quick-match search screen (ported from Yatzy, without the ad slot). */
+.quick-search-screen {
+  padding: max(12px, env(safe-area-inset-top, 0px)) 10px max(12px, env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+}
+.quick-search-layout { height: 100%; display: grid; place-items: center; }
+.quick-search-status { display: flex; flex-direction: column; gap: 12px; padding: 12px 8px; overflow-wrap: anywhere; }
+.quick-search-icon { width: 48px; height: 48px; }
+.quick-search-spin { animation: quick-search-rotate 2s linear infinite; }
+.quick-search-progress { width: 0; animation: quick-search-fill linear forwards; }
+@keyframes quick-search-rotate { to { transform: rotate(360deg); } }
+@keyframes quick-search-fill { to { width: 100%; } }
+@media (max-height: 620px) {
+  .quick-search-status { gap: 8px; padding-block: 4px; }
+  .quick-search-icon { width: 32px; height: 32px; }
+  .quick-search-icon svg { width: 24px; height: 24px; }
+}

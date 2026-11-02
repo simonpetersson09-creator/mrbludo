@@ -216,4 +216,12 @@ export const vi: Record<TranslationKey, string> = {
   countryRankLabel: "Hạng của bạn",
   countryRankLabelFull: "Hạng của bạn tại {country}",
   worldRankLabelFull: "Hạng của bạn trên thế giới",
+  selectPlayerCount: "Chọn số người chơi",
+  opponent: "đối thủ",
+  opponents: "đối thủ",
+  searchingOpponent: "Đang tìm đối thủ…",
+  searchingOpponentHint: "Nếu không tìm thấy ai, bạn sẽ chơi với máy",
+  matchFoundTitle: "Đã tìm thấy đối thủ!",
+  matchFoundVs: "Đối thủ của bạn: {name}",
+  cancelSearch: "Hủy",
 };

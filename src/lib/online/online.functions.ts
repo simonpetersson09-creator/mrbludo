@@ -91,3 +91,13 @@ export const getMyRanks = createServerFn({ method: "POST" }).middleware([require
   const { getMyRanksAction } = await import("./online-actions");
   return getMyRanksAction({ context });
 });
+
+export const quickFinalize = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(startMatchInput).handler(async ({ data, context }) => {
+  const { quickFinalizeAction } = await import("./online-actions");
+  return quickFinalizeAction({ data, context });
+});
+
+export const quickStatus = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(startMatchInput).handler(async ({ data, context }) => {
+  const { quickStatusAction } = await import("./online-actions");
+  return quickStatusAction({ data, context });
+});

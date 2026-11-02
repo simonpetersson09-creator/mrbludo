@@ -216,4 +216,12 @@ export const ko: Record<TranslationKey, string> = {
   countryRankLabel: "내 순위",
   countryRankLabelFull: "{country} 내 순위",
   worldRankLabelFull: "내 세계 순위",
+  selectPlayerCount: "플레이어 수를 골라줘",
+  opponent: "상대",
+  opponents: "상대",
+  searchingOpponent: "상대 찾는 중…",
+  searchingOpponentHint: "상대가 없으면 컴퓨터와 플레이해",
+  matchFoundTitle: "상대를 찾았어!",
+  matchFoundVs: "상대: {name}",
+  cancelSearch: "취소",
 };

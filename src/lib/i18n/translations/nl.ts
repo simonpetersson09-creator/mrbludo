@@ -201,4 +201,12 @@ export const nl: Record<TranslationKey, string> = {
   countryRankLabel: "Jouw rang",
   countryRankLabelFull: "Jouw rang in {country}",
   worldRankLabelFull: "Jouw wereldrang",
+  selectPlayerCount: "Kies het aantal spelers",
+  opponent: "tegenstander",
+  opponents: "tegenstanders",
+  searchingOpponent: "Tegenstander zoeken…",
+  searchingOpponentHint: "Als we niemand vinden, speel je tegen de computer",
+  matchFoundTitle: "Tegenstander gevonden!",
+  matchFoundVs: "Je speelt tegen {name}",
+  cancelSearch: "Annuleren",
 };

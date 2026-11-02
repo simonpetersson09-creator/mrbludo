@@ -216,4 +216,12 @@ export const ml: Record<TranslationKey, string> = {
   countryRankLabel: "നിങ്ങളുടെ റാങ്ക്",
   countryRankLabelFull: "{country}: നിങ്ങളുടെ റാങ്ക്",
   worldRankLabelFull: "നിങ്ങളുടെ ലോക റാങ്ക്",
+  selectPlayerCount: "കളിക്കാരുടെ എണ്ണം തിരഞ്ഞെടുക്കൂ",
+  opponent: "എതിരാളി",
+  opponents: "എതിരാളികൾ",
+  searchingOpponent: "എതിരാളിയെ തിരയുന്നു…",
+  searchingOpponentHint: "ആരെയും കിട്ടിയില്ലെങ്കിൽ കമ്പ്യൂട്ടറുമായി കളിക്കാം",
+  matchFoundTitle: "എതിരാളിയെ കിട്ടി!",
+  matchFoundVs: "നിങ്ങളുടെ എതിരാളി: {name}",
+  cancelSearch: "റദ്ദാക്കൂ",
 };

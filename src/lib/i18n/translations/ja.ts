@@ -216,4 +216,12 @@ export const ja: Record<TranslationKey, string> = {
   countryRankLabel: "国内順位",
   countryRankLabelFull: "{country}での順位",
   worldRankLabelFull: "世界での順位",
+  selectPlayerCount: "人数を選んでね",
+  opponent: "対戦相手",
+  opponents: "対戦相手",
+  searchingOpponent: "対戦相手を探してるよ…",
+  searchingOpponentHint: "見つからない時はコンピューターと対戦するよ",
+  matchFoundTitle: "対戦相手が見つかった!",
+  matchFoundVs: "対戦相手: {name}",
+  cancelSearch: "キャンセル",
 };

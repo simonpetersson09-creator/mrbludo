@@ -216,4 +216,12 @@ export const ta: Record<TranslationKey, string> = {
   countryRankLabel: "உங்கள் தரம்",
   countryRankLabelFull: "{country} நாட்டில் உங்கள் தரம்",
   worldRankLabelFull: "உலகில் உங்கள் தரம்",
+  selectPlayerCount: "வீரர்கள் எண்ணிக்கையைத் தேர்ந்தெடுங்கள்",
+  opponent: "எதிராளி",
+  opponents: "எதிராளிகள்",
+  searchingOpponent: "எதிராளியைத் தேடுகிறோம்…",
+  searchingOpponentHint: "யாரும் கிடைக்காவிட்டால் கணினியுடன் ஆடலாம்",
+  matchFoundTitle: "எதிராளி கிடைத்தார்!",
+  matchFoundVs: "உங்கள் எதிராளி: {name}",
+  cancelSearch: "ரத்து",
 };
