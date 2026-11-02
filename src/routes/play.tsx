@@ -157,7 +157,7 @@ function PlayPage() {
       </div>
 
       <div className="flex min-h-0 flex-1 items-start justify-center">
-        <div className="aspect-square h-full max-h-full max-w-full overflow-hidden rounded-xl shadow-2xl">
+        <div className="aspect-square max-h-full w-full overflow-hidden rounded-xl shadow-2xl">
           <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} />
         </div>
       </div>
