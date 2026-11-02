@@ -72,9 +72,11 @@ export function t(key: TranslationKey, params?: Record<string, string | number>)
 
 /** React hook — returns a translator that re-renders the component on language change. */
 export function useTranslation() {
-  const [lang, setLang] = useState<Language>(() => getLanguage());
+  // Same first render on server and browser; read device/storage only after mount.
+  const [lang, setLang] = useState<Language>("sv");
 
   useEffect(() => {
+    setLang(getLanguage());
     return subscribeLanguageChanges(() => {
       const next = getLanguage();
       setLang((prev) => (prev === next ? prev : next));

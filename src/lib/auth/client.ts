@@ -8,8 +8,8 @@ let nativeClient: ReturnType<typeof createClient<Database>> | undefined;
 function client() {
   if (typeof window === "undefined" || !Capacitor.isNativePlatform()) return managedClient;
   if (!nativeClient) {
-    const url = import.meta.env.VITE_SUPABASE_URL;
-    const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const url = import.meta.env['VITE_SUPABASE_URL'];
+    const key = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'];
     if (!url || !key) throw new Error("Player service is unavailable");
     nativeClient = createClient<Database>(url, key, {
       auth: { storage: nativeSessionStorage, storageKey: "mrb-ludo:v1:native-session", persistSession: true, autoRefreshToken: true, detectSessionInUrl: false },
