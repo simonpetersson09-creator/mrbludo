@@ -3,10 +3,16 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 const [action = "verify", platform] = process.argv.slice(2);
 function run(command, args) {
   const result = spawnSync(command, args, { stdio: "inherit", env: process.env });
-  if (result.error || result.status !== 0) process.exit(result.status || 1);
+  if (result.error) { console.error(`${command} is unavailable: ${result.error.message}`); process.exit(1); }
+  if (result.status !== 0) process.exit(result.status || 1);
 }
 try {
   if (action === "web") {
+    const origin = process.env.VITE_MRB_LUDO_ONLINE_ORIGIN;
+    if (origin) {
+      const parsed = new URL(origin);
+      if (parsed.protocol !== "https:" || /localhost|id-preview|yatzy/i.test(parsed.hostname) || parsed.username || parsed.password || parsed.pathname !== "/" || parsed.search || parsed.hash) throw new Error("Only the separately approved published Ludo HTTPS origin may be bundled");
+    }
     run("bunx", ["vite", "build", "--config", "vite.native.config.ts"]);
   } else if (action === "verify") {
     const config = readFileSync("capacitor.config.ts", "utf8");
