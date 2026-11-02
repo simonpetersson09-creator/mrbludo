@@ -116,6 +116,22 @@
 .home-action-ghost { background: var(--secondary); color: var(--secondary-foreground); box-shadow: none; border: 1px solid var(--border); }
 .home-action-danger { background: color-mix(in oklab, var(--destructive) 85%, var(--background)); color: var(--destructive-foreground); box-shadow: none; }
 
+/* Runda guldknappar under huvudknapparna – samma cirkel, gradient, skugga och
+   liten etikett under knappen som Yatzys .home-round-action på startsidan. */
+.home-round-row { display: flex; justify-content: center; gap: 28px; padding-top: 8px; }
+.home-round-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.home-round-action {
+  width: 46px; height: 46px; border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(to bottom right, var(--game-gold-light), var(--game-gold));
+  color: var(--background);
+  box-shadow: 0 4px 14px color-mix(in oklab, var(--game-gold) 35%, transparent);
+  transition: box-shadow .2s, filter .2s, transform .1s;
+}
+.home-round-action:active { box-shadow: 0 2px 8px color-mix(in oklab, var(--game-gold) 25%, transparent); filter: brightness(.95); transform: scale(.94); }
+.home-round-label { font-size: 8px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; line-height: 1; white-space: nowrap; color: color-mix(in oklab, var(--primary) 60%, transparent); }
+@media (min-width: 640px) { .home-round-action { width: 50px; height: 50px; } }
+
 .brand-title {
   font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em;
   background: linear-gradient(180deg, hsl(46 88% 82%), hsl(42 80% 66%) 55%, hsl(38 68% 54%));

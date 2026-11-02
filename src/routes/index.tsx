@@ -46,8 +46,16 @@ function HomePage() {
         )}
         <button className="home-action font-display" onClick={quick}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
         <Link to="/online" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">🌐</span><span>{t("playOnline")}</span></Link>
-        <Link to="/stats" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">📊</span><span>{t("stats")}</span></Link>
-        <Link to="/settings" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">⚙️</span><span>{t("settings")}</span></Link>
+      </div>
+      <div className="home-round-row">
+        <Link to="/stats" className="home-round-item">
+          <span className="home-round-action"><BarChart3 className="h-4 w-4 sm:h-5 sm:w-5" /></span>
+          <span className="home-round-label">{t("stats")}</span>
+        </Link>
+        <Link to="/settings" className="home-round-item">
+          <span className="home-round-action"><Settings className="h-4 w-4 sm:h-5 sm:w-5" /></span>
+          <span className="home-round-label">{t("settings")}</span>
+        </Link>
       </div>
     </main>
   );
