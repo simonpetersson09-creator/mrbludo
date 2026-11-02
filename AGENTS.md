@@ -14,7 +14,7 @@
 - `src/components/dice-engine/` is copied read-only-sourced from Mr. B Yatzy; keep it presentation-only and never re-link it to Yatzy resources.
 - All browser storage keys use the `mrb-ludo:v1:` namespace to stay isolated from Yatzy.
 - `noUncheckedIndexedAccess` is off: the board/engine index fixed-size arrays heavily.
-- Online play is server-authoritative: `src/lib/online/online.functions.ts` loads the match, applies `match-logic.ts` (which wraps the same engine as local play), and writes with an optimistic `version` check so concurrent/double actions fail instead of forking state.
+- Online play is server-authoritative: shared `src/lib/online/online-actions.ts` handlers apply `match-logic.ts` and optimistic version writes; authenticated Start functions and the native API call those same handlers to avoid divergent rules.
 - Dice for online matches are generated only on the server (`secureRoll`); clients never send die values.
 - Match/stat/friend writes go through server functions with the admin client after auth; tables only expose member-scoped SELECT via RLS, so leaderboards can only be changed by finished online matches.
 - Clients sync via realtime plus a 5 s heartbeat that also refetches and lets the server auto-play idle turns (30 s) and forfeit dropped players (90 s).
@@ -22,6 +22,8 @@
 - Server functions throw stable `err:<code>` strings instead of user-facing text; clients translate via `errorMessage()`.
 - App-owned auth goes through `src/lib/auth/client.ts`: managed client on web, namespaced Keychain/Keystore storage on native; generated integration files remain untouched.
 - Ordinary startup deduplicates anonymous sign-in and never discards a saved identity on storage/network failure; server middleware verifies every private request.
-- Capacitor loads only an explicitly configured stable HTTPS Ludo origin because TanStack Start requires its server runtime; the bundled shell is not an offline game build.
+- Capacitor launches the `dist-native` static bundle built by `vite.native.config.ts`, reusing TanStack Router's generated tree and the actual local game screens; only the root and server transport are substituted, so cold-start local play needs no server.
+- Packaged online actions use the authenticated `/api/public/native` JSON boundary with shared validators/handlers; the native service origin must be separately approved and cannot point at Yatzy or preview hosts.
+- Fonts and local gameplay imagery are bundled; native viewport synchronization uses visualViewport after mount, following Yatzy's principle without importing preview-only globals.
 - Native platform projects contain no release signing credentials; build scripts refuse preview/HTTP origins and never publish.
 - AdMob and push remain inert adapter boundaries until activation is separately approved; no SDK initialization or permission request on launch.

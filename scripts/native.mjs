@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 const [action = "verify", platform] = process.argv.slice(2);
 function run(command, args) {
   const result = spawnSync(command, args, { stdio: "inherit", env: process.env });
@@ -9,6 +9,14 @@ try {
   if (action === "web") {
     run("bunx", ["vite", "build", "--config", "vite.native.config.ts"]);
   } else if (action === "verify") {
+    const config = readFileSync("capacitor.config.ts", "utf8");
+    if (!config.includes('webDir: "dist-native"') || config.includes("server:")) throw new Error("Native app must launch the packaged game, not a remote website");
+    if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web first");
+    const files = readdirSync("dist-native/assets");
+    if (!files.some(f => f.endsWith("woff2")) || !files.some(f => f.startsWith("DiceScene"))) throw new Error("Bundled fonts or 3D die missing");
+    for (const file of files.filter(f => /\.(js|html|css)$/.test(f))) {
+      if (/ixzqnmocplgbsawuufsm|sb_secret_|supabaseAdmin|SUPABASE_SERVICE_ROLE_KEY/.test(readFileSync(`dist-native/assets/${file}`, "utf8"))) throw new Error("Forbidden backend configuration in native package");
+    }
     const android = readFileSync("android/app/src/main/AndroidManifest.xml", "utf8");
     const gradle = readFileSync("android/app/build.gradle", "utf8");
     const ios = readFileSync("ios/App/App.xcodeproj/project.pbxproj", "utf8");
@@ -21,6 +29,7 @@ try {
     console.log("Ludo identifiers, unsigned native projects, Android hardware acceleration and backup protection verified.");
     console.log("Mac/Xcode available:", existsSync("/Applications/Xcode.app"), "Android SDK configured:", !!(process.env.ANDROID_HOME || process.env.ANDROID_SDK_ROOT));
   } else if (["sync", "open", "build"].includes(action) && ["ios", "android"].includes(platform)) {
+    if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web before sync or build");
     run("bunx", ["cap", "sync", platform]);
     if (action === "open") run("bunx", ["cap", "open", platform]);
     if (action === "build" && platform === "android") run("bash", ["-c", "cd android && ./gradlew assembleDebug"]);

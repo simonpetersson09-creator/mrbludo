@@ -3,8 +3,9 @@ import { nativeOnlineOrigin } from "./origin";
 import type * as Web from "@/lib/online/online.functions";
 
 async function invoke<T>(operation: string, data?: unknown): Promise<T> {
+  const origin = nativeOnlineOrigin();
   const session = await ensurePlayerSession();
-  const response = await fetch(nativeOnlineOrigin() + "/api/public/native", {
+  const response = await fetch(origin + "/api/public/native", {
     method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
     body: JSON.stringify({ operation, data }),
   });
