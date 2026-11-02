@@ -42,11 +42,11 @@ function HomePage() {
       <p className="mb-6 text-sm text-muted-foreground">{t("tagline")}</p>
       <div className="home-stack">
         {hasGame && (
-          <Link to="/play" className="home-action home-action-success"><Play size={16} /> {t("resumeMatch")}</Link>
+          <Link to="/play" className="home-action"><Play size={16} /> {t("resumeMatch")}</Link>
         )}
-        <button className="home-action" onClick={quick}><Zap size={16} /> {t("quickMatchBot")}</button>
-        <Link to="/setup" className="home-action"><Users size={16} /> {t("newMatch")}</Link>
-        <Link to="/online" className="home-action home-action-gold"><Globe size={16} /> {t("playOnline")}</Link>
+        <button className="home-action font-display" onClick={quick}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
+        <Link to="/setup" className="home-action font-display"><Users size={16} /> {t("newMatch")}</Link>
+        <Link to="/online" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">🌐</span><span>{t("playOnline")}</span></Link>
         <div className="mt-3 grid grid-cols-3 gap-[7px]">
           <Link to="/stats" className="home-action home-action-ghost"><BarChart3 size={16} /> {t("stats")}</Link>
           <Link to="/rules" className="home-action home-action-ghost"><BookOpen size={16} /> {t("rules")}</Link>
