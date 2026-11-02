@@ -182,7 +182,7 @@ export const ml: Record<TranslationKey, string> = {
   adminRetD7: "റിടൻഷൻ D7 %",
   adminRetD30: "റിടൻഷൻ D30 %",
   last30Days: "കഴിഞ്ഞ 30 ദിവസം",
-  appDevicesNote: "ആപ്പ് ഉപകരണങ്ങൾ = iOS + Android. വെബ് സെഷനുകൾ പ്രത്യേകം കാണിക്കും, കളിക്കാരായി കണക്കാക്ക won't.",
+  appDevicesNote: "ആപ്പ് ഉപകരണങ്ങൾ = iOS + Android. വെബ് സെഷനുകൾ പ്രത്യേകം കാണിക്കും, കളിക്കാരായി കണക്കാക്കില്ല.",
   colDate: "തീയതി",
   colAppDevices: "ആപ്പ് ഉപകരണങ്ങൾ",
   colWeb: "വെബ്",
