@@ -13,6 +13,7 @@ import { LudoBoard } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
+import { RollLabel } from "@/components/ludo/RollLabel";
 import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, startMatch } from "@/lib/online/online.functions";
 import { useAvatarImages } from "@/lib/ludo/avatar";
@@ -226,7 +227,7 @@ function OnlineMatchPage() {
         </div>
         <div className="game-command-area">
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
-            {t("roll")}
+            <RollLabel state={state} canRoll={canRoll} myTurn={myTurn} />
           </button>
           <div className="flex items-center justify-center gap-2">
             <button className="game-nav-btn" onClick={() => navigate({ to: "/online" })}>{t("home")}</button>

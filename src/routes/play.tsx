@@ -12,6 +12,7 @@ import { chooseMove } from "@/lib/ludo/ai";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { pieceCenter } from "@/lib/ludo/board";
 import { clearGame, loadGame, loadSettings, loadStats, saveGame, saveStats } from "@/lib/ludo/storage";
+import { RollLabel } from "@/components/ludo/RollLabel";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/play")({
@@ -194,7 +195,7 @@ function PlayPage() {
         </div>
         <div className="game-command-area">
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={doRoll} disabled={!canRoll}>
-            {t("roll")}
+            <RollLabel state={state} canRoll={canRoll} myTurn={humanTurn} />
           </button>
           <div className="flex items-center justify-center gap-2">
             <button className="game-nav-btn" onClick={() => navigate({ to: "/" })}>{t("home")}</button>
