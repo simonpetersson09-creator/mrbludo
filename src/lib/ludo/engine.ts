@@ -131,9 +131,9 @@ export function createGame(players: Player[], variant: Variant = "classic"): Gam
 }
 
 /** Absolute track square (0..51) for a piece on the shared track, else null. */
-export function absSquare(color: Color, progress: number): number | null {
-  if (progress < 0 || progress > LAST_TRACK) return null;
-  return (color * 13 + progress) % TRACK_LEN;
+export function absSquare(color: Color, progress: number, variant: Variant = "classic"): number | null {
+  if (progress < 0 || progress > PATHS[variant].lastTrack) return null;
+  return (startSquare(color, variant) + progress) % TRACK_LEN;
 }
 
 export function isSafeSquare(abs: number, variant: Variant = "classic"): boolean {
@@ -143,10 +143,11 @@ export function isSafeSquare(abs: number, variant: Variant = "classic"): boolean
 export function targetOf(progress: number, roll: number, variant: Variant = "classic"): number | null {
   const rules = RULES[variant];
   if (progress === YARD) return rules.exitRolls.includes(roll) ? 0 : null;
-  if (progress === GOAL) return null;
+  const goal = goalOf(variant);
+  if (progress === goal) return null;
   const t = progress + roll;
-  if (t <= GOAL) return t;
-  return rules.bounce ? 2 * GOAL - t : null;
+  if (t <= goal) return t;
+  return rules.bounce ? 2 * goal - t : null;
 }
 
 /** Every progress value a piece steps on, in order, ending on its target (bounce included). */
@@ -154,10 +155,11 @@ export function pathOf(progress: number, roll: number, variant: Variant = "class
   const target = targetOf(progress, roll, variant);
   if (target == null) return [];
   if (progress === YARD) return [0];
+  const goal = goalOf(variant);
   const out: number[] = [];
   for (let k = 1; k <= roll; k++) {
     const p = progress + k;
-    out.push(p > GOAL ? 2 * GOAL - p : p);
+    out.push(p > goal ? 2 * goal - p : p);
   }
   return out;
 }
@@ -169,7 +171,7 @@ function pieceCanMove(pieces: number[], i: number, roll: number, variant: Varian
   if (!RULES[variant].blockOwn) return true;
   // Putting out on a six may share the start square (Fia exception).
   if (from === YARD && roll === 6) return true;
-  return !pieces.some((other, j) => j !== i && other !== YARD && other !== GOAL && path.includes(other));
+  return !pieces.some((other, j) => j !== i && other !== YARD && other !== goalOf(variant) && path.includes(other));
 }
 
 export function legalMoves(state: GameState, roll = state.dice): number[] {
@@ -206,7 +208,8 @@ function passTurn(s: GameState): void {
 
 export function rankPlayers(state: GameState): number[] {
   const seats = state.players.map((_, i) => i);
-  const goals = (i: number) => state.pieces[i].filter((x) => x === GOAL).length;
+  const goal = goalOf(variantOf(state));
+  const goals = (i: number) => state.pieces[i].filter((x) => x === goal).length;
   const prog = (i: number) => state.pieces[i].reduce((a, x) => a + (x < 0 ? 0 : x), 0);
   return seats.sort((a, b) => {
     if (a === state.winner) return -1;
@@ -269,22 +272,23 @@ export function applyMove(state: GameState, piece: number): GameState {
     if (second >= 0) { s.pieces[p][second] = 0; alsoOut = second; }
   }
   const captured: { player: number; piece: number }[] = [];
-  const abs = absSquare(s.players[p].color, to);
+  const abs = absSquare(s.players[p].color, to, variant);
   if (abs != null && !isSafeSquare(abs, variant)) {
     s.players.forEach((op, oi) => {
       if (oi === p || op.forfeited) return;
       s.pieces[oi].forEach((pr, pi) => {
-        if (absSquare(op.color, pr) === abs) {
+        if (absSquare(op.color, pr, variant) === abs) {
           s.pieces[oi][pi] = YARD;
           captured.push({ player: oi, piece: pi });
         }
       });
     });
   }
-  const reachedGoal = to === GOAL;
+  const goal = goalOf(variant);
+  const reachedGoal = to === goal;
   const extraRoll = roll === 6;
   s.lastEvent = { kind: "moved", player: p, piece, from, to, captured, reachedGoal, extraRoll, ...(alsoOut != null ? { alsoOut } : {}) };
-  if (s.pieces[p].every((x) => x === GOAL)) {
+  if (s.pieces[p].every((x) => x === goal)) {
     finish(s, p);
     return s;
   }
