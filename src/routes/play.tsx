@@ -11,6 +11,8 @@ import { applyMove, canWalkOut, applyRoll, forfeit, legalMoves, rollDie, absSqua
 import { chooseMove } from "@/lib/ludo/ai";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { pieceCenter } from "@/lib/ludo/board";
+import { AppOpenGameGate } from "@/components/AppOpenGameGate";
+import { usePostMatchExit } from "@/lib/ads/usePostMatchExit";
 import { clearGame, loadGame, loadSettings, loadStats, saveGame, saveStats } from "@/lib/ludo/storage";
 import { RollLabel } from "@/components/ludo/RollLabel";
 import { useOwnAvatar } from "@/lib/ludo/avatar";
@@ -28,7 +30,7 @@ export const Route = createFileRoute("/play")({
       { property: "og:description", content: "Spela Ludo mot datorn eller vänner på samma enhet." },
     ],
   }),
-  component: PlayPage,
+  component: () => <AppOpenGameGate><PlayPage /></AppOpenGameGate>,
 });
 
 const ROLL_MS = 1150;
@@ -225,6 +227,10 @@ function PlayPage() {
 function ResultOverlay({ state, onAgain, onHome }: { state: GameState; onAgain: () => void; onHome: () => void }) {
   const { t } = useTranslation();
   const ranking = state.ranking ?? state.players.map((_, i) => i);
+  // Post-match interstitial (Yatzy rules): only for a fully played game, never after a forfeit.
+  const [matchKey] = useState(() => `local:${Date.now()}`);
+  const completed = !state.players.some((p) => p.forfeited);
+  const { leaving, leave } = usePostMatchExit(matchKey, completed, onHome);
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm">
       <div className="w-full max-w-[360px] rounded-2xl border bg-card p-5 text-center shadow-2xl">
@@ -244,8 +250,8 @@ function ResultOverlay({ state, onAgain, onHome }: { state: GameState; onAgain: 
           })}
         </ol>
         <div className="home-stack mt-4">
-          <button className="home-action home-action-gold" onClick={onAgain}>{t("playAgain")}</button>
-          <button className="home-action home-action-ghost" onClick={onHome}>{t("home")}</button>
+          <button className="home-action home-action-gold" disabled={leaving} onClick={() => void leave(onAgain)}>{t("playAgain")}</button>
+          <button className="home-action home-action-ghost" disabled={leaving} onClick={() => void leave()}>{t("home")}</button>
         </div>
       </div>
     </div>

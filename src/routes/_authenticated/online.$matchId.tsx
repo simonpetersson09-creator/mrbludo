@@ -37,7 +37,7 @@ export const Route = createFileRoute("/_authenticated/online/$matchId")({
       { property: "og:description", content: "Spela Ludo online i realtid." },
     ],
   }),
-  component: OnlineMatchPage,
+  component: () => <AppOpenGameGate><OnlineMatchPage /></AppOpenGameGate>,
 });
 
 const ROLL_MS = 1150;
@@ -231,6 +231,7 @@ function OnlineMatchPage() {
         </div>
       )}
 
+      {state.phase === "finished" && <OnlineResultActions matchId={match.id} completed={!state.players.some((p) => p.forfeited)} onAgain={() => navigate({ to: "/online" })} onHome={() => navigate({ to: "/" })} />}
       {state.phase === "finished" && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm">
           <div className="w-full max-w-[360px] rounded-2xl border bg-card p-5 text-center shadow-2xl">
@@ -254,8 +255,8 @@ function OnlineMatchPage() {
             </ol>
             <p className="mt-2 text-xs text-muted-foreground">{t("countsOnLeaderboard")}</p>
             <div className="home-stack mt-4">
-              <button className="home-action home-action-gold" onClick={() => navigate({ to: "/online" })}>{t("playAgain")}</button>
-              <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/" })}>{t("home")}</button>
+              <button className="home-action home-action-gold" data-result-action="again">{t("playAgain")}</button>
+              <button className="home-action home-action-ghost" data-result-action="home">{t("home")}</button>
             </div>
           </div>
         </div>
