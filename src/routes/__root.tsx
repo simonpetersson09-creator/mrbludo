@@ -115,7 +115,7 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        {/* Runs before the app's modules: if an outdated module fails to load after an update, reload once instead of a blank screen. */}
+        {/* Runs before the app's modules: if an outdated module fails to load after an update, reload a few times instead of a blank screen. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){var K="mrb-ludo:v1:boot-reload",RE=/Importing a module script failed|Failed to fetch dynamically imported module|error loading dynamically imported module/i;function c(){try{return parseInt(sessionStorage.getItem(K)||"0",10)||0}catch(e){return -1}}function f(m){m=String(m||"");if(!RE.test(m))return;var n=c();if(n<0||n>2)return;try{sessionStorage.setItem(K,String(n+1))}catch(e){return}setTimeout(function(){location.reload()},250+n*500)}addEventListener("error",function(e){f(e&&e.message)},true);addEventListener("unhandledrejection",function(e){f(e&&e.reason&&(e.reason.message||e.reason))});addEventListener("load",function(){setTimeout(function(){try{sessionStorage.removeItem(K)}catch(e){}},10000)})})();`,
@@ -134,7 +134,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
-  // After an app update, old code chunks disappear; reload once instead of showing a blank screen.
+  // After an app update, old code chunks disappear; reload a few times instead of showing a blank screen.
   useEffect(() => {
     const KEY = "mrb-ludo:v1:chunk-reload";
     // One try is not enough: an update can still be writing its files, so retry a few times and
