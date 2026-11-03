@@ -14,6 +14,7 @@ import { pieceCenter } from "@/lib/ludo/board";
 import { clearGame, loadGame, loadSettings, loadStats, saveGame, saveStats } from "@/lib/ludo/storage";
 import { RollLabel } from "@/components/ludo/RollLabel";
 import { useOwnAvatar } from "@/lib/ludo/avatar";
+import { flag } from "@/lib/online/profile-options";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/play")({
@@ -46,6 +47,11 @@ function PlayPage() {
   const [face, setFace] = useState<DiceValue>(6);
   const [confirmForfeit, setConfirmForfeit] = useState(false);
   const ownAvatar = useOwnAvatar();
+  const [ownFlag, setOwnFlag] = useState<string | undefined>();
+  useEffect(() => {
+    const region = navigator.language.split("-")[1]?.toUpperCase();
+    if (region) setOwnFlag(flag(region));
+  }, []);
   const busy = useRef(false);
   const statsDone = useRef(false);
   const settings = useMemo(() => loadSettings(), []);
@@ -162,14 +168,14 @@ function PlayPage() {
 
   const canRoll = humanTurn && state.phase === "roll" && !rolling;
 
-  const seatInfo = state.players.map((p) => ({ name: p.name, kind: p.isBot ? "bot" as const : "human" as const, image: p.isBot ? null : ownAvatar }));
+  const seatInfo = state.players.map((p) => ({ name: p.name, kind: p.isBot ? "bot" as const : "human" as const, image: p.isBot ? null : ownAvatar, flag: p.isBot ? undefined : ownFlag }));
 
   return (
     <main className="game-screen">
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
        <div className="game-board-stack flex flex-col">
         <SeatCardRow state={state} seats={seatInfo} edge="top" />
-        <div className="aspect-square w-full overflow-hidden rounded-xl shadow-2xl">
+        <div className="aspect-square w-full rounded-xl shadow-2xl">
           <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} seats={seatInfo} />
         </div>
         <SeatCardRow state={state} seats={seatInfo} edge="bottom" />

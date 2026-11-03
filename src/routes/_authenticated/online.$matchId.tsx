@@ -199,7 +199,7 @@ function OnlineMatchPage() {
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
        <div className="game-board-stack flex flex-col">
         <SeatCardRow state={state} seats={seatInfo} edge="top" />
-        <div className="aspect-square w-full overflow-hidden rounded-xl shadow-2xl">
+        <div className="aspect-square w-full rounded-xl shadow-2xl">
           <LudoBoard state={state} legal={legal} onPick={(piece) => send({ kind: "move", piece })} captureAt={captureAt} seats={seatInfo} />
         </div>
         <SeatCardRow state={state} seats={seatInfo} edge="bottom" />
