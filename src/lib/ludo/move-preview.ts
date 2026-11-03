@@ -15,6 +15,6 @@ export function movePreviews(state: GameState, legal: number[]) {
     const key = `${x},${y}`;
     if (seen.has(key)) return [];
     seen.add(key);
-    return [{ x, y, color: player.color }];
+    return [{ x, y, color: player.color, piece }];
   });
 }

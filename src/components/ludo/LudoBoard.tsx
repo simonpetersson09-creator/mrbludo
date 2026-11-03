@@ -1,8 +1,9 @@
-import { memo, useId } from "react";
+import { memo, useId, useLayoutEffect, useRef } from "react";
 import { GOAL, type Color, type GameState } from "@/lib/ludo/engine";
 import { HOME_COLUMN, TRACK, YARD_ORIGIN, pieceCenter } from "@/lib/ludo/board";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 import { movePreviews } from "@/lib/ludo/move-preview";
+import { pieceWaypoints } from "@/lib/ludo/piece-motion";
 
 const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
@@ -26,6 +27,27 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
   const { t } = useTranslation();
   const boardId = useId().replace(/:/g, "");
   const seatColors = new Set(state.players.map((p) => p.color));
+  const previousState = useRef(state);
+  const pieceElements = useRef(new Map<string, SVGGElement>());
+
+  useLayoutEffect(() => {
+    const previous = previousState.current;
+    previousState.current = state;
+    if (previous === state || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const ev = state.lastEvent;
+    if (ev?.kind !== "moved") return;
+    const player = state.players[ev.player];
+    const from = previous.pieces[ev.player]?.[ev.piece];
+    if (!player || from == null || from === ev.to) return;
+    const element = pieceElements.current.get(`${ev.player}-${ev.piece}`);
+    if (!element) return;
+    const waypoints = pieceWaypoints(player.color, from, ev.to, ev.piece);
+    const animation = element.animate(waypoints.map(([x, y], index) => ({
+      transform: index === waypoints.length - 1 ? element.style.transform : `translate(${x}px, ${y}px)`,
+      offset: index / (waypoints.length - 1),
+    })), { duration: (waypoints.length - 1) * 150, easing: "linear" });
+    return () => animation.cancel();
+  }, [state]);
 
   // Group pieces by spot so stacked pieces get a small offset.
   const spots = new Map<string, number>();
@@ -96,12 +118,16 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
       <rect x="0.045" y="0.045" width="14.91" height="14.91" rx="0.36" fill="none" stroke={`url(#${boardId}-frame)`} strokeWidth="0.09" />
       </g>
 
-      <g pointerEvents="none" className="move-destinations">
-        {movePreviews(state, legal).map(({ x, y, color }) => (
-          <g key={`${x},${y}`}>
+      <g className="move-destinations">
+        {movePreviews(state, legal).map(({ x, y, color, piece }) => (
+          <g key={`${x},${y}`} className="cursor-pointer" role="button" tabIndex={0}
+            aria-label={t("movePieceAria", { color: t(COLOR_NAME_KEYS[color]), n: piece + 1 })}
+            onClick={() => onPick(piece)}
+            onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onPick(piece); } }}>
             <circle cx={x} cy={y} r="0.39" fill={FILL[color]} fillOpacity="0.18" stroke="var(--board-mark)" strokeWidth="0.12" />
             <circle cx={x} cy={y} r="0.39" fill="none" stroke={FILL[color]} strokeWidth="0.055" />
             <circle cx={x} cy={y} r="0.1" fill={FILL[color]} />
+            <circle cx={x} cy={y} r="0.55" fill="transparent" />
           </g>
         ))}
       </g>
@@ -113,6 +139,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
       {pieces.map((p) => (
         <g
           key={p.key}
+          ref={(element) => { if (element) pieceElements.current.set(p.key, element); else pieceElements.current.delete(p.key); }}
           className={`piece ${p.legal ? "piece-legal cursor-pointer" : ""}`}
           style={{ transform: `translate(${p.x}px, ${p.y}px)` }}
           onClick={p.legal ? () => onPick(p.idx) : undefined}
