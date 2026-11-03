@@ -4,7 +4,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { LudoBoard } from "@/components/ludo/LudoBoard";
+import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { applyMove, applyRoll, forfeit, legalMoves, rollDie, absSquare, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
@@ -162,13 +162,17 @@ function PlayPage() {
 
   const canRoll = humanTurn && state.phase === "roll" && !rolling;
 
+  const seatInfo = state.players.map((p) => ({ name: p.name, kind: p.isBot ? "bot" as const : "human" as const, image: p.isBot ? null : ownAvatar }));
+
   return (
     <main className="game-screen">
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
        <div className="game-board-stack flex flex-col">
+        <SeatCardRow state={state} seats={seatInfo} edge="top" />
         <div className="aspect-square w-full overflow-hidden rounded-xl shadow-2xl">
-          <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} seats={state.players.map((p) => ({ name: p.name, kind: p.isBot ? "bot" as const : "human" as const, image: p.isBot ? null : ownAvatar }))} />
+          <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} seats={seatInfo} />
         </div>
+        <SeatCardRow state={state} seats={seatInfo} edge="bottom" />
        </div>
       </div>
 
