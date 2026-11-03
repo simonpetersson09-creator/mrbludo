@@ -35,7 +35,7 @@ interface Props {
   seats?: (SeatInfo | undefined)[];
 }
 
-const STEP_MS = 150;
+const STEP_MS = 185;
 
 function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
   const { t } = useTranslation();
