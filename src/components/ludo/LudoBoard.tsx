@@ -75,11 +75,18 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
           <stop offset="100%" stopColor="var(--board-frame-dark)" />
         </linearGradient>
         <path id={`${boardId}-safe`} d="M 0,-0.25 L 0.074,-0.102 L 0.238,-0.077 L 0.12,0.039 L 0.147,0.202 L 0,0.125 L -0.147,0.202 L -0.12,0.039 L -0.238,-0.077 L -0.074,-0.102 Z" />
-        <radialGradient id="pieceShine" cx="35%" cy="30%" r="70%">
-          <stop offset="0%" stopColor="white" stopOpacity="0.75" />
-          <stop offset="45%" stopColor="white" stopOpacity="0.1" />
-          <stop offset="100%" stopColor="black" stopOpacity="0.25" />
+        <linearGradient id={`${boardId}-pawn-shine`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="var(--board-mark-line)" stopOpacity="0.5" />
+          <stop offset="30%" stopColor="var(--board-mark)" stopOpacity="0.45" />
+          <stop offset="55%" stopColor="var(--board-mark)" stopOpacity="0" />
+          <stop offset="100%" stopColor="var(--board-mark-line)" stopOpacity="0.55" />
+        </linearGradient>
+        <radialGradient id={`${boardId}-pawn-head`} cx="32%" cy="25%" r="75%">
+          <stop offset="0%" stopColor="var(--board-mark)" stopOpacity="0.6" />
+          <stop offset="45%" stopColor="var(--board-mark)" stopOpacity="0" />
+          <stop offset="100%" stopColor="var(--board-mark-line)" stopOpacity="0.5" />
         </radialGradient>
+        <path id={`${boardId}-pawn-body`} d="M-.13,-.26 C-.14,-.08 -.21,.03 -.29,.13 Q-.34,.19 -.3,.25 Q0,.38 .3,.25 Q.34,.19 .29,.13 C.21,.03 .14,-.08 .13,-.26 Z" />
       </defs>
       <g clipPath={`url(#${boardId}-edge)`} pointerEvents="none">
       <rect x="0" y="0" width="15" height="15" rx="0.4" fill="var(--board)" />
@@ -147,9 +154,15 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
           aria-label={p.legal ? t("movePieceAria", { color: t(COLOR_NAME_KEYS[p.color]), n: p.idx + 1 }) : undefined}
         >
           {p.legal && <circle className="piece-ring" r="0.5" fill="none" stroke="var(--game-gold)" strokeWidth="0.1" />}
-          <ellipse cx="0.04" cy="0.16" rx="0.34" ry="0.16" fill="black" opacity="0.25" />
-          <circle r={p.done ? 0.26 : 0.34} fill={FILL[p.color]} stroke="hsl(195 50% 10%)" strokeWidth="0.05" />
-          <circle r={p.done ? 0.26 : 0.34} fill="url(#pieceShine)" />
+          <g transform={p.done ? "scale(0.76)" : undefined} pointerEvents="none">
+            <ellipse cx="0.05" cy="0.3" rx="0.36" ry="0.13" fill="var(--board-mark-line)" opacity="0.4" />
+            <ellipse cy="0.23" rx="0.32" ry="0.12" fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />
+            <use href={`#${boardId}-pawn-body`} fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />
+            <use href={`#${boardId}-pawn-body`} fill={`url(#${boardId}-pawn-shine)`} />
+            <ellipse cy="0.18" rx="0.28" ry="0.09" fill="none" stroke="var(--board-mark)" strokeOpacity="0.25" strokeWidth="0.025" />
+            <circle cy="-0.39" r="0.21" fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />
+            <circle cy="-0.39" r="0.21" fill={`url(#${boardId}-pawn-head)`} />
+          </g>
           {/* larger invisible tap target */}
           {p.legal && <circle r="0.75" fill="transparent" />}
         </g>
