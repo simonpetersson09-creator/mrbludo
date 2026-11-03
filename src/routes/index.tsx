@@ -118,7 +118,7 @@ function HomePage() {
         <Link to="/online" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">🌐</span><span>{t("playOnline")}</span></Link>
         <Link to="/stats" className="home-action font-display"><BarChart3 size={16} /><span>{t("stats")}</span></Link>
       </div>
-      <div className="home-round-row">
+      <div className="home-round-row relative z-20">
         <div className="home-round-item relative">
           <button ref={langBtnRef} type="button" className="home-round-action" aria-label={t("languageLabel")} aria-expanded={showLangs} onClick={toggleLangs}>
             <Globe className="h-4 w-4 sm:h-5 sm:w-5" />
