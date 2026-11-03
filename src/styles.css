@@ -385,10 +385,11 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display
 @media (max-height: 739px) { .match-info-bar { display: none; } }
 @media (orientation: landscape) and (max-height: 540px) { .match-info-bar { display: none; } }
 
-/* Compact notices: small pill that hugs its text, lingers, then fades away. */
-.mrb-toaster { --width: min(200px, 62vw) !important; }
-.mrb-toaster [data-sonner-toast] { width: fit-content !important; max-width: min(200px, 62vw) !important; margin-inline: auto !important; padding: 3px 9px !important; font-size: 10px !important; gap: 4px !important; border-radius: 9999px !important; line-height: 1.25 !important; }
-.mrb-toaster [data-sonner-toast] [data-icon] { width: 11px; height: 11px; }
+/* Compact notices: a tiny pill that hugs its text, lingers, then fades away. */
+.mrb-toaster { --width: min(168px, 50vw) !important; }
+.mrb-toaster [data-sonner-toast] { width: fit-content !important; max-width: min(168px, 50vw) !important; margin-inline: auto !important; padding: 2px 6px !important; font-size: 8.5px !important; gap: 3px !important; border-radius: 9999px !important; line-height: 1.2 !important; }
+.mrb-toaster [data-sonner-toast] [data-icon] { width: 9px !important; height: 9px !important; min-width: 9px !important; display: flex !important; align-items: center; justify-content: center; }
+.mrb-toaster [data-sonner-toast] [data-icon] svg { width: 9px !important; height: 9px !important; }
 .mrb-toaster [data-sonner-toast][data-removed="true"] { transition: opacity .7s ease, transform .7s ease !important; }
 
 /* Goal celebration: rings and sparkles burst from the center as a piece arrives. */
