@@ -28,6 +28,7 @@ export interface DiceTrayProps {
   /** Optional hold-ring tint (any CSS colour). */
   holdColor?: string | undefined;
   skin?: DiceLook | undefined;
+  entryFrom?: "left" | "right";
 }
 
 function DiceTrayImpl({
@@ -44,6 +45,7 @@ function DiceTrayImpl({
   pipColor,
   holdColor,
   skin,
+  entryFrom = "right",
 }: DiceTrayProps) {
   const cameraRef = useRef<PerspectiveCameraImpl>(null);
   const viewportWidth = useThree((s) => s.size.width);
@@ -71,8 +73,11 @@ function DiceTrayImpl({
     [cameraAzimuth, cameraPolar],
   );
   const screenRight = useMemo<[number, number, number]>(
-    () => [Math.cos(cameraAzimuth), 0, -Math.sin(cameraAzimuth)],
-    [cameraAzimuth],
+    () => {
+      const direction = entryFrom === "left" ? -1 : 1;
+      return [direction * Math.cos(cameraAzimuth), 0, -direction * Math.sin(cameraAzimuth)];
+    },
+    [cameraAzimuth, entryFrom],
   );
 
   const positions = useMemo(

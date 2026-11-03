@@ -2,6 +2,7 @@ import { memo, useId } from "react";
 import { GOAL, type Color, type GameState } from "@/lib/ludo/engine";
 import { HOME_COLUMN, TRACK, YARD_ORIGIN, pieceCenter } from "@/lib/ludo/board";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
+import { movePreviews } from "@/lib/ludo/move-preview";
 
 const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
@@ -93,6 +94,16 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
       <polygon points="6,9 6,6 7.5,7.5" fill={BOARD_FILL[0]} />
       <path d="M6,6 H9 V9 H6 Z M6,6 L9,9 M9,6 L6,9" fill="none" stroke="var(--board-grid)" strokeWidth="0.026" strokeLinejoin="round" />
       <rect x="0.045" y="0.045" width="14.91" height="14.91" rx="0.36" fill="none" stroke={`url(#${boardId}-frame)`} strokeWidth="0.09" />
+      </g>
+
+      <g pointerEvents="none" className="move-destinations">
+        {movePreviews(state, legal).map(({ x, y, color }) => (
+          <g key={`${x},${y}`}>
+            <circle cx={x} cy={y} r="0.39" fill={FILL[color]} fillOpacity="0.18" stroke="var(--board-mark)" strokeWidth="0.12" />
+            <circle cx={x} cy={y} r="0.39" fill="none" stroke={FILL[color]} strokeWidth="0.055" />
+            <circle cx={x} cy={y} r="0.1" fill={FILL[color]} />
+          </g>
+        ))}
       </g>
 
       {captureAt && (

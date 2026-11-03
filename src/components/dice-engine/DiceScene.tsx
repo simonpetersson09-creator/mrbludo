@@ -90,6 +90,7 @@ function DiceSceneImpl({
   pipColor,
   holdColor,
   skin,
+  entryFrom = "right",
   onToggleHold,
   className,
 }: DiceSceneProps) {
@@ -169,6 +170,7 @@ function DiceSceneImpl({
           pipColor={pipColor}
           holdColor={holdColor}
           skin={skin}
+          entryFrom={entryFrom}
           onToggleHold={onToggleHold}
         />
         <Warmup />

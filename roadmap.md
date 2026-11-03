@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Game view: two-column player names, right-edge controls, framed throw cloth, smaller player-colored left-entry die, board depth and legal destination markers; local mobile-browser flow and 10 tests passed (physical phone and online-session rendering not tested)
 - [x] Audit native language, iOS/Android settings and Yatzy read-only reference
 - [x] Correct verified native configuration issues and add regression checks
 - [x] Run available tests and report exact changes plus physical-device/build blockers
