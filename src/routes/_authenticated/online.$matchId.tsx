@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, Copy, Play, Share2, UserPlus, WifiOff } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { matchQrValue } from "@/lib/online/match-code";
+import { PUBLISHED_LUDO_ORIGIN } from "@/lib/native/origin";
 import { toast } from "sonner";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
