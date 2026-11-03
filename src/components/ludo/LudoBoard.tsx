@@ -71,14 +71,14 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         g.setAttribute("opacity", "0");
         for (const side of [-1, 1]) {
           const e = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
-          e.setAttribute("cx", String(side * 0.1)); e.setAttribute("cy", String(side * 0.055));
-          e.setAttribute("rx", "0.072"); e.setAttribute("ry", "0.12");
+          e.setAttribute("cx", String(side * 0.16)); e.setAttribute("cy", String(side * 0.09));
+          e.setAttribute("rx", "0.11"); e.setAttribute("ry", "0.17");
           // Inline style so the colour variable always resolves; a thin dark rim keeps the print
           // readable on white squares and on the player's own coloured lane.
           e.style.fill = fill;
           e.style.stroke = "var(--board-ink)";
-          e.style.strokeWidth = "0.018";
-          e.style.strokeOpacity = "0.5";
+          e.style.strokeWidth = "0.02";
+          e.style.strokeOpacity = "0.55";
           g.appendChild(e);
         }
         trail.appendChild(g);
