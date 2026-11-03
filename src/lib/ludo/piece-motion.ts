@@ -2,9 +2,9 @@ import { pieceCenter } from "./board";
 import { GOAL, LAST_TRACK, YARD, type Color } from "./engine";
 
 /** Visual waypoints only; the authoritative move is never split into actions. */
-export function pieceWaypoints(color: Color, from: number, to: number, piece: number): [number, number][] {
+export function pieceWaypoints(color: Color, from: number, to: number, piece: number, roll?: number | null): [number, number][] {
   // Fia bounce: walk into the goal, then back the extra steps.
-  if (from > LAST_TRACK && from < GOAL && to < from) {
+  if (from > LAST_TRACK && from < GOAL && roll != null && from + roll > GOAL) {
     const steps = [...Array.from({ length: GOAL - from + 1 }, (_, i) => from + i), ...Array.from({ length: GOAL - to }, (_, i) => GOAL - 1 - i)];
     return steps.map((p) => pieceCenter(color, p, piece));
   }

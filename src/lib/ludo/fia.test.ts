@@ -91,7 +91,7 @@ describe("Svenska Fia med knuff", () => {
     expect(targetOf(53, 5, "classic")).toBeNull();
     const s = applyMove(applyRoll(withPieces(game("fia"), [[53, GOAL, GOAL, GOAL], [YARD, YARD, YARD, YARD]]), 5), 0);
     expect(s.pieces[0][0]).toBe(54);
-    expect(pieceWaypoints(0, 53, 54, 0)).toHaveLength(6); // 53,54,55,56,55,54
+    expect(pieceWaypoints(0, 53, 54, 0, 5)).toHaveLength(6); // 53,54,55,56,55,54
   });
 
   it("a bounce may not pass or land on an own piece", () => {
