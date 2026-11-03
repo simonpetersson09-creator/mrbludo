@@ -45,6 +45,7 @@ function PlayPage() {
   const [rolling, setRolling] = useState(false);
   const [face, setFace] = useState<DiceValue>(6);
   const [confirmForfeit, setConfirmForfeit] = useState(false);
+  const ownAvatar = useOwnAvatar();
   const busy = useRef(false);
   const statsDone = useRef(false);
   const settings = useMemo(() => loadSettings(), []);
