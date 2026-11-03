@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as JoinRouteImport } from './routes/join'
 import { Route as PlayRouteImport } from './routes/play'
 import { Route as RulesRouteImport } from './routes/rules'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -43,6 +44,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinRoute = JoinRouteImport.update({
+  id: '/join',
+  path: '/join',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayRoute = PlayRouteImport.update({
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
+  '/join': typeof JoinRoute
   '/play': typeof PlayRoute
   '/rules': typeof RulesRoute
   '/settings': typeof SettingsRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
+  '/join': typeof JoinRoute
   '/play': typeof PlayRoute
   '/rules': typeof RulesRoute
   '/settings': typeof SettingsRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
+  '/join': typeof JoinRoute
   '/play': typeof PlayRoute
   '/rules': typeof RulesRoute
   '/settings': typeof SettingsRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-login'
     | '/auth'
+    | '/join'
     | '/play'
     | '/rules'
     | '/settings'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-login'
     | '/auth'
+    | '/join'
     | '/play'
     | '/rules'
     | '/settings'
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/admin-login'
     | '/auth'
+    | '/join'
     | '/play'
     | '/rules'
     | '/settings'
@@ -222,6 +234,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
   AuthRoute: typeof AuthRoute
+  JoinRoute: typeof JoinRoute
   PlayRoute: typeof PlayRoute
   RulesRoute: typeof RulesRoute
   SettingsRoute: typeof SettingsRoute
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join': {
+      id: '/join'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof JoinRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/play': {
@@ -373,6 +393,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
   AuthRoute: AuthRoute,
+  JoinRoute: JoinRoute,
   PlayRoute: PlayRoute,
   RulesRoute: RulesRoute,
   SettingsRoute: SettingsRoute,

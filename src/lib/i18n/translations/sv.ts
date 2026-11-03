@@ -289,6 +289,17 @@ export const sv = {
   waitCooldown: "Vänta {sec}s innan nästa meddelande",
   close: "Stäng",
   you: "Du",
+  joinTitle: "Du är inbjuden till Mr. B Ludo! 🎲",
+  joinBody: "En vän vill spela Ludo med dig. Ladda ner appen gratis och skriv in koden.",
+  joinHaveApp: "Har du redan appen?",
+  joinSteps: "Öppna Mr. B Ludo, tryck på {label} och skriv in koden ovan.",
+  storeApple: "App Store",
+  storeGoogle: "Google Play",
+  storeSoon: "Mr. B Ludo finns snart i App Store och Google Play.",
+  webOnlyTitle: "Mr. B Ludo spelas i appen",
+  webOnlyBody: "Ladda ner appen gratis och spela med vänner.",
+  copyCode: "Kopiera kod",
+  errInviteExpired: "Inbjudan har gått ut – be vännen skicka en ny",
 };
 
 export type TranslationKey = keyof typeof sv;

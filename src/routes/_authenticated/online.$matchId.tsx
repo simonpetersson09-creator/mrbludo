@@ -319,7 +319,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
   const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => toast.success(t("inviteSent"))).catch((e) => toast.error(errorMessage(e, t)));
   // Like Yatzy's "Dela inbjudan": the phone's share sheet (Messenger, WhatsApp …), or copy when sharing is unavailable.
   const share = async () => {
-    const url = `${PUBLISHED_LUDO_ORIGIN}/online?code=${match.code}`;
+    const url = `${PUBLISHED_LUDO_ORIGIN}/join?code=${match.code}`;
     const text = t("shareInviteText", { code: match.code });
     try {
       const { Capacitor } = await import("@capacitor/core");

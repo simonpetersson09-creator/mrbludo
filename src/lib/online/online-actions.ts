@@ -1,7 +1,7 @@
 import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput } from "./online-inputs";
 import type { GameState } from "@/lib/ludo/engine";
 import {
-  BOT_SECONDS, DROP_SECONDS, MatchError, TURN_SECONDS, autoStep, makeCode, performAction, secureRoll, startState, statDeltas,
+  BOT_SECONDS, CODE_TTL_MS, DROP_SECONDS, MatchError, TURN_SECONDS, autoStep, codeExpired, makeCode, performAction, secureRoll, startState, statDeltas,
   type Action,
 } from "./match-logic";
 
@@ -83,7 +83,7 @@ async function isMember(db: Admin, matchId: string, userId: string) {
 }
 
 /** Yatzy's invite rules: invites live 6 hours; invites and friend requests are spaced at least 10 seconds apart. */
-export const INVITE_TTL_MS = 6 * 3600_000;
+export const INVITE_TTL_MS = CODE_TTL_MS;
 export const SEND_COOLDOWN_MS = 10_000;
 async function rateLimit(db: Admin, table: "friendships" | "match_invites", col: "requester" | "from_user", userId: string) {
   const since = new Date(Date.now() - SEND_COOLDOWN_MS).toISOString();
@@ -135,11 +135,16 @@ export const createMatchAction = async ({ data, context }: { data: ReturnType<ty
 
 export const joinByCodeAction = async ({ data, context }: { data: ReturnType<typeof joinByCodeInput>; context: OnlineContext }) => {
     const db = await admin();
-    const { data: m } = await db.from("matches").select("id, status, max_players").eq("code", data.code).maybeSingle();
+    const { data: m } = await db.from("matches").select("id, status, max_players, created_at").eq("code", data.code).maybeSingle();
     if (!m) throw new Error("err:no_match_code");
     const { data: mine } = await db.from("match_players").select("seat").eq("match_id", m.id).eq("user_id", context.userId).maybeSingle();
     if (mine) return { id: m.id };
     if (m.status !== "waiting") throw new Error("err:already_started");
+    // A code that has been waiting 6 hours is dead: close the match and say so.
+    if (m.created_at == null || codeExpired(m.created_at)) {
+      await db.from("matches").update({ status: "abandoned" }).eq("id", m.id);
+      throw new Error("err:invite_expired");
+    }
     if (!(await seatUser(db, m.id, m.max_players, context.userId))) throw new Error("err:match_full");
     await maybeAutostart(db, m.id);
     return { id: m.id };

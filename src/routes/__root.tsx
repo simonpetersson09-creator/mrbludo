@@ -8,6 +8,7 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
+import { isDownloadOnlyVisitor, isNativeWindow } from "@/lib/web-access";
 import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { AndroidBackButton } from "@/components/AndroidBackButton";
@@ -155,6 +156,8 @@ function RootComponent() {
     return () => { window.removeEventListener("error", onError); window.removeEventListener("unhandledrejection", onRejection); };
   }, []);
   useEffect(() => {
+    // A plain browser on the published site is a visitor, not a player: no identity, no usage log.
+    if (isDownloadOnlyVisitor({ hostname: window.location.hostname, isNative: isNativeWindow(), isDev: import.meta.env.DEV })) return;
     const ping = () => logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
     // Admin login has its own credentials; ordinary app launch creates a player automatically.
     if (window.location.pathname !== "/admin-login") ensurePlayerSession().then(ping).catch(() => {});

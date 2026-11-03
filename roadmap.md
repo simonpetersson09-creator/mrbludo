@@ -38,3 +38,5 @@
 - [x] Invites expire after 6 h, single use, 10 s send limit; friend requests only after finished match; one friendship per pair
 - [x] C6/C7: others see only public profile/stat fields; forfeits excluded from weekly/country lists; country stored per match; only real country codes
 - [x] E5–E8: Fia bot walk-out choice, edge-case tests, translated 404 page, real unknown-key check (204 tests)
+- [x] Invite links now open `/join?code=…`: browsers get the download page, app users open the match directly; match codes expire after 6 hours (221 tests passed; live published-site behaviour needs a publish, phones not tested)
+- [ ] App Store and Google Play links for the download page — blocked until the store listings exist (Simon to supply)
