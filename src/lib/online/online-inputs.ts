@@ -4,7 +4,7 @@ export const updateProfileInput = (d: { display_name: string; avatar: string; co
     const name = String(d.display_name ?? "").trim().slice(0, 20);
     if (name.length < 2) throw new Error("err:name_short");
     const country = String(d.country ?? "").toUpperCase();
-    if (!/^[A-Z]{2}$/.test(country)) throw new Error("err:invalid_country");
+    if (!isRealCountry(country)) throw new Error("err:invalid_country");
     return { display_name: name, avatar: String(d.avatar ?? "🎲").slice(0, 8), country };
   };
 const variantInput = (v: unknown): Variant => (isVariant(v) ? v : "classic");
@@ -53,3 +53,12 @@ export const logEventInput = (d: { kind: string; deviceId?: string; platform?: s
     return { kind, platform, deviceId: String(d.deviceId ?? "").slice(0, 64) || null, detail };
   };
 export const deleteDataInput = (_d?: unknown) => ({ confirm: true as const });
+
+/** Only real ISO 3166 region codes (not "XX" or "ZZ") may be stored as a player's country. */
+export function isRealCountry(code: string): boolean {
+  if (!/^[A-Z]{2}$/.test(code)) return false;
+  try {
+    const name = new Intl.DisplayNames(["en"], { type: "region", fallback: "none" }).of(code);
+    return !!name && name !== code && name !== "Unknown Region";
+  } catch { return false; }
+}

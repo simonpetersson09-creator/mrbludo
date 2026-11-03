@@ -105,8 +105,9 @@ export interface OnlineContext { supabase: SupabaseClient<Database>; userId: str
 export const getMeAction = async ({ context }: { context: OnlineContext }) => {
   const { supabase, userId } = context;
   const [{ data: profile }, { data: stats }, { data: isAdmin }] = await Promise.all([
-    supabase.from("profiles").select("*").eq("id", userId).maybeSingle(),
-    supabase.from("player_stats").select("*").eq("user_id", userId).maybeSingle(),
+    // Own row incl. private columns (friend code, sign-up time): read with the server client after auth.
+    admin().then((db) => db.from("profiles").select("*").eq("id", userId).maybeSingle()),
+    supabase.from("player_stats").select("user_id, played, wins, captures, pieces_home, forfeits").eq("user_id", userId).maybeSingle(),
     supabase.rpc("has_role", { _user_id: userId, _role: "admin" }),
   ]);
   await supabase.from("profiles").update({ last_seen: new Date().toISOString() }).eq("id", userId);
@@ -382,7 +383,7 @@ export const respondInviteAction = async ({ data, context }: { data: ReturnType<
   };
 
 export const getLeaderboardAction = async ({ data, context }: { data: ReturnType<typeof getLeaderboardInput>; context: OnlineContext }) => {
-    const { data: rows } = await context.supabase.from("player_stats").select("*").gt("played", 0).order(data.sort, { ascending: false }).order("played").limit(50);
+    const { data: rows } = await context.supabase.from("player_stats").select("user_id, played, wins, captures, pieces_home, forfeits").gt("played", 0).order(data.sort, { ascending: false }).order("played").limit(50);
     const ids = (rows ?? []).map((r) => r.user_id);
     const { data: profs } = ids.length ? await context.supabase.from("profiles").select("id, display_name, avatar, country").in("id", ids) : { data: [] };
     const byId = new Map((profs ?? []).map((p) => [p.id, p]));
