@@ -30,8 +30,8 @@ export function useDieColor(target: string, state: GameState | null): string {
     if (!waiting) return;
     const hold = state ? dieColorHoldMs(state) : 0;
     if (hold <= 0) { setShown(latest.current); return; }
-    const timer = window.setTimeout(() => setShown(latest.current), hold);
-    return () => window.clearTimeout(timer);
+    const timer = setTimeout(() => setShown(latest.current), hold);
+    return () => clearTimeout(timer);
   }, [waiting, state]);
   return shown;
 }
