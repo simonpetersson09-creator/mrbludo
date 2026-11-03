@@ -9,9 +9,10 @@ export function movePreviews(state: GameState, legal: number[]) {
   return legal.flatMap((piece) => {
     const progress = state.pieces[state.current]?.[piece];
     if (progress == null) return [];
-    const target = targetOf(progress, state.dice ?? 0, variantOf(state));
+    const variant = variantOf(state);
+    const target = targetOf(progress, state.dice ?? 0, variant);
     if (target == null) return [];
-    const [x, y] = pieceCenter(player.color, target, piece);
+    const [x, y] = pieceCenter(player.color, target, piece, variant);
     const key = `${x},${y}`;
     if (seen.has(key)) return [];
     seen.add(key);

@@ -4,7 +4,7 @@ import { randomBotNames } from "@/lib/ludo/bot-names";
  * Server functions call these after loading a match row; the same engine rules
  * apply to local and online games.
  */
-import { applyMove, applyRoll, createGame, forfeit, GOAL, isVariant, legalMoves, type Color, type GameState, type Variant } from "@/lib/ludo/engine";
+import { applyMove, applyRoll, createGame, forfeit, goalOf, isVariant, variantOf, legalMoves, type Color, type GameState, type Variant } from "@/lib/ludo/engine";
 import { chooseMove } from "@/lib/ludo/ai";
 
 export const SEAT_COLORS: Record<number, Color[]> = { 2: [0, 2], 3: [0, 1, 2], 4: [0, 1, 2, 3] };
@@ -93,7 +93,7 @@ export function statDeltas(prev: GameState, next: GameState): Record<string, Sta
   return out;
 }
 
-export const piecesHome = (state: GameState, seat: number) => state.pieces[seat].filter((x) => x === GOAL).length;
+export const piecesHome = (state: GameState, seat: number) => state.pieces[seat].filter((x) => x === goalOf(variantOf(state))).length;
 
 export function secureRoll(): number {
   const buf = new Uint32Array(1);

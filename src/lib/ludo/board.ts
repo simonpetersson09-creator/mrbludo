@@ -1,4 +1,4 @@
-import { GOAL, LAST_TRACK, YARD, type Color } from "./engine";
+import { PATHS, YARD, startSquare, type Color, type Variant } from "./engine";
 
 /** 15x15 grid coordinates [col,row]. Track index 0 = red start square. */
 export const TRACK: [number, number][] = (() => {
@@ -27,6 +27,16 @@ export const HOME_COLUMN: Record<Color, [number, number][]> = {
   3: [13, 12, 11, 10, 9].map((r) => [7, r] as [number, number]),
 };
 
+/** Fia: a smaller finish leaves room for a 6th lane square next to the center cell. */
+export const FIA_HOME_COLUMN: Record<Color, [number, number][]> = {
+  0: [1, 2, 3, 4, 5, 6].map((c) => [c, 7] as [number, number]),
+  1: [1, 2, 3, 4, 5, 6].map((r) => [7, r] as [number, number]),
+  2: [13, 12, 11, 10, 9, 8].map((c) => [c, 7] as [number, number]),
+  3: [13, 12, 11, 10, 9, 8].map((r) => [7, r] as [number, number]),
+};
+
+export const homeColumnOf = (variant: Variant = "classic") => (variant === "fia" ? FIA_HOME_COLUMN : HOME_COLUMN);
+
 /** Yard origin (top-left of the 6x6 yard). */
 export const YARD_ORIGIN: Record<Color, [number, number]> = { 0: [0, 0], 1: [9, 0], 2: [9, 9], 3: [0, 9] };
 
@@ -49,15 +59,17 @@ export function yardSpot(color: Color, piece: number): [number, number] {
 }
 
 const GOAL_SPOT: Record<Color, [number, number]> = { 0: [6.85, 7.5], 1: [7.5, 6.85], 2: [8.15, 7.5], 3: [7.5, 8.15] };
+const FIA_GOAL_SPOT: Record<Color, [number, number]> = { 0: [7.28, 7.5], 1: [7.5, 7.28], 2: [7.72, 7.5], 3: [7.5, 7.72] };
 
 /** Center of the cell a piece occupies (grid units). */
-export function pieceCenter(color: Color, progress: number, piece: number): [number, number] {
+export function pieceCenter(color: Color, progress: number, piece: number, variant: Variant = "classic"): [number, number] {
+  const path = PATHS[variant];
   if (progress === YARD) return yardSpot(color, piece);
-  if (progress === GOAL) return GOAL_SPOT[color];
-  if (progress <= LAST_TRACK) {
-    const [c, r] = TRACK[(color * 13 + progress) % 52];
+  if (progress === path.goal) return (variant === "fia" ? FIA_GOAL_SPOT : GOAL_SPOT)[color];
+  if (progress <= path.lastTrack) {
+    const [c, r] = TRACK[(startSquare(color, variant) + progress) % 52];
     return [c + 0.5, r + 0.5];
   }
-  const [c, r] = HOME_COLUMN[color][progress - LAST_TRACK - 1];
+  const [c, r] = homeColumnOf(variant)[color][progress - path.lastTrack - 1];
   return [c + 0.5, r + 0.5];
 }
