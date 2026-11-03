@@ -82,18 +82,17 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
           g.appendChild(e);
         }
         trail.appendChild(g);
-        // Each print shows up as the piece steps off, stays about three squares, then fades —
-        // oldest first, and the last one is gone shortly after the piece lands.
+        // Every print lives the same short while: the oldest (furthest behind the piece) is the
+        // first to go, and the whole trail is gone just after the piece lands.
         const total = walk + 560;
         const appear = (i + 0.55) * STEP_MS;
-        const shown = Math.min(appear + 150, total - 2);
-        const fade = Math.max(shown + 1, Math.min(appear + 3.1 * STEP_MS, total - 501));
-        const gone = Math.max(fade + 1, Math.min(fade + 520, total));
+        const shown = Math.min(appear + 140, total - 2);
+        const gone = Math.max(shown + 1, Math.min(shown + 560, total));
         const a = g.animate([
           { opacity: 0, offset: 0 },
           { opacity: 0, offset: appear / total },
           { opacity: 0.86, offset: shown / total },
-          { opacity: 0.72, offset: fade / total },
+          { opacity: 0, offset: gone / total },
           { opacity: 0, offset: gone / total },
           ...(gone < total ? [{ opacity: 0, offset: 1 }] : []),
         ], { duration: total, easing: "ease-in-out" });
