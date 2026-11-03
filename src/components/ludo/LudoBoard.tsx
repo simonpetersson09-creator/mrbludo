@@ -5,7 +5,7 @@ import { goalOf, startSquare, variantOf, type Color, type GameState } from "@/li
 import { homeColumnOf, trackOf, cellSizeOf, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardNestCenter } from "@/lib/ludo/board";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 import { movePreviews } from "@/lib/ludo/move-preview";
-import { pieceWaypoints } from "@/lib/ludo/piece-motion";
+import { pieceWaypoints, STEP_MS } from "@/lib/ludo/piece-motion";
 
 const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
@@ -36,7 +36,6 @@ interface Props {
   seats?: (SeatInfo | undefined)[];
 }
 
-const STEP_MS = 185;
 
 function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
   const { t } = useTranslation();

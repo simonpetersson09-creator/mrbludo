@@ -14,3 +14,20 @@ export function pieceWaypoints(color: Color, from: number, to: number, piece: nu
   if (from === YARD || to <= from || to > GOAL) return [at(from), at(to)];
   return Array.from({ length: to - from + 1 }, (_, index) => at(from + index));
 }
+
+/** Board walk speed: one square per STEP_MS (shared by the board and the die colour change). */
+export const STEP_MS = 185;
+
+/**
+ * How long the board's walk animation for one move lasts, so the rest of the screen can wait for
+ * the piece to land before treating the turn as passed over. Mirrors the board's own arithmetic:
+ * one square per STEP_MS, and a drawn-out final step when the move knocks someone out.
+ */
+export function walkDurationMs(from: number, to: number, variant: Variant = "classic", captured = false): number {
+  const { goal: GOAL, lastTrack: LAST } = PATHS[variant];
+  let steps: number;
+  if (from === YARD) steps = to + 1;
+  else if (to < from && from > LAST && from < GOAL) steps = (GOAL - from) + (GOAL - to); // Fia bounce off the goal
+  else steps = Math.max(1, to - from);
+  return steps * STEP_MS + (captured ? STEP_MS * 2.4 : 0);
+}
