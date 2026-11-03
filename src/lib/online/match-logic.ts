@@ -87,7 +87,7 @@ export function autoStep(state: GameState, roll: () => number): GameState {
     ? applyRoll(state, roll())
     : (() => { const a = chooseBotAction(state); return applyMove(state, a.piece, a.walkOut); })();
   // Computer seats need no notice; only a human who was away is told the server moved for them.
-  return state.players[seat]?.isBot ? next : { ...next, auto: { seat, at: Date.now() } };
+  return state.players[seat]?.isBot ? next : ({ ...next, auto: { seat, at: Date.now() } } as MarkedState);
 }
 
 export interface StatDelta { played: number; wins: number; captures: number; pieces_home: number; forfeits: number }

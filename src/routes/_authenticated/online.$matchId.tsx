@@ -146,9 +146,9 @@ function OnlineMatchPage() {
     setFace(ev.value as DiceValue);
     const remaining = Math.max(350, ROLL_MS - (Date.now() - rollStart.current));
     setRolling(true);
-    const t = window.setTimeout(() => { setRolling(false); if (mineEv) void playDiceLandHaptic(); }, rollStart.current ? remaining : ROLL_MS);
+    const timer = window.setTimeout(() => { setRolling(false); if (mineEv) void playDiceLandHaptic(); }, rollStart.current ? remaining : ROLL_MS);
     rollStart.current = 0;
-    return () => window.clearTimeout(t);
+    return () => window.clearTimeout(timer);
   }, [match?.version]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Haptics for turn handover and win (same events as Yatzy's TurnTransition / success pulse).
