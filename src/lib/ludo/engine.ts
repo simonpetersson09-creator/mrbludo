@@ -1,7 +1,11 @@
 /**
  * Mr. B Ludo – pure rules engine. No React, no DOM, no network.
  *
- * Documented rule choices (version 1):
+ * Variants: "classic" (below, default) and "fia" (Svenska Fia med knuff, see RULES.fia):
+ * out on 1 or 6, a six brings two pieces out, no three-sixes limit, no safe squares,
+ * own pieces can't be passed or shared, overshooting the goal bounces back.
+ *
+ * Classic rule choices (version 1):
  * - 2–4 players, 4 pieces each, one die per roll.
  * - A 6 is required to move a piece out of the yard onto its start square.
  * - A 6 gives an extra roll. A third consecutive 6 ends the turn unused.
@@ -25,6 +29,33 @@ export const LAST_TRACK = 50;
 export const GOAL = 56;
 export const TRACK_LEN = 52;
 
+/** Rule variants share one engine; each is a small rule configuration. */
+export type Variant = "classic" | "fia";
+export const VARIANTS: Variant[] = ["classic", "fia"];
+
+export interface RuleConfig {
+  /** Die values that bring a piece out of the yard. */
+  exitRolls: number[];
+  /** Consecutive sixes that end the turn unused (Infinity = no limit). */
+  maxSixes: number;
+  /** Start squares protect pieces from being knocked. */
+  safeStarts: boolean;
+  /** Own pieces may not be passed or shared (except putting out on a six). */
+  blockOwn: boolean;
+  /** Overshooting the goal walks back the extra steps instead of being illegal. */
+  bounce: boolean;
+  /** A six out of the yard brings two pieces when at least two are home. */
+  doubleExitOnSix: boolean;
+}
+
+export const RULES: Record<Variant, RuleConfig> = {
+  classic: { exitRolls: [6], maxSixes: 3, safeStarts: true, blockOwn: false, bounce: false, doubleExitOnSix: false },
+  fia: { exitRolls: [1, 6], maxSixes: Infinity, safeStarts: false, blockOwn: true, bounce: true, doubleExitOnSix: true },
+};
+
+export const variantOf = (state: { variant?: Variant }): Variant => (state.variant === "fia" ? "fia" : "classic");
+export const isVariant = (v: unknown): v is Variant => v === "classic" || v === "fia";
+
 export interface Player {
   id: string;
   name: string;
@@ -37,6 +68,8 @@ export type Phase = "roll" | "move" | "finished";
 
 export interface GameState {
   version: 1;
+  /** Missing = classic (games saved before variants existed). */
+  variant?: Variant;
   players: Player[];
   pieces: number[][]; // per player, 4 progress values
   current: number; // index into players
@@ -51,13 +84,14 @@ export interface GameState {
 
 export type GameEvent =
   | { kind: "rolled"; player: number; value: number; noMoves: boolean; threeSixes: boolean }
-  | { kind: "moved"; player: number; piece: number; from: number; to: number; captured: { player: number; piece: number }[]; reachedGoal: boolean; extraRoll: boolean }
+  | { kind: "moved"; player: number; piece: number; from: number; to: number; captured: { player: number; piece: number }[]; reachedGoal: boolean; extraRoll: boolean; alsoOut?: number }
   | { kind: "forfeit"; player: number };
 
-export function createGame(players: Player[]): GameState {
+export function createGame(players: Player[], variant: Variant = "classic"): GameState {
   if (players.length < 2 || players.length > 4) throw new Error("2–4 players required");
   return {
     version: 1,
+    ...(variant === "fia" ? { variant } : {}),
     players,
     pieces: players.map(() => [YARD, YARD, YARD, YARD]),
     current: 0,
@@ -77,23 +111,49 @@ export function absSquare(color: Color, progress: number): number | null {
   return (color * 13 + progress) % TRACK_LEN;
 }
 
-export function isSafeSquare(abs: number): boolean {
-  return abs % 13 === 0;
+export function isSafeSquare(abs: number, variant: Variant = "classic"): boolean {
+  return RULES[variant].safeStarts && abs % 13 === 0;
 }
 
-export function targetOf(progress: number, roll: number): number | null {
-  if (progress === YARD) return roll === 6 ? 0 : null;
+export function targetOf(progress: number, roll: number, variant: Variant = "classic"): number | null {
+  const rules = RULES[variant];
+  if (progress === YARD) return rules.exitRolls.includes(roll) ? 0 : null;
   if (progress === GOAL) return null;
   const t = progress + roll;
-  return t > GOAL ? null : t;
+  if (t <= GOAL) return t;
+  return rules.bounce ? 2 * GOAL - t : null;
+}
+
+/** Every progress value a piece steps on, in order, ending on its target (bounce included). */
+export function pathOf(progress: number, roll: number, variant: Variant = "classic"): number[] {
+  const target = targetOf(progress, roll, variant);
+  if (target == null) return [];
+  if (progress === YARD) return [0];
+  const out: number[] = [];
+  for (let k = 1; k <= roll; k++) {
+    const p = progress + k;
+    out.push(p > GOAL ? 2 * GOAL - p : p);
+  }
+  return out;
+}
+
+function pieceCanMove(pieces: number[], i: number, roll: number, variant: Variant): boolean {
+  const from = pieces[i];
+  const path = pathOf(from, roll, variant);
+  if (!path.length) return false;
+  if (!RULES[variant].blockOwn) return true;
+  // Putting out on a six may share the start square (Fia exception).
+  if (from === YARD && roll === 6) return true;
+  return !pieces.some((other, j) => j !== i && other !== YARD && other !== GOAL && path.includes(other));
 }
 
 export function legalMoves(state: GameState, roll = state.dice): number[] {
   if (roll == null || state.phase === "finished") return [];
-  const p = state.current;
+  const variant = variantOf(state);
+  const own = state.pieces[state.current];
   const out: number[] = [];
-  state.pieces[p].forEach((pr, i) => {
-    if (targetOf(pr, roll) != null) out.push(i);
+  own.forEach((_, i) => {
+    if (pieceCanMove(own, i, roll, variant)) out.push(i);
   });
   return out;
 }
@@ -148,7 +208,7 @@ export function applyRoll(state: GameState, value: number): GameState {
   const player = s.current;
   s.dice = value;
   if (value === 6) s.sixesInRow++;
-  if (value === 6 && s.sixesInRow >= 3) {
+  if (value === 6 && s.sixesInRow >= RULES[variantOf(s)].maxSixes) {
     s.lastEvent = { kind: "rolled", player, value, noMoves: false, threeSixes: true };
     passTurn(s);
     return s;
@@ -174,11 +234,18 @@ export function applyMove(state: GameState, piece: number): GameState {
   const p = s.current;
   const roll = s.dice!;
   const from = s.pieces[p][piece];
-  const to = targetOf(from, roll)!;
+  const variant = variantOf(s);
+  const to = targetOf(from, roll, variant)!;
   s.pieces[p][piece] = to;
+  // Fia: a six out of the yard brings a second home piece along.
+  let alsoOut: number | undefined;
+  if (from === YARD && roll === 6 && RULES[variant].doubleExitOnSix) {
+    const second = s.pieces[p].findIndex((x, j) => j !== piece && x === YARD);
+    if (second >= 0) { s.pieces[p][second] = 0; alsoOut = second; }
+  }
   const captured: { player: number; piece: number }[] = [];
   const abs = absSquare(s.players[p].color, to);
-  if (abs != null && !isSafeSquare(abs)) {
+  if (abs != null && !isSafeSquare(abs, variant)) {
     s.players.forEach((op, oi) => {
       if (oi === p || op.forfeited) return;
       s.pieces[oi].forEach((pr, pi) => {
@@ -191,7 +258,7 @@ export function applyMove(state: GameState, piece: number): GameState {
   }
   const reachedGoal = to === GOAL;
   const extraRoll = roll === 6;
-  s.lastEvent = { kind: "moved", player: p, piece, from, to, captured, reachedGoal, extraRoll };
+  s.lastEvent = { kind: "moved", player: p, piece, from, to, captured, reachedGoal, extraRoll, ...(alsoOut != null ? { alsoOut } : {}) };
   if (s.pieces[p].every((x) => x === GOAL)) {
     finish(s, p);
     return s;

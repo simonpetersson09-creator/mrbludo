@@ -27,6 +27,11 @@ export const es: Record<TranslationKey, string> = {
   human: "Humano",
   computerColor: "Máquina {color}",
   startMatch: "Empezar partida",
+  gameMode: "Modo de juego",
+  modeClassic: "Ludo clásico",
+  modeFia: "Fia sueco",
+  modeClassicRules: "Sales con 6 · un 6 da otra tirada · tres 6 seguidos terminan el turno · las casillas de salida son seguras · tirada exacta para la meta.",
+  modeFiaRules: "Sales con 1 o 6 · un 6 saca dos fichas · un 6 da otra tirada · no hay casillas seguras · no puedes saltar tus fichas · si te pasas, rebotas desde la meta.",
 
   colorRed: "Rojo",
   colorGreen: "Verde",

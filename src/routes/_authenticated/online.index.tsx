@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ChevronRight, Crown, KeyRound, Loader2, ScanLine, Send, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/auth/client";
+import { VariantPicker, useVariant } from "@/components/ludo/VariantPicker";
 import { createMatch, getMe, joinByCode, listFriends, respondInvite } from "@/lib/online/online.functions";
 import { loadProfileSnapshot, saveProfileSnapshot, lastOnlineMatch } from "@/lib/online/snapshot";
 import { parseMatchCode } from "@/lib/online/match-code";
@@ -32,6 +33,7 @@ function OnlineLobby() {
   const [me, setMe] = useState<Me | null>(null);
   const [invites, setInvites] = useState<Inv>([]);
   const [size, setSize] = useState(2);
+  const [variant, setVariant] = useVariant();
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -113,7 +115,8 @@ function OnlineLobby() {
                 ))}
               </div>
             </div>
-            <button disabled={busy} onClick={() => run(() => createMatch({ data: { isPrivate: true, maxPlayers: size } }))}
+            <VariantPicker value={variant} onChange={setVariant} />
+            <button disabled={busy} onClick={() => run(() => createMatch({ data: { isPrivate: true, maxPlayers: size, variant } }))}
               className="w-full rounded-xl bg-primary py-3.5 font-display text-lg font-bold text-primary-foreground shadow-lg transition active:scale-[0.97] disabled:opacity-50">
               {busy ? <Loader2 className="mx-auto h-5 w-5 animate-spin" /> : t("createGame")}
             </button>

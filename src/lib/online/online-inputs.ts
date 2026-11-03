@@ -1,3 +1,4 @@
+import { isVariant, type Variant } from "@/lib/ludo/engine";
 import type { Action } from "./match-logic";
 export const updateProfileInput = (d: { display_name: string; avatar: string; country: string }) => {
     const name = String(d.display_name ?? "").trim().slice(0, 20);
@@ -6,9 +7,10 @@ export const updateProfileInput = (d: { display_name: string; avatar: string; co
     if (!/^[A-Z]{2}$/.test(country)) throw new Error("err:invalid_country");
     return { display_name: name, avatar: String(d.avatar ?? "🎲").slice(0, 8), country };
   };
-export const createMatchInput = (d: { isPrivate: boolean; maxPlayers: number }) => ({ isPrivate: !!d.isPrivate, maxPlayers: Math.min(4, Math.max(2, Math.round(Number(d.maxPlayers) || 4))) });
+const variantInput = (v: unknown): Variant => (isVariant(v) ? v : "classic");
+export const createMatchInput = (d: { isPrivate: boolean; maxPlayers: number; variant?: Variant }) => ({ isPrivate: !!d.isPrivate, maxPlayers: Math.min(4, Math.max(2, Math.round(Number(d.maxPlayers) || 4))), variant: variantInput(d.variant) });
 export const joinByCodeInput = (d: { code: string }) => ({ code: String(d.code ?? "").trim().toUpperCase().slice(0, 8) });
-export const quickMatchInput = (d: { maxPlayers: number }) => ({ maxPlayers: Math.min(4, Math.max(2, Math.round(Number(d.maxPlayers) || 2))) });
+export const quickMatchInput = (d: { maxPlayers: number; variant?: Variant }) => ({ maxPlayers: Math.min(4, Math.max(2, Math.round(Number(d.maxPlayers) || 2))), variant: variantInput(d.variant) });
 export const startMatchInput = (d: { matchId: string }) => ({ matchId: String(d.matchId) });
 export const leaveMatchInput = (d: { matchId: string }) => ({ matchId: String(d.matchId) });
 export const actInput = (d: { matchId: string; version: number; action: Action }) => {

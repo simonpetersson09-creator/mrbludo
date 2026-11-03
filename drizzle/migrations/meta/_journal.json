@@ -29,6 +29,13 @@
       "when": 1793657820272,
       "tag": "0003_weekly_and_country_rankings",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793705176001,
+      "tag": "0004_match_variant",
+      "breakpoints": true
     }
   ]
 }

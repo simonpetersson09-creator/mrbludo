@@ -29,6 +29,11 @@ export const sv = {
   human: "Människa",
   computerColor: "Dator {color}",
   startMatch: "Starta match",
+  gameMode: "Spelläge",
+  modeClassic: "Classic Ludo",
+  modeFia: "Fia med knuff",
+  modeClassicRules: "Ut på 6 · 6 ger nytt kast · tre sexor i rad avbryter turen · startrutor är säkra · exakt slag i mål.",
+  modeFiaRules: "Ut på 1 eller 6 · en 6 tar ut två pjäser · 6 ger nytt kast · inga säkra rutor · egna pjäser får inte passeras · för högt slag studsar tillbaka från mål.",
 
   // Färger
   colorRed: "Röd",

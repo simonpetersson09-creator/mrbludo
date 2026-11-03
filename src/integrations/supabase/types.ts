@@ -163,6 +163,7 @@ export type Database = {
           status: string
           turn_started_at: string | null
           updated_at: string
+          variant: string
           verified: boolean
           version: number
         }
@@ -178,6 +179,7 @@ export type Database = {
           status?: string
           turn_started_at?: string | null
           updated_at?: string
+          variant?: string
           verified?: boolean
           version?: number
         }
@@ -193,6 +195,7 @@ export type Database = {
           status?: string
           turn_started_at?: string | null
           updated_at?: string
+          variant?: string
           verified?: boolean
           version?: number
         }

@@ -27,6 +27,11 @@ export const th: Record<TranslationKey, string> = {
   human: "มนุษย์",
   computerColor: "คอมพิวเตอร์ {color}",
   startMatch: "เริ่มแมตช์",
+  gameMode: "โหมดเกม",
+  modeClassic: "ลูโดคลาสสิก",
+  modeFia: "ฟีอาแบบสวีเดน",
+  modeClassicRules: "ออกด้วย 6 · ได้ 6 ทอยอีกครั้ง · 6 สามครั้งติดจบตา · ช่องเริ่มปลอดภัย · ต้องทอยพอดีเข้าเส้นชัย",
+  modeFiaRules: "ออกด้วย 1 หรือ 6 · ได้ 6 นำออกสองตัว · ได้ 6 ทอยอีกครั้ง · ไม่มีช่องปลอดภัย · ห้ามข้ามหมากตัวเอง · ทอยเกินจะเด้งกลับจากเส้นชัย",
 
   colorRed: "แดง",
   colorGreen: "เขียว",

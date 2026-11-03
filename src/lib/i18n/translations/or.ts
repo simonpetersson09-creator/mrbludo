@@ -27,6 +27,11 @@ export const or: Record<TranslationKey, string> = {
   human: "ମଣିଷ",
   computerColor: "କମ୍ପ୍ୟୁଟର {color}",
   startMatch: "ମ୍ୟାଚ୍ ଆରମ୍ଭ କରନ୍ତୁ",
+  gameMode: "ଖେଳ ମୋଡ୍",
+  modeClassic: "କ୍ଲାସିକ୍ ଲୁଡୋ",
+  modeFia: "ସ୍ୱିଡିଶ୍ ଫିଆ",
+  modeClassicRules: "6ରେ ବାହାର · 6ରେ ପୁଣି ଥରେ · ଲଗାତାର ତିନି 6ରେ ପାଳି ଶେଷ · ଆରମ୍ଭ ଘର ସୁରକ୍ଷିତ · ଘର ପାଇଁ ଠିକ୍ ସଂଖ୍ୟା।",
+  modeFiaRules: "1 କିମ୍ବା 6ରେ ବାହାର · 6ରେ ଦୁଇଟି ଗୋଟି ବାହାର · 6ରେ ପୁଣି ଥରେ · କୌଣସି ସୁରକ୍ଷିତ ଘର ନାହିଁ · ନିଜ ଗୋଟି ଟପିହେବ ନାହିଁ · ଅଧିକ ହେଲେ ଘରୁ ପଛକୁ ଫେରେ।",
 
   colorRed: "ନାଲି",
   colorGreen: "ସବୁଜ",

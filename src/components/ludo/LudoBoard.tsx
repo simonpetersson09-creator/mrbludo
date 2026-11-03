@@ -55,7 +55,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
     const element = pieceElements.current.get(`${ev.player}-${ev.piece}`);
     if (!element) return;
     const animations: Animation[] = [];
-    const waypoints = pieceWaypoints(player.color, from, ev.to, ev.piece);
+    const waypoints = pieceWaypoints(player.color, from, ev.to, ev.piece, previous.dice);
     const walk = (waypoints.length - 1) * STEP_MS;
     animations.push(element.animate(waypoints.map(([x, y], index) => ({
       transform: index === waypoints.length - 1 ? element.style.transform : `translate(${x}px, ${y}px)`,

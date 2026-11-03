@@ -1,3 +1,4 @@
+import type { Variant } from "@/lib/ludo/engine";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Dices, Users } from "lucide-react";
@@ -12,6 +13,7 @@ const FOUND_MS = 2_000;
 
 interface Props {
   players: number;
+  variant: Variant;
   onMatch: (matchId: string) => void;
   onNoMatch: () => void;
   onCancel: () => void;
@@ -21,7 +23,7 @@ interface Props {
  * Port of Yatzy's quick-match search: look for online players for 15 s; full group starts at once,
  * otherwise the server fills empty seats with computer players, and nobody found → local bot game.
  */
-export function QuickMatchSearch({ players, onMatch, onNoMatch, onCancel }: Props) {
+export function QuickMatchSearch({ players, variant, onMatch, onNoMatch, onCancel }: Props) {
   const { t } = useTranslation();
   const [count, setCount] = useState(1);
   const [found, setFound] = useState<string | null>(null);
@@ -67,7 +69,7 @@ export function QuickMatchSearch({ players, onMatch, onNoMatch, onCancel }: Prop
       if (typeof navigator !== "undefined" && !navigator.onLine) return local();
       try {
         await ensurePlayerSession();
-        const r = await quickMatch({ data: { maxPlayers: players } });
+        const r = await quickMatch({ data: { maxPlayers: players, variant } });
         if (cancelled) { void leaveMatch({ data: { matchId: r.id } }).catch(() => {}); return; }
         matchRef.current = r.id;
         void poll();
@@ -79,7 +81,7 @@ export function QuickMatchSearch({ players, onMatch, onNoMatch, onCancel }: Prop
       window.clearTimeout(timer);
       if (!doneRef.current && matchRef.current) void leaveMatch({ data: { matchId: matchRef.current } }).catch(() => {});
     };
-  }, [players]);
+  }, [players, variant]);
 
   return createPortal(
     <div className="quick-search-screen fixed inset-0 z-50 bg-background/95 backdrop-blur-sm">

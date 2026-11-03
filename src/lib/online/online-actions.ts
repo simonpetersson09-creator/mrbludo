@@ -42,11 +42,11 @@ async function maybeAutostart(db: Admin, matchId: string) {
   const { data: m } = await db.from("matches").select("*").eq("id", matchId).single();
   if (!m || m.status !== "waiting") return;
   const { data: seats } = await db.from("match_players").select("user_id, seat, display_name").eq("match_id", matchId);
-  if ((seats?.length ?? 0) >= m.max_players) await doStart(db, m.id, m.version, (seats ?? []));
+  if ((seats?.length ?? 0) >= m.max_players) await doStart(db, m.id, m.version, (seats ?? []), undefined, m.variant);
 }
 
-async function doStart(db: Admin, matchId: string, version: number, seats: { user_id: string; seat: number; display_name: string }[], total?: number) {
-  const state = startState(seats, total);
+async function doStart(db: Admin, matchId: string, version: number, seats: { user_id: string; seat: number; display_name: string }[], total?: number, variant?: string) {
+  const state = startState(seats, total, variant === "fia" ? "fia" : "classic");
   const { data } = await db.from("matches")
     .update({ status: "playing", state: state as never, version: version + 1, turn_started_at: new Date().toISOString(), updated_at: new Date().toISOString() })
     .eq("id", matchId).eq("version", version).eq("status", "waiting").select("id");
@@ -109,7 +109,7 @@ export const createMatchAction = async ({ data, context }: { data: ReturnType<ty
     const db = await admin();
     for (let i = 0; i < 5; i++) {
       const { data: m, error } = await db.from("matches")
-        .insert({ code: makeCode(), is_private: data.isPrivate, max_players: data.maxPlayers, host_id: context.userId }).select("id, code").single();
+        .insert({ code: makeCode(), is_private: data.isPrivate, max_players: data.maxPlayers, variant: data.variant, host_id: context.userId }).select("id, code").single();
       if (!error && m) {
         await seatUser(db, m.id, data.maxPlayers, context.userId);
         return m;
@@ -149,7 +149,7 @@ export const quickMatchAction = async ({ data, context }: { data: ReturnType<typ
     for (const r of mineWaiting ?? []) await leaveMatchAction({ data: { matchId: r.match_id }, context });
     const since = new Date(Date.now() - 10 * 60_000).toISOString();
     const { data: open } = await db.from("matches").select("id, max_players, host_id")
-      .eq("status", "waiting").eq("is_private", false).eq("max_players", data.maxPlayers)
+      .eq("status", "waiting").eq("is_private", false).eq("max_players", data.maxPlayers).eq("variant", data.variant)
       .gte("updated_at", since).order("created_at").limit(10);
     for (const m of open ?? []) {
       if (!(await pruneQuickSeats(db, m.id)).length) continue;
@@ -160,7 +160,7 @@ export const quickMatchAction = async ({ data, context }: { data: ReturnType<typ
       }
     }
     const { data: m } = await db.from("matches")
-      .insert({ code: makeCode(), is_private: false, max_players: data.maxPlayers, host_id: context.userId }).select("id").single();
+      .insert({ code: makeCode(), is_private: false, max_players: data.maxPlayers, variant: data.variant, host_id: context.userId }).select("id").single();
     if (!m) throw new Error("err:create_failed");
     await seatUser(db, m.id, data.maxPlayers, context.userId);
     return { id: m.id };
@@ -185,7 +185,7 @@ export const quickFinalizeAction = async ({ data, context }: { data: ReturnType<
       await leaveMatchAction({ data: { matchId: m.id }, context });
       return { status: "none" as const };
     }
-    await doStart(db, m.id, m.version, liveSeats, m.max_players);
+    await doStart(db, m.id, m.version, liveSeats, m.max_players, m.variant);
     return { status: "started" as const };
   };
 
@@ -208,7 +208,7 @@ export const startMatchAction = async ({ data, context }: { data: ReturnType<typ
     if (m.status !== "waiting") return { ok: true };
     const { data: seats } = await db.from("match_players").select("user_id, seat, display_name").eq("match_id", m.id);
     if ((seats?.length ?? 0) < 2) throw new Error("err:min_players");
-    await doStart(db, m.id, m.version, seats ?? []);
+    await doStart(db, m.id, m.version, seats ?? [], undefined, m.variant);
     return { ok: true };
   };
 

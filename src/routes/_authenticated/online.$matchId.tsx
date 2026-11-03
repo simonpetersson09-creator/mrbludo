@@ -43,7 +43,7 @@ export const Route = createFileRoute("/_authenticated/online/$matchId")({
 const ROLL_MS = 1150;
 const COLOR_VAR = ["var(--ludo-red)", "var(--ludo-green)", "var(--ludo-yellow)", "var(--ludo-blue)"];
 
-interface MatchRow { id: string; code: string; status: string; is_private: boolean; max_players: number; host_id: string; state: unknown; version: number; turn_started_at: string | null }
+interface MatchRow { id: string; code: string; status: string; is_private: boolean; max_players: number; host_id: string; state: unknown; version: number; turn_started_at: string | null; variant?: string }
 interface SeatRow { user_id: string; seat: number; display_name: string; avatar: string; country: string; last_seen: string }
 
 function OnlineMatchPage() {
@@ -327,7 +327,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
     <main className="app-screen">
       <div className="home-stack">
         <h1 className="brand-title text-3xl">{t("waitingRoom")}</h1>
-        <p className="text-sm text-muted-foreground">{match.is_private ? t("privateMatch") : t("quickMatch")} · {t("playersCount", { n: seats.length, max: match.max_players })}</p>
+        <p className="text-sm text-muted-foreground">{match.is_private ? t("privateMatch") : t("quickMatch")} · {t(match.variant === "fia" ? "modeFia" : "modeClassic")} · {t("playersCount", { n: seats.length, max: match.max_players })}</p>
         <button className="mt-3 flex items-center justify-center gap-2 rounded-[10px] border border-gold bg-card py-3" onClick={() => { navigator.clipboard?.writeText(match.code); toast.success(t("codeCopied")); }}>
           <span className="text-xs text-muted-foreground">{t("matchCode")}</span>
           <span className="font-display text-2xl font-bold tracking-[0.3em] text-gold">{match.code}</span>

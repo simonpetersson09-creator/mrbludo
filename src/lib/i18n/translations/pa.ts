@@ -27,6 +27,11 @@ export const pa: Record<TranslationKey, string> = {
   human: "ਇਨਸਾਨ",
   computerColor: "ਕੰਪਿਊਟਰ {color}",
   startMatch: "ਮੈਚ ਸ਼ੁਰੂ ਕਰੋ",
+  gameMode: "ਖੇਡ ਮੋਡ",
+  modeClassic: "ਕਲਾਸਿਕ ਲੂਡੋ",
+  modeFia: "ਸਵੀਡਿਸ਼ ਫ਼ੀਆ",
+  modeClassicRules: "6 'ਤੇ ਬਾਹਰ · 6 'ਤੇ ਇੱਕ ਹੋਰ ਵਾਰੀ · ਲਗਾਤਾਰ ਤਿੰਨ 6 'ਤੇ ਵਾਰੀ ਖਤਮ · ਸ਼ੁਰੂਆਤੀ ਖਾਨੇ ਸੁਰੱਖਿਅਤ · ਘਰ ਲਈ ਸਹੀ ਅੰਕ।",
+  modeFiaRules: "1 ਜਾਂ 6 'ਤੇ ਬਾਹਰ · 6 'ਤੇ ਦੋ ਗੋਟੀਆਂ ਬਾਹਰ · 6 'ਤੇ ਇੱਕ ਹੋਰ ਵਾਰੀ · ਕੋਈ ਸੁਰੱਖਿਅਤ ਖਾਨਾ ਨਹੀਂ · ਆਪਣੀ ਗੋਟੀ ਪਾਰ ਨਹੀਂ ਕਰ ਸਕਦੇ · ਵੱਧ ਅੰਕ 'ਤੇ ਘਰ ਤੋਂ ਵਾਪਸ।",
 
   colorRed: "ਲਾਲ",
   colorGreen: "ਹਰਾ",

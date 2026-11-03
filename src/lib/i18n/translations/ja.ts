@@ -27,6 +27,11 @@ export const ja: Record<TranslationKey, string> = {
   human: "人間",
   computerColor: "コンピューター（{color}）",
   startMatch: "対局を開始",
+  gameMode: "ゲームモード",
+  modeClassic: "クラシック・ルード",
+  modeFia: "スウェーデン式フィア",
+  modeClassicRules: "6で出発 · 6でもう一回 · 6が3回連続でターン終了 · スタートマスは安全 · ゴールはぴったりで。",
+  modeFiaRules: "1か6で出発 · 6なら2コマ出せる · 6でもう一回 · 安全マスなし · 自分のコマは追い越せない · 出目が多すぎるとゴールから戻る。",
 
   colorRed: "赤",
   colorGreen: "緑",

@@ -1,4 +1,4 @@
-import { GOAL, LAST_TRACK, YARD, absSquare, isSafeSquare, legalMoves, targetOf, type GameState } from "./engine";
+import { GOAL, LAST_TRACK, YARD, absSquare, isSafeSquare as safeIn, legalMoves, targetOf, variantOf, type GameState } from "./engine";
 
 /** Squares (abs) an opponent could reach with one roll of 1..6. */
 function threatened(state: GameState, abs: number): boolean {
@@ -23,11 +23,13 @@ export function chooseMove(state: GameState, rng: () => number = Math.random): n
   const me = state.current;
   const color = state.players[me].color;
   const roll = state.dice!;
+  const variant = variantOf(state);
+  const isSafeSquare = (abs: number) => safeIn(abs, variant);
   let best = moves[0];
   let bestScore = -Infinity;
   for (const i of moves) {
     const from = state.pieces[me][i];
-    const to = targetOf(from, roll)!;
+    const to = targetOf(from, roll, variant)!;
     let score = 0;
     const abs = absSquare(color, to);
     if (to === GOAL) score += 60;

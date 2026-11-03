@@ -27,6 +27,11 @@ export const fr: Record<TranslationKey, string> = {
   human: "Humain",
   computerColor: "Ordinateur {color}",
   startMatch: "Lancer la partie",
+  gameMode: "Mode de jeu",
+  modeClassic: "Ludo classique",
+  modeFia: "Fia suédois",
+  modeClassicRules: "Sortie sur 6 · un 6 donne un autre lancer · trois 6 de suite terminent le tour · cases de départ protégées · lancer exact pour finir.",
+  modeFiaRules: "Sortie sur 1 ou 6 · un 6 sort deux pions · un 6 donne un autre lancer · aucune case protégée · impossible de dépasser ses pions · un lancer trop fort rebondit depuis l'arrivée.",
 
   colorRed: "Rouge",
   colorGreen: "Vert",

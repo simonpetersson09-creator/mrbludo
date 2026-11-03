@@ -1,4 +1,4 @@
-import { targetOf, type GameState } from "./engine";
+import { targetOf, variantOf, type GameState } from "./engine";
 import { pieceCenter } from "./board";
 
 /** Presentation only: use the engine's exact targets without applying a move. */
@@ -9,7 +9,7 @@ export function movePreviews(state: GameState, legal: number[]) {
   return legal.flatMap((piece) => {
     const progress = state.pieces[state.current]?.[piece];
     if (progress == null) return [];
-    const target = targetOf(progress, state.dice ?? 0);
+    const target = targetOf(progress, state.dice ?? 0, variantOf(state));
     if (target == null) return [];
     const [x, y] = pieceCenter(player.color, target, piece);
     const key = `${x},${y}`;

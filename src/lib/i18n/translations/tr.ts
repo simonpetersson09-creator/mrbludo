@@ -27,6 +27,11 @@ export const tr: Record<TranslationKey, string> = {
   human: "İnsan",
   computerColor: "Bilgisayar {color}",
   startMatch: "Maçı başlat",
+  gameMode: "Oyun modu",
+  modeClassic: "Klasik Ludo",
+  modeFia: "İsveç Fia",
+  modeClassicRules: "6 ile çıkış · 6 yeni zar hakkı verir · üst üste üç 6 turu bitirir · başlangıç kareleri güvenlidir · bitirmek için tam zar.",
+  modeFiaRules: "1 veya 6 ile çıkış · 6 iki taş çıkarır · 6 yeni zar hakkı verir · güvenli kare yok · kendi taşlarını geçemezsin · fazla zar hedeften geri seker.",
 
   colorRed: "Kırmızı",
   colorGreen: "Yeşil",

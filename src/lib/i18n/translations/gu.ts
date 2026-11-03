@@ -27,6 +27,11 @@ export const gu: Record<TranslationKey, string> = {
   human: "માણસ",
   computerColor: "કમ્પ્યુટર {color}",
   startMatch: "મેચ શરૂ કરો",
+  gameMode: "ગેમ મોડ",
+  modeClassic: "ક્લાસિક લૂડો",
+  modeFia: "સ્વીડિશ ફિયા",
+  modeClassicRules: "6 પર બહાર · 6 પર ફરી ચાલ · સતત ત્રણ 6 પર વારો પૂરો · શરૂઆતના ખાના સુરક્ષિત · ઘર માટે ચોક્કસ અંક.",
+  modeFiaRules: "1 અથવા 6 પર બહાર · 6 પર બે સોગઠી બહાર · 6 પર ફરી ચાલ · કોઈ સુરક્ષિત ખાનું નથી · પોતાની સોગઠી ઓળંગી ન શકાય · વધારે અંક ઘરથી પાછા ફરે.",
 
   colorRed: "લાલ",
   colorGreen: "લીલો",
