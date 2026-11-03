@@ -50,7 +50,9 @@ describe("useDieColor", () => {
       expect(result.current).toBe("green");
     } finally {
       vi.useRealTimers();
-    }
+      }
+  });
+
   it("does not restart the wait when the same position is re-fetched", async () => {
     vi.useFakeTimers();
     try {
