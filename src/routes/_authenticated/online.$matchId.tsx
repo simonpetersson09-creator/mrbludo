@@ -13,6 +13,7 @@ import { LudoBoard } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
+import { RollLabel } from "@/components/ludo/RollLabel";
 import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, startMatch } from "@/lib/online/online.functions";
 import { useAvatarImages } from "@/lib/ludo/avatar";
