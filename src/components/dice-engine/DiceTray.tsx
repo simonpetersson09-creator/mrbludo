@@ -28,7 +28,7 @@ export interface DiceTrayProps {
   /** Optional hold-ring tint (any CSS colour). */
   holdColor?: string | undefined;
   skin?: DiceLook | undefined;
-  entryFrom?: "left" | "right";
+  entryFrom?: "left" | "right" | "center";
 }
 
 function DiceTrayImpl({
@@ -74,7 +74,9 @@ function DiceTrayImpl({
   );
   const screenRight = useMemo<[number, number, number]>(
     () => {
-      const direction = entryFrom === "left" ? -1 : 1;
+      // A DOM-level flight can carry the whole canvas across the screen;
+      // keep its internal tumble centered rather than clipping a second flight.
+      const direction = entryFrom === "center" ? 0 : entryFrom === "left" ? -1 : 1;
       return [direction * Math.cos(cameraAzimuth), 0, -direction * Math.sin(cameraAzimuth)];
     },
     [cameraAzimuth, entryFrom],

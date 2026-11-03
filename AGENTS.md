@@ -14,6 +14,7 @@
 - Legal destination overlays use engine `targetOf` and board `pieceCenter`, invoke the same piece action as piece taps, and animate visual waypoints without splitting authoritative moves; die tint and entry direction are presentation props only.
 - Ludo rules live in `src/lib/ludo/engine.ts` as pure functions (no React/DOM/network) so they can run on a server later; rendering only reads state.
 - `src/components/dice-engine/` is copied read-only-sourced from Mr. B Yatzy; keep it presentation-only and never re-link it to Yatzy resources.
+- Vite strips preview `data-tsd-source` attributes only from dice-engine modules because Three.js objects cannot accept DOM source labels during updates.
 - All browser storage keys use the `mrb-ludo:v1:` namespace to stay isolated from Yatzy.
 - `noUncheckedIndexedAccess` is off: the board/engine index fixed-size arrays heavily.
 - Online play is server-authoritative: shared `src/lib/online/online-actions.ts` handlers apply `match-logic.ts` and optimistic version writes; authenticated Start functions and the native API call those same handlers to avoid divergent rules.
