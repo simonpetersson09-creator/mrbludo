@@ -133,12 +133,18 @@ function OnlineMatchPage() {
 
   // Haptics for turn handover and win (same events as Yatzy's TurnTransition / success pulse).
   const prevTurn = useRef(-1);
+  const [turnBanner, setTurnBanner] = useState(false);
   useEffect(() => {
     if (!state || !userId) return;
     const mine = state.players.findIndex((p) => p.id === userId);
     if (state.phase === "finished") { if (prevTurn.current >= 0 && state.winner === mine) void playSuccessHaptic(); prevTurn.current = -2; return; }
-    if (prevTurn.current >= 0 && prevTurn.current !== state.current && state.current === mine) void playTurnHaptic();
+    const becameMine = prevTurn.current >= 0 && prevTurn.current !== state.current && state.current === mine;
     prevTurn.current = state.current;
+    if (!becameMine) return;
+    void playTurnHaptic();
+    setTurnBanner(true);
+    const tm = window.setTimeout(() => setTurnBanner(false), 1500);
+    return () => window.clearTimeout(tm);
   }, [state?.current, state?.phase, userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const send = useCallback(async (action: { kind: "roll" } | { kind: "move"; piece: number }) => {
@@ -193,7 +199,7 @@ function OnlineMatchPage() {
           const s = seatOf(p.id);
           const away = s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited;
           return (
-            <div key={p.id} className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "border-gold bg-card" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}>
+            <div key={p.id} className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "game-player-active" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`} style={{ "--pc": COLOR_VAR[p.color] } as React.CSSProperties}>
               <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
               {p.isBot ? <span className="shrink-0 text-sm">🤖</span> : <PlayerAvatar emoji={s?.avatar ?? "🎲"} image={pics[s?.user_id ?? ""]} className="h-5 w-5 text-xs" />}
               <span className="game-player-name font-semibold">{p.name}</span>
@@ -241,6 +247,12 @@ function OnlineMatchPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {turnBanner && (
+        <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[state.players[mySeat]?.color ?? 0] } as React.CSSProperties}>
+          <span className="font-display text-2xl font-bold" style={{ color: COLOR_VAR[state.players[mySeat]?.color ?? 0] }}>{t("yourTurn")}</span>
+        </div>
+      )}
 
       {state.phase === "finished" && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm">

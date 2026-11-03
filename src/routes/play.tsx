@@ -7,7 +7,7 @@ import {
 import { LudoBoard } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
-import { applyMove, applyRoll, forfeit, legalMoves, rollDie, absSquare, COLOR_KEYS, type GameState } from "@/lib/ludo/engine";
+import { applyMove, applyRoll, forfeit, legalMoves, rollDie, absSquare, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
 import { chooseMove } from "@/lib/ludo/ai";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { pieceCenter } from "@/lib/ludo/board";
@@ -96,10 +96,16 @@ function PlayPage() {
 
   // "Your turn" pulse when control returns to a human player (Yatzy TurnTransition)
   const prevCurrent = useRef(-1);
+  const [turnBanner, setTurnBanner] = useState<Color | null>(null);
   useEffect(() => {
     if (!state || state.phase === "finished") return;
-    if (prevCurrent.current !== -1 && prevCurrent.current !== state.current && !state.players[state.current].isBot) void playTurnHaptic();
+    const becameHuman = prevCurrent.current !== -1 && prevCurrent.current !== state.current && !state.players[state.current].isBot;
     prevCurrent.current = state.current;
+    if (!becameHuman) return;
+    void playTurnHaptic();
+    setTurnBanner(state.players[state.current].color);
+    const tm = window.setTimeout(() => setTurnBanner(null), 1500);
+    return () => window.clearTimeout(tm);
   }, [state?.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Stats on finish (human player 0 is the device owner)
@@ -161,7 +167,8 @@ function PlayPage() {
         {state.players.map((p, i) => (
           <div
             key={p.id}
-            className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "border-gold bg-card" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}
+            className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "game-player-active" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}
+            style={{ "--pc": COLOR_VAR[p.color] } as React.CSSProperties}
           >
             <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
             <span className="game-player-name font-semibold">{p.name}</span>
@@ -221,6 +228,12 @@ function PlayPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {turnBanner != null && (
+        <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[turnBanner] } as React.CSSProperties}>
+          <span className="font-display text-2xl font-bold" style={{ color: COLOR_VAR[turnBanner] }}>{t("yourTurn")}</span>
+        </div>
+      )}
 
       {state.phase === "finished" && <ResultOverlay state={state} onAgain={() => navigate({ to: "/setup" })} onHome={() => navigate({ to: "/" })} />}
     </main>

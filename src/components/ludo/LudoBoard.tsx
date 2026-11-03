@@ -93,10 +93,12 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
       {([0, 1, 2, 3] as Color[]).map((c) => {
         const [x, y] = YARD_ORIGIN[c];
         const active = seatColors.has(c);
+        const isTurn = state.phase !== "finished" && state.players[state.current]?.color === c;
         return (
           <g key={c} opacity={active ? 1 : 0.35}>
             <rect x={x} y={y} width="6" height="6" fill={BOARD_FILL[c]} />
-            <rect x={x + 0.8} y={y + 0.8} width="4.4" height="4.4" rx="0.32" fill="var(--board)" stroke="var(--board-base-line)" strokeWidth="0.035" />
+            {isTurn && <rect x={x} y={y} width="6" height="6" fill={BOARD_FILL[c]} className="base-turn-glow" />}
+            <rect x={x + 0.8} y={y + 0.8} width="4.4" height="4.4" rx="0.32" fill="var(--board)" stroke={isTurn ? BOARD_FILL[c] : "var(--board-base-line)"} strokeWidth={isTurn ? 0.07 : 0.035} />
             {[[1.5, 1.5], [3.5, 1.5], [1.5, 3.5], [3.5, 3.5]].map(([dx, dy], i) => (
               <circle key={i} cx={x + dx + 0.5} cy={y + dy + 0.5} r="0.55" fill={BOARD_FILL[c]} fillOpacity="0.12" stroke={BOARD_FILL[c]} strokeOpacity="0.6" strokeWidth="0.035" />
             ))}
