@@ -113,7 +113,6 @@ export const bn: Record<TranslationKey, string> = {
   quickMatch: "দ্রুত ম্যাচ",
   matchCode: "ম্যাচ কোড",
   friends: "বন্ধু",
-  leaderboard: "লিডারবোর্ড",
   profile: "প্রোফাইল",
   admin: "অ্যাডমিন",
   signOut: "লগ আউট",

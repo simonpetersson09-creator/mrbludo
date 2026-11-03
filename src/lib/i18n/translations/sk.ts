@@ -104,7 +104,6 @@ export const sk: Record<TranslationKey, string> = {
   quickMatch: "Rýchla hra",
   matchCode: "Kód hry",
   friends: "Priatelia",
-  leaderboard: "Rebríček",
   profile: "Profil",
   admin: "Správa",
   signOut: "Odhlásiť sa",

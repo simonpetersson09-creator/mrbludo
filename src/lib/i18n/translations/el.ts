@@ -104,7 +104,6 @@ export const el: Record<TranslationKey, string> = {
   quickMatch: "Γρήγορο παιχνίδι",
   matchCode: "Κωδικός παιχνιδιού",
   friends: "Φίλοι",
-  leaderboard: "Κατάταξη",
   profile: "Προφίλ",
   admin: "Διαχείριση",
   signOut: "Αποσύνδεση",

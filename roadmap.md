@@ -1,0 +1,9 @@
+# Roadmap
+- [x] Remove leaderboard from Play with friends page
+- [x] Quick play search duration = Yatzy (15 s, verified 17 s incl. start)
+- [x] Language popover placement = Yatzy
+- [x] Bot speeds + haptics verified (only own actions vibrate)
+- [ ] Native server direct to backend like Yatzy — waiting on user decision (requires moving game server logic)
+- [x] Game buttons Yatzy design
+- [x] Die background blends with page
+- [x] Player bar + board centered lower, safe areas top/bottom

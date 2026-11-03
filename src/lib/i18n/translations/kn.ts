@@ -113,7 +113,6 @@ export const kn: Record<TranslationKey, string> = {
   quickMatch: "ತ್ವರಿತ ಪಂದ್ಯ",
   matchCode: "ಪಂದ್ಯ ಕೋಡ್",
   friends: "ಸ್ನೇಹಿತರು",
-  leaderboard: "ಲీಡರ್‌ಬೋರ್ಡ್",
   profile: "ಪ್ರೊಫೈಲ್",
   admin: "ಅಡ್ಮಿನ್",
   signOut: "ಲಾಗ್ ಔಟ್",

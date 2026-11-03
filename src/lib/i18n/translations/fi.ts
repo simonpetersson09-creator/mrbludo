@@ -104,7 +104,6 @@ export const fi: Record<TranslationKey, string> = {
   quickMatch: "Pikapeli",
   matchCode: "Pelikoodi",
   friends: "Kaverit",
-  leaderboard: "Tulostaulukko",
   profile: "Profiili",
   admin: "Ylläpito",
   signOut: "Kirjaudu ulos",

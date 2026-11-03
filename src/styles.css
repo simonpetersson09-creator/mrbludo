@@ -183,13 +183,12 @@
 @media (prefers-reduced-motion: reduce) { .brand-logo { animation: none; } }
 
 .app-screen { min-height: 100dvh; padding: calc(16px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
-.game-screen { height: var(--app-dvh, 100dvh); overflow: hidden; display: flex; flex-direction: column; padding: calc(8px + env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); gap: 8px; }
+.game-screen { height: var(--app-dvh, 100dvh); overflow: hidden; display: flex; flex-direction: column; padding: calc(28px + env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); gap: 8px; }
 @media (orientation: landscape) and (max-height: 540px) {
   .game-screen { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 40%); grid-template-rows: auto minmax(0, 1fr) auto; }
-  .game-screen > :nth-child(1) { grid-column: 1 / -1; }
-  .game-screen > :nth-child(2) { grid-column: 1; grid-row: 2 / 4; }
-  .game-screen > :nth-child(3) { grid-column: 2; grid-row: 2; align-self: end; }
-  .game-screen > :nth-child(4) { grid-column: 2; grid-row: 3; }
+  .game-screen > :nth-child(1) { grid-column: 1; grid-row: 1 / 4; }
+  .game-screen > :nth-child(2) { grid-column: 2; grid-row: 2; align-self: end; }
+  .game-screen > :nth-child(3) { grid-column: 2; grid-row: 3; }
 }
 
 .piece { transition: transform 260ms cubic-bezier(.3,.8,.4,1); }
@@ -219,3 +218,32 @@
   .quick-search-icon { width: 32px; height: 32px; }
   .quick-search-icon svg { width: 24px; height: 24px; }
 }
+
+/* In-game controls ported from Yatzy's GamePage: round gold Kasta + small Hem/Ge upp pills. */
+.game-roll-btn {
+  width: 88px; height: 88px; border-radius: 9999px; font-weight: 700; font-size: 16px; letter-spacing: .025em;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(to bottom, var(--primary), var(--game-gold-dark)); color: var(--primary-foreground);
+  box-shadow: 0 8px 32px -4px color-mix(in oklab, var(--game-gold) 45%, transparent), 0 4px 16px -2px color-mix(in oklab, var(--background) 60%, transparent);
+  transition: background-color .2s, transform .1s; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.game-roll-btn:active { transform: scale(.94); }
+.game-roll-btn:disabled { background: var(--secondary); color: var(--muted-foreground); box-shadow: none; }
+.kasta-pulse { animation: kasta-pulse-shadow 2.4s ease-in-out infinite; }
+@keyframes kasta-pulse-shadow {
+  0%, 100% { box-shadow: 0 8px 32px -4px color-mix(in oklab, var(--game-gold) 45%, transparent), 0 4px 16px -2px color-mix(in oklab, var(--background) 60%, transparent); }
+  50% { box-shadow: 0 8px 40px 0 color-mix(in oklab, var(--game-gold) 70%, transparent), 0 4px 16px -2px color-mix(in oklab, var(--background) 60%, transparent); }
+}
+.game-nav-btn {
+  display: inline-flex; align-items: center; justify-content: center; padding: 0 8px; min-width: 3.2rem; min-height: 32px;
+  border-radius: 8px; font-size: 10px; font-weight: 500; white-space: nowrap;
+  color: color-mix(in oklab, var(--primary) 85%, transparent);
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  border: 1px solid color-mix(in oklab, var(--primary) 25%, transparent);
+  box-shadow: 0 2px 8px -2px color-mix(in oklab, var(--background) 60%, transparent);
+  transition: background-color .2s; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.game-nav-btn:active { background: color-mix(in oklab, var(--primary) 20%, transparent); }
+.game-nav-btn-danger { color: color-mix(in oklab, var(--destructive) 85%, transparent); background: color-mix(in oklab, var(--destructive) 10%, transparent); border-color: color-mix(in oklab, var(--destructive) 30%, transparent); }
+.game-nav-btn-danger:active { background: color-mix(in oklab, var(--destructive) 20%, transparent); }
+.game-nav-btn:disabled { opacity: .4; }

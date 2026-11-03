@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ChevronRight, Crown, KeyRound, Loader2, ScanLine, Send, Trophy, Users } from "lucide-react";
+import { ArrowLeft, ChevronRight, Crown, KeyRound, Loader2, ScanLine, Send, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/auth/client";
 import { createMatch, getMe, joinByCode, listFriends, respondInvite } from "@/lib/online/online.functions";
@@ -154,7 +154,6 @@ function OnlineLobby() {
         </div>
 
         <div className="grid grid-cols-1 gap-[7px]">
-          <Link to="/leaderboard" className="home-action home-action-ghost"><Trophy size={16} /> {t("leaderboard")}</Link>
           {me?.isAdmin && <Link to="/admin" className="home-action home-action-ghost"><Crown size={16} /> {t("admin")}</Link>}
         </div>
       </div>

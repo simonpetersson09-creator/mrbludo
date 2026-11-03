@@ -27,7 +27,6 @@ function HomePage() {
   const { t, lang } = useTranslation();
   const [resume, setResume] = useState<{ myTurn: boolean; names: string } | null>(null);
   const [showLangs, setShowLangs] = useState(false);
-  const [langDown, setLangDown] = useState(false);
   const langBtnRef = useRef<HTMLButtonElement>(null);
   const langPopRef = useRef<HTMLDivElement>(null);
 
@@ -49,13 +48,7 @@ function HomePage() {
     return () => document.removeEventListener("pointerdown", onDown);
   }, [showLangs]);
 
-  const toggleLangs = () => {
-    if (!showLangs) {
-      const rect = langBtnRef.current?.getBoundingClientRect();
-      if (rect) setLangDown(rect.top < 280);
-    }
-    setShowLangs((v) => !v);
-  };
+  const toggleLangs = () => setShowLangs((v) => !v);
 
   const [showQuick, setShowQuick] = useState(false);
   const [search, setSearch] = useState<number | null>(null);
@@ -120,11 +113,33 @@ function HomePage() {
         <Link to="/stats" className="home-action font-display"><BarChart3 size={16} /><span>{t("stats")}</span></Link>
       </div>
       <div className="home-round-row">
-        <div className="home-round-item">
+        <div className="home-round-item relative">
           <button ref={langBtnRef} type="button" className="home-round-action" aria-label={t("languageLabel")} aria-expanded={showLangs} onClick={toggleLangs}>
             <Globe className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
           <span className="home-round-label">{t("languageLabel")}</span>
+          {showLangs && (
+            <div
+              ref={langPopRef}
+              role="menu"
+              className="absolute top-full left-1/2 z-50 mt-2 max-h-48 w-44 -translate-x-1/2 overflow-y-auto rounded-2xl border border-border/60 bg-popover py-1.5 shadow-lg [&::-webkit-scrollbar]:hidden"
+              style={{ overscrollBehaviorY: "contain", scrollbarWidth: "none" }}
+            >
+              {LANGUAGES.map((l) => (
+                <button
+                  key={l.code}
+                  type="button"
+                  role="menuitem"
+                  className={`flex w-full items-center gap-2.5 px-3 py-2 text-sm transition-colors ${l.code === lang ? "bg-primary/15 font-semibold text-primary" : "text-popover-foreground hover:bg-secondary/60"}`}
+                  onClick={() => { setLanguage(l.code); setShowLangs(false); }}
+                >
+                  <span className="text-base" aria-hidden="true">{l.flag}</span>
+                  <span className="min-w-0 flex-1 truncate text-left">{l.label}</span>
+                  {l.code === lang && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <Link to="/settings" className="home-round-item">
           <span className="home-round-action"><Settings className="h-4 w-4 sm:h-5 sm:w-5" /></span>
@@ -134,23 +149,6 @@ function HomePage() {
           <span className="home-round-action"><Users className="h-4 w-4 sm:h-5 sm:w-5" /></span>
           <span className="home-round-label">{t("friends")}</span>
         </Link>
-        {showLangs && (
-          <div ref={langPopRef} className={`home-round-pop${langDown ? " home-round-pop-down" : ""}`} role="menu">
-            {LANGUAGES.map((l) => (
-              <button
-                key={l.code}
-                type="button"
-                role="menuitem"
-                className={`home-round-pop-item${l.code === lang ? " home-round-pop-item-active" : ""}`}
-                onClick={() => { setLanguage(l.code); setShowLangs(false); }}
-              >
-                <span aria-hidden="true">{l.flag}</span>
-                <span className="min-w-0 flex-1 truncate text-left">{l.label}</span>
-                {l.code === lang && <Check size={13} className="shrink-0" />}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
       </div>
       <HomeStats />

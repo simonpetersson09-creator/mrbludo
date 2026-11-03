@@ -113,7 +113,6 @@ export const vi: Record<TranslationKey, string> = {
   quickMatch: "Đấu nhanh",
   matchCode: "Mã trận",
   friends: "Bạn bè",
-  leaderboard: "Bảng xếp hạng",
   profile: "Hồ sơ",
   admin: "Quản trị",
   signOut: "Đăng xuất",

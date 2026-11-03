@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Check, Copy, Dice5, Flag, Home, Play, Share2, UserPlus, WifiOff } from "lucide-react";
+import { Check, Copy, Play, Share2, UserPlus, WifiOff } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { matchQrValue } from "@/lib/online/match-code";
 import { toast } from "sonner";
@@ -119,12 +119,14 @@ function OnlineMatchPage() {
     if (match.version <= animatedVersion.current) return;
     animatedVersion.current = match.version;
     const ev = state.lastEvent;
-    if (ev?.kind === "moved") void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
+    // Like Yatzy: only my own actions vibrate (opponents/bots don't buzz my phone).
+    const mineEv = !!ev && "player" in ev && state.players[ev.player]?.id === userId;
+    if (ev?.kind === "moved" && mineEv) void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
     if (ev?.kind !== "rolled") return;
     setFace(ev.value as DiceValue);
     const remaining = Math.max(350, ROLL_MS - (Date.now() - rollStart.current));
     setRolling(true);
-    const t = window.setTimeout(() => { setRolling(false); void playDiceLandHaptic(); }, rollStart.current ? remaining : ROLL_MS);
+    const t = window.setTimeout(() => { setRolling(false); if (mineEv) void playDiceLandHaptic(); }, rollStart.current ? remaining : ROLL_MS);
     rollStart.current = 0;
     return () => window.clearTimeout(t);
   }, [match?.version]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -184,6 +186,8 @@ function OnlineMatchPage() {
 
   return (
     <main className="game-screen">
+      <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
+       <div className="flex flex-col gap-2" style={{ width: "min(100cqw, calc(100cqh - 34px))" }}>
       <div className="flex gap-1.5">
         {state.players.map((p, i) => {
           const s = seatOf(p.id);
@@ -199,10 +203,10 @@ function OnlineMatchPage() {
         })}
       </div>
 
-      <div className="flex min-h-0 flex-1 items-start justify-center [container-type:size]">
-        <div className="h-[min(100cqw,100cqh)] w-[min(100cqw,100cqh)] overflow-hidden rounded-xl shadow-2xl">
+        <div className="aspect-square w-full overflow-hidden rounded-xl shadow-2xl">
           <LudoBoard state={state} legal={legal} onPick={(piece) => send({ kind: "move", piece })} captureAt={captureAt} />
         </div>
+       </div>
       </div>
 
       <div className="text-center" aria-live="polite">
@@ -214,13 +218,13 @@ function OnlineMatchPage() {
         <div className="w-[132px] shrink-0">
           <LudoDie value={face} rolling={rolling} onTap={() => send({ kind: "roll" })} disabled={!canRoll} pipColor={COLOR_VAR[me.color]} />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col justify-end gap-[7px]">
-          <button className="home-action home-action-gold" onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
-            <Dice5 size={16} /> {t("roll")}
+        <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-2">
+          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
+            {t("roll")}
           </button>
-          <div className="grid grid-cols-2 gap-[7px]">
-            <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/online" })}><Home size={16} /> {t("home")}</button>
-            <button className="home-action home-action-danger" onClick={() => setConfirmForfeit(true)} disabled={state.phase === "finished" || mySeat < 0 || state.players[mySeat].forfeited}><Flag size={16} /> {t("forfeit")}</button>
+          <div className="flex items-center justify-center gap-2">
+            <button className="game-nav-btn" onClick={() => navigate({ to: "/online" })}>{t("home")}</button>
+            <button className="game-nav-btn game-nav-btn-danger" onClick={() => setConfirmForfeit(true)} disabled={state.phase === "finished" || mySeat < 0 || state.players[mySeat].forfeited}>{t("forfeit")}</button>
           </div>
         </div>
       </div>

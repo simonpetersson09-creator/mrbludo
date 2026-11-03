@@ -113,7 +113,6 @@ export const no: Record<TranslationKey, string> = {
   quickMatch: "Hurtigkamp",
   matchCode: "Kampkode",
   friends: "Venner",
-  leaderboard: "Toppliste",
   profile: "Profil",
   admin: "Admin",
   signOut: "Logg ut",

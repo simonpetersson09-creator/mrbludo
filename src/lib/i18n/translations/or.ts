@@ -113,7 +113,6 @@ export const or: Record<TranslationKey, string> = {
   quickMatch: "ଦ୍ରୁତ ମ୍ୟାଚ୍",
   matchCode: "ମ୍ୟାଚ୍ କୋଡ୍",
   friends: "ବନ୍ଧୁ",
-  leaderboard: "ଲିଡରବୋର୍ଡ",
   profile: "ପ୍ରୋଫାଇଲ୍",
   admin: "ଆଡମିନ୍",
   signOut: "ଲଗ୍ ଆଉଟ୍",

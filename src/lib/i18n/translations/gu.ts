@@ -113,7 +113,6 @@ export const gu: Record<TranslationKey, string> = {
   quickMatch: "ઝડપી મેચ",
   matchCode: "મેચ કોડ",
   friends: "મિત્રો",
-  leaderboard: "લીડરબોર્ડ",
   profile: "પ્રોફાઇલ",
   admin: "એડમિન",
   signOut: "લોગ આઉટ",

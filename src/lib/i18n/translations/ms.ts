@@ -113,7 +113,6 @@ export const ms: Record<TranslationKey, string> = {
   quickMatch: "Perlawanan pantas",
   matchCode: "Kod perlawanan",
   friends: "Rakan",
-  leaderboard: "Carta",
   profile: "Profil",
   admin: "Pentadbir",
   signOut: "Log keluar",

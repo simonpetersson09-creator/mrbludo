@@ -113,7 +113,6 @@ export const ro: Record<TranslationKey, string> = {
   quickMatch: "Meci rapid",
   matchCode: "Cod meci",
   friends: "Prieteni",
-  leaderboard: "Clasament",
   profile: "Profil",
   admin: "Admin",
   signOut: "Deconectează-te",

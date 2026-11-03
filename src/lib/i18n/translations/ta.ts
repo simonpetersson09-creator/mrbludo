@@ -113,7 +113,6 @@ export const ta: Record<TranslationKey, string> = {
   quickMatch: "விரைவு போட்டி",
   matchCode: "போட்டி குறியீடு",
   friends: "நண்பர்கள்",
-  leaderboard: "லீடர்போர்டு",
   profile: "சுயவிவரம்",
   admin: "நிர்வாகி",
   signOut: "வெளியேறு",

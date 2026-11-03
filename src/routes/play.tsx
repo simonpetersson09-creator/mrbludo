@@ -1,6 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Dice5, Flag, Home } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -30,7 +29,9 @@ export const Route = createFileRoute("/play")({
 });
 
 const ROLL_MS = 1150;
-const BOT_DELAY = { slow: 1100, normal: 650, fast: 300 } as const;
+// Bot pacing: pause before each bot action, and how long the bot's die tumbles.
+const BOT_DELAY = { slow: 1400, normal: 700, fast: 250 } as const;
+const BOT_ROLL_MS = { slow: 1150, normal: 850, fast: 500 } as const;
 const COLOR_VAR = ["var(--ludo-red)", "var(--ludo-green)", "var(--ludo-yellow)", "var(--ludo-blue)"];
 const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
@@ -61,28 +62,27 @@ function PlayPage() {
   const doRoll = useCallback(() => {
     if (!state || state.phase !== "roll" || busy.current) return;
     busy.current = true;
+    // Like Yatzy: only the player's own actions vibrate, never the computer's.
+    const human = !state.players[state.current].isBot;
     const value = rollDie();
     setFace(value as DiceValue);
     setRolling(true);
-    void playLightHaptic();
+    if (human) void playLightHaptic();
     window.setTimeout(() => {
       setRolling(false);
-      void playDiceLandHaptic();
+      if (human) void playDiceLandHaptic();
       setState((s) => (s && s.phase === "roll" ? applyRoll(s, value) : s));
       busy.current = false;
-    }, ROLL_MS);
-  }, [state]);
+    }, human ? ROLL_MS : BOT_ROLL_MS[settings.botSpeed]);
+  }, [state, settings.botSpeed]);
 
   const doMove = useCallback((piece: number) => {
-    if (busy.current) return;
-    setState((s) => {
-      if (!s || s.phase !== "move" || !legalMoves(s).includes(piece)) return s;
-      const next = applyMove(s, piece);
-      const ev = next.lastEvent;
-      if (ev?.kind === "moved") void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
-      return next;
-    });
-  }, []);
+    if (busy.current || !state || state.phase !== "move" || !legalMoves(state).includes(piece)) return;
+    const next = applyMove(state, piece);
+    const ev = next.lastEvent;
+    if (ev?.kind === "moved" && !state.players[ev.player].isBot) void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
+    setState(next);
+  }, [state]);
 
   // Bot driver
   useEffect(() => {
@@ -155,6 +155,8 @@ function PlayPage() {
 
   return (
     <main className="game-screen">
+      <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
+       <div className="flex flex-col gap-2" style={{ width: "min(100cqw, calc(100cqh - 34px))" }}>
       <div className="flex gap-1.5">
         {state.players.map((p, i) => (
           <div
@@ -168,10 +170,10 @@ function PlayPage() {
         ))}
       </div>
 
-      <div className="flex min-h-0 flex-1 items-start justify-center [container-type:size]">
-        <div className="h-[min(100cqw,100cqh)] w-[min(100cqw,100cqh)] overflow-hidden rounded-xl shadow-2xl">
+        <div className="aspect-square w-full overflow-hidden rounded-xl shadow-2xl">
           <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} />
         </div>
+       </div>
       </div>
 
       <div className="text-center" aria-live="polite">
@@ -183,17 +185,13 @@ function PlayPage() {
         <div className="w-[132px] shrink-0">
           <LudoDie value={face} rolling={rolling} onTap={doRoll} disabled={!canRoll} pipColor={COLOR_VAR[me.color]} />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col justify-end gap-[7px]">
-          <button className="home-action home-action-gold" onClick={doRoll} disabled={!canRoll}>
-            <Dice5 size={16} /> {t("roll")}
+        <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-2">
+          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={doRoll} disabled={!canRoll}>
+            {t("roll")}
           </button>
-          <div className="grid grid-cols-2 gap-[7px]">
-            <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/" })}>
-              <Home size={16} /> {t("home")}
-            </button>
-            <button className="home-action home-action-danger" onClick={() => setConfirmForfeit(true)} disabled={state.phase === "finished"}>
-              <Flag size={16} /> {t("forfeit")}
-            </button>
+          <div className="flex items-center justify-center gap-2">
+            <button className="game-nav-btn" onClick={() => navigate({ to: "/" })}>{t("home")}</button>
+            <button className="game-nav-btn game-nav-btn-danger" onClick={() => setConfirmForfeit(true)} disabled={state.phase === "finished"}>{t("forfeit")}</button>
           </div>
         </div>
       </div>

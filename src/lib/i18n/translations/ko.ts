@@ -113,7 +113,6 @@ export const ko: Record<TranslationKey, string> = {
   quickMatch: "빠른 대전",
   matchCode: "경기 코드",
   friends: "친구",
-  leaderboard: "순위표",
   profile: "프로필",
   admin: "관리",
   signOut: "로그아웃",

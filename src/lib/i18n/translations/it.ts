@@ -104,7 +104,6 @@ export const it: Record<TranslationKey, string> = {
   quickMatch: "Partita rapida",
   matchCode: "Codice partita",
   friends: "Amici",
-  leaderboard: "Classifica",
   profile: "Profilo",
   admin: "Amministrazione",
   signOut: "Esci",
