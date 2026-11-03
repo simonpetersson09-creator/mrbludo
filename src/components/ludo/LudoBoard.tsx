@@ -1,7 +1,7 @@
 import { memo, useId, useLayoutEffect, useRef } from "react";
 import { Bot, Globe, Trophy } from "lucide-react";
-import { GOAL, type Color, type GameState } from "@/lib/ludo/engine";
-import { HOME_COLUMN, TRACK, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardNestCenter } from "@/lib/ludo/board";
+import { goalOf, startSquare, variantOf, type Color, type GameState } from "@/lib/ludo/engine";
+import { homeColumnOf, TRACK, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardNestCenter } from "@/lib/ludo/board";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 import { movePreviews } from "@/lib/ludo/move-preview";
 import { pieceWaypoints } from "@/lib/ludo/piece-motion";
@@ -55,7 +55,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
     const element = pieceElements.current.get(`${ev.player}-${ev.piece}`);
     if (!element) return;
     const animations: Animation[] = [];
-    const waypoints = pieceWaypoints(player.color, from, ev.to, ev.piece, previous.dice);
+    const waypoints = pieceWaypoints(player.color, from, ev.to, ev.piece, previous.dice, variantOf(state));
     const walk = (waypoints.length - 1) * STEP_MS;
     animations.push(element.animate(waypoints.map(([x, y], index) => ({
       transform: index === waypoints.length - 1 ? element.style.transform : `translate(${x}px, ${y}px)`,
@@ -73,7 +73,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       const vColor = state.players[c.player]?.color;
       const vFrom = previous.pieces[c.player]?.[c.piece];
       if (!victim || vColor == null || vFrom == null) continue;
-      const [x, y] = pieceCenter(vColor, vFrom, c.piece);
+      const [x, y] = pieceCenter(vColor, vFrom, c.piece, variantOf(state));
       const dx = x < 7.5 ? -0.35 : 0.35;
       animations.push(victim.animate([
         { transform: `translate(${x}px, ${y}px)` },
@@ -84,18 +84,21 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
     return () => animations.forEach((a) => a.cancel());
   }, [state]);
 
+  const variant = variantOf(state);
+  const goal = goalOf(variant);
+  const fia = variant === "fia";
   // Group pieces by spot so stacked pieces get a small offset.
   const spots = new Map<string, number>();
   const pieces: { key: string; x: number; y: number; color: Color; seat: number; idx: number; legal: boolean; done: boolean }[] = [];
   state.players.forEach((pl, seat) => {
     if (pl.forfeited) return;
     state.pieces[seat].forEach((pr, idx) => {
-      let [x, y] = pieceCenter(pl.color, pr, idx);
+      let [x, y] = pieceCenter(pl.color, pr, idx, variant);
       const k = `${x.toFixed(2)},${y.toFixed(2)}`;
       const n = spots.get(k) ?? 0;
       spots.set(k, n + 1);
       if (n > 0) { x += (n % 2 ? 0.18 : -0.18); y -= 0.14 * n; }
-      pieces.push({ key: `${seat}-${idx}`, x, y, color: pl.color, seat, idx, done: pr === GOAL, legal: seat === state.current && legal.includes(idx) });
+      pieces.push({ key: `${seat}-${idx}`, x, y, color: pl.color, seat, idx, done: pr === goal, legal: seat === state.current && legal.includes(idx) });
     });
   });
 
@@ -180,7 +183,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       })}
 
       {TRACK.map(([c, r], i) => {
-        const startColor = i % 13 === 0 ? ((i / 13) as Color) : null;
+        const startColor = ([0, 1, 2, 3] as Color[]).find((c) => startSquare(c, variant) === i) ?? null;
         return (
           <g key={i}>
             <rect x={c} y={r} width="1" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
@@ -192,7 +195,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         );
       })}
       {([0, 1, 2, 3] as Color[]).map((c) =>
-        HOME_COLUMN[c].map(([x, y], i) => (
+        homeColumnOf(variant)[c].map(([x, y], i) => (
           <g key={`${c}-${i}`}>
             <rect x={x} y={y} width="1" height="1" fill={BOARD_FILL[c]} stroke="var(--board-grid)" strokeWidth="0.026" />
             <circle cx={x + 0.5} cy={y + 0.5} r="0.37" fill="none" stroke="var(--board-mark)" strokeOpacity="0.45" strokeWidth="0.04" />
@@ -201,6 +204,14 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       )}
 
       {/* Finish: a clear checkered goal with a gold center. */}
+      {fia ? <>
+        {/* Fia: a one-square finish; the 6th lane squares sit around it. */}
+        {[[6, 6], [8, 6], [6, 8], [8, 8]].map(([x, y]) => <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />)}
+        <rect x="7" y="7" width="1" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+        <circle cx="7.5" cy="7.5" r="0.47" fill={`url(#${boardId}-checker)`} stroke="var(--board-ink)" strokeWidth="0.04" />
+        <circle cx="7.5" cy="7.5" r="0.32" fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.05" />
+        <Trophy x={7.36} y={7.36} width={0.28} height={0.28} color="var(--board-gold-ink)" strokeWidth={2.2} />
+      </> : <>
       <rect x="6" y="6" width="3" height="3" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
       <circle cx="7.5" cy="7.5" r="1.22" fill={`url(#${boardId}-checker)`} stroke="var(--board-ink)" strokeWidth="0.05" />
       <circle cx="7.5" cy="7.5" r="0.86" fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.08" />
@@ -209,6 +220,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       <polygon points="7.12,6 7.88,6 7.5,6.26" fill={BOARD_FILL[1]} />
       <polygon points="9,7.12 9,7.88 8.74,7.5" fill={BOARD_FILL[2]} />
       <polygon points="7.12,9 7.88,9 7.5,8.74" fill={BOARD_FILL[3]} />
+      </>}
 
       </g>
 
@@ -276,7 +288,7 @@ export function SeatCardRow({ state, seats, edge }: { state: GameState; seats?: 
     const info = seats?.[seat];
     const kind = info?.kind ?? (pl.isBot ? "bot" : "human");
     const name = info?.name ?? pl.name;
-    const home = state.pieces[seat].filter((p) => p === GOAL).length;
+    const home = state.pieces[seat].filter((p) => p === goalOf(variantOf(state))).length;
     const isTurn = turnColor === c;
     return (
       <div className={`seat-card${isTurn ? " seat-card-turn" : ""}${c === right ? " flex-row-reverse text-right" : ""}`} style={{ opacity: pl.forfeited ? 0.45 : 1, ["--pc" as string]: FILL[c] }}>

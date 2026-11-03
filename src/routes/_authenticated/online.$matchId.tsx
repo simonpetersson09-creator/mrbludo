@@ -12,7 +12,7 @@ import { supabase } from "@/lib/auth/client";
 import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
-import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
+import { goalOf, legalMoves, variantOf, type GameState } from "@/lib/ludo/engine";
 import { RollLabel } from "@/components/ludo/RollLabel";
 import { QuickChat } from "@/components/ludo/QuickChat";
 import { pieceCenter } from "@/lib/ludo/board";
