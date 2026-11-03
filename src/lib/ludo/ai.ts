@@ -1,4 +1,4 @@
-import { YARD, absSquare, canWalkOut, goalOf, lastTrackOf, isSafeSquare as safeIn, legalMoves, targetOf, variantOf, type GameState } from "./engine";
+import { WALK_OUT_TARGET, YARD, absSquare, canWalkOut, goalOf, lastTrackOf, isSafeSquare as safeIn, legalMoves, targetOf, variantOf, type GameState } from "./engine";
 
 /** Squares (abs) an opponent could reach with one roll of 1..6. */
 function threatened(state: GameState, abs: number): boolean {
@@ -69,7 +69,7 @@ export function chooseBotAction(state: GameState, rng: () => number = Math.rando
   const variant = variantOf(state);
   const yardPiece = state.pieces[me].findIndex((p) => p === YARD);
   if (yardPiece < 0 || !canWalkOut(state, yardPiece)) return { piece, walkOut: false };
-  const abs = absSquare(state.players[me].color, 6, variant);
+  const abs = absSquare(state.players[me].color, WALK_OUT_TARGET, variant);
   const knocks = abs != null && state.players.some((op, oi) =>
     oi !== me && !op.forfeited && state.pieces[oi].some((pr) => absSquare(op.color, pr, variant) === abs));
   if (!knocks) return { piece, walkOut: false };

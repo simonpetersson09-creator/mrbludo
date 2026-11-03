@@ -7,9 +7,9 @@ const game = (variant: Variant, colors: Color[]): GameState =>
   createGame(colors.map((color, i) => ({ id: `p${i}`, name: `P${i}`, color, isBot: false })), variant);
 
 describe("Fia bot: one out + six steps", () => {
-  it("walks one piece out when that knocks an opponent on square 6", () => {
+  it("walks one piece out when that knocks an opponent on its sixth square", () => {
     let s = game("fia", [0, 2]);
-    const target = absSquare(0, 6, "fia");
+    const target = absSquare(0, 5, "fia");
     let victim = -1;
     for (let p = 0; p < 40 && victim < 0; p++) if (absSquare(2, p, "fia") === target) victim = p;
     s = { ...s, pieces: [[YARD, YARD, YARD, YARD], [victim, YARD, YARD, YARD]] };
