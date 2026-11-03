@@ -112,6 +112,8 @@ function OnlineMatchPage() {
   }, [matchId, load]);
 
   const state = (match?.state ?? null) as GameState | null;
+  if (typeof window !== "undefined") (window as unknown as { __dbg: unknown }).__dbg =
+    { v: match?.version, auto: (match?.state as MarkedState | undefined)?.auto ?? null, uid: userId, players: state?.players.map((p) => p.id) ?? [] };
 
   // Computer seats (quick play) are played by the server; nudge it quickly on their turn.
   const botTurn = !!state && state.phase !== "finished" && !!state.players[state.current]?.isBot;
@@ -130,8 +132,6 @@ function OnlineMatchPage() {
     const ev = state.lastEvent;
     // Yatzy-style clarity: when the server plays a step for someone who was away, say so.
     const mark = (state as MarkedState).auto;
-    // eslint-disable-next-line no-console
-    console.log("[auto-debug]", JSON.stringify(mark ?? null), "ver", match.version, "shown", autoShown.current, "me", userId);
     if (mark && mark.at !== autoShown.current) {
       autoShown.current = mark.at;
       const who = state.players[mark.seat];
