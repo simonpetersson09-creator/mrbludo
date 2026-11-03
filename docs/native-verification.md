@@ -1,4 +1,6 @@
-# Mr. B Ludo — native readiness, 2 November 2026
+# Mr. B Ludo — native readiness
+
+The current configuration audit is recorded in [native-configuration-audit.md](native-configuration-audit.md). The dated test results below are historical, not a claim that compilation or physical-device verification has since been completed.
 
 ## Implemented
 - Packaged local Vite client in `dist-native`, using the existing TanStack Router tree and actual Ludo screens. Engine, computer opponent, all 40 languages, Inter/Space Grotesk fonts, game imagery and real 3D die ship locally. Capacitor has no remote `server.url`.
@@ -6,7 +8,7 @@
 - Profile/friend-code/statistics display cache and last-online-match shortcut, all Ludo-namespaced; cached data is never authority for roles or leaderboard writes.
 - Automatic anonymous Cloud identity at first launch, existing identity reuse, deduplicated initialization and authenticated server actions. Ordinary players have no registration, Google, email/password or sign-out controls.
 - Separate `/admin-login` password form; admin data still requires a server-controlled role. No administrator was created or role assigned.
-- Separate iOS and Android Capacitor 8 projects, both using the new `com.mrbgames.ludo` application identifier. No Yatzy application identifier, backend, key, signing certificate or production service file was copied. Identifier ownership/reservation in the stores is not verified.
+- Separate iOS and Android Capacitor 8 projects, now using `com.simonpetersson.mrbludo`. iOS signing is prepared for approved team `F43HQMHCAT`, with no credentials in source. No Yatzy application identifier, backend, key, signing certificate or production service file was copied. Identifier ownership/reservation in the stores is not verified.
 - Native-only session client backed by iOS Keychain / Android Keystore plugin, with a Ludo-specific key; no plaintext fallback on storage failure. Web retains the managed preview client. Server token attachment uses the same client as the UI.
 - Native foreground/background and connectivity listeners, auth refresh pause/resume, fresh match reads on return, Android back handling, and 3D canvas wake/context-loss recovery. Home/back never forfeits a match.
 - Safe-area insets on all four edges and compact landscape layout. Android hardware acceleration explicitly enabled, cleartext networking disabled and app backups disabled. All 40 language dictionaries retained.
@@ -21,7 +23,7 @@
 - One player went offline, reconnected and reloaded the same match. A legal forfeit finished the match and both saw the winner. Both profiles retained personal friend codes and finished-match statistics after reload. This was a forfeit completion, not a four-pieces-home completion.
 - Anonymous administrator access denied; successful privileged administrator login is not verified.
 - 35 automated tests passed, including rules, server match logic, language parity, first-launch deduplication/identity preservation, native origin isolation, cached-role safety, match shortcut persistence, opt-in diagnostics privacy and disabled ads/push boundaries.
-- Both platform projects generated and plugin sync succeeded. Native configuration checks verified identifiers, no supplied signing settings, Android acceleration and backup protection.
+- Both platform projects generated and plugin sync succeeded at the earlier verification. Those checks predated the newly approved identifier/team; see the current audit for fresh results.
 - Browser layout at 320×568, 393×706, 844×390, 768×1024 and 1024×768: controls in bounds, no horizontal overflow, live 3D canvas and no page errors. Screenshots inspected. Browser rendering is not proof of native GPU behavior.
 
 ## Yatzy reference and deliberate differences
@@ -68,7 +70,7 @@ iOS on Mac with Xcode installed:
 bun run native:build:ios
 bun run native:open:ios
 ```
-The build command produces an unsigned simulator build. For a real iPhone, choose your own Apple team under Signing & Capabilities in Xcode, select the connected iPhone, and Run. An installable signed IPA requires that account/provisioning; no Yatzy team or certificate may be selected.
+The build command produces an unsigned simulator build. For a real iPhone, verify approved team `F43HQMHCAT` under Signing & Capabilities in Xcode, select the connected iPhone, and Run. An installable signed IPA requires that team's account/provisioning; no private key or certificate is copied from Yatzy.
 
 ## External toolchains and physical tests still required
 - iOS compilation needs a Mac, Xcode (Capacitor 8 requirements), signing/provisioning for device builds and the user's own Apple account. No IPA was produced.

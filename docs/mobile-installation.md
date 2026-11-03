@@ -1,6 +1,6 @@
 # Mr. B Ludo — mobile test installation
 
-No publication, advertisements or push is part of these commands. Run commands from the source checkout root. Both apps are `com.mrbgames.ludo`, version 1.0, build 1; never select a Yatzy signing identity.
+No publication, advertisements or push is part of these commands. Run commands from the source checkout root. Both apps are `com.simonpetersson.mrbludo`, version 1.0, build 1. iOS uses the approved public Apple Team ID `F43HQMHCAT`; no certificates or private keys are stored here. Changing the former identifier creates a distinct installed app; it does not migrate an old test installation's saved identity automatically.
 
 ## Shared prerequisites and offline package
 
@@ -26,7 +26,7 @@ bun run native:sync:android
 bun run native:build:android
 adb devices
 adb install -r android/app/build/outputs/apk/debug/app-debug.apk
-adb shell am start -n com.mrbgames.ludo/.MainActivity
+adb shell am start -n com.simonpetersson.mrbludo/.MainActivity
 ```
 
 The build produces a debug APK signed with your local Android debug key, not a Play Store release. On Windows, the script invokes `gradlew.bat`.
@@ -35,7 +35,7 @@ The build produces a debug APK signed with your local Android debug key, not a P
 
 - Mac with a Capacitor 8-compatible Xcode installation, iOS SDK and command-line tools. Use Xcode 26+ for this test setup; exact Xcode/toolchain compatibility has not been exercised in this Linux environment.
 - Run `sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer`, accept Xcode's license and complete first-launch setup. Swift Package Manager downloads Capacitor 8.6.0; CocoaPods is not used by this project's SPM setup.
-- Connected iPhone with iOS 15+; trust the Mac and enable Developer Mode where required. Add your own Apple account/team in Xcode for device signing; an App Store release is not required for development testing.
+- Connected iPhone with iOS 15+; trust the Mac and enable Developer Mode where required. Add an Apple account authorized for team `F43HQMHCAT` in Xcode. Register the Ludo App ID with Push Notifications capability and obtain its provisioning profile; no App Store release is required for development testing.
 
 ```sh
 bun run native:sync:ios
@@ -43,7 +43,7 @@ bun run native:build:ios
 bun run native:open:ios
 ```
 
-`native:build:ios` attempts an unsigned simulator build, not an installable IPA. In Xcode select target App → Signing & Capabilities → your own team, select the connected iPhone, then Product → Run. Free Apple provisioning may impose device/profile expiry restrictions.
+`native:build:ios` attempts an unsigned simulator build, not an installable IPA. In Xcode verify target App → Signing & Capabilities → team `F43HQMHCAT` and Bundle ID `com.simonpetersson.mrbludo`, select the connected iPhone, then Product → Run. Debug prepares the development APNs environment; Release prepares production. Xcode archive/export must validate the final signed entitlements against the provisioning profile. No registration, permission request or push delivery is implemented by these settings.
 
 After both syncs, `bun run native:verify` checks both platforms' files, versions, plugins and copied package. It does not compile Swift or Java.
 
