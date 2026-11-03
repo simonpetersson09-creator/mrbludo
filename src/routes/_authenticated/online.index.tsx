@@ -96,13 +96,13 @@ function OnlineLobby() {
 
         {resumeId && <Link to="/online/$matchId" params={{ matchId: resumeId }} className="home-action home-action-success">{t("resumeMatch")}</Link>}
 
-        <div className="space-y-4">
+        <div className="space-y-2.5">
           {/* Same two cards as Yatzy's "Spela med vän": create and get a code, or join with a code/QR. */}
-          <div className="space-y-3 rounded-2xl border border-primary/30 bg-primary/10 p-4">
+          <div className="space-y-2 rounded-2xl border border-primary/30 bg-primary/10 p-3">
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/20"><Send className="h-5 w-5 text-primary" /></div>
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/20"><Send className="h-4 w-4 text-primary" /></div>
               <div className="min-w-0">
-                <p className="font-display text-base font-bold">{t("lobbyCreateTitle")}</p>
+                <p className="font-display text-sm font-bold">{t("lobbyCreateTitle")}</p>
                 <p className="text-xs leading-snug text-muted-foreground">{t("lobbyCreateHint")}</p>
               </div>
             </div>
@@ -117,7 +117,7 @@ function OnlineLobby() {
             </div>
             <VariantPicker value={variant} onChange={setVariant} />
             <button disabled={busy} onClick={() => run(() => createMatch({ data: { isPrivate: true, maxPlayers: size, variant } }))}
-              className="w-full rounded-xl bg-primary py-3.5 font-display text-lg font-bold text-primary-foreground shadow-lg transition active:scale-[0.97] disabled:opacity-50">
+              className="w-full rounded-xl bg-primary py-2.5 font-display text-base font-bold text-primary-foreground shadow-lg transition active:scale-[0.97] disabled:opacity-50">
               {busy ? <Loader2 className="mx-auto h-5 w-5 animate-spin" /> : t("createGame")}
             </button>
             <Link to="/friends" className="flex w-full items-center justify-center gap-1.5 text-xs font-semibold text-primary active:opacity-70">
@@ -125,32 +125,32 @@ function OnlineLobby() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 -my-0.5">
             <div className="h-px flex-1 bg-border" />
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("or")}</span>
             <div className="h-px flex-1 bg-border" />
           </div>
 
-          <form className="space-y-3 rounded-2xl border border-gold/30 bg-gold/10 p-4" onSubmit={(e) => { e.preventDefault(); void join(code); }}>
+          <form className="space-y-2 rounded-2xl border border-gold/30 bg-gold/10 p-3" onSubmit={(e) => { e.preventDefault(); void join(code); }}>
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gold/20"><KeyRound className="h-5 w-5 text-gold" /></div>
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gold/20"><KeyRound className="h-4 w-4 text-gold" /></div>
               <div className="min-w-0">
-                <p className="font-display text-base font-bold">{t("lobbyJoinTitle")}</p>
+                <p className="font-display text-sm font-bold">{t("lobbyJoinTitle")}</p>
                 <p className="text-xs leading-snug text-muted-foreground">{t("lobbyJoinHint")}</p>
               </div>
             </div>
             <div className="flex gap-2">
               <input aria-label={t("matchCode")} value={code} maxLength={6} placeholder="ABC123" autoCapitalize="characters"
                 onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
-                className="min-w-0 flex-1 rounded-xl border border-border/50 bg-secondary px-3 py-3 text-center font-display text-xl font-bold uppercase tracking-[0.3em] text-foreground outline-none transition-all placeholder:text-muted-foreground/40 focus:border-gold/60 focus:ring-1 focus:ring-gold/40" />
+                className="min-w-0 flex-1 rounded-xl border border-border/50 bg-secondary px-3 py-2 text-center font-display text-lg font-bold uppercase tracking-[0.3em] text-foreground outline-none transition-all placeholder:text-muted-foreground/40 focus:border-gold/60 focus:ring-1 focus:ring-gold/40" />
               <button type="button" disabled={busy} onClick={() => setScannerOpen(true)}
                 className="flex flex-col items-center justify-center gap-0.5 rounded-xl border border-border/50 bg-secondary px-3 py-2 text-foreground transition active:scale-95 disabled:opacity-50">
-                <ScanLine className="h-5 w-5 text-gold" />
+                <ScanLine className="h-4 w-4 text-gold" />
                 <span className="text-[10px] font-semibold text-muted-foreground">{t("lobbyScanShort")}</span>
               </button>
             </div>
             <button type="submit" disabled={busy || code.length !== 6}
-              className="w-full rounded-xl bg-gold py-3.5 font-display text-lg font-bold text-background shadow-lg transition active:scale-[0.97] disabled:opacity-50">
+              className="w-full rounded-xl bg-gold py-2.5 font-display text-base font-bold text-background shadow-lg transition active:scale-[0.97] disabled:opacity-50">
               {t("join")}
             </button>
           </form>
