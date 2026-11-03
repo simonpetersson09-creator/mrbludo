@@ -136,7 +136,7 @@ function OnlineMatchPage() {
       // A mark from a device that was away when it happened is not worth a late notice.
       if (who && Date.now() - mark.at < 90_000) {
         const mine = who.id === userId;
-        (mine ? toast.info : toast.message)(t(mine ? "autoPlayedMine" : "autoPlayedOther", { name: who.name }));
+        toast.info(t(mine ? "autoPlayedMine" : "autoPlayedOther", { name: who.name }));
       }
     }
     // Like Yatzy: only my own actions vibrate (opponents/bots don't buzz my phone).
