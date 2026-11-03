@@ -226,7 +226,7 @@ function OnlineMatchPage() {
         </div>
         <div className="game-command-area">
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
-            {t("roll")}
+            <RollLabel state={state} canRoll={canRoll} myTurn={myTurn} />
           </button>
           <div className="flex items-center justify-center gap-2">
             <button className="game-nav-btn" onClick={() => navigate({ to: "/online" })}>{t("home")}</button>

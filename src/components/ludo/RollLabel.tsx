@@ -1,6 +1,6 @@
 import { useTranslation } from "@/lib/i18n";
 import type { GameState } from "@/lib/ludo/engine";
-import { COLOR_VAR } from "@/lib/ludo/board";
+const COLOR_VAR = ["var(--ludo-red)", "var(--ludo-green)", "var(--ludo-yellow)", "var(--ludo-blue)"];
 
 /** Yatzy-style Kasta label: "Din tur" + Kasta on your turn, otherwise whose turn with a pulsing color dot. */
 export function RollLabel({ state, canRoll, myTurn }: { state: GameState; canRoll: boolean; myTurn: boolean }) {
