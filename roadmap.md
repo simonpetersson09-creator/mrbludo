@@ -14,3 +14,16 @@
 - [x] Game buttons Yatzy design
 - [x] Die background blends with page
 - [x] Player bar + board centered lower, safe areas top/bottom
+- [ ] Turn bubble diagonal inward with gap
+- [ ] Status text above board black & clearer
+- [ ] Yatzy home-page effects on Ludo home
+- [ ] Smoothness / lag
+- [ ] Language list position
+- [ ] Stats: remove forfeited, "Utslagningar" -> "Utlagda pjäser"
+- [ ] Compress Play with friend page
+- [ ] Fia summary text removed -> "(Svensk variant)"; Spelläge heading centered like player-count heading
+- [ ] Tempo: two levels (normal, fast)
+- [ ] Info.plist proposals (suggestion only)
+- [ ] Friend list layout vs Yatzy
+- [ ] Pre-release check (quick play, friend play, invites, stats, friends, notifications, both modes, translations)
+- [ ] App talks directly to server (native)
