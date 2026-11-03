@@ -18,13 +18,13 @@ const PLIST_PATH = resolve(process.cwd(), 'ios/App/App/Info.plist');
 
 /** key → string value that must be present in Info.plist. */
 const REQUIRED_STRING_KEYS = {
-  GADApplicationIdentifier: 'ca-app-pub-7448540924654868~6494873071',
+  GADApplicationIdentifier: 'ca-app-pub-7448540924654868~5267706252',
   NSCameraUsageDescription:
-    'Kameran används endast för att skanna QR-koder när du ansluter till en väns spel.',
+    "The camera is used only to scan a friend's match QR code.",
   NSPhotoLibraryUsageDescription:
-    'Bildbiblioteket används endast om du vill välja en egen profilbild.',
+    'Your photo library is used only when you choose a profile picture.',
   NSUserTrackingUsageDescription:
-    'Ditt svar används bara för att visa annonser som passar dig bättre. Spelet är gratis tack vare annonserna.',
+    'Allowing this lets Mr. B Ludo show ads that are more relevant to you. The game works the same either way.',
 };
 
 /**

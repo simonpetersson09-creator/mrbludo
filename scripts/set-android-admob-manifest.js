@@ -4,7 +4,7 @@
  * Missing com.google.android.gms.ads.APPLICATION_ID is fatal on Android: the
  * Google Mobile Ads SDK crashes the app at startup.
  *
- * The Android App ID is read from ADMOB_IDS.android.appId in src/lib/admob.ts.
+ * The Android App ID is read from ADMOB_IDS.android.appId in src/lib/ads/admob.ts.
  * While it is still null, Google's official SAMPLE App ID is written so debug
  * builds start. Never ship a release with the sample ID.
  *
@@ -15,7 +15,7 @@ import { existsSync } from 'fs';
 import { resolve } from 'path';
 
 const MANIFEST = resolve(process.cwd(), 'android/app/src/main/AndroidManifest.xml');
-const ADMOB_TS = resolve(process.cwd(), 'src/lib/admob.ts');
+const ADMOB_TS = resolve(process.cwd(), 'src/lib/ads/admob.ts');
 const GOOGLE_SAMPLE_APP_ID = 'ca-app-pub-3940256099942544~3347511713';
 const META = 'com.google.android.gms.ads.APPLICATION_ID';
 
@@ -33,7 +33,7 @@ async function main() {
   let appId = await androidAppId();
   if (!appId) {
     appId = GOOGLE_SAMPLE_APP_ID;
-    console.warn('[Android manifest] WARNING: no Android AdMob App ID set in src/lib/admob.ts.');
+    console.warn('[Android manifest] WARNING: no Android AdMob App ID set in src/lib/ads/admob.ts.');
     console.warn('[Android manifest] Using Google\'s SAMPLE App ID – OK for testing, NOT for release.');
   }
   let xml = await readFile(MANIFEST, 'utf8');
