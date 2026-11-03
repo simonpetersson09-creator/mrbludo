@@ -46,6 +46,7 @@ export interface DiceSceneProps extends DiceConfig {
   holdColor?: string | undefined;
   /** Gold dice reward skin. */
   skin?: DiceLook | undefined;
+  entryFrom?: "left" | "right";
   /** Fired when a die is tapped/clicked. */
   onToggleHold?: (index: number) => void;
   /** Optional className for the wrapping element (full size by default). */
