@@ -81,14 +81,15 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         const total = walk + 360;
         const appear = (i + 0.55) * STEP_MS;
         const shown = Math.min(appear + 140, total - 2);
-        const fade = Math.min(Math.max(appear + 2.2 * STEP_MS, shown + 1), total - 341);
+        const fade = Math.max(shown + 1, Math.min(appear + 2.2 * STEP_MS, total - 341));
+        const gone = Math.max(fade + 1, Math.min(fade + 340, total));
         const a = g.animate([
           { opacity: 0, offset: 0 },
           { opacity: 0, offset: appear / total },
           { opacity: 0.5, offset: shown / total },
           { opacity: 0.4, offset: fade / total },
-          { opacity: 0, offset: Math.min((fade + 340) / total, 1) },
-          { opacity: 0, offset: 1 },
+          { opacity: 0, offset: gone / total },
+          ...(gone < total ? [{ opacity: 0, offset: 1 }] : []),
         ], { duration: total, easing: "ease-in-out" });
         a.onfinish = a.oncancel = () => g.remove();
         animations.push(a);
@@ -153,6 +154,11 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
     });
   });
 
+  // A piece just reached the goal: gold sparkles burst from the center as it lands.
+  const lastEv = state.lastEvent;
+  const celebrate = lastEv?.kind === "moved" && lastEv.reachedGoal && state.players[lastEv.player]
+    ? { color: state.players[lastEv.player]!.color, delay: Math.max(0, Math.min(lastEv.to - lastEv.from, 12)) * STEP_MS }
+    : null;
   const seatByColor = new Map<Color, number>(state.players.map((p, i) => [p.color, i]));
   const turnColor = state.phase !== "finished" ? state.players[state.current]?.color : undefined;
 
@@ -303,6 +309,24 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         <circle key={`cap-${captureAt.join()}-${state.turnCount}`} cx={captureAt[0]} cy={captureAt[1]} r="0.6" fill="none" stroke="var(--destructive)" strokeWidth="0.12" className="capture-flash" style={{ transformOrigin: `${captureAt[0]}px ${captureAt[1]}px` }} />
       )}
 
+      <g ref={trailRef} pointerEvents="none" />
+      {celebrate && (
+        <g key={`goal-${state.turnCount}`} className="goal-burst" pointerEvents="none" style={{ ["--d" as string]: `${celebrate.delay}ms`, ["--bc" as string]: FILL[celebrate.color] }}>
+          <circle className="goal-burst-ring" cx="7.5" cy="7.5" r={fia ? 0.5 : 1.1} fill="none" stroke="var(--game-gold)" strokeWidth="0.09" />
+          <circle className="goal-burst-ring goal-burst-ring-2" cx="7.5" cy="7.5" r={fia ? 0.5 : 1.1} fill="none" stroke="var(--bc)" strokeWidth="0.06" />
+          {Array.from({ length: 14 }, (_, i) => {
+            const a = (i / 14) * Math.PI * 2;
+            const far = (i % 2 ? 1.5 : 2.1) * (fia ? 0.75 : 1);
+            return (
+              <g key={i} transform={`translate(7.5 7.5) rotate(${(a * 180) / Math.PI})`}>
+                <path className="goal-burst-spark" style={{ ["--far" as string]: `${far}px`, ["--i" as string]: i % 3 }}
+                  d="M 0,-0.13 L 0.035,-0.035 L 0.13,0 L 0.035,0.035 L 0,0.13 L -0.035,0.035 L -0.13,0 L -0.035,-0.035 Z"
+                  fill={i % 3 === 0 ? "var(--bc)" : "var(--game-gold)"} />
+              </g>
+            );
+          })}
+        </g>
+      )}
       {pieces.map((p) => (
         <g
           key={p.key}
