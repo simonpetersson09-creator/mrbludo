@@ -50,6 +50,13 @@
       "when": 1793726195958,
       "tag": "0006_friendship_pair_unique",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793726412773,
+      "tag": "0007_ranking_excludes_forfeits_and_profile_columns",
+      "breakpoints": true
     }
   ]
 }
