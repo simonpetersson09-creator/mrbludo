@@ -268,4 +268,8 @@ export const th: Record<TranslationKey, string> = {
   hofMatches: "แมตช์",
   hofEmpty: "สัปดาห์นี้ยังไม่มีใครเล่น",
   topCountriesYearTitle: "10 ประเทศอันดับสูงสุด ปี {year}",
+  quickMessages: "ข้อความด่วน",
+  waitCooldown: "รอ {sec} วิ ก่อนส่งข้อความถัดไป",
+  close: "ปิด",
+  you: "คุณ",
 };

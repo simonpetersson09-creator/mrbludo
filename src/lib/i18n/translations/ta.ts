@@ -268,4 +268,8 @@ export const ta: Record<TranslationKey, string> = {
   hofMatches: "ஆட்டங்கள்",
   hofEmpty: "இந்த வாரம் இதுவரை யாரும் விளையாடவில்லை",
   topCountriesYearTitle: "முதல் 10 நாடுகள் {year}",
+  quickMessages: "விரைவுச் செய்திகள்",
+  waitCooldown: "அடுத்த செய்திக்கு {sec} வினாடிகள் காத்திருங்கள்",
+  close: "மூடு",
+  you: "நீங்கள்",
 };

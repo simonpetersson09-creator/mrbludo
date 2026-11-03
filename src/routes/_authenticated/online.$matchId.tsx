@@ -14,6 +14,7 @@ import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
 import { RollLabel } from "@/components/ludo/RollLabel";
+import { QuickChat } from "@/components/ludo/QuickChat";
 import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, startMatch } from "@/lib/online/online.functions";
 import { useAvatarImages } from "@/lib/ludo/avatar";
@@ -194,24 +195,9 @@ function OnlineMatchPage() {
   return (
     <main className="game-screen">
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
-       <div className={`game-board-stack flex flex-col gap-2 ${state.players.length === 4 ? "game-board-stack-four" : ""}`}>
-      <div className={`game-player-list ${state.players.length === 4 ? "game-player-list-four" : ""}`}>
-        {state.players.map((p, i) => {
-          const s = seatOf(p.id);
-          const away = s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited;
-          return (
-            <div key={p.id} className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "game-player-active" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`} style={{ "--pc": COLOR_VAR[p.color] } as React.CSSProperties}>
-              <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
-              {p.isBot ? <span className="shrink-0 text-sm">🤖</span> : <PlayerAvatar emoji={s?.avatar ?? "🎲"} image={pics[s?.user_id ?? ""]} className="h-5 w-5 text-xs" />}
-              <span className="game-player-name font-semibold">{p.name}</span>
-              <span className="ml-auto shrink-0 text-muted-foreground">{away ? <WifiOff size={11} className="inline" /> : s ? flag(s.country) : ""} {state.pieces[i].filter((x) => x === GOAL).length}/4</span>
-            </div>
-          );
-        })}
-      </div>
-
+       <div className="game-board-stack flex flex-col">
         <div className="aspect-square w-full overflow-hidden rounded-xl shadow-2xl">
-          <LudoBoard state={state} legal={legal} onPick={(piece) => send({ kind: "move", piece })} captureAt={captureAt} />
+          <LudoBoard state={state} legal={legal} onPick={(piece) => send({ kind: "move", piece })} captureAt={captureAt} seats={state.players.map((p) => { const s = seatOf(p.id); return { name: p.name, kind: p.isBot ? "bot" as const : "online" as const, flag: s ? flag(s.country) : undefined, image: s ? pics[s.user_id] : null, emoji: s?.avatar, away: !!s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited }; })} />
         </div>
        </div>
       </div>
@@ -221,11 +207,12 @@ function OnlineMatchPage() {
         <p className="h-4 text-xs text-muted-foreground">{sub || (state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
       </div>
 
-      <div className="game-bottom-controls">
+      <div className="game-bottom-controls game-bottom-controls-chat">
         <div className="game-throw-area">
           <LudoDie value={face} rolling={rolling} onTap={() => send({ kind: "roll" })} disabled={!canRoll} pipColor={COLOR_VAR[me.color]} />
         </div>
         <div className="game-command-area">
+          <QuickChat matchId={matchId} myName={mySeat >= 0 ? state.players[mySeat].name : ""} myColor={mySeat >= 0 ? state.players[mySeat].color : null} />
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
             <RollLabel state={state} canRoll={canRoll} myTurn={myTurn} />
           </button>

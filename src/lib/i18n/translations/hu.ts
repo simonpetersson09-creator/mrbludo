@@ -253,4 +253,8 @@ export const hu: Record<TranslationKey, string> = {
   hofMatches: "meccsek",
   hofEmpty: "Ezen a héten még senki sem játszott",
   topCountriesYearTitle: "Top 10 ország – {year}",
+  quickMessages: "Gyors üzenetek",
+  waitCooldown: "Várj {sec} mp-et a következő üzenetig",
+  close: "Bezárás",
+  you: "Te",
 };

@@ -268,4 +268,8 @@ export const en: Record<TranslationKey, string> = {
   hofMatches: "matches",
   hofEmpty: "Nobody has played yet this week",
   topCountriesYearTitle: "Top 10 countries {year}",
+  quickMessages: "Quick messages",
+  waitCooldown: "Wait {sec}s before the next message",
+  close: "Close",
+  you: "You",
 };

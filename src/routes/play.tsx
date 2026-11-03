@@ -13,6 +13,7 @@ import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic 
 import { pieceCenter } from "@/lib/ludo/board";
 import { clearGame, loadGame, loadSettings, loadStats, saveGame, saveStats } from "@/lib/ludo/storage";
 import { RollLabel } from "@/components/ludo/RollLabel";
+import { useOwnAvatar } from "@/lib/ludo/avatar";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/play")({
@@ -44,6 +45,7 @@ function PlayPage() {
   const [rolling, setRolling] = useState(false);
   const [face, setFace] = useState<DiceValue>(6);
   const [confirmForfeit, setConfirmForfeit] = useState(false);
+  const ownAvatar = useOwnAvatar();
   const busy = useRef(false);
   const statsDone = useRef(false);
   const settings = useMemo(() => loadSettings(), []);
@@ -163,23 +165,9 @@ function PlayPage() {
   return (
     <main className="game-screen">
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
-       <div className={`game-board-stack flex flex-col gap-2 ${state.players.length === 4 ? "game-board-stack-four" : ""}`}>
-       <div className={`game-player-list ${state.players.length === 4 ? "game-player-list-four" : ""}`}>
-        {state.players.map((p, i) => (
-          <div
-            key={p.id}
-            className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "game-player-active" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}
-            style={{ "--pc": COLOR_VAR[p.color] } as React.CSSProperties}
-          >
-            <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
-            <span className="game-player-name font-semibold">{p.name}</span>
-            <span className="ml-auto shrink-0 text-muted-foreground">{p.isBot ? "🤖" : ""}{state.pieces[i].filter((x) => x === 56).length}/4</span>
-          </div>
-        ))}
-      </div>
-
+       <div className="game-board-stack flex flex-col">
         <div className="aspect-square w-full overflow-hidden rounded-xl shadow-2xl">
-          <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} />
+          <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} seats={state.players.map((p) => ({ name: p.name, kind: p.isBot ? "bot" as const : "human" as const, image: p.isBot ? null : ownAvatar }))} />
         </div>
        </div>
       </div>

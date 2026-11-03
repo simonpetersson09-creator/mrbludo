@@ -268,4 +268,8 @@ export const ja: Record<TranslationKey, string> = {
   hofMatches: "対戦数",
   hofEmpty: "今週はまだ誰もプレイしていないよ",
   topCountriesYearTitle: "{year}年 国別トップ10",
+  quickMessages: "定型メッセージ",
+  waitCooldown: "次のメッセージまであと{sec}秒",
+  close: "閉じる",
+  you: "あなた",
 };

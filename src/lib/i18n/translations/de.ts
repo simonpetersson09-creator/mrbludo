@@ -268,4 +268,8 @@ export const de: Record<TranslationKey, string> = {
   hofMatches: "Spiele",
   hofEmpty: "Diese Woche hat noch niemand gespielt",
   topCountriesYearTitle: "Top 10 Länder {year}",
+  quickMessages: "Schnellnachrichten",
+  waitCooldown: "Warte {sec}s bis zur nächsten Nachricht",
+  close: "Schließen",
+  you: "Du",
 };

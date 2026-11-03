@@ -268,4 +268,8 @@ export const ml: Record<TranslationKey, string> = {
   hofMatches: "മത്സരങ്ങൾ",
   hofEmpty: "ഈ ആഴ്ച ഇതുവരെ ആരും കളിച്ചിട്ടില്ല",
   topCountriesYearTitle: "മികച്ച 10 രാജ്യങ്ങൾ {year}",
+  quickMessages: "ദ്രുത സന്ദേശങ്ങൾ",
+  waitCooldown: "അടുത്ത സന്ദേശത്തിന് {sec}s കാത്തിരിക്കൂ",
+  close: "അടയ്ക്കൂ",
+  you: "നിങ്ങൾ",
 };

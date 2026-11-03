@@ -268,4 +268,8 @@ export const ro: Record<TranslationKey, string> = {
   hofMatches: "meciuri",
   hofEmpty: "Nimeni nu a jucat încă în această săptămână",
   topCountriesYearTitle: "Top 10 țări {year}",
+  quickMessages: "Mesaje rapide",
+  waitCooldown: "Așteaptă {sec}s până la următorul mesaj",
+  close: "Închide",
+  you: "Tu",
 };

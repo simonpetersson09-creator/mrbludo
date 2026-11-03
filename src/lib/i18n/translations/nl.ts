@@ -253,4 +253,8 @@ export const nl: Record<TranslationKey, string> = {
   hofMatches: "wedstrijden",
   hofEmpty: "Er heeft deze week nog niemand gespeeld",
   topCountriesYearTitle: "Top 10 landen {year}",
+  quickMessages: "Snelle berichten",
+  waitCooldown: "Wacht {sec}s voor je volgende bericht",
+  close: "Sluiten",
+  you: "Jij",
 };

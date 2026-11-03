@@ -117,14 +117,18 @@
   --throw-shadow: oklch(0.16 0.025 195 / 0.5);
 }
 
+:root {
+  --board-ink: oklch(0.27 0.03 200);
+  --board-gold: oklch(0.72 0.135 78);
+  --board-gold-light: oklch(0.9 0.1 90);
+  --board-gold-ink: oklch(0.4 0.08 70);
+}
 .game-screen div:has(> .ludo-board) { box-shadow: var(--board-shadow); }
-.game-board-stack { width: min(100cqw, calc(100cqh - 50px)); }
-.game-board-stack-four { width: min(100cqw, calc(100cqh - 92px)); }
-.game-player-list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
-.game-player-list-four { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.game-player-name { min-width: 0; overflow-wrap: anywhere; line-height: 1.3; }
-.game-player-list > div { min-height: 32px; }
-.game-player-active { border-color: var(--pc) !important; background: var(--card); opacity: 1 !important; box-shadow: 0 0 0 1px var(--pc), 0 0 12px color-mix(in oklab, var(--pc) 55%, transparent); }
+.game-board-stack { width: min(100cqw, 100cqh); }
+@keyframes player-card-turn { 0%, 100% { filter: drop-shadow(0 0 0.04px var(--game-gold)); } 50% { filter: drop-shadow(0 0 0.22px var(--game-gold)); } }
+.player-card-turn { animation: player-card-turn 1.6s ease-in-out infinite; }
+@keyframes piece-done-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+.piece-done-glow { animation: piece-done-glow 2.2s ease-in-out infinite; }
 @keyframes base-turn-glow { 0%, 100% { opacity: 0.14; } 50% { opacity: 0.42; } }
 .base-turn-glow { animation: base-turn-glow 1.6s ease-in-out infinite; }
 @keyframes turn-banner-pop {
@@ -295,3 +299,14 @@
 .game-nav-btn-danger { color: color-mix(in oklab, var(--destructive) 85%, transparent); background: color-mix(in oklab, var(--destructive) 10%, transparent); border-color: color-mix(in oklab, var(--destructive) 30%, transparent); }
 .game-nav-btn-danger:active { background: color-mix(in oklab, var(--destructive) 20%, transparent); }
 .game-nav-btn:disabled { opacity: .4; }
+
+/* Quick messages (Yatzy's QuickChat): online matches only. */
+.quick-chat-btn { position: relative; z-index: 50; width: 36px; height: 36px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; align-self: center; color: var(--primary-foreground); background: linear-gradient(to bottom, var(--primary), var(--game-gold-dark, var(--primary))); box-shadow: 0 6px 20px -4px oklch(0 0 0 / 0.5); transition: transform .15s; }
+.quick-chat-btn:active { transform: scale(0.95); }
+.quick-chat-btn:disabled { opacity: .5; }
+.quick-chat-bubbles { pointer-events: none; position: fixed; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top) + 48px); z-index: 80; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.quick-chat-bubble { max-width: 260px; display: flex; align-items: baseline; gap: 8px; padding: 8px 14px; border-radius: 16px; color: var(--board-mark); font-size: 13px; font-weight: 500; box-shadow: 0 8px 20px -6px oklch(0 0 0 / .5); animation: quick-chat-in .3s cubic-bezier(.3,1.4,.5,1); }
+.quick-chat-name { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; opacity: .85; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@keyframes quick-chat-in { from { opacity: 0; transform: translateY(-12px) scale(.85); } }
+.quick-chat-panel { position: fixed; z-index: 76; right: calc(env(safe-area-inset-right) + 12px); bottom: calc(env(safe-area-inset-bottom) + 80px); width: min(320px, calc(100vw - 24px)); overflow: hidden; border-radius: 24px; border: 1px solid color-mix(in oklab, var(--border) 60%, transparent); background: var(--card); box-shadow: 0 24px 48px -12px oklch(0 0 0 / .6); animation: quick-chat-in .25s ease; }
+.game-bottom-controls-chat { height: 176px; }

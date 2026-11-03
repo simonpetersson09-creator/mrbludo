@@ -268,4 +268,8 @@ export const da: Record<TranslationKey, string> = {
   hofMatches: "kampe",
   hofEmpty: "Ingen har spillet endnu i denne uge",
   topCountriesYearTitle: "Top 10 lande {year}",
+  quickMessages: "Hurtigbeskeder",
+  waitCooldown: "Vent {sec}s før næste besked",
+  close: "Luk",
+  you: "Du",
 };
