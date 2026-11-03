@@ -12,6 +12,8 @@ export const hr: Record<TranslationKey, string> = {
   genericError: "Nešto je pošlo po zlu",
   tagline: "Klasični Ludo – četiri figurice, jedna kockica",
   resumeMatch: "Nastavi igru",
+  yourTurnLabel: "Ti si na redu",
+  waitingShort: "Čekanje",
   quickMatchBot: "Brza igra protiv računala",
   playOnline: "Igraj online",
   stats: "Statistika",

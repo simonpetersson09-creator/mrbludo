@@ -12,6 +12,8 @@ export const pl: Record<TranslationKey, string> = {
   genericError: "Coś poszło nie tak",
   tagline: "Klasyczne Ludo – cztery pionki, jedna kostka",
   resumeMatch: "Wznów rozgrywkę",
+  yourTurnLabel: "Twoja kolej",
+  waitingShort: "Czekamy",
   quickMatchBot: "Szybka gra z komputerem",
   playOnline: "Graj online",
   stats: "Statystyki",

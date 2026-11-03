@@ -12,6 +12,8 @@ export const ca: Record<TranslationKey, string> = {
   genericError: "Alguna cosa ha anat malament",
   tagline: "Ludo clàssic – quatre fitxes, un dau",
   resumeMatch: "Reprèn la partida en curs",
+  yourTurnLabel: "Et toca",
+  waitingShort: "Esperant",
   quickMatchBot: "Partida ràpida contra l'ordinador",
   playOnline: "Juga en línia",
   stats: "Estadístiques",

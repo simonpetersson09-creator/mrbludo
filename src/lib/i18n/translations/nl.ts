@@ -12,6 +12,8 @@ export const nl: Record<TranslationKey, string> = {
   genericError: "Er ging iets mis",
   tagline: "Klassieke Ludo – vier pionnen, één dobbelsteen",
   resumeMatch: "Huidige potje hervatten",
+  yourTurnLabel: "Jouw beurt",
+  waitingShort: "Wachten",
   quickMatchBot: "Snel potje tegen de computer",
   playOnline: "Online spelen",
   stats: "Statistieken",

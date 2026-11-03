@@ -13,6 +13,8 @@ export const or: Record<TranslationKey, string> = {
 
   tagline: "କ୍ଲାସିକ୍ ଲୁଡୋ – ଚାରିଗୁଟି ଗୁଟି, ଗୋଟିଏ ପାସା",
   resumeMatch: "ଚାଲୁଥିବା ମ୍ୟାଚ୍ ଜାରି ରଖନ୍ତୁ",
+  yourTurnLabel: "ତୁମ ପାଳି",
+  waitingShort: "ଅପେକ୍ଷାରେ",
   quickMatchBot: "କମ୍ପ୍ୟୁଟର ବିରୁଦ୍ଧରେ ଦ୍ରୁତ ମ୍ୟାଚ୍",
   playOnline: "ଅନଲାଇନ୍ ଖେଳନ୍ତୁ",
   stats: "ପରିସଂଖ୍ୟାନ",

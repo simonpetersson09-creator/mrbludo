@@ -13,6 +13,8 @@ export const pa: Record<TranslationKey, string> = {
 
   tagline: "ਕਲਾਸਿਕ ਲੂਡੋ – ਚਾਰ ਗੋਟੀਆਂ, ਇੱਕ ਪਾਸਾ",
   resumeMatch: "ਚੱਲ ਰਿਹਾ ਮੈਚ ਜਾਰੀ ਰੱਖੋ",
+  yourTurnLabel: "ਤੁਹਾਡੀ ਵਾਰੀ",
+  waitingShort: "ਉਡੀਕ ਵਿੱਚ",
   quickMatchBot: "ਕੰਪਿਊਟਰ ਵਿਰੁੱਧ ਤੇਜ਼ ਮੈਚ",
   playOnline: "ਔਨਲਾਈਨ ਖੇਡੋ",
   stats: "ਅੰਕੜੇ",

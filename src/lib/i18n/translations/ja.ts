@@ -13,6 +13,8 @@ export const ja: Record<TranslationKey, string> = {
 
   tagline: "クラシックルド – 4つの駒、1つのサイコロ",
   resumeMatch: "途中の対局を続ける",
+  yourTurnLabel: "あなたの番",
+  waitingShort: "待機中",
   quickMatchBot: "コンピューターとクイック対戦",
   playOnline: "オンラインでプレイ",
   stats: "統計",

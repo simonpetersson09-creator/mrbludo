@@ -13,6 +13,8 @@ export const ro: Record<TranslationKey, string> = {
 
   tagline: "Ludo clasic – patru piese, un zar",
   resumeMatch: "Continuă meciul în curs",
+  yourTurnLabel: "Rândul tău",
+  waitingShort: "În așteptare",
   quickMatchBot: "Meci rapid contra calculatorului",
   playOnline: "Joacă online",
   stats: "Statistici",

@@ -12,6 +12,8 @@ export const cs: Record<TranslationKey, string> = {
   genericError: "Něco se pokazilo",
   tagline: "Klasické Ludo – čtyři figurky, jedna kostka",
   resumeMatch: "Pokračovat v rozehrané hře",
+  yourTurnLabel: "Jsi na tahu",
+  waitingShort: "Čekání",
   quickMatchBot: "Rychlá hra proti počítači",
   playOnline: "Hrát online",
   stats: "Statistiky",

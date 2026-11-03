@@ -12,6 +12,8 @@ export const el: Record<TranslationKey, string> = {
   genericError: "Κάτι πήγε στραβά",
   tagline: "Κλασικό Ludo – τέσσερα πιόνια, ένα ζάρι",
   resumeMatch: "Συνέχεια του παιχνιδιού",
+  yourTurnLabel: "Η σειρά σου",
+  waitingShort: "Αναμονή",
   quickMatchBot: "Γρήγορο παιχνίδι με τον υπολογιστή",
   playOnline: "Παίξε online",
   stats: "Στατιστικά",

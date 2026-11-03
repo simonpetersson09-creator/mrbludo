@@ -25,13 +25,18 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const navigate = useNavigate();
   const { t, lang } = useTranslation();
-  const [hasGame, setHasGame] = useState(false);
+  const [resume, setResume] = useState<{ myTurn: boolean; names: string } | null>(null);
   const [showLangs, setShowLangs] = useState(false);
   const [langDown, setLangDown] = useState(false);
   const langBtnRef = useRef<HTMLButtonElement>(null);
   const langPopRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => setHasGame(!!loadGame()), []);
+  useEffect(() => {
+    const g = loadGame();
+    if (!g) return;
+    const cur = g.players[g.current];
+    setResume({ myTurn: !!cur && !cur.isBot, names: g.players.filter((p) => p.isBot).map((p) => p.name).join(", ") });
+  }, []);
 
   // Stäng språklistan när man klickar utanför knappen eller listan.
   useEffect(() => {
@@ -74,10 +79,21 @@ function HomePage() {
       </div>
       <h1 className="brand-wordmark text-4xl sm:text-5xl">Mr B Ludo</h1>
       <p className="brand-tagline mt-1 mb-6 text-center">{t("tagline")}</p>
+      {resume && (
+        <div className="home-stack mb-3">
+          <Link to="/play" className={`home-match-card font-display ${resume.myTurn ? "home-match-card-turn" : "home-match-card-waiting"}`}>
+            <span className={`home-card-chip${resume.myTurn ? " home-card-chip-light" : ""}`}><Play /></span>
+            <span className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
+              <span className="truncate text-[11px] font-bold leading-none">{t("resumeMatch")}</span>
+              <span className="truncate text-[8px] leading-none opacity-90">{resume.names}</span>
+            </span>
+            <span className={`home-card-pill${resume.myTurn ? " home-card-pill-action animate-pulse" : ""}`}>
+              {resume.myTurn ? t("yourTurnLabel") : t("waitingShort")}
+            </span>
+          </Link>
+        </div>
+      )}
       <div className="home-stack">
-        {hasGame && (
-          <Link to="/play" className="home-action"><Play size={16} /> {t("resumeMatch")}</Link>
-        )}
         <button className="home-action font-display" aria-expanded={showQuick} onClick={() => setShowQuick((v) => !v)}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
         {showQuick && (
           <div className="space-y-2 overflow-hidden">
@@ -92,6 +108,7 @@ function HomePage() {
           </div>
         )}
         <Link to="/online" className="home-action font-display"><span aria-hidden="true" className="home-action-icon">🌐</span><span>{t("playOnline")}</span></Link>
+        <Link to="/stats" className="home-action font-display"><BarChart3 size={16} /><span>{t("stats")}</span></Link>
       </div>
       <div className="home-round-row">
         <div className="home-round-item">
@@ -107,10 +124,6 @@ function HomePage() {
         <Link to="/friends" className="home-round-item">
           <span className="home-round-action"><Users className="h-4 w-4 sm:h-5 sm:w-5" /></span>
           <span className="home-round-label">{t("friends")}</span>
-        </Link>
-        <Link to="/stats" className="home-round-item">
-          <span className="home-round-action"><BarChart3 className="h-4 w-4 sm:h-5 sm:w-5" /></span>
-          <span className="home-round-label">{t("stats")}</span>
         </Link>
         {showLangs && (
           <div ref={langPopRef} className={`home-round-pop${langDown ? " home-round-pop-down" : ""}`} role="menu">
