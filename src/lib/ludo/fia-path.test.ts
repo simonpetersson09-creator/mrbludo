@@ -1,104 +1,96 @@
 import { describe, expect, it } from "vitest";
-import { FIA_HOME_COLUMN, HOME_COLUMN, TRACK, pieceCenter } from "./board";
-import { PATHS, absSquare, applyMove, applyRoll, createGame, goalOf, startSquare, targetOf, type Color, type GameState } from "./engine";
+import { FIA_CELL, FIA_HOME_COLUMN, FIA_TRACK, TRACK, pieceCenter } from "./board";
+import { PATHS, absSquare, applyMove, applyRoll, createGame, goalOf, startSquare, targetOf, type Color } from "./engine";
 import { pieceWaypoints } from "./piece-motion";
+import { performAction } from "@/lib/online/match-logic";
+import { chooseMove } from "./ai";
 
 const COLORS: Color[] = [0, 1, 2, 3];
-const cell = (p: [number, number]) => `${p[0] - 0.5},${p[1] - 0.5}`;
+const gridCell = ([x, y]: [number, number]) => [Math.round(x / FIA_CELL), Math.round(y / FIA_CELL)];
 
-describe("Fia board geometry", () => {
-  it("has 52 track squares and 6 lane squares per color (76 total), classic keeps 52 + 5", () => {
-    expect(PATHS.fia).toEqual({ startOffset: -1, lastTrack: 51, laneLen: 6, goal: 58 });
-    expect(PATHS.classic).toEqual({ startOffset: 0, lastTrack: 50, laneLen: 5, goal: 56 });
-    const all = new Set([...TRACK.map(String), ...COLORS.flatMap((c) => FIA_HOME_COLUMN[c].map(String))]);
-    expect(all.size).toBe(76);
+describe("Fia geometry verified against the supplied photograph", () => {
+  it("has 40 outer positions, four lane positions per color and one separate goal", () => {
+    expect(PATHS.fia).toEqual({ trackLen: 40, startOffset: 0, lastTrack: 39, laneLen: 4, goal: 44 });
+    expect(FIA_TRACK).toHaveLength(40);
+    const cells = [...FIA_TRACK, ...COLORS.flatMap(c => FIA_HOME_COLUMN[c]), [5 * FIA_CELL, 5 * FIA_CELL] as [number, number]];
+    expect(new Set(cells.map(p => String(gridCell(p)))).size).toBe(57);
+    for (const c of COLORS) expect(FIA_HOME_COLUMN[c]).toHaveLength(4);
   });
 
-  it("the new 6th lane square sits right next to the center cell", () => {
-    expect(FIA_HOME_COLUMN[0][5]).toEqual([6, 7]);
-    expect(FIA_HOME_COLUMN[1][5]).toEqual([7, 6]);
-    expect(FIA_HOME_COLUMN[2][5]).toEqual([8, 7]);
-    expect(FIA_HOME_COLUMN[3][5]).toEqual([7, 8]);
-    for (const c of COLORS) expect(FIA_HOME_COLUMN[c].slice(0, 5)).toEqual(HOME_COLUMN[c]);
+  it("preserves Classic geometry", () => {
+    expect(PATHS.classic).toEqual({ trackLen: 52, startOffset: 0, lastTrack: 50, laneLen: 5, goal: 56 });
+    expect(TRACK).toHaveLength(52);
+    for (const c of COLORS) expect(startSquare(c)).toBe(c * 13);
   });
 
-  it("each color starts exactly one step earlier than in classic", () => {
+  it("starts at the marked outer corner beside each yard", () => {
+    const starts = [[0, 4], [6, 0], [10, 6], [4, 10]];
     for (const c of COLORS) {
-      expect(startSquare(c, "classic")).toBe(c * 13);
-      expect(startSquare(c, "fia")).toBe((c * 13 + 51) % 52);
+      expect(startSquare(c, "fia")).toBe(c * 10);
+      expect(gridCell(FIA_TRACK[startSquare(c, "fia")])).toEqual(starts[c]);
     }
-    expect(TRACK[startSquare(0, "fia")]).toEqual([0, 6]);
-    expect(TRACK[startSquare(1, "fia")]).toEqual([8, 0]);
-    expect(TRACK[startSquare(2, "fia")]).toEqual([14, 8]);
-    expect(TRACK[startSquare(3, "fia")]).toEqual([6, 14]);
   });
 
-  it("every color walks a full lap, turns in from the square before its start, then 6 lane squares to goal", () => {
-    for (const c of COLORS) {
-      const cells: string[] = [];
-      for (let p = 0; p < 58; p++) cells.push(String(pieceCenter(c, p, 0, "fia").map((v) => v - 0.5)));
-      expect(new Set(cells).size).toBe(58); // no square visited twice
-      // track part covers all 52 squares
-      expect(new Set(cells.slice(0, 52)).size).toBe(52);
-      expect(absSquare(c, 51, "fia")).toBe((startSquare(c, "fia") + 51) % 52);
-      expect(absSquare(c, 52, "fia")).toBeNull();
-      // each step is to an orthogonally adjacent square (no shortcuts)
-      for (let p = 1; p < 58; p++) {
-        const [ax, ay] = pieceCenter(c, p - 1, 0, "fia");
-        const [bx, by] = pieceCenter(c, p, 0, "fia");
-        // one square at a time (the track's corner turns are diagonal, as in Classic)
-        expect(Math.max(Math.abs(ax - bx), Math.abs(ay - by))).toBe(1);
+  it("has the photograph's four-position lanes without overlapping the central goal", () => {
+    expect(FIA_HOME_COLUMN[0].map(gridCell)).toEqual([[1, 5], [2, 5], [3, 5], [4, 5]]);
+    expect(FIA_HOME_COLUMN[1].map(gridCell)).toEqual([[5, 1], [5, 2], [5, 3], [5, 4]]);
+    expect(FIA_HOME_COLUMN[2].map(gridCell)).toEqual([[9, 5], [8, 5], [7, 5], [6, 5]]);
+    expect(FIA_HOME_COLUMN[3].map(gridCell)).toEqual([[5, 9], [5, 8], [5, 7], [5, 6]]);
+  });
+
+  for (const c of COLORS) {
+    it(`color ${c}: full lap and lane have no duplicates, shortcuts or asymmetric steps`, () => {
+      const positions = Array.from({ length: 44 }, (_, p) => pieceCenter(c, p, 0, "fia"));
+      expect(new Set(positions.map(String)).size).toBe(44);
+      for (let p = 0; p < 40; p++) expect(absSquare(c, p, "fia")).toBe((c * 10 + p) % 40);
+      expect(absSquare(c, 40, "fia")).toBeNull();
+      const firstLane = positions[40];
+      expect(firstLane[0]).toBeCloseTo(FIA_HOME_COLUMN[c][0][0] + FIA_CELL / 2);
+      expect(firstLane[1]).toBeCloseTo(FIA_HOME_COLUMN[c][0][1] + FIA_CELL / 2);
+      for (let p = 1; p < 44; p++) {
+        const [ax, ay] = positions[p - 1];
+        const [bx, by] = positions[p];
+        expect(Math.max(Math.abs(ax - bx), Math.abs(ay - by))).toBeCloseTo(FIA_CELL);
       }
-      expect(cells.slice(52).map((s) => s)).toEqual(FIA_HOME_COLUMN[c].map(String));
-      void cell;
-    }
-  });
-
-  it("symmetric: rotating color 0's path by 90° gives each other color's path", () => {
-    const rot = ([x, y]: [number, number]): [number, number] => [15 - y, x];
-    for (const c of COLORS) {
-      for (let p = 0; p <= 58; p++) {
-        let q = pieceCenter(0, p, 0, "fia");
-        for (let k = 0; k < c; k++) q = rot(q);
-        const r = pieceCenter(c, p, 0, "fia");
-        expect(q[0]).toBeCloseTo(r[0]);
-        expect(q[1]).toBeCloseTo(r[1]);
+      for (let p = 0; p < 44; p++) {
+        let [x, y] = pieceCenter(0, p, 0, "fia");
+        for (let k = 0; k < c; k++) [x, y] = [15 - y, x];
+        expect(positions[p][0]).toBeCloseTo(x);
+        expect(positions[p][1]).toBeCloseTo(y);
       }
-    }
-  });
+    });
 
-  it("goal needs an exact 58 steps and overshoot bounces back from 58", () => {
-    expect(goalOf("fia")).toBe(58);
-    expect(targetOf(55, 3, "fia")).toBe(58);
-    expect(targetOf(55, 5, "fia")).toBe(56);
-    expect(pieceWaypoints(0, 55, 56, 0, 5, "fia").length).toBe(6);
-  });
-
-  it("every color reaches goal in a played game from the yard", () => {
-    for (const c of COLORS) {
-      let s: GameState = createGame([
-        { id: "a", name: "A", color: c, isBot: false },
+    it(`color ${c}: local AI and authoritative online actions follow the same path from yard to goal`, () => {
+      let local = createGame([
+        { id: "a", name: "A", color: c, isBot: true },
         { id: "b", name: "B", color: ((c + 2) % 4) as Color, isBot: false },
       ], "fia");
-      s = { ...s, pieces: [[-1, 58, 58, 58], [58, 58, 58, -1]] };
-      s = applyMove(applyRoll(s, 6), 0); // out (six keeps the turn)
-      expect(s.pieces[0][0]).toBe(0);
-      // walk 57 more steps with sixes (extra rolls keep the turn) and a final 3
-      for (let i = 0; i < 9; i++) s = applyMove(applyRoll(s, 6), 0);
-      expect(s.pieces[0][0]).toBe(54);
-      s = applyMove(applyRoll(s, 4), 0);
-      expect(s.winner).toBe(0);
-    }
-  });
+      local = { ...local, pieces: [[-1, 44, 44, 44], [-1, -1, -1, -1]] };
+      let online = structuredClone(local);
+      for (const roll of [6, 6, 6, 6, 6, 6, 6, 6, 2]) {
+        local = applyRoll(local, roll);
+        online = performAction(online, "a", { kind: "roll" }, () => roll);
+        expect(chooseMove(local, () => 0)).toBe(0);
+        local = applyMove(local, 0);
+        online = performAction(online, "a", { kind: "move", piece: 0 }, () => roll);
+        expect(online).toEqual(local);
+      }
+      expect(local.pieces[0][0]).toBe(44);
+      expect(local.winner).toBe(0);
+    });
 
-  it("knocks an opponent standing on the new start square", () => {
-    let s = createGame([
-      { id: "a", name: "A", color: 0, isBot: false },
-      { id: "b", name: "B", color: 1, isBot: false },
-    ], "fia");
-    // green piece standing on red's Fia start square (abs 51) = green progress 51 - 12 = 39
-    expect(absSquare(1, 39, "fia")).toBe(startSquare(0, "fia"));
-    s = { ...s, pieces: [[-1, -1, -1, -1], [39, -1, -1, -1]] };
+    it(`color ${c}: overshoot walks into the separate goal then back`, () => {
+      expect(goalOf("fia")).toBe(44);
+      expect(targetOf(41, 5, "fia")).toBe(42);
+      const points = pieceWaypoints(c, 41, 42, 0, 5, "fia");
+      expect(points).toEqual([41, 42, 43, 44, 43, 42].map(p => pieceCenter(c, p, 0, "fia")));
+    });
+  }
+
+  it("captures on the corrected start position", () => {
+    let s = createGame([{ id: "a", name: "A", color: 0, isBot: false }, { id: "b", name: "B", color: 1, isBot: false }], "fia");
+    expect(absSquare(1, 30, "fia")).toBe(startSquare(0, "fia"));
+    s = { ...s, pieces: [[-1, -1, -1, -1], [30, -1, -1, -1]] };
     s = applyMove(applyRoll(s, 1), 0);
     expect(s.pieces[1][0]).toBe(-1);
   });
