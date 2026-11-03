@@ -169,16 +169,19 @@ function PlayPage() {
   const canRoll = humanTurn && state.phase === "roll" && !rolling;
 
   const seatInfo = state.players.map((p) => ({ name: p.name, kind: p.isBot ? "bot" as const : "human" as const, image: p.isBot ? null : ownAvatar, flag: p.isBot ? undefined : ownFlag }));
+  // "Din tur" only reads clearly when this device has exactly one human; otherwise the card names the player.
+  const ownSeat = state.players.filter((p) => !p.isBot).length === 1 ? state.players.findIndex((p) => !p.isBot) : undefined;
 
   return (
     <main className="game-screen">
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
        <div className="game-board-stack flex flex-col">
-        <SeatCardRow state={state} seats={seatInfo} edge="top" />
+        <SeatCardRow state={state} seats={seatInfo} edge="top" ownSeat={ownSeat} />
         <div className="aspect-square w-full rounded-xl shadow-2xl">
           <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} seats={seatInfo} />
         </div>
-        <SeatCardRow state={state} seats={seatInfo} edge="bottom" />
+        <SeatCardRow state={state} seats={seatInfo} edge="bottom" ownSeat={ownSeat} />
+
        </div>
       </div>
 
