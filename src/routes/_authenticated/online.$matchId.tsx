@@ -14,6 +14,7 @@ import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
 import { RollLabel } from "@/components/ludo/RollLabel";
+import { QuickChat } from "@/components/ludo/QuickChat";
 import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, startMatch } from "@/lib/online/online.functions";
 import { useAvatarImages } from "@/lib/ludo/avatar";
@@ -206,11 +207,12 @@ function OnlineMatchPage() {
         <p className="h-4 text-xs text-muted-foreground">{sub || (state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
       </div>
 
-      <div className="game-bottom-controls">
+      <div className="game-bottom-controls game-bottom-controls-chat">
         <div className="game-throw-area">
           <LudoDie value={face} rolling={rolling} onTap={() => send({ kind: "roll" })} disabled={!canRoll} pipColor={COLOR_VAR[me.color]} />
         </div>
         <div className="game-command-area">
+          <QuickChat matchId={matchId} myName={mySeat >= 0 ? state.players[mySeat].name : ""} myColor={mySeat >= 0 ? state.players[mySeat].color : null} />
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
             <RollLabel state={state} canRoll={canRoll} myTurn={myTurn} />
           </button>
