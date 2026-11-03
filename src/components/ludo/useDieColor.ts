@@ -26,12 +26,15 @@ export function useDieColor(target: string, state: GameState | null): string {
   const latest = useRef(target);
   latest.current = target;
   const waiting = target !== shown;
+  const hold = state ? dieColorHoldMs(state) : 0;
+  // Which move is walking right now. A re-fetched copy of the same match state must not restart
+  // the wait, so the effect keys on the move itself rather than on the state object.
+  const walking = state ? `${state.turnCount}:${state.lastEvent?.kind ?? "-"}:${target}` : "-";
   useEffect(() => {
     if (!waiting) return;
-    const hold = state ? dieColorHoldMs(state) : 0;
     if (hold <= 0) { setShown(latest.current); return; }
     const timer = setTimeout(() => setShown(latest.current), hold);
     return () => clearTimeout(timer);
-  }, [waiting, state]);
+  }, [waiting, hold, walking]);
   return shown;
 }
