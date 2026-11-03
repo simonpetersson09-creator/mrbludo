@@ -1,6 +1,6 @@
 import { afterEach, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ listen: vi.fn(async () => ({ remove: vi.fn() })) }));
+const mocks = vi.hoisted(() => ({ listen: vi.fn(async (_event: string, _handler: unknown) => ({ remove: vi.fn() })) }));
 vi.mock("@capacitor/core", () => ({ Capacitor: { isNativePlatform: () => true } }));
 vi.mock("@capacitor/app", () => ({ App: { addListener: mocks.listen } }));
 vi.mock("@capacitor/network", () => ({ Network: { addListener: mocks.listen } }));
