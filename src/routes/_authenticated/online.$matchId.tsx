@@ -119,12 +119,14 @@ function OnlineMatchPage() {
     if (match.version <= animatedVersion.current) return;
     animatedVersion.current = match.version;
     const ev = state.lastEvent;
-    if (ev?.kind === "moved") void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
+    // Like Yatzy: only my own actions vibrate (opponents/bots don't buzz my phone).
+    const mineEv = !!ev && "player" in ev && ev.player === mySeat;
+    if (ev?.kind === "moved" && mineEv) void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
     if (ev?.kind !== "rolled") return;
     setFace(ev.value as DiceValue);
     const remaining = Math.max(350, ROLL_MS - (Date.now() - rollStart.current));
     setRolling(true);
-    const t = window.setTimeout(() => { setRolling(false); void playDiceLandHaptic(); }, rollStart.current ? remaining : ROLL_MS);
+    const t = window.setTimeout(() => { setRolling(false); if (mineEv) void playDiceLandHaptic(); }, rollStart.current ? remaining : ROLL_MS);
     rollStart.current = 0;
     return () => window.clearTimeout(t);
   }, [match?.version]); // eslint-disable-line react-hooks/exhaustive-deps
