@@ -70,6 +70,5 @@ describe("useDieColor", () => {
     } finally {
       vi.useRealTimers();
     }
-  });
 });
 });
