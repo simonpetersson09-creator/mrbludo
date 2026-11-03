@@ -12,6 +12,8 @@ export const fi: Record<TranslationKey, string> = {
   genericError: "Jokin meni pieleen",
   tagline: "Klassinen Ludo – neljä nappulaa, yksi noppa",
   resumeMatch: "Jatka kesken olevaa peliä",
+  yourTurnLabel: "Sinun vuorosi",
+  waitingShort: "Odotetaan",
   quickMatchBot: "Pikapeli tietokonetta vastaan",
   playOnline: "Pelaa verkossa",
   stats: "Tilastot",

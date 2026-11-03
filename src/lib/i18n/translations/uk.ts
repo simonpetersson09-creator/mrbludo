@@ -13,6 +13,8 @@ export const uk: Record<TranslationKey, string> = {
 
   tagline: "Класичне лудо – чотири фішки, один кубик",
   resumeMatch: "Продовжити поточний матч",
+  yourTurnLabel: "Твій хід",
+  waitingShort: "Чекаємо",
   quickMatchBot: "Швидкий матч проти комп'ютера",
   playOnline: "Грати онлайн",
   stats: "Статистика",

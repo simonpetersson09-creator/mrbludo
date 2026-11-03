@@ -12,6 +12,8 @@ export const hu: Record<TranslationKey, string> = {
   genericError: "Valami hiba történt",
   tagline: "Klasszikus Ludo – négy bábu, egy dobókocka",
   resumeMatch: "Folyamatban lévő játék folytatása",
+  yourTurnLabel: "Te jössz",
+  waitingShort: "Várakozás",
   quickMatchBot: "Gyors játék a gép ellen",
   playOnline: "Online játék",
   stats: "Statisztikák",

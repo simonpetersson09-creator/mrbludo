@@ -13,6 +13,8 @@ export const bn: Record<TranslationKey, string> = {
 
   tagline: "ক্লাসিক লুডো – চারটি গুটি, একটি ছক্কা",
   resumeMatch: "চলমান ম্যাচ চালিয়ে যান",
+  yourTurnLabel: "তোমার পালা",
+  waitingShort: "অপেক্ষায়",
   quickMatchBot: "কম্পিউটারের বিরুদ্ধে দ্রুত ম্যাচ",
   playOnline: "অনলাইনে খেলুন",
   stats: "পরিসংখ্যান",

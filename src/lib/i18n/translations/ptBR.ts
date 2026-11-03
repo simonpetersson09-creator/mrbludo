@@ -12,6 +12,8 @@ export const ptBR: Record<TranslationKey, string> = {
   genericError: "Algo deu errado",
   tagline: "Ludo clássico – quatro peões, um dado",
   resumeMatch: "Continuar partida",
+  yourTurnLabel: "Sua vez",
+  waitingShort: "Esperando",
   quickMatchBot: "Partida rápida contra o computador",
   playOnline: "Jogar online",
   stats: "Estatísticas",

@@ -13,6 +13,8 @@ export const no: Record<TranslationKey, string> = {
 
   tagline: "Klassisk Ludo – fire brikker, én terning",
   resumeMatch: "Fortsett pågående kamp",
+  yourTurnLabel: "Din tur",
+  waitingShort: "Venter",
   quickMatchBot: "Hurtigkamp mot datamaskinen",
   playOnline: "Spill på nett",
   stats: "Statistikk",

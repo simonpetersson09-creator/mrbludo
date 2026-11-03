@@ -12,6 +12,8 @@ export const it: Record<TranslationKey, string> = {
   genericError: "Qualcosa è andato storto",
   tagline: "Ludo classico – quattro pedine, un dado",
   resumeMatch: "Riprendi la partita in corso",
+  yourTurnLabel: "Il tuo turno",
+  waitingShort: "In attesa",
   quickMatchBot: "Partita rapida contro il computer",
   playOnline: "Gioca online",
   stats: "Statistiche",

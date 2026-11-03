@@ -13,6 +13,8 @@ export const es: Record<TranslationKey, string> = {
 
   tagline: "Ludo clásico – cuatro fichas, un dado",
   resumeMatch: "Continuar partida en curso",
+  yourTurnLabel: "Tu turno",
+  waitingShort: "Esperando",
   quickMatchBot: "Partida rápida contra la máquina",
   playOnline: "Jugar en línea",
   stats: "Estadísticas",

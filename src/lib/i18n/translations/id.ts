@@ -13,6 +13,8 @@ export const id: Record<TranslationKey, string> = {
 
   tagline: "Ludo klasik – empat bidak, satu dadu",
   resumeMatch: "Lanjutkan pertandingan",
+  yourTurnLabel: "Giliranmu",
+  waitingShort: "Menunggu",
   quickMatchBot: "Pertandingan cepat lawan komputer",
   playOnline: "Main online",
   stats: "Statistik",

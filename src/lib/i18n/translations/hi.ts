@@ -13,6 +13,8 @@ export const hi: Record<TranslationKey, string> = {
 
   tagline: "क्लासिक लूडो – चार गोटियां, एक पासा",
   resumeMatch: "चल रहा मैच जारी रखें",
+  yourTurnLabel: "तुम्हारी बारी",
+  waitingShort: "इंतज़ार है",
   quickMatchBot: "कंप्यूटर से त्वरित मैच",
   playOnline: "ऑनलाइन खेलें",
   stats: "आंकड़े",

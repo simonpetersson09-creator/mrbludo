@@ -13,6 +13,8 @@ export const fr: Record<TranslationKey, string> = {
 
   tagline: "Ludo classique – quatre pions, un dé",
   resumeMatch: "Reprendre la partie en cours",
+  yourTurnLabel: "Votre tour",
+  waitingShort: "En attente",
   quickMatchBot: "Partie rapide contre l'ordinateur",
   playOnline: "Jouer en ligne",
   stats: "Statistiques",
