@@ -76,17 +76,19 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
           g.appendChild(e);
         }
         trail.appendChild(g);
-        const appear = (i + 0.6) * STEP_MS;
-        const fadeEnd = walk + 260;
-        const fadeStart = Math.min(appear + 2 * STEP_MS, fadeEnd - 200);
-        const total = fadeEnd + i * 0 ;
+        // Each print shows up as the piece steps off, lingers ~2 squares, then fades — oldest first,
+        // and the last one is gone just after the piece lands.
+        const total = walk + 320;
+        const appear = (i + 0.55) * STEP_MS;
+        const shown = Math.min(appear + 140, total - 2);
+        const fade = Math.min(Math.max(appear + 2.2 * STEP_MS, shown + 1), total - 1);
         const a = g.animate([
-          { opacity: 0 },
+          { opacity: 0, offset: 0 },
           { opacity: 0, offset: appear / total },
-          { opacity: 0.55, offset: Math.min((appear + 120) / total, 0.99) },
-          { opacity: 0.45, offset: Math.max(fadeStart / total, (appear + 121) / total) },
-          { opacity: 0 },
-        ].map((k) => ({ ...k, offset: k.offset == null ? undefined : Math.min(Math.max(k.offset, 0), 1) })) as Keyframe[], { duration: total, easing: "ease-out" });
+          { opacity: 0.5, offset: shown / total },
+          { opacity: 0.4, offset: fade / total },
+          { opacity: 0, offset: 1 },
+        ], { duration: total, easing: "ease-in-out" });
         a.onfinish = a.oncancel = () => g.remove();
         animations.push(a);
       }
