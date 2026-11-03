@@ -97,7 +97,21 @@
   --ludo-blue: hsl(210 70% 52%);
   --board: hsl(40 30% 96%);
   --board-line: hsl(195 12% 72%);
+  /* Muted board inks only; original ludo tokens still paint the pieces. */
+  --board-red: oklch(0.59 0.145 20);
+  --board-green: oklch(0.61 0.108 160);
+  --board-yellow: oklch(0.8 0.133 85);
+  --board-blue: oklch(0.6 0.115 245);
+  --board-grid: oklch(0.62 0.018 195);
+  --board-base-line: oklch(0.98 0.009 85 / 0.65);
+  --board-frame-light: oklch(0.92 0.018 85);
+  --board-frame-dark: oklch(0.53 0.032 195);
+  --board-mark: oklch(0.98 0.008 85);
+  --board-mark-line: oklch(0.32 0.03 195 / 0.65);
+  --board-shadow: 0 5px 14px oklch(0.15 0.025 195 / 0.22);
 }
+
+.game-screen div:has(> .ludo-board) { box-shadow: var(--board-shadow); }
 
 @layer base {
   * { border-color: var(--color-border); }

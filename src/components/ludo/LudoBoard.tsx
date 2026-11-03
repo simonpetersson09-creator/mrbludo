@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useId } from "react";
 import { GOAL, type Color, type GameState } from "@/lib/ludo/engine";
 import { HOME_COLUMN, TRACK, YARD_ORIGIN, pieceCenter } from "@/lib/ludo/board";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
@@ -7,6 +7,11 @@ const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYello
 
 const FILL: Record<Color, string> = {
   0: "var(--ludo-red)", 1: "var(--ludo-green)", 2: "var(--ludo-yellow)", 3: "var(--ludo-blue)",
+};
+
+// Board inks are independent of piece colors: never recolor the pieces here.
+const BOARD_FILL: Record<Color, string> = {
+  0: "var(--board-red)", 1: "var(--board-green)", 2: "var(--board-yellow)", 3: "var(--board-blue)",
 };
 
 interface Props {
@@ -18,6 +23,7 @@ interface Props {
 
 function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
   const { t } = useTranslation();
+  const boardId = useId().replace(/:/g, "");
   const seatColors = new Set(state.players.map((p) => p.color));
 
   // Group pieces by spot so stacked pieces get a small offset.
@@ -36,24 +42,33 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
   });
 
   return (
-    <svg viewBox="0 0 15 15" className="h-full w-full select-none" role="img" aria-label={t("boardAria")}>
+    <svg viewBox="0 0 15 15" className="ludo-board h-full w-full select-none" role="img" aria-label={t("boardAria")}>
       <defs>
+        <clipPath id={`${boardId}-edge`}>
+          <rect x="0" y="0" width="15" height="15" rx="0.4" />
+        </clipPath>
+        <linearGradient id={`${boardId}-frame`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="var(--board-frame-light)" />
+          <stop offset="100%" stopColor="var(--board-frame-dark)" />
+        </linearGradient>
+        <path id={`${boardId}-safe`} d="M 0,-0.25 L 0.074,-0.102 L 0.238,-0.077 L 0.12,0.039 L 0.147,0.202 L 0,0.125 L -0.147,0.202 L -0.12,0.039 L -0.238,-0.077 L -0.074,-0.102 Z" />
         <radialGradient id="pieceShine" cx="35%" cy="30%" r="70%">
           <stop offset="0%" stopColor="white" stopOpacity="0.75" />
           <stop offset="45%" stopColor="white" stopOpacity="0.1" />
           <stop offset="100%" stopColor="black" stopOpacity="0.25" />
         </radialGradient>
       </defs>
+      <g clipPath={`url(#${boardId}-edge)`} pointerEvents="none">
       <rect x="0" y="0" width="15" height="15" rx="0.4" fill="var(--board)" />
       {([0, 1, 2, 3] as Color[]).map((c) => {
         const [x, y] = YARD_ORIGIN[c];
         const active = seatColors.has(c);
         return (
           <g key={c} opacity={active ? 1 : 0.35}>
-            <rect x={x} y={y} width="6" height="6" fill={FILL[c]} />
-            <rect x={x + 0.8} y={y + 0.8} width="4.4" height="4.4" rx="0.5" fill="var(--board)" />
+            <rect x={x} y={y} width="6" height="6" fill={BOARD_FILL[c]} />
+            <rect x={x + 0.8} y={y + 0.8} width="4.4" height="4.4" rx="0.32" fill="var(--board)" stroke="var(--board-base-line)" strokeWidth="0.035" />
             {[[1.5, 1.5], [3.5, 1.5], [1.5, 3.5], [3.5, 3.5]].map(([dx, dy], i) => (
-              <circle key={i} cx={x + dx + 0.5} cy={y + dy + 0.5} r="0.55" fill={FILL[c]} opacity="0.3" />
+              <circle key={i} cx={x + dx + 0.5} cy={y + dy + 0.5} r="0.55" fill={BOARD_FILL[c]} fillOpacity="0.12" stroke={BOARD_FILL[c]} strokeOpacity="0.6" strokeWidth="0.035" />
             ))}
           </g>
         );
@@ -62,20 +77,23 @@ function LudoBoardImpl({ state, legal, onPick, captureAt }: Props) {
         const startColor = i % 13 === 0 ? ((i / 13) as Color) : null;
         return (
           <g key={i}>
-            <rect x={c} y={r} width="1" height="1" fill={startColor != null ? FILL[startColor] : "var(--board)"} stroke="var(--board-line)" strokeWidth="0.04" />
-            {startColor != null && <text x={c + 0.5} y={r + 0.68} textAnchor="middle" fontSize="0.5" fill="var(--board)">★</text>}
+            <rect x={c} y={r} width="1" height="1" fill={startColor != null ? BOARD_FILL[startColor] : "var(--board)"} stroke="var(--board-grid)" strokeWidth="0.026" />
+            {startColor != null && <use href={`#${boardId}-safe`} x={c + 0.5} y={r + 0.5} fill="var(--board-mark)" stroke="var(--board-mark-line)" strokeWidth="0.018" strokeLinejoin="round" />}
           </g>
         );
       })}
       {([0, 1, 2, 3] as Color[]).map((c) =>
         HOME_COLUMN[c].map(([x, y], i) => (
-          <rect key={`${c}-${i}`} x={x} y={y} width="1" height="1" fill={FILL[c]} stroke="var(--board-line)" strokeWidth="0.04" />
+          <rect key={`${c}-${i}`} x={x} y={y} width="1" height="1" fill={BOARD_FILL[c]} stroke="var(--board-grid)" strokeWidth="0.026" />
         )),
       )}
-      <polygon points="6,6 9,6 7.5,7.5" fill={FILL[1]} />
-      <polygon points="9,6 9,9 7.5,7.5" fill={FILL[2]} />
-      <polygon points="9,9 6,9 7.5,7.5" fill={FILL[3]} />
-      <polygon points="6,9 6,6 7.5,7.5" fill={FILL[0]} />
+      <polygon points="6,6 9,6 7.5,7.5" fill={BOARD_FILL[1]} />
+      <polygon points="9,6 9,9 7.5,7.5" fill={BOARD_FILL[2]} />
+      <polygon points="9,9 6,9 7.5,7.5" fill={BOARD_FILL[3]} />
+      <polygon points="6,9 6,6 7.5,7.5" fill={BOARD_FILL[0]} />
+      <path d="M6,6 H9 V9 H6 Z M6,6 L9,9 M9,6 L6,9" fill="none" stroke="var(--board-grid)" strokeWidth="0.026" strokeLinejoin="round" />
+      <rect x="0.045" y="0.045" width="14.91" height="14.91" rx="0.36" fill="none" stroke={`url(#${boardId}-frame)`} strokeWidth="0.09" />
+      </g>
 
       {captureAt && (
         <circle key={`cap-${captureAt.join()}-${state.turnCount}`} cx={captureAt[0]} cy={captureAt[1]} r="0.6" fill="none" stroke="var(--destructive)" strokeWidth="0.12" className="capture-flash" style={{ transformOrigin: `${captureAt[0]}px ${captureAt[1]}px` }} />
