@@ -74,7 +74,7 @@ function OnlineLobby() {
 
   return (
     <main className="app-screen flex flex-col overflow-y-auto overscroll-contain px-5">
-      <div className="mx-auto w-full max-w-sm space-y-6 py-4">
+      <div className="mx-auto w-full max-w-sm space-y-3 py-3">
         <div className="flex items-center gap-3">
           <Link to="/" aria-label={t("back")} className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary/60 transition active:scale-95">
             <ArrowLeft className="h-5 w-5 text-foreground" />
