@@ -314,13 +314,23 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
   useEffect(() => { listFriends().then((r) => setFriends(r.friends.filter((f) => f.status === "accepted"))).catch(() => {}); }, []);
   const start = () => startMatch({ data: { matchId: match.id } }).catch((e) => toast.error(errorMessage(e, t)));
   const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => toast.success(t("inviteSent"))).catch((e) => toast.error(errorMessage(e, t)));
-  // Like Yatzy's "Dela inbjudan": the phone's share sheet, or copy when sharing is unavailable.
+  // Like Yatzy's "Dela inbjudan": the phone's share sheet (Messenger, WhatsApp …), or copy when sharing is unavailable.
   const share = async () => {
+    const url = `${PUBLISHED_LUDO_ORIGIN}/online?code=${match.code}`;
     const text = t("shareInviteText", { code: match.code });
     try {
-      if (navigator.share) { await navigator.share({ title: "Mr. B Ludo", text }); return; }
-    } catch (e) { if ((e as { name?: string })?.name === "AbortError") return; }
-    try { await navigator.clipboard?.writeText(text); toast.success(t("codeCopied")); } catch { /* nothing to do */ }
+      const { Capacitor } = await import("@capacitor/core");
+      if (Capacitor.isNativePlatform()) {
+        const { Share } = await import("@capacitor/share");
+        await Share.share({ title: "Mr. B Ludo", text, url, dialogTitle: t("shareInvite") });
+        return;
+      }
+      if (navigator.share) { await navigator.share({ title: "Mr. B Ludo", text, url }); return; }
+    } catch (e) {
+      const msg = String((e as { name?: string; message?: string })?.name ?? "") + String((e as { message?: string })?.message ?? "");
+      if (/abort|cancel/i.test(msg)) return;
+    }
+    try { await navigator.clipboard?.writeText(`${text}\n${url}`); toast.success(t("codeCopied")); } catch { /* nothing to do */ }
   };
   if (match.status === "abandoned") return <main className="app-screen"><div className="home-stack"><p>{t("matchAbandoned")}</p><button className="home-action mt-3" onClick={onLeave}>{t("back")}</button></div></main>;
   return (
