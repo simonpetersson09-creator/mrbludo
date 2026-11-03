@@ -69,7 +69,7 @@ export function chooseBotAction(state: GameState, rng: () => number = Math.rando
   const variant = variantOf(state);
   const yardPiece = state.pieces[me].findIndex((p) => p === YARD);
   if (yardPiece < 0 || !canWalkOut(state, yardPiece)) return { piece, walkOut: false };
-  const abs = absSquare(state.players[me].color, 6, variant);
+  const abs = absSquare(state.players[me].color, WALK_OUT_TARGET, variant);
   const knocks = abs != null && state.players.some((op, oi) =>
     oi !== me && !op.forfeited && state.pieces[oi].some((pr) => absSquare(op.color, pr, variant) === abs));
   if (!knocks) return { piece, walkOut: false };

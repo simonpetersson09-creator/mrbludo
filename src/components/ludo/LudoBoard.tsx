@@ -320,7 +320,7 @@ export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState;
       <div className={`seat-card${isTurn ? " seat-card-turn" : ""}${c === right ? " flex-row-reverse text-right" : ""}`} style={{ opacity: pl.forfeited ? 0.45 : 1, ["--pc" as string]: FILL[c] }}>
         {isTurn && (
           <span className={`seat-card-bubble seat-card-bubble-${edge} seat-card-bubble-in-${c === right ? "right" : "left"}${ownSeat === seat ? " seat-card-bubble-me" : ""}`} aria-hidden="true">
-            <span className="seat-card-bubble-text">{seat === ownSeat ? t("yourTurnLabel") : t("theirTurn", { name })}</span>
+            <span className="seat-card-bubble-text">{seat === ownSeat ? t("yourTurnLabel") : possessive(t("theirTurn", { name }), name)}</span>
           </span>
         )}
 

@@ -32,11 +32,11 @@ describe("Svenska Fia med knuff", () => {
     expect(s.current).toBe(0); // 6 = extra roll
   });
 
-  it("a 6 can instead bring one piece out alone and walk it six steps", () => {
+  it("a 6 can instead bring one piece out alone and walk it six squares counting the start", () => {
     let s = applyRoll(game("fia"), 6);
     expect(canWalkOut(s, 1)).toBe(true);
     s = applyMove(s, 1, true);
-    expect(s.pieces[0]).toEqual([YARD, 6, YARD, YARD]);
+    expect(s.pieces[0]).toEqual([YARD, 5, YARD, YARD]);
     expect(s.lastEvent).not.toHaveProperty("alsoOut");
     expect(s.current).toBe(0);
   });

@@ -1,4 +1,4 @@
-import { canWalkOut, targetOf, variantOf, type GameState } from "./engine";
+import { WALK_OUT_TARGET, canWalkOut, targetOf, variantOf, type GameState } from "./engine";
 import { pieceCenter } from "./board";
 
 /** Presentation only: use the engine's exact targets without applying a move. */
@@ -20,8 +20,8 @@ export function movePreviews(state: GameState, legal: number[]) {
     if (progress == null) continue;
     const target = targetOf(progress, state.dice ?? 0, variant);
     if (target != null) add(piece, target, false);
-    // Fia six: a second marker six steps ahead lets one piece come out and walk.
-    if (canWalkOut(state, piece)) add(piece, 6, true);
+    // Fia six: a second marker on the sixth square lets one piece come out and walk.
+    if (canWalkOut(state, piece)) add(piece, WALK_OUT_TARGET, true);
   }
   return out;
 }
