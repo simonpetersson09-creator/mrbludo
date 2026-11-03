@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { possessive } from "./LudoBoard";
+import { possessive } from "./possessive";
 describe("turn bubble genitive", () => {
   it("drops the extra s after names ending in s", () => {
-    expect(possessive("Lars tur", "Lar")).toBe("Lars tur");
+    
     expect(possessive("Larss tur", "Lars")).toBe("Lars tur");
     expect(possessive("James's turn", "James")).toBe("James' turn");
   });

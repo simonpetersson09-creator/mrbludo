@@ -1,3 +1,4 @@
+import { possessive } from "@/lib/i18n/possessive";
 import { memo, useId, useLayoutEffect, useRef } from "react";
 import { Bot, Globe, Trophy } from "lucide-react";
 import { goalOf, startSquare, variantOf, type Color, type GameState } from "@/lib/ludo/engine";
