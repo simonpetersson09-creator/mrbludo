@@ -30,10 +30,22 @@ export const HOME_COLUMN: Record<Color, [number, number][]> = {
 /** Yard origin (top-left of the 6x6 yard). */
 export const YARD_ORIGIN: Record<Color, [number, number]> = { 0: [0, 0], 1: [9, 0], 2: [9, 9], 3: [0, 9] };
 
-export function yardSpot(color: Color, piece: number): [number, number] {
+/** Top yards (red, green) keep their player card at the top edge; bottom yards at the bottom edge. */
+export const yardIsTop = (color: Color) => color === 0 || color === 1;
+
+/** Center of the compact 2x2 piece nest inside a yard; the rest of the yard holds the player card. */
+export function yardNestCenter(color: Color): [number, number] {
   const [x, y] = YARD_ORIGIN[color];
-  const offs: [number, number][] = [[1.5, 1.5], [3.5, 1.5], [1.5, 3.5], [3.5, 3.5]];
-  return [x + offs[piece][0] + 0.5, y + offs[piece][1] + 0.5];
+  return [x + 3, y + (yardIsTop(color) ? 3.55 : 2.45)];
+}
+
+export const YARD_SPOT_GAP = 0.62;
+
+export function yardSpot(color: Color, piece: number): [number, number] {
+  const [cx, cy] = yardNestCenter(color);
+  const g = YARD_SPOT_GAP;
+  const offs: [number, number][] = [[-g, -g], [g, -g], [-g, g], [g, g]];
+  return [cx + offs[piece][0], cy + offs[piece][1]];
 }
 
 const GOAL_SPOT: Record<Color, [number, number]> = { 0: [6.85, 7.5], 1: [7.5, 6.85], 2: [8.15, 7.5], 3: [7.5, 8.15] };
