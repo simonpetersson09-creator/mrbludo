@@ -3,6 +3,7 @@ import { Outlet, HeadContent, createRootRouteWithContext, useRouter } from "@tan
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AndroidBackButton } from "@/components/AndroidBackButton";
+import { NativeDeepLinks } from "@/components/NativeDeepLinks";
 import { ensurePlayerSession } from "@/lib/auth/player";
 import { supabase } from "@/lib/auth/client";
 import { startNativeRuntime, RESUME_EVENT } from "@/lib/native/runtime";
@@ -34,5 +35,5 @@ function NativeRoot() {
     });
     return () => { stopped = true; cleanup?.(); viewportCleanup(); data.subscription.unsubscribe(); window.removeEventListener("online", connect); window.removeEventListener(RESUME_EVENT, connect); };
   }, [router, queryClient]);
-  return <QueryClientProvider client={queryClient}><HeadContent /><AndroidBackButton /><Outlet /><Toaster position="top-center" /></QueryClientProvider>;
+  return <QueryClientProvider client={queryClient}><HeadContent /><AndroidBackButton /><NativeDeepLinks /><Outlet /><Toaster position="top-center" /></QueryClientProvider>;
 }

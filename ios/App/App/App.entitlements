@@ -4,5 +4,9 @@
 <dict>
 	<key>aps-environment</key>
 	<string>$(MRB_APNS_ENVIRONMENT)</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:mrbludo.lovable.app</string>
+	</array>
 </dict>
 </plist>
