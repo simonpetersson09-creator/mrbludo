@@ -33,6 +33,8 @@ export function QuickMatchSearch({ players, variant, onMatch, onNoMatch, onCance
   const cb = useRef({ onMatch, onNoMatch });
   cb.current = { onMatch, onNoMatch };
 
+  useEffect(() => { setQuickSearchActive(true); return () => setQuickSearchActive(false); }, []);
+
   useEffect(() => {
     let timer: number | undefined;
     let cancelled = false;
