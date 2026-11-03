@@ -1,7 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { renderHook } from "@testing-library/react";
 import { applyMove, applyRoll, createGame } from "@/lib/ludo/engine";
 import { walkDurationMs } from "@/lib/ludo/piece-motion";
-import { dieColorHoldMs } from "./useDieColor";
+import { dieColorHoldMs, useDieColor } from "./useDieColor";
 
 const two = () => createGame([
   { id: "a", name: "A", color: 0, isBot: false },
