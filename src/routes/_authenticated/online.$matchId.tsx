@@ -200,7 +200,7 @@ function OnlineMatchPage() {
           const s = seatOf(p.id);
           const away = s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited;
           return (
-            <div key={p.id} className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "border-gold bg-card" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}>
+            <div key={p.id} className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "game-player-active" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`} style={{ "--pc": COLOR_VAR[p.color] } as React.CSSProperties}>
               <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
               {p.isBot ? <span className="shrink-0 text-sm">🤖</span> : <PlayerAvatar emoji={s?.avatar ?? "🎲"} image={pics[s?.user_id ?? ""]} className="h-5 w-5 text-xs" />}
               <span className="game-player-name font-semibold">{p.name}</span>
