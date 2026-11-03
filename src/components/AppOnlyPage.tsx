@@ -49,7 +49,7 @@ export function AppOnlyPage({ code }: { code?: string | undefined }) {
       <>
         {store === "apple" ? <AppleIcon /> : <PlayIcon />}
         <span className="flex flex-col items-start leading-none">
-          <span className="text-[10px] font-medium opacity-70">{url ? "Mr. B Ludo" : "…"}</span>
+          <span className="text-[10px] font-medium opacity-70">Mr. B Ludo</span>
           <span className="mt-0.5 text-[15px] font-semibold">{store === "apple" ? t("storeApple") : t("storeGoogle")}</span>
         </span>
       </>
