@@ -30,7 +30,7 @@ export interface SeatInfo {
 interface Props {
   state: GameState;
   legal: number[];
-  onPick: (piece: number) => void;
+  onPick: (piece: number, walkOut?: boolean) => void;
   captureAt?: [number, number] | null;
   seats?: (SeatInfo | undefined)[];
 }
@@ -67,19 +67,31 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       { transform: "translate(0px, 0px)" }, { transform: "translate(0px, -0.24px)" }, { transform: "translate(0px, 0px)" },
       { transform: "translate(0px, -0.08px)" }, { transform: "translate(0px, 0px)" },
     ], { duration: 420, delay: walk, easing: "ease-out" }));
-    // Knocked-out pieces get bumped, then slide back to their yard.
+    // Knocked-out pieces get launched: a high spinning arc home, then a dizzy, squashed landing.
     for (const c of ev.captured) {
       const victim = pieceElements.current.get(`${c.player}-${c.piece}`);
       const vColor = state.players[c.player]?.color;
       const vFrom = previous.pieces[c.player]?.[c.piece];
       if (!victim || vColor == null || vFrom == null) continue;
       const [x, y] = pieceCenter(vColor, vFrom, c.piece, variantOf(state));
-      const dx = x < 7.5 ? -0.35 : 0.35;
+      const [hx, hy] = pieceCenter(vColor, -1, c.piece, variantOf(state));
+      const mx = (x + hx) / 2;
+      const peak = Math.min(y, hy) - 3.2;
+      const spin = hx < x ? -1 : 1;
+      const end = victim.style.transform;
       animations.push(victim.animate([
         { transform: `translate(${x}px, ${y}px)` },
-        { transform: `translate(${x + dx}px, ${y - 0.45}px) rotate(${dx > 0 ? 28 : -28}deg) scale(1.15)`, offset: 0.3 },
-        { transform: victim.style.transform },
-      ], { duration: 620, delay: walk, easing: "cubic-bezier(.3,.7,.3,1)", fill: "backwards" }));
+        { transform: `translate(${x}px, ${y + 0.12}px) scale(1.25, .6)`, offset: 0.1 },
+        { transform: `translate(${(x + mx) / 2}px, ${(y + peak) / 2}px) rotate(${spin * 260}deg) scale(1.15)`, offset: 0.32 },
+        { transform: `translate(${mx}px, ${peak}px) rotate(${spin * 540}deg) scale(1.3)`, offset: 0.5 },
+        { transform: `translate(${(mx + hx) / 2}px, ${(peak + hy) / 2}px) rotate(${spin * 900}deg) scale(1.1)`, offset: 0.7 },
+        { transform: `${end} rotate(${spin * 1080}deg) scale(1.35, .55)`, offset: 0.84 },
+        { transform: `${end} rotate(${spin * 1080 - spin * 14}deg) scale(.92, 1.08)`, offset: 0.9 },
+        { transform: `${end} rotate(${spin * 1080 + spin * 10}deg)`, offset: 0.95 },
+        { transform: end },
+      ], { duration: 1500, delay: walk + 80, easing: "ease-in-out", fill: "backwards" }));
+      const vPawn = victim.querySelector<SVGGElement>(".pawn");
+      if (vPawn) animations.push(vPawn.animate([{ opacity: 1 }, { opacity: 0.55 }, { opacity: 1 }], { duration: 400, delay: walk + 1580 }));
     }
     return () => animations.forEach((a) => a.cancel());
   }, [state]);
@@ -209,11 +221,20 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
 
       {/* Finish: a clear checkered goal with a gold center. */}
       {fia ? <>
-        {/* Four lane positions lead to the separate central goal. */}
+        {/* Four lane positions lead to a gold medallion goal with a star rosette. */}
         <rect x={5 * cell} y={5 * cell} width={cell} height={cell} fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
-        <circle cx="7.5" cy="7.5" r={0.47 * cell} fill={`url(#${boardId}-checker)`} stroke="var(--board-ink)" strokeWidth="0.04" />
-        <circle cx="7.5" cy="7.5" r={0.32 * cell} fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.05" />
-        <Trophy x={7.5 - 0.14 * cell} y={7.5 - 0.14 * cell} width={0.28 * cell} height={0.28 * cell} color="var(--board-gold-ink)" strokeWidth={2.2} />
+        {([0, 1, 2, 3] as Color[]).map((c) => {
+          const [lx, ly] = homeColumnOf(variant)[c][homeColumnOf(variant)[c].length - 1];
+          const ax = lx + cell / 2 - 7.5, ay = ly + cell / 2 - 7.5;
+          const len = Math.hypot(ax, ay) || 1;
+          const ux = ax / len, uy = ay / len, r0 = 0.5 * cell, r1 = 0.3 * cell, w = 0.2 * cell;
+          return <polygon key={c} points={`${7.5 + ux * r0 - uy * w},${7.5 + uy * r0 + ux * w} ${7.5 + ux * r0 + uy * w},${7.5 + uy * r0 - ux * w} ${7.5 + ux * r1},${7.5 + uy * r1}`} fill={BOARD_FILL[c]} stroke="var(--board-mark-line)" strokeWidth="0.02" strokeLinejoin="round" />;
+        })}
+        <circle cx="7.5" cy="7.5" r={0.42 * cell} fill="var(--board-ink)" fillOpacity="0.14" />
+        <circle cx="7.5" cy="7.53" r={0.4 * cell} fill={`url(#${boardId}-checker)`} stroke="var(--board-gold)" strokeWidth="0.07" />
+        <polygon points={Array.from({ length: 16 }, (_, i) => { const a = (i * Math.PI) / 8 - Math.PI / 2; const r = (i % 2 ? 0.17 : 0.31) * cell; return `${7.5 + Math.cos(a) * r},${7.5 + Math.sin(a) * r}`; }).join(" ")} fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.035" strokeLinejoin="round" />
+        <circle cx="7.5" cy="7.5" r={0.15 * cell} fill={`url(#${boardId}-gold)`} stroke="var(--board-gold-ink)" strokeOpacity="0.5" strokeWidth="0.025" />
+        <Trophy x={7.5 - 0.1 * cell} y={7.5 - 0.1 * cell} width={0.2 * cell} height={0.2 * cell} color="var(--board-gold-ink)" strokeWidth={2.4} />
       </> : <>
       <rect x="6" y="6" width="3" height="3" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
       <circle cx="7.5" cy="7.5" r="1.22" fill={`url(#${boardId}-checker)`} stroke="var(--board-ink)" strokeWidth="0.05" />
@@ -228,11 +249,11 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       </g>
 
       <g className="move-destinations">
-        {movePreviews(state, legal).map(({ x, y, color, piece }) => (
+        {movePreviews(state, legal).map(({ x, y, color, piece, walkOut }) => (
           <g key={`${x},${y}`} className="cursor-pointer" role="button" tabIndex={0}
             aria-label={t("movePieceAria", { color: t(COLOR_NAME_KEYS[color]), n: piece + 1 })}
-            onClick={() => onPick(piece)}
-            onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onPick(piece); } }}>
+            onClick={() => onPick(piece, walkOut)}
+            onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onPick(piece, walkOut); } }}>
             <circle cx={x} cy={y} r="0.39" fill={FILL[color]} fillOpacity="0.18" stroke="var(--board-mark)" strokeWidth="0.12" />
             <circle cx={x} cy={y} r="0.39" fill="none" stroke={FILL[color]} strokeWidth="0.055" />
             <circle cx={x} cy={y} r="0.1" fill={FILL[color]} />
@@ -299,7 +320,7 @@ export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState;
       <div className={`seat-card${isTurn ? " seat-card-turn" : ""}${c === right ? " flex-row-reverse text-right" : ""}`} style={{ opacity: pl.forfeited ? 0.45 : 1, ["--pc" as string]: FILL[c] }}>
         {isTurn && (
           <span className={`seat-card-bubble seat-card-bubble-${edge}${ownSeat === seat ? " seat-card-bubble-me" : ""}`} aria-hidden="true">
-            <span className="seat-card-bubble-text">{seat === ownSeat ? t("yourTurnLabel") : name}</span>
+            <span className="seat-card-bubble-text">{seat === ownSeat ? t("yourTurnLabel") : t("theirTurn", { name })}</span>
           </span>
         )}
 
