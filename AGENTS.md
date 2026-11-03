@@ -13,6 +13,7 @@
 - Board-only inks use separate `--board-*` tokens from piece `--ludo-*` colors, so board refinements cannot recolor pieces; decorative board SVG layers never receive pointer events.
 - Legal destination overlays use engine `targetOf` and board `pieceCenter`, invoke the same piece action as piece taps, and animate visual waypoints without splitting authoritative moves; die tint and entry direction are presentation props only.
 - Ludo rules live in `src/lib/ludo/engine.ts` as pure functions (no React/DOM/network) so they can run on a server later; rendering only reads state.
+- Rule variants are `RULES` configs in the one engine, stored as optional `GameState.variant` (missing = classic) and `matches.variant`; quick play filters on it so modes never mix, keeping old saves and Classic behavior unchanged.
 - `src/components/dice-engine/` is copied read-only-sourced from Mr. B Yatzy; keep it presentation-only and never re-link it to Yatzy resources.
 - Vite strips preview `data-tsd-source` attributes only from dice-engine modules because Three.js objects cannot accept DOM source labels during updates.
 - All browser storage keys use the `mrb-ludo:v1:` namespace to stay isolated from Yatzy.
