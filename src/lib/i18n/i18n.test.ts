@@ -79,8 +79,20 @@ describe("i18n usage in source", () => {
   }
 
   it("every t() call references a real key", () => {
-    const used = usedKeys();
-    const bad = [...used].filter((k) => !svKeys.includes(k as TranslationKey));
+    const keys = new Set<string>(svKeys);
+    const bad: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of readdirSync(dir, { withFileTypes: true })) {
+        if (e.name === "node_modules" || e.name.startsWith(".")) continue;
+        const p = join(dir, e.name);
+        if (e.isDirectory()) walk(p);
+        else if (/\.tsx?$/.test(e.name) && !e.name.endsWith(".test.ts")) {
+          const src = readFileSync(p, "utf8");
+          for (const m of src.matchAll(/\bt\(\s*"([^"]+)"/g)) if (!keys.has(m[1])) bad.push(`${e.name}:${m[1]}`);
+        }
+      }
+    };
+    walk(SRC_DIR);
     expect(bad, `unknown keys used: ${bad.join(",")}`).toEqual([]);
   });
 

@@ -1,4 +1,4 @@
-import { YARD, absSquare, goalOf, lastTrackOf, isSafeSquare as safeIn, legalMoves, targetOf, variantOf, type GameState } from "./engine";
+import { YARD, absSquare, canWalkOut, goalOf, lastTrackOf, isSafeSquare as safeIn, legalMoves, targetOf, variantOf, type GameState } from "./engine";
 
 /** Squares (abs) an opponent could reach with one roll of 1..6. */
 function threatened(state: GameState, abs: number): boolean {
