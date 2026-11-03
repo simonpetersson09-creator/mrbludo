@@ -21,9 +21,9 @@ const BOARD_FILL: Record<Color, string> = {
 export interface SeatInfo {
   name: string;
   kind: "human" | "bot" | "online";
-  flag?: string;
+  flag?: string | undefined;
   image?: string | null;
-  emoji?: string;
+  emoji?: string | undefined;
   away?: boolean;
 }
 
