@@ -28,6 +28,7 @@ export function LudoDie({ value, rolling, pipColor, onTap, disabled }: Props) {
       aria-label={t("rollDiceAria")}
       onClick={disabled ? undefined : onTap}
       aria-disabled={disabled}
+      disabled={disabled}
       className="throw-tray relative h-full w-full"
     >
       <span className="throw-cloth" aria-hidden="true" />
