@@ -30,8 +30,8 @@ export const Route = createFileRoute("/play")({
 
 const ROLL_MS = 1150;
 // Bot pacing: pause before each bot action, and how long the bot's die tumbles.
-const BOT_DELAY = { slow: 1400, normal: 700, fast: 250 } as const;
-const BOT_ROLL_MS = { slow: 1150, normal: 850, fast: 500 } as const;
+const BOT_DELAY = { slow: 1900, normal: 1100, fast: 250 } as const;
+const BOT_ROLL_MS = { slow: 1300, normal: 1050, fast: 500 } as const;
 const COLOR_VAR = ["var(--ludo-red)", "var(--ludo-green)", "var(--ludo-yellow)", "var(--ludo-blue)"];
 const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
