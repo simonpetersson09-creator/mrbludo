@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { GOAL, YARD, absSquare, goalOf, startSquare, applyMove, applyRoll, createGame, legalMoves, targetOf, type Color, type GameState, type Variant } from "./engine";
+import { GOAL, YARD, absSquare, goalOf, startSquare, applyMove, applyRoll, canWalkOut, createGame, legalMoves, targetOf, type Color, type GameState, type Variant } from "./engine";
 import { chooseMove } from "./ai";
 import { pieceWaypoints } from "./piece-motion";
 import { performAction, startState } from "@/lib/online/match-logic";
@@ -30,6 +30,24 @@ describe("Svenska Fia med knuff", () => {
     expect(s.pieces[0][2]).toBe(0);
     expect(s.lastEvent).toMatchObject({ kind: "moved", alsoOut: 0 });
     expect(s.current).toBe(0); // 6 = extra roll
+  });
+
+  it("a 6 can instead bring one piece out alone and walk it six steps", () => {
+    let s = applyRoll(game("fia"), 6);
+    expect(canWalkOut(s, 1)).toBe(true);
+    s = applyMove(s, 1, true);
+    expect(s.pieces[0]).toEqual([YARD, 6, YARD, YARD]);
+    expect(s.lastEvent).not.toHaveProperty("alsoOut");
+    expect(s.current).toBe(0);
+  });
+
+  it("walking out alone is not allowed in Classic, on other rolls, or past an own piece", () => {
+    expect(canWalkOut(applyRoll(game("classic"), 6), 0)).toBe(false);
+    expect(canWalkOut(applyRoll(game("fia"), 1), 0)).toBe(false);
+    const s = applyRoll(withPieces(game("fia"), [[4, YARD, YARD, YARD], [YARD, YARD, YARD, YARD]]), 6);
+    expect(canWalkOut(s, 1)).toBe(false);
+    expect(() => applyMove(s, 1, true)).toThrow();
+    expect(() => performAction(s, "p0", { kind: "move", piece: 1, walkOut: true }, () => 1)).toThrow();
   });
 
   it("a 6 can instead move a piece on the board six steps", () => {
