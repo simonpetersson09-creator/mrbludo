@@ -385,10 +385,10 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display
 @media (max-height: 739px) { .match-info-bar { display: none; } }
 @media (orientation: landscape) and (max-height: 540px) { .match-info-bar { display: none; } }
 
-/* Compact notices: half size, linger, then fade away. */
-.mrb-toaster { --width: min(230px, 78vw) !important; }
-.mrb-toaster [data-sonner-toast] { padding: 6px 12px !important; font-size: 11.5px !important; gap: 6px !important; border-radius: 9999px !important; }
-.mrb-toaster [data-sonner-toast] [data-icon] { width: 14px; height: 14px; }
+/* Compact notices: small pill that hugs its text, lingers, then fades away. */
+.mrb-toaster { --width: min(200px, 62vw) !important; }
+.mrb-toaster [data-sonner-toast] { width: fit-content !important; max-width: min(200px, 62vw) !important; margin-inline: auto !important; padding: 3px 9px !important; font-size: 10px !important; gap: 4px !important; border-radius: 9999px !important; line-height: 1.25 !important; }
+.mrb-toaster [data-sonner-toast] [data-icon] { width: 11px; height: 11px; }
 .mrb-toaster [data-sonner-toast][data-removed="true"] { transition: opacity .7s ease, transform .7s ease !important; }
 
 /* Goal celebration: rings and sparkles burst from the center as a piece arrives. */
