@@ -137,11 +137,15 @@ function RootComponent() {
   // After an app update, old code chunks disappear; reload once instead of showing a blank screen.
   useEffect(() => {
     const KEY = "mrb-ludo:v1:chunk-reload";
+    // One try is not enough: an update can still be writing its files, so retry a few times and
+    // wait a little longer for every try instead of leaving a blank screen.
     const onFail = (e: Event) => {
-      if (sessionStorage.getItem(KEY)) return;
+      let tries = 0;
+      try { tries = Number.parseInt(sessionStorage.getItem(KEY) ?? "0", 10) || 0; } catch { return; }
+      if (tries > 2) return;
       e.preventDefault();
-      sessionStorage.setItem(KEY, "1");
-      window.location.reload();
+      try { sessionStorage.setItem(KEY, String(tries + 1)); } catch { return; }
+      window.setTimeout(() => window.location.reload(), 250 + tries * 500);
     };
     window.addEventListener("vite:preloadError", onFail);
     const clear = window.setTimeout(() => sessionStorage.removeItem(KEY), 10_000);
