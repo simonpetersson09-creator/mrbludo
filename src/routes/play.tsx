@@ -7,6 +7,7 @@ import {
 import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { MatchInfoBar } from "@/components/ludo/MatchInfoBar";
 import { LudoDie } from "@/components/ludo/LudoDie";
+import { useDieColor } from "@/components/ludo/useDieColor";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { applyMove, canWalkOut, applyRoll, forfeit, legalMoves, rollDie, absSquare, variantOf, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
 import { chooseBotAction } from "@/lib/ludo/ai";
@@ -69,6 +70,8 @@ function PlayPage() {
   useEffect(() => { if (state && state.phase !== "finished") saveGame(state); }, [state]);
 
   const me = state?.players[state.current];
+  // The die keeps the colour of the player who just moved until their piece has finished walking.
+  const dieColor = useDieColor(me ? COLOR_VAR[me.color] : "", state);
   const legal = state && state.phase === "move" ? legalMoves(state) : [];
   const humanTurn = !!me && !me.isBot && state!.phase !== "finished";
 
@@ -177,7 +180,7 @@ function PlayPage() {
 
       <div className="game-bottom-controls">
         <div className="game-throw-area">
-          <LudoDie value={face} rolling={rolling} onTap={doRoll} disabled={!canRoll} pipColor={COLOR_VAR[me.color]} />
+          <LudoDie value={face} rolling={rolling} onTap={doRoll} disabled={!canRoll} pipColor={dieColor} />
         </div>
         <div className="game-command-area">
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={doRoll} disabled={!canRoll}>

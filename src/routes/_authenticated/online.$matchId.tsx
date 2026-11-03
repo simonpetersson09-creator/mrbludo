@@ -13,6 +13,7 @@ import { supabase } from "@/lib/auth/client";
 import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { MatchInfoBar } from "@/components/ludo/MatchInfoBar";
 import { LudoDie } from "@/components/ludo/LudoDie";
+import { useDieColor } from "@/components/ludo/useDieColor";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { goalOf, legalMoves, variantOf, type GameState } from "@/lib/ludo/engine";
 import { RollLabel } from "@/components/ludo/RollLabel";
@@ -112,6 +113,8 @@ function OnlineMatchPage() {
   }, [matchId, load]);
 
   const state = (match?.state ?? null) as GameState | null;
+  // The die keeps the colour of the player who just moved until their piece has finished walking.
+  const dieColor = useDieColor(state ? COLOR_VAR[state.players[state.current]?.color ?? 0] ?? "" : "", state);
 
   // Computer seats (quick play) are played by the server; nudge it quickly on their turn.
   const botTurn = !!state && state.phase !== "finished" && !!state.players[state.current]?.isBot;
@@ -217,7 +220,7 @@ function OnlineMatchPage() {
 
       <div className="game-bottom-controls game-bottom-controls-chat">
         <div className="game-throw-area">
-          <LudoDie value={face} rolling={rolling} onTap={() => send({ kind: "roll" })} disabled={!canRoll} pipColor={COLOR_VAR[me.color]} />
+          <LudoDie value={face} rolling={rolling} onTap={() => send({ kind: "roll" })} disabled={!canRoll} pipColor={dieColor} />
         </div>
         <div className="game-command-area">
           <QuickChat matchId={matchId} myName={mySeat >= 0 ? state.players[mySeat].name : ""} myColor={mySeat >= 0 ? state.players[mySeat].color : null} />

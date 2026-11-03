@@ -58,7 +58,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
     const animations: Animation[] = [];
     const waypoints = pieceWaypoints(player.color, from, ev.to, ev.piece, previous.dice, variantOf(state));
     const walk = (waypoints.length - 1) * STEP_MS;
-    // Soft footsteps: a pair of prints appears on each square the piece leaves, then fades from the back.
+    // Soft footsteps: a pair of prints in the player's own colour appears on each square the piece
+    // leaves, lingers a few squares, then fades from the back — oldest first.
     const trail = trailRef.current;
     if (trail && waypoints.length > 2) {
       const fill = FILL[player.color];
@@ -70,23 +71,29 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         g.setAttribute("opacity", "0");
         for (const side of [-1, 1]) {
           const e = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
-          e.setAttribute("cx", String(side * 0.075)); e.setAttribute("cy", String(side * 0.05));
-          e.setAttribute("rx", "0.05"); e.setAttribute("ry", "0.085"); e.setAttribute("fill", "var(--board-ink)"); e.setAttribute("stroke", fill); e.setAttribute("stroke-width", "0.02");
+          e.setAttribute("cx", String(side * 0.1)); e.setAttribute("cy", String(side * 0.055));
+          e.setAttribute("rx", "0.072"); e.setAttribute("ry", "0.12");
+          // Inline style so the colour variable always resolves; a thin dark rim keeps the print
+          // readable on white squares and on the player's own coloured lane.
+          e.style.fill = fill;
+          e.style.stroke = "var(--board-ink)";
+          e.style.strokeWidth = "0.018";
+          e.style.strokeOpacity = "0.5";
           g.appendChild(e);
         }
         trail.appendChild(g);
-        // Each print shows up as the piece steps off, lingers ~2 squares, then fades — oldest first,
-        // and the last one is gone just after the piece lands.
-        const total = walk + 360;
+        // Each print shows up as the piece steps off, stays about three squares, then fades —
+        // oldest first, and the last one is gone shortly after the piece lands.
+        const total = walk + 560;
         const appear = (i + 0.55) * STEP_MS;
-        const shown = Math.min(appear + 140, total - 2);
-        const fade = Math.max(shown + 1, Math.min(appear + 2.2 * STEP_MS, total - 341));
-        const gone = Math.max(fade + 1, Math.min(fade + 340, total));
+        const shown = Math.min(appear + 150, total - 2);
+        const fade = Math.max(shown + 1, Math.min(appear + 3.1 * STEP_MS, total - 501));
+        const gone = Math.max(fade + 1, Math.min(fade + 520, total));
         const a = g.animate([
           { opacity: 0, offset: 0 },
           { opacity: 0, offset: appear / total },
-          { opacity: 0.38, offset: shown / total },
-          { opacity: 0.3, offset: fade / total },
+          { opacity: 0.78, offset: shown / total },
+          { opacity: 0.62, offset: fade / total },
           { opacity: 0, offset: gone / total },
           ...(gone < total ? [{ opacity: 0, offset: 1 }] : []),
         ], { duration: total, easing: "ease-in-out" });
