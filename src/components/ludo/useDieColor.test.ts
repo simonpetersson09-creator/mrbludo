@@ -22,3 +22,34 @@ describe("die colour handover", () => {
     expect(dieColorHoldMs(s)).toBeGreaterThan(0);
   });
 });
+
+describe("useDieColor", () => {
+  const COLORS = ["red", "green", "yellow", "blue"];
+  const game = () => createGame([
+    { id: "a", name: "A", color: 0, isBot: false },
+    { id: "b", name: "B", color: 1, isBot: true },
+  ]);
+  // Red on square 8 with a five rolled: the walk to square 13 takes five squares.
+  const ready = () => ({ ...game(), phase: "move" as const, dice: 5, pieces: [[8, -1, -1, -1], [-1, -1, -1, -1]] });
+
+  it("keeps the mover's colour while the piece walks, then hands over", async () => {
+    vi.useFakeTimers();
+    try {
+      const before = ready();
+      const after = applyMove(before, 0);
+      const { result, rerender } = renderHook(
+        ({ s }: { s: ReturnType<typeof ready> }) => useDieColor(COLORS[s.players[s.current].color] ?? "", s),
+        { initialProps: { s: before } },
+      );
+      expect(result.current).toBe("red");
+      rerender({ s: after });
+      expect(result.current).toBe("red"); // the turn has not gone over yet
+      await vi.advanceTimersByTimeAsync(900);
+      expect(result.current).toBe("red");
+      await vi.advanceTimersByTimeAsync(300);
+      expect(result.current).toBe("green");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
