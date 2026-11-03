@@ -110,7 +110,7 @@ export interface GameState {
 
 export type GameEvent =
   | { kind: "rolled"; player: number; value: number; noMoves: boolean; threeSixes: boolean }
-  | { kind: "moved"; player: number; piece: number; from: number; to: number; captured: { player: number; piece: number }[]; reachedGoal: boolean; extraRoll: boolean; alsoOut?: number }
+  | { kind: "moved"; player: number; piece: number; from: number; to: number; roll?: number; captured: { player: number; piece: number }[]; reachedGoal: boolean; extraRoll: boolean; alsoOut?: number }
   | { kind: "forfeit"; player: number };
 
 export function createGame(players: Player[], variant: Variant = "classic"): GameState {
@@ -303,7 +303,7 @@ export function applyMove(state: GameState, piece: number, walkOut = false): Gam
   const goal = goalOf(variant);
   const reachedGoal = to === goal;
   const extraRoll = roll === 6;
-  s.lastEvent = { kind: "moved", player: p, piece, from, to, captured, reachedGoal, extraRoll, ...(alsoOut != null ? { alsoOut } : {}) };
+  s.lastEvent = { kind: "moved", player: p, piece, from, to, roll, captured, reachedGoal, extraRoll, ...(alsoOut != null ? { alsoOut } : {}) };
   if (s.pieces[p].every((x) => x === goal)) {
     finish(s, p);
     return s;

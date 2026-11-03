@@ -11,8 +11,10 @@ export function dieColorHoldMs(state: GameState): number {
   if (ev?.kind !== "moved") return 0;
   // With animations turned down there is no walk to wait for.
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return 0;
+  const player = state.players[ev.player];
+  if (!player) return 0;
   // A short beat after the piece lands, so the handover reads as one moment.
-  return walkDurationMs(ev.from, ev.to, variantOf(state), ev.captured.length > 0) + 150;
+  return walkDurationMs(player.color, ev.from, ev.to, ev.piece, ev.roll, variantOf(state), ev.captured.length > 0) + 150;
 }
 
 /**

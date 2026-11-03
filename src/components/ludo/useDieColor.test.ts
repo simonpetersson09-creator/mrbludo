@@ -17,7 +17,7 @@ describe("die colour handover", () => {
     const s = applyMove(applyRoll(two(), 6), 0);
     const ev = s.lastEvent;
     if (ev?.kind !== "moved") throw new Error("expected a move");
-    expect(dieColorHoldMs(s)).toEqual(walkDurationMs(ev.from, ev.to, "classic", ev.captured.length > 0) + 150);
+    expect(dieColorHoldMs(s)).toEqual(walkDurationMs(s.players[ev.player].color, ev.from, ev.to, ev.piece, ev.roll, "classic", ev.captured.length > 0) + 150);
     expect(dieColorHoldMs(s)).toBeGreaterThan(0);
   });
 });

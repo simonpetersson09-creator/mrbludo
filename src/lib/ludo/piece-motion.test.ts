@@ -13,18 +13,21 @@ it("does not walk a captured piece backward around the board", () => {
 });
 
 it("waits exactly as long as the board walks a normal move", () => {
-  expect(walkDurationMs(4, 9)).toEqual((pieceWaypoints(0, 4, 9, 0).length - 1) * STEP_MS);
-  expect(walkDurationMs(4, 9)).toEqual(5 * 185);
+  expect(walkDurationMs(0, 4, 9, 0, 5)).toEqual((pieceWaypoints(0, 4, 9, 0, 5).length - 1) * STEP_MS);
+  expect(walkDurationMs(0, 4, 9, 0, 5)).toEqual(5 * 185);
 });
 it("counts every square of a walk out of the yard", () => {
-  expect(walkDurationMs(-1, 6)).toEqual((pieceWaypoints(0, -1, 6, 0).length - 1) * STEP_MS);
-  expect(walkDurationMs(-1, 6)).toEqual(7 * 185);
+  expect(walkDurationMs(0, -1, 6, 0, 6)).toEqual((pieceWaypoints(0, -1, 6, 0, 6).length - 1) * STEP_MS);
+  expect(walkDurationMs(0, -1, 6, 0, 6)).toEqual(7 * 185);
 });
 it("counts the bounce off the goal in Fia", () => {
   const walk = pieceWaypoints(0, 41, 42, 0, 5, "fia");
-  expect(walk.length).toBeGreaterThan(2);
-  expect(walkDurationMs(41, 42, "fia")).toEqual((walk.length - 1) * STEP_MS);
+  expect(walk).toHaveLength(6);
+  expect(walkDurationMs(0, 41, 42, 0, 5, "fia")).toEqual((walk.length - 1) * STEP_MS);
 });
 it("holds longer when the move knocks a piece out", () => {
-  expect(walkDurationMs(4, 9, "classic", true)).toEqual(5 * 185 + 2.4 * 185);
+  expect(walkDurationMs(0, 4, 9, 0, 5, "classic", true)).toEqual(5 * 185 + 2.4 * 185);
+});
+it("still counts the squares when the roll behind the move is unknown", () => {
+  expect(walkDurationMs(0, 4, 9, 0, null)).toEqual(5 * 185);
 });
