@@ -444,6 +444,7 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
     retention: { d1: retention(1), d7: retention(7), d30: retention(30) },
     days,
     errors: ev.filter((e) => e.kind === "error").slice(0, 30).map((e) => ({ at: e.created_at, platform: e.platform, detail: e.detail })),
+    ads: ev.filter((e) => e.kind === "ad").slice(0, 40).map((e) => ({ at: e.created_at, platform: e.platform, detail: e.detail })),
   };
 };
 

@@ -70,6 +70,14 @@ describe("Svenska Fia med knuff", () => {
     expect(six.pieces[0]).toEqual([0, 0, 0, YARD]);
   });
 
+  it("all four own pieces may stand together on the start square (agreed rule)", () => {
+    const base = withPieces(game("fia"), [[0, 0, YARD, YARD], [YARD, YARD, YARD, YARD]]);
+    const six = applyMove(applyRoll(base, 6), 2);
+    expect(six.pieces[0]).toEqual([0, 0, 0, 0]);
+    const lastOne = applyMove(applyRoll(withPieces(game("fia"), [[0, 0, 0, YARD], [YARD, YARD, YARD, YARD]]), 6), 3);
+    expect(lastOne.pieces[0]).toEqual([0, 0, 0, 0]);
+  });
+
   it("has no three-sixes limit", () => {
     let s = withPieces(game("fia"), [[10, F, F, F], [YARD, YARD, YARD, YARD]]);
     for (let i = 0; i < 4; i++) s = applyMove(applyRoll(s, 6), 0);

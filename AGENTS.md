@@ -42,3 +42,4 @@
 - Profile pictures are small square JPEG data URLs kept in `profiles.avatar_image` (no storage bucket: this workspace blocks public ones), with the emoji in `profiles.avatar` as the fallback; the device copy drives the UI, and a device that has never seen the picture must adopt the server copy (`adoptOwnAvatarFromServer`) before it pushes, so a new device can never erase an existing picture.
 - Friend requests follow Yatzy: only between players who shared an online match (sent from the result screen); there is no friend-code entry.
 - Native invite links are parsed only by pure `src/lib/native/deep-link.ts` (own domain + `mrbludo://`; foreign hosts ignored).
+- App errors and ad events reach the admin panel only via `src/lib/online/report.ts` → `app_events` (deduplicated, capped per session, short fields only; consent/tracking answers never leave the device).

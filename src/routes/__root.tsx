@@ -20,6 +20,7 @@ import { deviceId, platform } from "@/lib/online/telemetry";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { reportAppError } from "@/lib/online/report";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -50,16 +51,17 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportAppError(error, "error_page");
   }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          {t("errorPageTitle")}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          {t("errorPageBody")}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -69,7 +71,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            {t("tryAgain")}
           </button>
           <a
             href="/"
@@ -143,6 +145,14 @@ function RootComponent() {
     window.addEventListener("vite:preloadError", onFail);
     const clear = window.setTimeout(() => sessionStorage.removeItem(KEY), 10_000);
     return () => { window.removeEventListener("vite:preloadError", onFail); window.clearTimeout(clear); };
+  }, []);
+  // Uncaught app errors go to the admin logs (deduplicated and capped per session).
+  useEffect(() => {
+    const onError = (e: ErrorEvent) => reportAppError(e.error ?? e.message, "onerror");
+    const onRejection = (e: PromiseRejectionEvent) => reportAppError(e.reason, "unhandledrejection");
+    window.addEventListener("error", onError);
+    window.addEventListener("unhandledrejection", onRejection);
+    return () => { window.removeEventListener("error", onError); window.removeEventListener("unhandledrejection", onRejection); };
   }, []);
   useEffect(() => {
     const ping = () => logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
