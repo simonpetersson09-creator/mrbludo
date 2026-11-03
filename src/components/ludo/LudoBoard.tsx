@@ -95,16 +95,25 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         animations.push(a);
       }
     }
-    animations.push(element.animate(waypoints.map(([x, y], index) => ({
-      transform: index === waypoints.length - 1 ? element.style.transform : `translate(${x}px, ${y}px)`,
-      offset: index / (waypoints.length - 1),
-    })), { duration: walk, easing: "linear" }));
+    // Knock slow motion: the final step onto a victim is drawn out, so the hit lands with weight.
+    const knock = ev.captured.length > 0 && waypoints.length > 1;
+    const lastStep = knock ? STEP_MS * 3.4 : STEP_MS;
+    const walkTotal = walk - STEP_MS + lastStep;
+    animations.push(element.animate(waypoints.map(([x, y], index) => {
+      const n = waypoints.length - 1;
+      const offset = index === n ? 1 : (index * STEP_MS) / walkTotal;
+      return {
+        transform: index === n ? element.style.transform : `translate(${x}px, ${y}px)`,
+        offset,
+        ...(knock && index === n - 1 ? { easing: "cubic-bezier(.55,0,.85,.35)" } : {}),
+      };
+    }), { duration: walkTotal, easing: "linear" }));
     // Landing bounce.
     const pawn = element.querySelector<SVGGElement>(".pawn");
     if (pawn) animations.push(pawn.animate([
       { transform: "translate(0px, 0px)" }, { transform: "translate(0px, -0.24px)" }, { transform: "translate(0px, 0px)" },
       { transform: "translate(0px, -0.08px)" }, { transform: "translate(0px, 0px)" },
-    ], { duration: 420, delay: walk, easing: "ease-out" }));
+    ], { duration: 420, delay: walkTotal, easing: "ease-out" }));
     // Knocked-out pieces get launched: a high spinning arc home, then a dizzy, squashed landing.
     for (const c of ev.captured) {
       const victim = pieceElements.current.get(`${c.player}-${c.piece}`);
@@ -127,9 +136,9 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         { transform: `${end} rotate(${spin * 1080 - spin * 14}deg) scale(.92, 1.08)`, offset: 0.9 },
         { transform: `${end} rotate(${spin * 1080 + spin * 10}deg)`, offset: 0.95 },
         { transform: end },
-      ], { duration: 1500, delay: walk + 80, easing: "ease-in-out", fill: "backwards" }));
+      ], { duration: 1500, delay: walkTotal + 80, easing: "ease-in-out", fill: "backwards" }));
       const vPawn = victim.querySelector<SVGGElement>(".pawn");
-      if (vPawn) animations.push(vPawn.animate([{ opacity: 1 }, { opacity: 0.55 }, { opacity: 1 }], { duration: 400, delay: walk + 1580 }));
+      if (vPawn) animations.push(vPawn.animate([{ opacity: 1 }, { opacity: 0.55 }, { opacity: 1 }], { duration: 400, delay: walkTotal + 1580 }));
     }
     return () => animations.forEach((a) => a.cancel());
   }, [state]);
