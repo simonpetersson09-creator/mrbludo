@@ -46,7 +46,8 @@ describe("Fia board geometry", () => {
       for (let p = 1; p < 58; p++) {
         const [ax, ay] = pieceCenter(c, p - 1, 0, "fia");
         const [bx, by] = pieceCenter(c, p, 0, "fia");
-        expect(Math.abs(ax - bx) + Math.abs(ay - by)).toBe(1);
+        // one square at a time (the track's corner turns are diagonal, as in Classic)
+        expect(Math.max(Math.abs(ax - bx), Math.abs(ay - by))).toBe(1);
       }
       expect(cells.slice(52).map((s) => s)).toEqual(FIA_HOME_COLUMN[c].map(String));
       void cell;
@@ -80,7 +81,7 @@ describe("Fia board geometry", () => {
         { id: "b", name: "B", color: ((c + 2) % 4) as Color, isBot: false },
       ], "fia");
       s = { ...s, pieces: [[-1, 58, 58, 58], [58, 58, 58, -1]] };
-      s = applyMove(applyRoll(s, 1), 0); // out on 1
+      s = applyMove(applyRoll(s, 6), 0); // out (six keeps the turn)
       expect(s.pieces[0][0]).toBe(0);
       // walk 57 more steps with sixes (extra rolls keep the turn) and a final 3
       for (let i = 0; i < 9; i++) s = applyMove(applyRoll(s, 6), 0);
