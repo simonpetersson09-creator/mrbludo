@@ -149,7 +149,7 @@ function OnlineMatchPage() {
     return () => window.clearTimeout(tm);
   }, [state?.current, state?.phase, userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const send = useCallback(async (action: { kind: "roll" } | { kind: "move"; piece: number }) => {
+  const send = useCallback(async (action: { kind: "roll" } | { kind: "move"; piece: number; walkOut?: boolean }) => {
     if (!match || pending || offline) return;
     setPending(true);
     if (action.kind === "roll") { rollStart.current = Date.now(); setRolling(true); void playLightHaptic(); }
@@ -177,21 +177,6 @@ function OnlineMatchPage() {
   const captureAt = ev?.kind === "moved" && ev.captured.length ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece, variantOf(state)) as [number, number]) : null;
   const seatOf = (id: string) => seats.find((s) => s.user_id === id);
 
-  let status = "";
-  if (state.phase === "finished") status = t("playerWon", { name: state.players[state.winner!].name });
-  else if (rolling) status = t("statusRolling");
-  else if (!myTurn) status = t("theirTurn", { name: me.name });
-  else if (state.phase === "move") status = legal.length === 1 ? t("tapPiece") : t("choosePiece");
-  else if (ev?.kind === "moved" && ev.extraRoll && ev.player === state.current) status = t("extraRoll");
-  else status = t("yourTurn");
-  let sub = "";
-  if (rolling) sub = "";
-  else if (ev?.kind === "rolled" && ev.noMoves && ev.value !== 6) sub = t("subNoMoves", { name: state.players[ev.player].name, value: ev.value });
-  else if (ev?.kind === "rolled" && ev.threeSixes) sub = t("subThreeSixes", { name: state.players[ev.player].name });
-  else if (ev?.kind === "moved" && ev.captured.length) sub = t("subCapture", { name: state.players[ev.player].name, names: ev.captured.map((c) => state.players[c.player].name).join(", ") });
-  else if (ev?.kind === "moved" && ev.reachedGoal) sub = t("subGoal", { name: state.players[ev.player].name });
-  else if (ev?.kind === "forfeit") sub = t("subLeft", { name: state.players[ev.player].name });
-
   const seatInfo = state.players.map((p) => { const s = seatOf(p.id); return { name: p.name, kind: p.isBot ? "bot" as const : "online" as const, flag: s ? flag(s.country) : undefined, image: s ? pics[s.user_id] : null, emoji: s?.avatar, away: !!s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited }; });
 
   return (
@@ -200,7 +185,7 @@ function OnlineMatchPage() {
         <div className="game-board-stack flex flex-col">
         <SeatCardRow state={state} seats={seatInfo} edge="top" ownSeat={mySeat} />
         <div className="aspect-square w-full rounded-xl shadow-2xl">
-          <LudoBoard state={state} legal={legal} onPick={(piece) => send({ kind: "move", piece })} captureAt={captureAt} seats={seatInfo} />
+          <LudoBoard state={state} legal={legal} onPick={(piece, walkOut) => send({ kind: "move", piece, ...(walkOut ? { walkOut: true } : {}) })} captureAt={captureAt} seats={seatInfo} />
         </div>
         <SeatCardRow state={state} seats={seatInfo} edge="bottom" ownSeat={mySeat} />
 
@@ -208,8 +193,7 @@ function OnlineMatchPage() {
       </div>
 
       <div className="text-center" aria-live="polite">
-        <p className="font-display text-base font-bold" style={{ color: COLOR_VAR[me.color] }}>{offline ? t("reconnecting") : status}</p>
-        <p className="h-4 text-xs text-muted-foreground">{sub || (state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
+        <p className="h-4 text-xs text-muted-foreground">{offline ? t("reconnecting") : (state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
       </div>
 
       <div className="game-bottom-controls game-bottom-controls-chat">

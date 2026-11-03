@@ -256,19 +256,32 @@ export function applyRoll(state: GameState, value: number): GameState {
   return s;
 }
 
-export function applyMove(state: GameState, piece: number): GameState {
+/**
+ * Fia: on a six a yard piece may instead come out alone and walk the six steps.
+ * Legal when no own piece blocks progress 1..6 (the walk passes over them).
+ */
+export function canWalkOut(state: GameState, piece: number): boolean {
+  const variant = variantOf(state);
+  if (!RULES[variant].doubleExitOnSix || state.phase !== "move" || state.dice !== 6) return false;
+  const own = state.pieces[state.current];
+  if (own?.[piece] !== YARD) return false;
+  return !own.some((p, j) => j !== piece && p >= 1 && p <= 6);
+}
+
+export function applyMove(state: GameState, piece: number, walkOut = false): GameState {
   if (state.phase !== "move" || state.dice == null) throw new Error("Not in move phase");
   if (!legalMoves(state).includes(piece)) throw new Error("Illegal move");
+  if (walkOut && !canWalkOut(state, piece)) throw new Error("Illegal move");
   const s = clone(state);
   const p = s.current;
   const roll = s.dice!;
   const from = s.pieces[p][piece];
   const variant = variantOf(s);
-  const to = targetOf(from, roll, variant)!;
+  const to = walkOut ? 6 : targetOf(from, roll, variant)!;
   s.pieces[p][piece] = to;
-  // Fia: a six out of the yard brings a second home piece along.
+  // Fia: a six out of the yard brings a second home piece along (unless walking out alone).
   let alsoOut: number | undefined;
-  if (from === YARD && roll === 6 && RULES[variant].doubleExitOnSix) {
+  if (!walkOut && from === YARD && roll === 6 && RULES[variant].doubleExitOnSix) {
     const second = s.pieces[p].findIndex((x, j) => j !== piece && x === YARD);
     if (second >= 0) { s.pieces[p][second] = 0; alsoOut = second; }
   }

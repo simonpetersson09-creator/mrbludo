@@ -10,6 +10,7 @@ export function pieceWaypoints(color: Color, from: number, to: number, piece: nu
     const steps = [...Array.from({ length: GOAL - from + 1 }, (_, i) => from + i), ...Array.from({ length: GOAL - to }, (_, i) => GOAL - 1 - i)];
     return steps.map(at);
   }
+  if (from === YARD && to > 0) return [at(YARD), ...Array.from({ length: to + 1 }, (_, i) => at(i))];
   if (from === YARD || to <= from || to > GOAL) return [at(from), at(to)];
   return Array.from({ length: to - from + 1 }, (_, index) => at(from + index));
 }

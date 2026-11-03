@@ -7,7 +7,7 @@ import {
 import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
-import { applyMove, applyRoll, forfeit, legalMoves, rollDie, absSquare, variantOf, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
+import { applyMove, canWalkOut, applyRoll, forfeit, legalMoves, rollDie, absSquare, variantOf, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
 import { chooseMove } from "@/lib/ludo/ai";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { pieceCenter } from "@/lib/ludo/board";
@@ -33,8 +33,8 @@ export const Route = createFileRoute("/play")({
 
 const ROLL_MS = 1150;
 // Bot pacing: pause before each bot action, and how long the bot's die tumbles.
-const BOT_DELAY = { slow: 1900, normal: 1100, fast: 250 } as const;
-const BOT_ROLL_MS = { slow: 1300, normal: 1050, fast: 500 } as const;
+const BOT_DELAY = { slow: 2500, normal: 1600, fast: 250 } as const;
+const BOT_ROLL_MS = { slow: 1500, normal: 1250, fast: 500 } as const;
 const COLOR_VAR = ["var(--ludo-red)", "var(--ludo-green)", "var(--ludo-yellow)", "var(--ludo-blue)"];
 const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
@@ -85,9 +85,10 @@ function PlayPage() {
     }, human ? ROLL_MS : BOT_ROLL_MS[settings.botSpeed]);
   }, [state, settings.botSpeed]);
 
-  const doMove = useCallback((piece: number) => {
+  const doMove = useCallback((piece: number, walkOut = false) => {
     if (busy.current || !state || state.phase !== "move" || !legalMoves(state).includes(piece)) return;
-    const next = applyMove(state, piece);
+    if (walkOut && !canWalkOut(state, piece)) return;
+    const next = applyMove(state, piece, walkOut);
     const ev = next.lastEvent;
     if (ev?.kind === "moved" && !state.players[ev.player].isBot) void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
     setState(next);
@@ -150,22 +151,6 @@ function PlayPage() {
     : null;
   void absSquare;
 
-  let status = "";
-  if (state.phase === "finished") status = t("playerWon", { name: state.players[state.winner!].name });
-  else if (rolling) status = t("statusRolling");
-  else if (me.isBot) status = t("statusThinking", { name: me.name });
-  else if (state.phase === "move") status = legal.length === 1 ? t("tapPiece") : t("choosePiece");
-  else if (ev?.kind === "rolled" && ev.threeSixes && state.players[ev.player] === me) status = t("threeSixesTurn");
-  else if (ev?.kind === "rolled" && ev.noMoves && ev.player === state.current && ev.value === 6) status = t("noMovesExtra");
-  else if (ev?.kind === "moved" && ev.extraRoll && ev.player === state.current) status = t("extraRoll");
-  else status = t("yourTurn");
-  let sub = "";
-  if (ev?.kind === "rolled" && ev.noMoves && ev.value !== 6) sub = t("subNoMoves", { name: state.players[ev.player].name, value: ev.value });
-  else if (ev?.kind === "rolled" && ev.threeSixes) sub = t("subThreeSixes", { name: state.players[ev.player].name });
-  else if (ev?.kind === "moved" && ev.captured.length) sub = t("subCapture", { name: state.players[ev.player].name, names: ev.captured.map((c) => state.players[c.player].name).join(", ") });
-  else if (ev?.kind === "moved" && ev.reachedGoal) sub = t("subGoal", { name: state.players[ev.player].name });
-  else if (ev?.kind === "forfeit") sub = t("subForfeit", { name: state.players[ev.player].name });
-
   const canRoll = humanTurn && state.phase === "roll" && !rolling;
 
   const seatInfo = state.players.map((p) => ({ name: p.name, kind: p.isBot ? "bot" as const : "human" as const, image: p.isBot ? null : ownAvatar, flag: p.isBot ? undefined : ownFlag }));
@@ -183,11 +168,6 @@ function PlayPage() {
         <SeatCardRow state={state} seats={seatInfo} edge="bottom" ownSeat={ownSeat} />
 
        </div>
-      </div>
-
-      <div className="text-center" aria-live="polite">
-        <p className="font-display text-base font-bold" style={{ color: COLOR_VAR[me.color] }}>{status}</p>
-        <p className="h-4 text-xs text-muted-foreground">{sub}</p>
       </div>
 
       <div className="game-bottom-controls">

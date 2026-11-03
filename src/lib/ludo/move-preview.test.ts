@@ -9,13 +9,13 @@ describe("legal destination previews", () => {
     state.phase = "move"; state.dice = 5; state.pieces[0] = [0, -1, 54, 56];
     const before = JSON.stringify(state);
     const [x, y] = pieceCenter(0, 5, 0);
-    expect(movePreviews(state, legalMoves(state))).toEqual([{ x, y, color: 0, piece: 0 }]);
+    expect(movePreviews(state, legalMoves(state))).toEqual([{ x, y, color: 0, piece: 0, walkOut: false }]);
     expect(JSON.stringify(state)).toBe(before);
   });
   it("deduplicates the shared starting square after a six", () => {
     const state = createGame([{ id: "a", name: "A", color: 0, isBot: false }, { id: "b", name: "B", color: 1, isBot: false }]);
     state.phase = "move"; state.dice = 6;
-    expect(movePreviews(state, legalMoves(state))).toEqual([{ x: 1.5, y: 6.5, color: 0, piece: 0 }]);
+    expect(movePreviews(state, legalMoves(state))).toEqual([{ x: 1.5, y: 6.5, color: 0, piece: 0, walkOut: false }]);
     state.phase = "roll";
     expect(movePreviews(state, [0])).toEqual([]);
   });
