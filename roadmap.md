@@ -27,6 +27,7 @@
 - [~] Pre-release check — 138 tests + browser screens done; live two-device online run, push not built
 - [ ] App talks directly to server (native) — needs publish approval (server address) or larger rewrite
 - [x] Launch audit C1–C4: heartbeat/quick-status membership check, account deletion uses "playing", atomic stats increment, one quick-play search per player (194 tests; not live two-device tested)
+- [x] Rating prompt (Yatzy schedule 5/15/35, app only), error + ad events in admin logs, translated error page, 4-pieces-on-start Fia test (209 tests; not tried on a phone)
 ## Waiting on Simon
 - [ ] AdMob: publisher ID (pub-…) for app-ads.txt, Android app ID + ad units
 - [ ] Apple push key (APNs) as server secret; enable Push + Associated Domains for Ludo app ID
