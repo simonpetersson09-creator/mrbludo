@@ -9,7 +9,7 @@ import {
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { supabase } from "@/lib/auth/client";
-import { LudoBoard } from "@/components/ludo/LudoBoard";
+import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
@@ -192,13 +192,17 @@ function OnlineMatchPage() {
   else if (ev?.kind === "moved" && ev.reachedGoal) sub = t("subGoal", { name: state.players[ev.player].name });
   else if (ev?.kind === "forfeit") sub = t("subLeft", { name: state.players[ev.player].name });
 
+  const seatInfo = state.players.map((p) => { const s = seatOf(p.id); return { name: p.name, kind: p.isBot ? "bot" as const : "online" as const, flag: s ? flag(s.country) : undefined, image: s ? pics[s.user_id] : null, emoji: s?.avatar, away: !!s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited }; });
+
   return (
     <main className="game-screen">
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
        <div className="game-board-stack flex flex-col">
+        <SeatCardRow state={state} seats={seatInfo} edge="top" />
         <div className="aspect-square w-full overflow-hidden rounded-xl shadow-2xl">
-          <LudoBoard state={state} legal={legal} onPick={(piece) => send({ kind: "move", piece })} captureAt={captureAt} seats={state.players.map((p) => { const s = seatOf(p.id); return { name: p.name, kind: p.isBot ? "bot" as const : "online" as const, flag: s ? flag(s.country) : undefined, image: s ? pics[s.user_id] : null, emoji: s?.avatar, away: !!s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited }; })} />
+          <LudoBoard state={state} legal={legal} onPick={(piece) => send({ kind: "move", piece })} captureAt={captureAt} seats={seatInfo} />
         </div>
+        <SeatCardRow state={state} seats={seatInfo} edge="bottom" />
        </div>
       </div>
 

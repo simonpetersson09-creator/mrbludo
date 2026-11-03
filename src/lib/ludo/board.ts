@@ -36,7 +36,7 @@ export const yardIsTop = (color: Color) => color === 0 || color === 1;
 /** Center of the compact 2x2 piece nest inside a yard; the rest of the yard holds the player card. */
 export function yardNestCenter(color: Color): [number, number] {
   const [x, y] = YARD_ORIGIN[color];
-  return [x + 3, y + (yardIsTop(color) ? 3.55 : 2.45)];
+  return [x + 3, y + 3];
 }
 
 export const YARD_SPOT_GAP = 0.62;

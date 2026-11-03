@@ -1,7 +1,7 @@
 import { memo, useId, useLayoutEffect, useRef } from "react";
 import { Bot, Globe, Trophy } from "lucide-react";
 import { GOAL, type Color, type GameState } from "@/lib/ludo/engine";
-import { HOME_COLUMN, TRACK, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardIsTop, yardNestCenter } from "@/lib/ludo/board";
+import { HOME_COLUMN, TRACK, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardNestCenter } from "@/lib/ludo/board";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 import { movePreviews } from "@/lib/ludo/move-preview";
 import { pieceWaypoints } from "@/lib/ludo/piece-motion";
@@ -36,7 +36,6 @@ interface Props {
 }
 
 const STEP_MS = 150;
-const short = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 
 function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
   const { t } = useTranslation();
@@ -194,49 +193,6 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       <polygon points="9,7.12 9,7.88 8.74,7.5" fill={BOARD_FILL[2]} />
       <polygon points="7.12,9 7.88,9 7.5,8.74" fill={BOARD_FILL[3]} />
 
-      {/* Player cards. */}
-      {([0, 1, 2, 3] as Color[]).map((c) => {
-        const seat = seatByColor.get(c);
-        if (seat == null) return null;
-        const pl = state.players[seat];
-        const info = seats?.[seat];
-        const [x, y] = YARD_ORIGIN[c];
-        const py = y + (yardIsTop(c) ? 0.45 : 4.45);
-        const ax = x + 1.02, ay = py + 0.55;
-        const isTurn = turnColor === c;
-        const kind = info?.kind ?? (pl.isBot ? "bot" : "human");
-        const name = info?.name ?? pl.name;
-        const home = state.pieces[seat].filter((p) => p === GOAL).length;
-        return (
-          <g key={`card-${c}`} opacity={pl.forfeited ? 0.45 : 1} className={isTurn ? "player-card-turn" : undefined}>
-            <rect x={x + 0.42} y={py} width="5.16" height="1.1" rx="0.55" fill="var(--board-mark)" fillOpacity="0.96"
-              stroke={isTurn ? "var(--game-gold)" : "var(--board-ink)"} strokeOpacity={isTurn ? 1 : 0.18} strokeWidth={isTurn ? 0.09 : 0.04} />
-            <circle cx={ax} cy={ay} r="0.43" fill={FILL[c]} stroke="var(--board-mark)" strokeWidth="0.06" />
-            {kind === "bot" ? (
-              <Bot x={ax - 0.27} y={ay - 0.27} width={0.54} height={0.54} color="var(--board-mark)" strokeWidth={2.2} />
-            ) : info?.image ? (
-              <>
-                <clipPath id={`${boardId}-av-${c}`}><circle cx={ax} cy={ay} r="0.4" /></clipPath>
-                <image href={info.image} x={ax - 0.4} y={ay - 0.4} width="0.8" height="0.8" clipPath={`url(#${boardId}-av-${c})`} preserveAspectRatio="xMidYMid slice" />
-              </>
-            ) : info?.emoji ? (
-              <text x={ax} y={ay + 0.17} textAnchor="middle" fontSize="0.48">{info.emoji}</text>
-            ) : (
-              <text x={ax} y={ay + 0.16} textAnchor="middle" fontSize="0.44" fontWeight="800" fill="var(--board-mark)">{name.slice(0, 1).toUpperCase()}</text>
-            )}
-            {kind === "online" && (
-              <g>
-                <circle cx={ax + 0.33} cy={ay + 0.3} r="0.19" fill="var(--board-ink)" stroke="var(--board-mark)" strokeWidth="0.04" />
-                <Globe x={ax + 0.2} y={ay + 0.17} width={0.26} height={0.26} color={info?.away ? "var(--board-red)" : "var(--board-mark)"} strokeWidth={2.4} />
-              </g>
-            )}
-            <text x={x + 1.62} y={py + 0.68} fontSize="0.37" fontWeight="700" fill="var(--board-ink)" className="font-display">
-              {short(name, info?.flag ? 12 : 15)}{info?.flag ? ` ${info.flag}` : ""}
-            </text>
-            <text x={x + 5.32} y={py + 0.67} textAnchor="end" fontSize="0.3" fontWeight="700" fill="var(--board-ink)" fillOpacity="0.6">{home}/4</text>
-          </g>
-        );
-      })}
       </g>
 
       <g className="move-destinations">
@@ -290,3 +246,36 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
 }
 
 export const LudoBoard = memo(LudoBoardImpl);
+
+/** Round player cards placed outside the board, in the corner next to each yard. */
+export function SeatCardRow({ state, seats, edge }: { state: GameState; seats?: (SeatInfo | undefined)[]; edge: "top" | "bottom" }) {
+  const left: Color = edge === "top" ? 0 : 3;
+  const right: Color = edge === "top" ? 1 : 2;
+  const turnColor = state.phase !== "finished" ? state.players[state.current]?.color : undefined;
+  const card = (c: Color) => {
+    const seat = state.players.findIndex((p) => p.color === c);
+    if (seat < 0) return <span />;
+    const pl = state.players[seat];
+    const info = seats?.[seat];
+    const kind = info?.kind ?? (pl.isBot ? "bot" : "human");
+    const name = info?.name ?? pl.name;
+    const home = state.pieces[seat].filter((p) => p === GOAL).length;
+    const isTurn = turnColor === c;
+    return (
+      <div className={`seat-card${isTurn ? " seat-card-turn" : ""}${c === right ? " flex-row-reverse text-right" : ""}`} style={{ opacity: pl.forfeited ? 0.45 : 1, ["--pc" as string]: FILL[c] }}>
+        <span className="seat-card-avatar">
+          {kind === "bot" ? <Bot className="h-[18px] w-[18px]" strokeWidth={2.2} />
+            : info?.image ? <img src={info.image} alt="" className="h-full w-full rounded-full object-cover" />
+            : info?.emoji ? <span className="text-base leading-none">{info.emoji}</span>
+            : <span className="text-sm font-extrabold">{name.slice(0, 1).toUpperCase()}</span>}
+          {kind === "online" && <span className="seat-card-globe"><Globe className="h-2.5 w-2.5" strokeWidth={2.4} style={info?.away ? { color: "var(--board-red)" } : undefined} /></span>}
+        </span>
+        <span className="min-w-0 leading-tight">
+          <span className="block truncate font-display text-[13px] font-bold">{name}{info?.flag ? ` ${info.flag}` : ""}</span>
+          <span className="block text-[10px] font-semibold opacity-60">{home}/4</span>
+        </span>
+      </div>
+    );
+  };
+  return <div className={`seat-card-row seat-card-row-${edge}`}>{card(left)}{card(right)}</div>;
+}
