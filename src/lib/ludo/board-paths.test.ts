@@ -58,23 +58,26 @@ describe("each color's full path", () => {
 
 describe("from yard to goal", () => {
   for (const c of COLORS) {
-    it(`color ${c} leaves on a 6, walks the whole board and finishes exactly on goal`, () => {
+    it(`color ${c} leaves only on a 6, walks the whole board and finishes exactly on goal`, () => {
       let s: GameState = createGame([
         { id: "a", name: "A", color: c, isBot: false },
         { id: "b", name: "B", color: ((c + 2) % 4) as Color, isBot: false },
       ]);
+      s = applyRoll(s, 5); // a 5 cannot leave the yard
+      expect(s.current).toBe(1);
+      s = applyRoll(s, 3); // opponent stays home
       s = applyMove(applyRoll(s, 6), 0);
       expect(s.pieces[0][0]).toBe(0);
-      // Walk with 6s (extra roll keeps the turn), then exact finish.
-      while (s.pieces[0][0] + 6 <= GOAL) {
-        s = applyRoll(s, 6);
-        const piece = s.pieces[0].findIndex((p) => p !== YARD && p !== GOAL);
-        s = applyMove(s, piece);
-        if (s.current !== 0) { s = applyRoll(s, 1); }
-        if (s.phase === "move") s = applyMove(s, 0);
-        if (s.current !== 0) break;
+      expect(s.current).toBe(0); // the 6 gives an extra roll
+      while (s.pieces[0][0] !== GOAL) {
+        const left = GOAL - s.pieces[0][0];
+        const roll = Math.min(5, left);
+        expect(s.current).toBe(0);
+        s = applyMove(applyRoll(s, roll), 0);
+        if (s.phase === "finished") break;
+        s = applyRoll(s, 3);
       }
-      expect(s.pieces[0][0]).toBeGreaterThan(LAST_TRACK);
+      expect(s.pieces[0][0]).toBe(GOAL);
     });
   }
 });
