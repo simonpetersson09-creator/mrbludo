@@ -1,3 +1,4 @@
+import { randomBotNames } from "@/lib/ludo/bot-names";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Bot, User } from "lucide-react";
@@ -37,11 +38,12 @@ function SetupPage() {
   }, []);
 
   const start = () => {
+    const botNames = randomBotNames(4);
     const players: Player[] = SEATS[count].map((color, i) => ({
       id: `p${i}`,
       color,
       isBot: i === 0 ? false : bots[i],
-      name: i > 0 && bots[i] ? t("computerColor", { color: t(COLOR_KEYS[color]) }) : names[i].trim() || t("playerN", { n: i + 1 }),
+      name: i > 0 && bots[i] ? botNames[i] : names[i].trim() || t("playerN", { n: i + 1 }),
     }));
     saveGame(createGame(players));
     navigate({ to: "/play" });

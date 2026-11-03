@@ -103,7 +103,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
   const turnColor = state.phase !== "finished" ? state.players[state.current]?.color : undefined;
 
   return (
-    <svg viewBox="0 0 15 15" className="ludo-board h-full w-full select-none" role="img" aria-label={t("boardAria")}>
+    <svg viewBox="0 0 15 15" className="ludo-board h-full w-full select-none" overflow="visible" role="img" aria-label={t("boardAria")}>
       <defs>
         <clipPath id={`${boardId}-edge`}>
           <rect x="0" y="0" width="15" height="15" rx="0.4" />
@@ -145,7 +145,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         const active = seat != null;
         const isTurn = turnColor === c;
         const [nx, ny] = yardNestCenter(c);
-        const half = YARD_SPOT_GAP + 0.68;
+        const half = YARD_SPOT_GAP + 0.82;
         return (
           <g key={c} opacity={active ? 1 : 0.35}>
             <rect x={x} y={y} width="6" height="6" fill={BOARD_FILL[c]} />
@@ -154,8 +154,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
             <rect x={nx - half} y={ny - half} width={half * 2} height={half * 2} rx="0.5" fill="var(--board-ink)" fillOpacity="0.14" stroke="var(--board-mark)" strokeOpacity="0.45" strokeWidth="0.04" />
             {[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([dx, dy], i) => (
               <g key={i}>
-                <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.42" fill="var(--board-ink)" fillOpacity="0.16" />
-                <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.42" fill="none" stroke="var(--board-mark)" strokeOpacity="0.85" strokeWidth="0.05" />
+                <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill="var(--board-ink)" fillOpacity="0.16" />
+                <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill="none" stroke="var(--board-mark)" strokeOpacity="0.85" strokeWidth="0.06" />
               </g>
             ))}
           </g>
@@ -226,7 +226,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
           {p.legal && <circle className="piece-ring" r="0.5" fill="none" stroke="var(--game-gold)" strokeWidth="0.1" />}
           {p.done && <circle className="piece-done-glow" r="0.36" fill="var(--game-gold)" fillOpacity="0.35" stroke="var(--game-gold)" strokeWidth="0.06" pointerEvents="none" />}
           <g className="pawn" pointerEvents="none">
-          <g transform={p.done ? "scale(0.76)" : undefined}>
+          <g transform={p.done ? "translate(0 0.08) scale(0.76)" : "translate(0 0.1)"}>
             <ellipse cx="0.05" cy="0.3" rx="0.36" ry="0.13" fill="var(--board-mark-line)" opacity="0.4" />
             <ellipse cy="0.23" rx="0.32" ry="0.12" fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />
             <use href={`#${boardId}-pawn-body`} fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />
@@ -264,15 +264,19 @@ export function SeatCardRow({ state, seats, edge }: { state: GameState; seats?: 
     return (
       <div className={`seat-card${isTurn ? " seat-card-turn" : ""}${c === right ? " flex-row-reverse text-right" : ""}`} style={{ opacity: pl.forfeited ? 0.45 : 1, ["--pc" as string]: FILL[c] }}>
         <span className="seat-card-avatar">
-          {kind === "bot" ? <Bot className="h-[18px] w-[18px]" strokeWidth={2.2} />
-            : info?.image ? <img src={info.image} alt="" className="h-full w-full rounded-full object-cover" />
+          {kind === "bot" ? <span className="seat-card-bot"><Bot className="h-[19px] w-[19px]" strokeWidth={2} /></span>
+            : info?.image ? <img src={info.image} alt="" className="h-full w-full object-cover" />
+            : info?.flag ? <span className="seat-card-flag" aria-hidden="true">{info.flag}</span>
             : info?.emoji ? <span className="text-base leading-none">{info.emoji}</span>
             : <span className="text-sm font-extrabold">{name.slice(0, 1).toUpperCase()}</span>}
-          {kind === "online" && <span className="seat-card-globe"><Globe className="h-2.5 w-2.5" strokeWidth={2.4} style={info?.away ? { color: "var(--board-red)" } : undefined} /></span>}
         </span>
+        {kind === "online" && <span className="seat-card-globe" aria-hidden="true"><Globe className="h-3 w-3" strokeWidth={2.4} /></span>}
         <span className="min-w-0 leading-tight">
-          <span className="block truncate font-display text-[13px] font-bold">{name}{info?.flag ? ` ${info.flag}` : ""}</span>
-          <span className="block text-[10px] font-semibold opacity-60">{home}/4</span>
+          <span className={`flex items-center gap-1 ${c === right ? "justify-end" : ""}`}>
+            <span className="truncate font-display text-[13px] font-bold">{name}</span>
+            {kind === "online" && <span className={`seat-card-presence${info?.away ? " seat-card-presence-away" : ""}`} aria-label={info?.away ? undefined : t("onlineNow")} />}
+          </span>
+          <span className="block text-[10px] font-semibold opacity-60">{t("piecesHome", { n: home })}</span>
         </span>
       </div>
     );
