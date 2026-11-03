@@ -4,7 +4,7 @@ import { randomBotNames } from "@/lib/ludo/bot-names";
  * Server functions call these after loading a match row; the same engine rules
  * apply to local and online games.
  */
-import { applyMove, applyRoll, createGame, forfeit, GOAL, legalMoves, type Color, type GameState } from "@/lib/ludo/engine";
+import { applyMove, applyRoll, createGame, forfeit, GOAL, isVariant, legalMoves, type Color, type GameState, type Variant } from "@/lib/ludo/engine";
 import { chooseMove } from "@/lib/ludo/ai";
 
 export const SEAT_COLORS: Record<number, Color[]> = { 2: [0, 2], 3: [0, 1, 2], 4: [0, 1, 2, 3] };
@@ -28,7 +28,7 @@ export const BOT_SECONDS = 1;
 export const isBotId = (id: string) => id.startsWith("bot:");
 
 /** Humans sorted by seat; `total` > humans fills the rest with server-played computer seats (quick play). */
-export function startState(seats: SeatInfo[], total = seats.length): GameState {
+export function startState(seats: SeatInfo[], total = seats.length, variant: Variant = "classic"): GameState {
   const sorted = [...seats].sort((a, b) => a.seat - b.seat);
   const n = Math.max(total, sorted.length);
   const colors = SEAT_COLORS[n];
@@ -36,7 +36,7 @@ export function startState(seats: SeatInfo[], total = seats.length): GameState {
   const humans = sorted.map((s, i) => ({ id: s.user_id, name: s.display_name, color: colors[i], isBot: false }));
   const botNames = randomBotNames(n - sorted.length);
   const bots = Array.from({ length: n - sorted.length }, (_, k) => ({ id: `bot:${k + 1}`, name: botNames[k], color: colors[sorted.length + k], isBot: true }));
-  return createGame([...humans, ...bots]);
+  return createGame([...humans, ...bots], isVariant(variant) ? variant : "classic");
 }
 
 export function seatOf(state: GameState, userId: string): number {
