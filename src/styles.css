@@ -146,15 +146,17 @@
 /* Turn bubble at the active player's card: same gold treatment as the Kasta button. */
 .seat-card-bubble {
   position: absolute; left: 50%; z-index: 30; pointer-events: none; transform: translateX(-50%);
-  display: block; max-width: 150px; padding: 5px 13px; text-align: center;
+  display: block; padding: 5px 13px; text-align: center;
   border-radius: 9999px; font-family: var(--font-display); font-size: 12px; font-weight: 700; line-height: 1.25;
-  letter-spacing: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  letter-spacing: 0; white-space: nowrap;
   color: var(--board-ink);
   background: linear-gradient(145deg, var(--board-gold-light), var(--board-gold));
   border: 1px solid var(--board-gold-light);
   box-shadow: inset 0 0 0 1.5px var(--board-gold), inset 0 0 0 2.5px var(--board-gold-light), var(--control-shadow);
   animation: seat-card-bubble-in .26s cubic-bezier(.3,1.4,.5,1);
 }
+.seat-card-bubble-text { display: block; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 .seat-card-bubble-me { animation: seat-card-bubble-in .26s cubic-bezier(.3,1.4,.5,1), kasta-pulse-shadow 2.4s ease-in-out .3s infinite; }
 .seat-card-bubble-top { bottom: calc(100% + 8px); }
 .seat-card-bubble-bottom { top: calc(100% + 8px); }
