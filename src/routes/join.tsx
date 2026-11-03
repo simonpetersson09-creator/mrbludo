@@ -8,7 +8,8 @@ import { parseMatchCode } from "@/lib/online/match-code";
  */
 export const Route = createFileRoute("/join")({
   validateSearch: (search: Record<string, unknown>): { code?: string } => {
-    const code = parseMatchCode(typeof search.code === "string" ? search.code : "");
+    const raw = search["code"];
+    const code = parseMatchCode(typeof raw === "string" ? raw : "");
     return code ? { code } : {};
   },
   head: () => ({

@@ -8,7 +8,7 @@ import mrBDie from "@/assets/mr-b-die.png";
  * download page, the game lives in the app). With an invite code it doubles as
  * the landing page for people who tapped an invite link without the app.
  */
-export function AppOnlyPage({ code }: { code?: string }) {
+export function AppOnlyPage({ code }: { code?: string | undefined }) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const stores = storeLinks();

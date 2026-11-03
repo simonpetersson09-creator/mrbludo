@@ -9,8 +9,8 @@ export const PLAY_STORE_URL = "";
 export type StoreLink = { store: "apple" | "google"; url: string };
 
 export function storeLinks(): StoreLink[] {
-  return [
-    APP_STORE_URL && { store: "apple" as const, url: APP_STORE_URL },
-    PLAY_STORE_URL && { store: "google" as const, url: PLAY_STORE_URL },
-  ].filter((link): link is StoreLink => Boolean(link));
+  const links: StoreLink[] = [];
+  if (APP_STORE_URL) links.push({ store: "apple", url: APP_STORE_URL });
+  if (PLAY_STORE_URL) links.push({ store: "google", url: PLAY_STORE_URL });
+  return links;
 }
