@@ -13,6 +13,7 @@ export const nl: Record<TranslationKey, string> = {
   tagline: "Klassieke Ludo – vier pionnen, één dobbelsteen",
   resumeMatch: "Huidige potje hervatten",
   yourTurnLabel: "Jouw beurt",
+  extraRoll: "Gooi opnieuw!",
   waitingShort: "Wachten",
   quickMatchBot: "Snel potje tegen de computer",
   playOnline: "Online spelen",

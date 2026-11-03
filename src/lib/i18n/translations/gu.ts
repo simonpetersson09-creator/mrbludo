@@ -14,6 +14,7 @@ export const gu: Record<TranslationKey, string> = {
   tagline: "ક્લાસિક લુડો – ચાર પાસાં, એક પાસો",
   resumeMatch: "ચાલુ મેચ ચાલુ રાખો",
   yourTurnLabel: "તમારો વારો",
+  extraRoll: "ફરી ફેંકો!",
   waitingShort: "રાહ છે",
   quickMatchBot: "કમ્પ્યુટર સામે ઝડપી મેચ",
   playOnline: "ઓનલાઈન રમો",

@@ -14,6 +14,7 @@ export const tr: Record<TranslationKey, string> = {
   tagline: "Klasik Ludo – dört taş, bir zar",
   resumeMatch: "Devam eden maça dön",
   yourTurnLabel: "Sıra sende",
+  extraRoll: "Tekrar at!",
   waitingShort: "Bekleniyor",
   quickMatchBot: "Bilgisayara karşı hızlı maç",
   playOnline: "Çevrimiçi oyna",

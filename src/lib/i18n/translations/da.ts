@@ -14,6 +14,7 @@ export const da: Record<TranslationKey, string> = {
   tagline: "Klassisk Ludo – fire brikker, én terning",
   resumeMatch: "Fortsæt igangværende kamp",
   yourTurnLabel: "Din tur",
+  extraRoll: "Slå igen!",
   waitingShort: "Venter",
   quickMatchBot: "Hurtig kamp mod computeren",
   playOnline: "Spil online",

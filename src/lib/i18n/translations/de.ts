@@ -14,6 +14,7 @@ export const de: Record<TranslationKey, string> = {
   tagline: "Klassisches Ludo – vier Figuren, ein Würfel",
   resumeMatch: "Laufendes Spiel fortsetzen",
   yourTurnLabel: "Du bist dran",
+  extraRoll: "Nochmal würfeln!",
   waitingShort: "Wartet",
   quickMatchBot: "Schnellspiel gegen den Computer",
   playOnline: "Online spielen",

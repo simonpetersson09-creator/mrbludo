@@ -13,6 +13,7 @@ export const hr: Record<TranslationKey, string> = {
   tagline: "Klasični Ludo – četiri figurice, jedna kockica",
   resumeMatch: "Nastavi igru",
   yourTurnLabel: "Ti si na redu",
+  extraRoll: "Baci ponovno!",
   waitingShort: "Čekanje",
   quickMatchBot: "Brza igra protiv računala",
   playOnline: "Igraj online",
