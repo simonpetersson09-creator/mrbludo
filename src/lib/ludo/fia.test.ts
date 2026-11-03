@@ -66,17 +66,18 @@ describe("Svenska Fia med knuff", () => {
   it("knocks opponents on start squares too (no safe squares), Classic keeps them safe", () => {
     // Blue (3) stands on red's start square (abs 0 = blue progress 13).
     for (const [variant, knocked] of [["fia", true], ["classic", false]] as const) {
-      let s = withPieces(game(variant, [0, 3]), [[YARD, YARD, YARD, YARD], [13, YARD, YARD, YARD]]);
-      expect(absSquare(3, 13)).toBe(0);
+      const progress = variant === "fia" ? 10 : 13;
+      let s = withPieces(game(variant, [0, 3]), [[YARD, YARD, YARD, YARD], [progress, YARD, YARD, YARD]]);
+      expect(absSquare(3, progress, variant)).toBe(startSquare(0, variant));
       s = applyMove(applyRoll(s, 6), 0);
       expect(s.pieces[1][0] === YARD).toBe(knocked);
     }
   });
 
   it("knocks only by landing, never by passing", () => {
-    let s = withPieces(game("fia", [0, 3]), [[0, F, F, F], [15, YARD, YARD, YARD]]); // blue 15 = abs 1, passed by red 0→5
+    let s = withPieces(game("fia", [0, 3]), [[0, F, F, F], [11, YARD, YARD, YARD]]); // blue 11 = abs 1, passed by red 0→5
     s = applyMove(applyRoll(s, 5), 0);
-    expect(s.pieces[1][0]).toBe(15);
+    expect(s.pieces[1][0]).toBe(11);
   });
 
   it("own pieces can't be passed or shared", () => {
@@ -89,18 +90,18 @@ describe("Svenska Fia med knuff", () => {
   });
 
   it("overshooting the goal bounces back the extra steps", () => {
-    expect(targetOf(55, 5, "fia")).toBe(56); // 55→58, back 2
+    expect(targetOf(F - 3, 5, "fia")).toBe(F - 2);
     expect(targetOf(53, 5, "classic")).toBeNull();
-    const s = applyMove(applyRoll(withPieces(game("fia"), [[55, F, F, F], [YARD, YARD, YARD, YARD]]), 5), 0);
-    expect(s.pieces[0][0]).toBe(56);
-    expect(pieceWaypoints(0, 55, 56, 0, 5, "fia")).toHaveLength(6); // 55,56,57,58,57,56
+    const s = applyMove(applyRoll(withPieces(game("fia"), [[F - 3, F, F, F], [YARD, YARD, YARD, YARD]]), 5), 0);
+    expect(s.pieces[0][0]).toBe(F - 2);
+    expect(pieceWaypoints(0, F - 3, F - 2, 0, 5, "fia")).toHaveLength(6);
   });
 
   it("a bounce may not pass or land on an own piece", () => {
-    const s = applyRoll(withPieces(game("fia"), [[56, 54, F, F], [YARD, YARD, YARD, YARD]]), 6);
+    const s = applyRoll(withPieces(game("fia"), [[F - 2, F - 4, F, F], [YARD, YARD, YARD, YARD]]), 6);
     // 56 → 57,58,57,56,55,54 lands on own piece at 54
     expect(legalMoves(s)).not.toContain(0);
-    const pass = applyRoll(withPieces(game("fia"), [[57, 56, F, F], [YARD, YARD, YARD, YARD]]), 4);
+    const pass = applyRoll(withPieces(game("fia"), [[F - 1, F - 2, F, F], [YARD, YARD, YARD, YARD]]), 4);
     // 57 → 58,57,56,55 passes own piece at 56
     expect(legalMoves(pass)).not.toContain(0);
   });

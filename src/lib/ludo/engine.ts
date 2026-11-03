@@ -55,6 +55,7 @@ export const RULES: Record<Variant, RuleConfig> = {
 
 /** Track geometry per variant: where a color starts and how long its path is. */
 export interface PathConfig {
+  trackLen: number;
   /** Shift of each color's start square along the track (-1 = one step earlier). */
   startOffset: number;
   /** Last progress value on the shared track. */
@@ -66,16 +67,16 @@ export interface PathConfig {
 }
 
 export const PATHS: Record<Variant, PathConfig> = {
-  classic: { startOffset: 0, lastTrack: 50, laneLen: 5, goal: 56 },
-  // Fia: start one step earlier, a full 52-square lap, 6 lane squares.
-  fia: { startOffset: -1, lastTrack: 51, laneLen: 6, goal: 58 },
+  classic: { trackLen: 52, startOffset: 0, lastTrack: 50, laneLen: 5, goal: 56 },
+  // User-confirmed photograph: 40 outer circles, four lane circles, separate goal.
+  fia: { trackLen: 40, startOffset: 0, lastTrack: 39, laneLen: 4, goal: 44 },
 };
 
 export const goalOf = (variant: Variant = "classic") => PATHS[variant].goal;
 export const lastTrackOf = (variant: Variant = "classic") => PATHS[variant].lastTrack;
 /** Absolute track index of a color's start square. */
 export const startSquare = (color: Color, variant: Variant = "classic") =>
-  (color * 13 + PATHS[variant].startOffset + TRACK_LEN) % TRACK_LEN;
+  (color * (PATHS[variant].trackLen / 4) + PATHS[variant].startOffset + PATHS[variant].trackLen) % PATHS[variant].trackLen;
 
 
 export const variantOf = (state: { variant?: Variant }): Variant => (state.variant === "fia" ? "fia" : "classic");
@@ -133,7 +134,7 @@ export function createGame(players: Player[], variant: Variant = "classic"): Gam
 /** Absolute track square (0..51) for a piece on the shared track, else null. */
 export function absSquare(color: Color, progress: number, variant: Variant = "classic"): number | null {
   if (progress < 0 || progress > PATHS[variant].lastTrack) return null;
-  return (startSquare(color, variant) + progress) % TRACK_LEN;
+  return (startSquare(color, variant) + progress) % PATHS[variant].trackLen;
 }
 
 export function isSafeSquare(abs: number, variant: Variant = "classic"): boolean {
