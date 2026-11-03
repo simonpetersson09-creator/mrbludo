@@ -1096,8 +1096,8 @@ export async function showAppOpenAd(canShow: () => boolean = () => true, source:
 
 /** Banner-ID per plattform. null = ingen banner i release-bygget än. */
 export const BANNER_IDS: Record<'ios' | 'android', string | null> = {
-  ios: 'ca-app-pub-7448540924654868/7786182090',
-  android: 'ca-app-pub-7448540924654868/2816751438',
+  ios: null, // Ludo has no banner
+  android: null,
 };
 
 const GOOGLE_TEST_BANNER: Record<'ios' | 'android', string> = {
