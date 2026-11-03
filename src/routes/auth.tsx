@@ -28,7 +28,7 @@ function AuthPage() {
   useEffect(() => {
     let active = true;
     setFailed(false);
-    ensurePlayerSession().then(() => { if (active) navigate({ to: redirect, replace: true }); }).catch(() => { if (active) setFailed(true); });
+    ensurePlayerSession().then(() => { if (active) navigate({ href: redirect, replace: true }); }).catch(() => { if (active) setFailed(true); });
     return () => { active = false; };
   }, [navigate, redirect, attempt]);
 
