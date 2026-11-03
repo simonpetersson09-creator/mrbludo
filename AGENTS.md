@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Mr. B Ludo architecture
+- Board-only inks use separate `--board-*` tokens from piece `--ludo-*` colors, so board refinements cannot recolor pieces; decorative board SVG layers never receive pointer events.
 - Ludo rules live in `src/lib/ludo/engine.ts` as pure functions (no React/DOM/network) so they can run on a server later; rendering only reads state.
 - `src/components/dice-engine/` is copied read-only-sourced from Mr. B Yatzy; keep it presentation-only and never re-link it to Yatzy resources.
 - All browser storage keys use the `mrb-ludo:v1:` namespace to stay isolated from Yatzy.
