@@ -5,7 +5,7 @@ import { goalOf, startSquare, variantOf, type Color, type GameState } from "@/li
 import { homeColumnOf, trackOf, cellSizeOf, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardNestCenter } from "@/lib/ludo/board";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 import { movePreviews } from "@/lib/ludo/move-preview";
-import { pieceWaypoints } from "@/lib/ludo/piece-motion";
+import { pieceWaypoints, STEP_MS } from "@/lib/ludo/piece-motion";
 
 const COLOR_NAME_KEYS: TranslationKey[] = ["colorRed", "colorGreen", "colorYellow", "colorBlue"];
 
@@ -36,7 +36,6 @@ interface Props {
   seats?: (SeatInfo | undefined)[];
 }
 
-const STEP_MS = 185;
 
 function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
   const { t } = useTranslation();
@@ -59,7 +58,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
     const animations: Animation[] = [];
     const waypoints = pieceWaypoints(player.color, from, ev.to, ev.piece, previous.dice, variantOf(state));
     const walk = (waypoints.length - 1) * STEP_MS;
-    // Soft footsteps: a pair of prints appears on each square the piece leaves, then fades from the back.
+    // Soft footsteps: a pair of prints in the player's own colour appears on each square the piece
+    // leaves, lingers a few squares, then fades from the back — oldest first.
     const trail = trailRef.current;
     if (trail && waypoints.length > 2) {
       const fill = FILL[player.color];
@@ -71,23 +71,30 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         g.setAttribute("opacity", "0");
         for (const side of [-1, 1]) {
           const e = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
-          e.setAttribute("cx", String(side * 0.075)); e.setAttribute("cy", String(side * 0.05));
-          e.setAttribute("rx", "0.05"); e.setAttribute("ry", "0.085"); e.setAttribute("fill", "var(--board-ink)"); e.setAttribute("stroke", fill); e.setAttribute("stroke-width", "0.02");
+          e.setAttribute("cx", String(side * 0.16)); e.setAttribute("cy", String(side * 0.09));
+          e.setAttribute("rx", "0.11"); e.setAttribute("ry", "0.17");
+          // Inline style so the colour variable always resolves; a thin dark rim keeps the print
+          // readable on white squares and on the player's own coloured lane.
+          e.style.fill = fill;
+          e.style.stroke = "var(--board-ink)";
+          e.style.strokeWidth = "0.02";
+          e.style.strokeOpacity = "0.55";
           g.appendChild(e);
         }
         trail.appendChild(g);
-        // Each print shows up as the piece steps off, lingers ~2 squares, then fades — oldest first,
-        // and the last one is gone just after the piece lands.
-        const total = walk + 360;
-        const appear = (i + 0.55) * STEP_MS;
-        const shown = Math.min(appear + 140, total - 2);
-        const fade = Math.max(shown + 1, Math.min(appear + 2.2 * STEP_MS, total - 341));
-        const gone = Math.max(fade + 1, Math.min(fade + 340, total));
+        // A print fades once the piece is about three squares ahead of it, so the trail is always
+        // strongest right behind the piece and thins out behind it; the last prints fade out just
+        // after the piece lands.
+        const total = walk + 260;
+        const appear = (i + 0.5) * STEP_MS;
+        const shown = Math.min(appear + 60, total - 2);
+        const fadeStart = Math.max(shown + 40, Math.min(appear + 3 * STEP_MS, total - 200));
+        const gone = Math.max(fadeStart + 1, Math.min(fadeStart + 320, total));
         const a = g.animate([
           { opacity: 0, offset: 0 },
           { opacity: 0, offset: appear / total },
-          { opacity: 0.38, offset: shown / total },
-          { opacity: 0.3, offset: fade / total },
+          { opacity: 0.86, offset: shown / total },
+          { opacity: 0, offset: gone / total },
           { opacity: 0, offset: gone / total },
           ...(gone < total ? [{ opacity: 0, offset: 1 }] : []),
         ], { duration: total, easing: "ease-in-out" });

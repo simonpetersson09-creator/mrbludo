@@ -41,3 +41,4 @@
 - [x] Auto-played idle turns are announced after the fact: away player sees "Tiden gick ut – draget gjordes åt dig", others see "…servern spelade åt {name}"; 40 languages, 225 tests, real two-session match checked at 30 s (not tried on a phone)
 - [x] Invite links now open `/join?code=…`: browsers get the download page, app users open the match directly; match codes expire after 6 hours (221 tests passed; live published-site behaviour needs a publish, phones not tested)
 - [ ] App Store and Google Play links for the download page — blocked until the store listings exist (Simon to supply)
+- [x] Footprints: player-coloured prints behind a walking piece, strongest next to the piece and fading behind, gone when it lands; die keeps the mover's colour until the piece arrives (236 tests; not tried on a phone)
