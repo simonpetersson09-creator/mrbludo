@@ -130,6 +130,8 @@ function OnlineMatchPage() {
     const ev = state.lastEvent;
     // Yatzy-style clarity: when the server plays a step for someone who was away, say so.
     const mark = (state as MarkedState).auto;
+    // eslint-disable-next-line no-console
+    console.log("[auto-debug]", JSON.stringify(mark ?? null), "ver", match.version, "shown", autoShown.current, "me", userId);
     if (mark && mark.at !== autoShown.current) {
       autoShown.current = mark.at;
       const who = state.players[mark.seat];
