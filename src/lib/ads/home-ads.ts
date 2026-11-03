@@ -5,7 +5,7 @@
  * - leaving Home or backgrounding invalidates the pending opportunity.
  */
 import { isAdMobAvailable, preloadAppOpenAd, showAppOpenAd, trackAdOpportunity } from "./admob";
-import { trackEvent } from "./ludo-ad-context";
+import { trackEvent } from "./analytics";
 
 export const RESUME_AD_MIN_AWAY_MS = 40_000;
 export const STARTUP_AD_DELAY_MS = 1500;

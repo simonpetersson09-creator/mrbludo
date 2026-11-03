@@ -1,4 +1,4 @@
-import { trackEvent } from './ludo-ad-context';
+import { trackEvent } from './analytics';
 
 const fields = ['stage', 'flow_id', 'attempt_id', 'occurred_at_ms', 'att_status', 'ump_status',
   'can_request_ads', 'app_version', 'build_number', 'ad_unit_id', 'test_mode', 'replayed',

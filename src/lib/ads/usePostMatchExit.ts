@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { preloadInterstitial, showPostMatchInterstitial } from '@/lib/ads/admob';
-import { trackEvent } from '@/lib/ads/ludo-ad-context';
+import { trackEvent } from '@/lib/ads/analytics';
 
 // A result can be revisited without presenting another ad for the same match.
 const attemptedMatches = new Set<string>();

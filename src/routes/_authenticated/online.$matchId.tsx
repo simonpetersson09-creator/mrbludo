@@ -27,7 +27,7 @@ import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic 
 import { errorMessage, useTranslation } from "@/lib/i18n";
 import { AppOpenGameGate } from "@/components/AppOpenGameGate";
 import { usePostMatchExit } from "@/lib/ads/usePostMatchExit";
-import { markOnlineMatchFinished } from "@/lib/ads/ludo-ad-context";
+import { markOnlineMatchFinished } from "@/lib/ads/local-stats";
 
 export const Route = createFileRoute("/_authenticated/online/$matchId")({
   head: () => ({

@@ -7,8 +7,8 @@
  */
 import { Capacitor } from '@capacitor/core';
 import { readAdConsentChoices, type AdConsentChoices } from './ad-consent';
-import { getRankedGames } from './ludo-ad-context';
-import { trackEvent } from './ludo-ad-context';
+import { getRankedGames } from './local-stats';
+import { trackEvent } from './analytics';
 import { recordAppOpenDiagnostic } from './app-open-diagnostics';
 import { setAppOpenPresentationPending } from './app-open-presentation';
 
@@ -181,7 +181,7 @@ function reportPrivacyCacheFailure(err: unknown): void {
   const code = typeof error?.code === 'string' ? error.code.slice(0, 40) : '';
   const message = typeof error?.message === 'string' ? error.message.slice(0, 160) : String(err).slice(0, 160);
   console.warn('[admob] discardPrivacyCaches failed', code, message);
-  void import('@/lib/ads/ludo-ad-context').then(({ trackEvent }) =>
+  void import('@/lib/ads/analytics').then(({ trackEvent }) =>
     trackEvent('ad_privacy_cache_failed', { code, message }),
   ).catch(() => {});
 }
@@ -306,7 +306,7 @@ export async function getAdConsentChoices(): Promise<AdConsentChoices> {
   if (!isAdMobAvailable()) return unknown;
   // Only allowlisted technical outcomes: never log consent values, status or errors.
   const report = (result: 'read_ok' | 'reader_unavailable' | 'read_timeout' | 'read_failed' | 'data_unavailable') => {
-    void import('@/lib/ads/ludo-ad-context').then(({ trackEvent }) =>
+    void import('@/lib/ads/analytics').then(({ trackEvent }) =>
       trackEvent('ad_consent_read', { result }),
     ).catch(() => {});
   };
@@ -945,7 +945,7 @@ function attachAppOpenRevenue(mod: AdMobModule) {
     void mod.AdMob.addListener(mod.AppOpenAdPluginEvents.AdImpression, (d: {
       valueMicros?: number; currencyCode?: string; precision?: number | string; networkName?: string;
     }) => {
-      void import('@/lib/ads/ludo-ad-context').then(({ trackEvent }) => trackEvent('ad_revenue', {
+      void import('@/lib/ads/analytics').then(({ trackEvent }) => trackEvent('ad_revenue', {
         kind: 'appOpen',
         value_micros: Number(d?.valueMicros ?? 0),
         currency: String(d?.currencyCode ?? ''),
@@ -1024,7 +1024,7 @@ export async function showAppOpenAd(canShow: () => boolean = () => true, source:
   if (!adAllowed(generation)) { reportSkip('appOpen', 'ads_not_ready'); return skip('ads_not_ready'); }
   // New players get one complete match before any startup/resume App Open ad.
   if (getRankedGames() < 1) { reportSkip('appOpen', 'first_match_pending'); return skip('first_match_pending'); }
-  const { waitingRoomAdBlocked } = await import('./ludo-ad-context');
+  const { waitingRoomAdBlocked } = await import('./waiting-room');
   if (waitingRoomAdBlocked()) { reportSkip('appOpen', 'waiting_room'); return skip('waiting_room'); }
   const adId = adUnitId('appOpen');
   if (!isAdMobAvailable() || !adId) { reportSkip('appOpen', 'unavailable'); return skip('unavailable'); }
@@ -1133,7 +1133,7 @@ function reportBanner(result: string, reason?: string, extra: Record<string, unk
     foreground: typeof document !== 'undefined' ? document.visibilityState === 'visible' : null,
     testAd: ADMOB_CONFIG.useTestAds, ...extra,
   };
-  void import('@/lib/ads/ludo-ad-context').then(({ trackEvent }) => trackEvent('ad_result', metadata)).catch(() => {});
+  void import('@/lib/ads/analytics').then(({ trackEvent }) => trackEvent('ad_result', metadata)).catch(() => {});
 }
 /** One app-global listener set. SDK events have no banner/request ID. */
 function ensureBannerListeners(mod: AdMobModule): Promise<void> {
