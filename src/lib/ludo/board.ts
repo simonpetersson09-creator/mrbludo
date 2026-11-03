@@ -31,16 +31,16 @@ export const HOME_COLUMN: Record<Color, [number, number][]> = {
 export const FIA_CELL = 15 / 11;
 export const FIA_TRACK: [number, number][] = (() => {
   const t: [number, number][] = [];
-  for (let c = 0; c <= 3; c++) t.push([c, 4]);
+  for (let c = 0; c <= 4; c++) t.push([c, 4]);
   for (let r = 3; r >= 0; r--) t.push([4, r]);
   t.push([5, 0]);
-  for (let r = 0; r <= 3; r++) t.push([6, r]);
+  for (let r = 0; r <= 4; r++) t.push([6, r]);
   for (let c = 7; c <= 10; c++) t.push([c, 4]);
   t.push([10, 5]);
-  for (let c = 10; c >= 7; c--) t.push([c, 6]);
+  for (let c = 10; c >= 6; c--) t.push([c, 6]);
   for (let r = 7; r <= 10; r++) t.push([6, r]);
   t.push([5, 10]);
-  for (let r = 10; r >= 7; r--) t.push([4, r]);
+  for (let r = 10; r >= 6; r--) t.push([4, r]);
   for (let c = 3; c >= 0; c--) t.push([c, 6]);
   t.push([0, 5]);
   return t.map(([x, y]) => [x * FIA_CELL, y * FIA_CELL]);

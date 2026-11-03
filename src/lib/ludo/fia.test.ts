@@ -75,9 +75,9 @@ describe("Svenska Fia med knuff", () => {
   });
 
   it("knocks only by landing, never by passing", () => {
-    let s = withPieces(game("fia", [0, 3]), [[0, F, F, F], [15, YARD, YARD, YARD]]); // blue 15 = abs 1, passed by red 0→5
+    let s = withPieces(game("fia", [0, 3]), [[0, F, F, F], [11, YARD, YARD, YARD]]); // blue 11 = abs 1, passed by red 0→5
     s = applyMove(applyRoll(s, 5), 0);
-    expect(s.pieces[1][0]).toBe(15);
+    expect(s.pieces[1][0]).toBe(11);
   });
 
   it("own pieces can't be passed or shared", () => {
