@@ -80,7 +80,6 @@ function OnlineMatchPage() {
     if (!m) { setMissing(true); rememberOnlineMatch(null); return; }
     if (m.status === "finished" || m.status === "abandoned") rememberOnlineMatch(null);
     setMatch((prev) => (prev && prev.version > m.version ? prev : (m as MatchRow)));
-    console.log("[dbg] load v", m.version, "auto", JSON.stringify((m.state as MarkedState).auto ?? null));
     setSeats((s ?? []) as SeatRow[]);
   }, [matchId]);
 
@@ -106,15 +105,13 @@ function OnlineMatchPage() {
   useEffect(() => {
     const t = window.setInterval(() => {
       if (document.visibilityState === "hidden" || !navigator.onLine) return;
-      heartbeat({ data: { matchId } }).then(() => { console.log("[dbg] hb ok"); setOffline(false); load(); }).catch((e) => { console.log("[dbg] hb fail", String(e).slice(0, 90)); setOffline(true); });
+      heartbeat({ data: { matchId } }).then(() => { setOffline(false); load(); }).catch(() => setOffline(true));
     }, 5000);
     heartbeat({ data: { matchId } }).catch(() => {});
     return () => window.clearInterval(t);
   }, [matchId, load]);
 
   const state = (match?.state ?? null) as GameState | null;
-  if (typeof window !== "undefined") (window as unknown as { __dbg: unknown }).__dbg =
-    { v: match?.version, auto: (match?.state as MarkedState | undefined)?.auto ?? null, uid: userId, players: state?.players.map((p) => p.id) ?? [] };
 
   // Computer seats (quick play) are played by the server; nudge it quickly on their turn.
   const botTurn = !!state && state.phase !== "finished" && !!state.players[state.current]?.isBot;
