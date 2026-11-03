@@ -280,8 +280,10 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
 export const LudoBoard = memo(LudoBoardImpl);
 
 /** Round player cards placed outside the board, in the corner next to each yard. */
-export function SeatCardRow({ state, seats, edge }: { state: GameState; seats?: (SeatInfo | undefined)[]; edge: "top" | "bottom" }) {
+export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState; seats?: (SeatInfo | undefined)[]; edge: "top" | "bottom"; ownSeat?: number | undefined }) {
+  const { t } = useTranslation();
   const left: Color = edge === "top" ? 0 : 3;
+
   const right: Color = edge === "top" ? 1 : 2;
   const turnColor = state.phase !== "finished" ? state.players[state.current]?.color : undefined;
   const card = (c: Color) => {
@@ -295,6 +297,14 @@ export function SeatCardRow({ state, seats, edge }: { state: GameState; seats?: 
     const isTurn = turnColor === c;
     return (
       <div className={`seat-card${isTurn ? " seat-card-turn" : ""}${c === right ? " flex-row-reverse text-right" : ""}`} style={{ opacity: pl.forfeited ? 0.45 : 1, ["--pc" as string]: FILL[c] }}>
+        {isTurn && (
+          <span className={`seat-card-bubble seat-card-bubble-${edge}${ownSeat === seat ? " seat-card-bubble-me" : ""}`} aria-hidden="true">
+            <span className="seat-card-bubble-text">{seat === ownSeat ? t("yourTurnLabel") : name}</span>
+          </span>
+        )}
+
+
+
         <span className="seat-card-avatar">
           {kind === "bot" ? <span className="seat-card-bot"><Bot className="h-[19px] w-[19px]" strokeWidth={2} /></span>
             : info?.image ? <img src={info.image} alt="" className="h-full w-full object-cover" />
