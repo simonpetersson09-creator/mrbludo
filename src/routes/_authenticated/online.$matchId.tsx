@@ -43,7 +43,7 @@ export const Route = createFileRoute("/_authenticated/online/$matchId")({
 const ROLL_MS = 1150;
 const COLOR_VAR = ["var(--ludo-red)", "var(--ludo-green)", "var(--ludo-yellow)", "var(--ludo-blue)"];
 
-interface MatchRow { id: string; code: string; status: string; is_private: boolean; max_players: number; host_id: string; state: unknown; version: number; turn_started_at: string | null }
+interface MatchRow { id: string; code: string; status: string; is_private: boolean; max_players: number; host_id: string; state: unknown; version: number; turn_started_at: string | null; variant?: string }
 interface SeatRow { user_id: string; seat: number; display_name: string; avatar: string; country: string; last_seen: string }
 
 function OnlineMatchPage() {
