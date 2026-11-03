@@ -26,6 +26,9 @@
 - Packaged online actions use the authenticated `/api/public/native` JSON boundary with shared validators/handlers; the native service origin must be separately approved and cannot point at Yatzy or preview hosts.
 - Fonts and local gameplay imagery are bundled; native viewport synchronization uses visualViewport after mount, following Yatzy's principle without importing preview-only globals.
 - Native platform projects contain no release signing credentials; build scripts refuse preview/HTTP origins and never publish.
+- Keep Capacitor, iOS and Android app identities aligned; the native verifier checks the approved public Apple team and environment-specific APNs entitlements, never private signing credentials.
+- Native locale declarations map the 40 app dictionaries to platform tags (no → nb, pt → pt-PT); regression tests prevent platform language lists from drifting.
+- AndroidBackButton is the only owner of native back events; lifecycle/network runtime must not install a competing back handler that bypasses confirmation.
 - AdMob and push remain inert adapter boundaries until activation is separately approved; no SDK initialization or permission request on launch.
 - Temporary native diagnostics are build-time opt-in and accept only allowlisted event/status labels plus elapsed time; never collect errors, URLs, identities, request data or credentials, and never persist or upload diagnostics.
 - Android back button (`src/components/AndroidBackButton.tsx` + pure `src/lib/native/back-policy.ts`) and haptics (`src/lib/native/haptics.ts`) are ports of Yatzy's equivalents; leaving a match via back never forfeits.
