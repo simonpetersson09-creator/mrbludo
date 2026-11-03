@@ -120,7 +120,7 @@ function OnlineMatchPage() {
     animatedVersion.current = match.version;
     const ev = state.lastEvent;
     // Like Yatzy: only my own actions vibrate (opponents/bots don't buzz my phone).
-    const mineEv = !!ev && "player" in ev && ev.player === mySeat;
+    const mineEv = !!ev && "player" in ev && state.players[ev.player]?.id === userId;
     if (ev?.kind === "moved" && mineEv) void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
     if (ev?.kind !== "rolled") return;
     setFace(ev.value as DiceValue);
