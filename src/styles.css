@@ -143,6 +143,32 @@
 .seat-card-presence { width: 8px; height: 8px; flex: none; border-radius: 9999px; background: var(--game-success); box-shadow: 0 0 5px color-mix(in oklch, var(--game-success) 90%, transparent); }
 .seat-card-presence-away { background: color-mix(in oklch, var(--muted-foreground) 40%, transparent); box-shadow: none; }
 .seat-card-turn { box-shadow: 0 0 0 1px var(--pc), 0 0 12px 1px color-mix(in oklch, var(--pc) 70%, transparent); transform: scale(1.04); }
+/* Turn bubble at the active player's card: same gold treatment as the Kasta button. */
+.seat-card-bubble {
+  position: absolute; left: 50%; z-index: 30; pointer-events: none; transform: translateX(-50%);
+  display: block; max-width: 150px; padding: 4px 12px; text-align: center;
+  border-radius: 9999px; font-family: var(--font-display); font-size: 11px; font-weight: 700; line-height: 1.25;
+  letter-spacing: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--board-ink);
+  background: linear-gradient(145deg, var(--board-gold-light), var(--board-gold));
+  border: 1px solid var(--board-gold-light);
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklch, var(--board-gold-light) 75%, transparent), var(--control-shadow);
+  animation: seat-card-bubble-in .26s cubic-bezier(.3,1.4,.5,1);
+}
+.seat-card-bubble-top { bottom: calc(100% + 7px); }
+.seat-card-bubble-bottom { top: calc(100% + 7px); }
+.seat-card-bubble::after {
+  content: ""; position: absolute; left: 50%; width: 9px; height: 9px; transform: translateX(-50%) rotate(45deg);
+  background: color-mix(in oklch, var(--board-gold) 80%, var(--board-gold-light));
+}
+.seat-card-bubble-top::after { bottom: -3px; }
+.seat-card-bubble-bottom::after { top: -3px; }
+@keyframes seat-card-bubble-in {
+  from { opacity: 0; transform: translateX(-50%) scale(.86); }
+  to { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .seat-card-bubble { animation: none; } }
+
 @keyframes player-card-turn { 0%, 100% { filter: drop-shadow(0 0 0.04px var(--game-gold)); } 50% { filter: drop-shadow(0 0 0.22px var(--game-gold)); } }
 .player-card-turn { animation: player-card-turn 1.6s ease-in-out infinite; }
 @keyframes piece-done-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
