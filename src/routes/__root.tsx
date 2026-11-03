@@ -9,7 +9,8 @@ import {
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { isDownloadOnlyVisitor, isNativeWindow } from "@/lib/web-access";
-import { useEffect, type ReactNode } from "react";
+import { CHUNK_RELOAD_KEY, clearChunkReloadTries, isStaleChunkError, isStaleNotice, tryStaleChunkReload } from "@/lib/chunk-reload";
+import { useEffect, useState, type ReactNode } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { AndroidBackButton } from "@/components/AndroidBackButton";
 import { Toaster } from "@/components/ui/sonner";
@@ -53,6 +54,9 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
     reportAppError(error, "error_page");
+    // A route file that vanished in an update lands here: fetch the current build instead of
+    // leaving the reader with an error screen.
+    if (isStaleChunkError(error)) tryStaleChunkReload();
   }, [error]);
 
   return (
@@ -118,7 +122,7 @@ function RootShell({ children }: { children: ReactNode }) {
         {/* Runs before the app's modules: if an outdated module fails to load after an update, reload a few times instead of a blank screen. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var K="mrb-ludo:v1:boot-reload",RE=/Importing a module script failed|Failed to fetch dynamically imported module|error loading dynamically imported module/i;function c(){try{return parseInt(sessionStorage.getItem(K)||"0",10)||0}catch(e){return -1}}function f(m){m=String(m||"");if(!RE.test(m))return;var n=c();if(n<0||n>2)return;try{sessionStorage.setItem(K,String(n+1))}catch(e){return}setTimeout(function(){location.reload()},250+n*500)}addEventListener("error",function(e){f(e&&e.message)},true);addEventListener("unhandledrejection",function(e){f(e&&e.reason&&(e.reason.message||e.reason))});addEventListener("load",function(){setTimeout(function(){try{sessionStorage.removeItem(K)}catch(e){}},10000)})})();`,
+            __html: `(function(){var K="mrb-ludo:v1:boot-reload",MAX=3,RE=/Importing a module script failed|Failed to fetch dynamically imported module|error loading dynamically imported module|Failed to load module script|Unable to preload CSS/i;function c(){try{return parseInt(sessionStorage.getItem(K)||"0",10)||0}catch(e){return -1}}function g(){try{var u=new URL(location.href);if(u.searchParams.get("stale")==="1")return;sessionStorage.removeItem(K);location.replace("/?stale=1&fresh="+Date.now())}catch(e){}}function f(m){m=String(m||"");if(!RE.test(m))return;var n=c();if(n<0)return;if(n>=MAX){g();return}try{sessionStorage.setItem(K,String(n+1))}catch(e){return}setTimeout(function(){location.reload()},250+n*500)}addEventListener("error",function(e){f(e&&e.message)},true);addEventListener("unhandledrejection",function(e){f(e&&e.reason&&(e.reason.message||e.reason))});addEventListener("load",function(){setTimeout(function(){try{sessionStorage.removeItem(K)}catch(e){}},10000)})})();`,
           }}
         />
         <HeadContent />
@@ -134,21 +138,21 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  const { t } = useTranslation();
+  // The reloads ran out and the app landed here instead of the screen that failed: say so.
+  const [stale, setStale] = useState(false);
+  useEffect(() => {
+    // The marker stays in the address while the notice is up: it is also what stops the app from
+    // reloading in circles over the same missing file.
+    setStale(isStaleNotice(window.location.search));
+  }, []);
   // After an app update, old code chunks disappear; reload a few times instead of showing a blank screen.
   useEffect(() => {
-    const KEY = "mrb-ludo:v1:chunk-reload";
-    // One try is not enough: an update can still be writing its files, so retry a few times and
-    // wait a little longer for every try instead of leaving a blank screen.
     const onFail = (e: Event) => {
-      let tries = 0;
-      try { tries = Number.parseInt(sessionStorage.getItem(KEY) ?? "0", 10) || 0; } catch { return; }
-      if (tries > 2) return;
-      e.preventDefault();
-      try { sessionStorage.setItem(KEY, String(tries + 1)); } catch { return; }
-      window.setTimeout(() => window.location.reload(), 250 + tries * 500);
+      if (tryStaleChunkReload({ key: CHUNK_RELOAD_KEY })) e.preventDefault();
     };
     window.addEventListener("vite:preloadError", onFail);
-    const clear = window.setTimeout(() => sessionStorage.removeItem(KEY), 10_000);
+    const clear = window.setTimeout(() => clearChunkReloadTries(CHUNK_RELOAD_KEY), 10_000);
     return () => { window.removeEventListener("vite:preloadError", onFail); window.clearTimeout(clear); };
   }, []);
   // Uncaught app errors go to the admin logs (deduplicated and capped per session).
@@ -184,6 +188,14 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <AndroidBackButton />
       <Outlet />
+      {stale && (
+        <div role="alert" className="fixed inset-x-0 top-0 z-50 flex items-center justify-center gap-3 bg-card/95 px-4 py-2 text-xs text-card-foreground shadow-md">
+          <span className="truncate">{t("errorPageBody")}</span>
+          <button onClick={() => window.location.replace("/")} className="shrink-0 rounded-full bg-gold px-3 py-1 font-semibold text-primary-foreground">
+            {t("tryAgain")}
+          </button>
+        </div>
+      )}
       <Toaster position="top-center" duration={6000} className="toaster group mrb-toaster" />
     </QueryClientProvider>
   );
