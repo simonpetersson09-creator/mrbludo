@@ -297,6 +297,12 @@ export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState;
     const isTurn = turnColor === c;
     return (
       <div className={`seat-card${isTurn ? " seat-card-turn" : ""}${c === right ? " flex-row-reverse text-right" : ""}`} style={{ opacity: pl.forfeited ? 0.45 : 1, ["--pc" as string]: FILL[c] }}>
+        {isTurn && (
+          <span className={`seat-card-bubble seat-card-bubble-${edge}`} aria-hidden="true">
+            {seat === ownSeat ? t("yourTurnLabel") : name}
+          </span>
+        )}
+
         <span className="seat-card-avatar">
           {kind === "bot" ? <span className="seat-card-bot"><Bot className="h-[19px] w-[19px]" strokeWidth={2} /></span>
             : info?.image ? <img src={info.image} alt="" className="h-full w-full object-cover" />
