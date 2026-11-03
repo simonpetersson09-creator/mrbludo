@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { useTranslation } from "@/lib/i18n";
+import throwFelt from "@/assets/throw-felt.jpg";
 
 // Yatzy's 3D die engine, rendered client-only (WebGL).
 const DiceScene = lazy(() => import("@/components/dice-engine/DiceScene").then((m) => ({ default: m.DiceScene })));
@@ -32,7 +33,9 @@ export function LudoDie({ value, rolling, pipColor, onTap, disabled }: Props) {
       disabled={disabled}
       className="throw-tray relative h-full w-full"
     >
-      <span className="throw-cloth" aria-hidden="true" />
+      <span className="throw-cloth" aria-hidden="true">
+        <img src={throwFelt} alt="" width={1152} height={576} className="throw-felt-texture" />
+      </span>
       {mounted && (
         <Suspense fallback={null}>
           <DiceScene className={`throw-die ${rolling ? "throw-die-enter" : ""}`} values={[value]} rolling={rolling} fill={0.68} entryFrom="center" skin={bodyColor ? { id: `ludo-${bodyColor}`, body: bodyColor, pip: toRgb(getComputedStyle(document.documentElement).getPropertyValue("--board-mark").trim()) } : undefined} />
