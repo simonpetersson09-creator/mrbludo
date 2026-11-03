@@ -189,6 +189,7 @@ export const ms: Record<TranslationKey, string> = {
   errMissing: "Tidak ditemui",
   errNotFriends: "Anda bukan rakan",
   errNotInMatch: "Anda bukan dalam perlawanan",
+  errRateLimited: "Tunggu sebentar sebelum menghantar semula",
   errForbidden: "Akses ditolak",
   errNotMember: "Anda bukan dalam perlawanan",
   errFinished: "Perlawanan tamat",

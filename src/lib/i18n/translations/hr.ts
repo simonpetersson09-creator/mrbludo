@@ -174,6 +174,7 @@ export const hr: Record<TranslationKey, string> = {
   errMissing: "Nedostaje",
   errNotFriends: "Niste prijatelji",
   errNotInMatch: "Nisi u ovoj igri",
+  errRateLimited: "Pričekaj trenutak prije ponovnog slanja",
   errForbidden: "Pristup odbijen",
   errNotMember: "Nisi u ovoj igri",
   errFinished: "Igra je završila",

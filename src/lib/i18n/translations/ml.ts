@@ -189,6 +189,7 @@ export const ml: Record<TranslationKey, string> = {
   errMissing: "കണ്ടെത്തിയില്ല",
   errNotFriends: "നിങ്ങൾ സുഹൃത്തുക്കളല്ല",
   errNotInMatch: "നീ മത്സരത്തിലില്ല",
+  errRateLimited: "വീണ്ടും അയയ്ക്കുന്നതിന് മുമ്പ് അൽപ്പം കാത്തിരിക്കുക",
   errForbidden: "പ്രവേശനം നിഷേധിച്ചു",
   errNotMember: "നീ മത്സരത്തിലില്ല",
   errFinished: "മത്സരം കഴിഞ്ഞു",

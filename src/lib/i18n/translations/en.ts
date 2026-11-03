@@ -189,6 +189,7 @@ export const en: Record<TranslationKey, string> = {
   errMissing: "Not found",
   errNotFriends: "You are not friends",
   errNotInMatch: "You are not in the match",
+  errRateLimited: "Please wait a moment before sending again",
   errForbidden: "Access denied",
   errNotMember: "You are not in the match",
   errFinished: "The match is over",

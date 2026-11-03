@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX IF NOT EXISTS friendships_pair_unique ON public.friendships (least(requester, addressee), greatest(requester, addressee));
+CREATE INDEX IF NOT EXISTS match_invites_from_created ON public.match_invites (from_user, created_at DESC);

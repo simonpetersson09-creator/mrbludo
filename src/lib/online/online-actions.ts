@@ -82,6 +82,15 @@ async function isMember(db: Admin, matchId: string, userId: string) {
   return !!data;
 }
 
+/** Yatzy's invite rules: invites live 6 hours; invites and friend requests are spaced at least 10 seconds apart. */
+export const INVITE_TTL_MS = 6 * 3600_000;
+export const SEND_COOLDOWN_MS = 10_000;
+async function rateLimit(db: Admin, table: "friendships" | "match_invites", col: "requester" | "from_user", userId: string) {
+  const since = new Date(Date.now() - SEND_COOLDOWN_MS).toISOString();
+  const { count } = await db.from(table).select("id", { count: "exact", head: true }).eq(col as never, userId as never).gte("created_at", since);
+  if ((count ?? 0) > 0) throw new Error("err:rate_limited");
+}
+
 function fail(e: unknown): never {
   if (e instanceof MatchError) throw new Error("err:" + e.code);
   throw e;
@@ -297,6 +306,9 @@ export const sendFriendRequestAction = async ({ data, context }: { data: ReturnT
     // Yatzy's rule: only players who sat in the same online match can become friends.
     const { data: seats } = await db.from("match_players").select("user_id").eq("match_id", data.matchId).in("user_id", [context.userId, data.userId]);
     if ((seats ?? []).length !== 2) throw new Error("err:not_in_match");
+    const { data: shared } = await db.from("matches").select("status").eq("id", data.matchId).maybeSingle();
+    if (shared?.status !== "finished") throw new Error("err:not_in_match");
+    await rateLimit(db, "friendships", "requester", context.userId);
     const { data: existing } = await db.from("friendships").select("*")
       .or(`and(requester.eq.${context.userId},addressee.eq.${data.userId}),and(requester.eq.${data.userId},addressee.eq.${context.userId})`).maybeSingle();
     if (existing) {
@@ -305,7 +317,12 @@ export const sendFriendRequestAction = async ({ data, context }: { data: ReturnT
         await db.from("friendships").update({ status: "accepted" }).eq("id", existing.id);
       return { ok: true, already: true };
     }
-    await db.from("friendships").insert({ requester: context.userId, addressee: data.userId });
+    const { error: insErr } = await db.from("friendships").insert({ requester: context.userId, addressee: data.userId });
+    if (insErr) {
+      // A crossing request won the race (unique pair index): accept theirs instead of creating a second one.
+      await db.from("friendships").update({ status: "accepted" }).eq("requester", data.userId).eq("addressee", context.userId).eq("status", "pending");
+      return { ok: true, already: true };
+    }
     return { ok: true, already: false };
   };
 
@@ -323,7 +340,7 @@ export const listFriendsAction = async ({ context }: { context: OnlineContext })
   const ids = [...new Set((rows ?? []).map((r) => (r.requester === userId ? r.addressee : r.requester)))];
   const { data: profs } = ids.length ? await supabase.from("profiles").select("id, display_name, avatar, country, last_seen").in("id", ids) : { data: [] };
   const byId = new Map((profs ?? []).map((p) => [p.id, p]));
-  const { data: invites } = await supabase.from("match_invites").select("id, match_id, from_user, created_at").eq("to_user", userId).eq("status", "pending").order("created_at", { ascending: false }).limit(10);
+  const { data: invites } = await supabase.from("match_invites").select("id, match_id, from_user, created_at").eq("to_user", userId).eq("status", "pending").gte("created_at", new Date(Date.now() - INVITE_TTL_MS).toISOString()).order("created_at", { ascending: false }).limit(10);
   return {
     friends: (rows ?? []).map((r) => {
       const other = r.requester === userId ? r.addressee : r.requester;
@@ -340,6 +357,9 @@ export const inviteFriendAction = async ({ data, context }: { data: ReturnType<t
     if (!f) throw new Error("err:not_friends");
     const { data: me } = await db.from("match_players").select("seat").eq("match_id", data.matchId).eq("user_id", context.userId).maybeSingle();
     if (!me) throw new Error("err:not_in_match");
+    await rateLimit(db, "match_invites", "from_user", context.userId);
+    // One live invite per friend and match: a repeat replaces the old one.
+    await db.from("match_invites").delete().eq("match_id", data.matchId).eq("to_user", data.userId).eq("status", "pending");
     await db.from("match_invites").insert({ match_id: data.matchId, from_user: context.userId, to_user: data.userId });
     return { ok: true };
   };
@@ -347,7 +367,11 @@ export const inviteFriendAction = async ({ data, context }: { data: ReturnType<t
 export const respondInviteAction = async ({ data, context }: { data: ReturnType<typeof respondInviteInput>; context: OnlineContext }) => {
     const db = await admin();
     const { data: inv } = await db.from("match_invites").select("*").eq("id", data.id).single();
-    if (!inv || inv.to_user !== context.userId) throw new Error("err:missing");
+    if (!inv || inv.to_user !== context.userId || inv.status !== "pending") throw new Error("err:missing");
+    if (Date.now() - new Date(inv.created_at).getTime() > INVITE_TTL_MS) {
+      await db.from("match_invites").update({ status: "expired" }).eq("id", inv.id);
+      throw new Error("err:missing");
+    }
     await db.from("match_invites").update({ status: data.accept ? "accepted" : "declined" }).eq("id", inv.id);
     if (!data.accept) return { matchId: null };
     const { data: m } = await db.from("matches").select("id, status, max_players").eq("id", inv.match_id).single();

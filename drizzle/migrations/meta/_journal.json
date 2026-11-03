@@ -43,6 +43,13 @@
       "when": 1793725791941,
       "tag": "0005_atomic_stats_and_quick_lock",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793726195958,
+      "tag": "0006_friendship_pair_unique",
+      "breakpoints": true
     }
   ]
 }

@@ -189,6 +189,7 @@ export const bn: Record<TranslationKey, string> = {
   errMissing: "পাওয়া যায়নি",
   errNotFriends: "আপনারা বন্ধু নন",
   errNotInMatch: "আপনি ম্যাচে নেই",
+  errRateLimited: "আবার পাঠানোর আগে একটু অপেক্ষা করুন",
   errForbidden: "প্রবেশ নিষিদ্ধ",
   errNotMember: "আপনি ম্যাচে নেই",
   errFinished: "ম্যাচ শেষ",

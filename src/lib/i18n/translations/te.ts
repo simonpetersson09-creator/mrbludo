@@ -189,6 +189,7 @@ export const te: Record<TranslationKey, string> = {
   errMissing: "కనబడలేదు",
   errNotFriends: "మీరు స్నేహితులు కాదు",
   errNotInMatch: "మీరు మ్యాచ్‌లో లేరు",
+  errRateLimited: "మళ్లీ పంపే ముందు కొంచెం వేచి ఉండండి",
   errForbidden: "యాక్సెస్ నిరాకరించబడింది",
   errNotMember: "మీరు మ్యాచ్‌లో లేరు",
   errFinished: "మ్యాచ్ ముగిసింది",

@@ -174,6 +174,7 @@ export const cs: Record<TranslationKey, string> = {
   errMissing: "Chybí",
   errNotFriends: "Nejste přátelé",
   errNotInMatch: "Nejsi v této hře",
+  errRateLimited: "Před dalším odesláním chvíli počkej",
   errForbidden: "Přístup odepřen",
   errNotMember: "Nejsi v této hře",
   errFinished: "Hra skončila",

@@ -189,6 +189,7 @@ export const or: Record<TranslationKey, string> = {
   errMissing: "ମିଳିଲା ନାହିଁ",
   errNotFriends: "ତୁମେ ବନ୍ଧୁ ନୁହଁ",
   errNotInMatch: "ତୁମେ ମ୍ୟାଚରେ ନାହଁ",
+  errRateLimited: "ପୁଣି ପଠାଇବା ପୂର୍ବରୁ ଟିକିଏ ଅପେକ୍ଷା କରନ୍ତୁ",
   errForbidden: "ପ୍ରବେଶ ନିଷେଧ",
   errNotMember: "ତୁମେ ମ୍ୟାଚରେ ନାହଁ",
   errFinished: "ମ୍ୟାଚ୍ ଶେଷ",

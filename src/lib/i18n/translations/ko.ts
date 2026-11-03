@@ -189,6 +189,7 @@ export const ko: Record<TranslationKey, string> = {
   errMissing: "찾을 수 없습니다",
   errNotFriends: "친구가 아닙니다",
   errNotInMatch: "경기에 참가하지 않았습니다",
+  errRateLimited: "다시 보내기 전에 잠시 기다려 주세요",
   errForbidden: "접근이 거부되었습니다",
   errNotMember: "경기에 참가하지 않았습니다",
   errFinished: "경기가 끝났습니다",

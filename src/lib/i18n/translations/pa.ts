@@ -189,6 +189,7 @@ export const pa: Record<TranslationKey, string> = {
   errMissing: "ਨਹੀਂ ਮਿਲਿਆ",
   errNotFriends: "ਤੁਸੀਂ ਦੋਸਤ ਨਹੀਂ ਹੋ",
   errNotInMatch: "ਤੁਸੀਂ ਮੈਚ ਵਿੱਚ ਨਹੀਂ ਹੋ",
+  errRateLimited: "ਦੁਬਾਰਾ ਭੇਜਣ ਤੋਂ ਪਹਿਲਾਂ ਥੋੜ੍ਹਾ ਰੁਕੋ",
   errForbidden: "ਪਹੁੰਚ ਅਸਵੀਕਾਰ",
   errNotMember: "ਤੁਸੀਂ ਮੈਚ ਵਿੱਚ ਨਹੀਂ ਹੋ",
   errFinished: "ਮੈਚ ਖਤਮ ਹੋ ਗਿਆ",

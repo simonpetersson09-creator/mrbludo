@@ -189,6 +189,7 @@ export const vi: Record<TranslationKey, string> = {
   errMissing: "Không tìm thấy",
   errNotFriends: "Các bạn chưa kết bạn",
   errNotInMatch: "Bạn không ở trong trận",
+  errRateLimited: "Vui lòng chờ một chút trước khi gửi lại",
   errForbidden: "Truy cập bị từ chối",
   errNotMember: "Bạn không ở trong trận",
   errFinished: "Trận đã kết thúc",

@@ -189,6 +189,7 @@ export const fr: Record<TranslationKey, string> = {
   errMissing: "Introuvable",
   errNotFriends: "Vous n'êtes pas amis",
   errNotInMatch: "Tu n'es pas dans la partie",
+  errRateLimited: "Attends un instant avant de renvoyer",
   errForbidden: "Accès refusé",
   errNotMember: "Tu n'es pas dans la partie",
   errFinished: "La partie est terminée",

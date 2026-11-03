@@ -174,6 +174,7 @@ export const pl: Record<TranslationKey, string> = {
   errMissing: "Brak",
   errNotFriends: "Nie jesteście znajomymi",
   errNotInMatch: "Nie bierzesz udziału w tej grze",
+  errRateLimited: "Poczekaj chwilę, zanim wyślesz ponownie",
   errForbidden: "Brak dostępu",
   errNotMember: "Nie bierzesz udziału w tej grze",
   errFinished: "Gra się zakończyła",

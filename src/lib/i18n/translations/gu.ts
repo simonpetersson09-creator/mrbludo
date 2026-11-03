@@ -189,6 +189,7 @@ export const gu: Record<TranslationKey, string> = {
   errMissing: "મળ્યું નહીં",
   errNotFriends: "તમે મિત્રો નથી",
   errNotInMatch: "તમે મેચમાં નથી",
+  errRateLimited: "ફરી મોકલતા પહેલાં થોડી રાહ જુઓ",
   errForbidden: "પ્રવેશ નકારાયો",
   errNotMember: "તમે મેચમાં નથી",
   errFinished: "મેચ પૂરી થઈ",
