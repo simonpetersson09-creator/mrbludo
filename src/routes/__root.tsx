@@ -6,8 +6,11 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  redirect,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
+import { isDownloadOnlyVisitor, isNativeWindow, webPlayBlocked } from "@/lib/web-access";
+import { parseMatchCode } from "@/lib/online/match-code";
 import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { AndroidBackButton } from "@/components/AndroidBackButton";
