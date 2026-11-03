@@ -51,5 +51,25 @@ describe("useDieColor", () => {
     } finally {
       vi.useRealTimers();
     }
+  it("does not restart the wait when the same position is re-fetched", async () => {
+    vi.useFakeTimers();
+    try {
+      const before = ready();
+      const after = applyMove(before, 0);
+      const { result, rerender } = renderHook(
+        ({ s }: { s: GameState }) => useDieColor(COLORS[s.players[s.current].color] ?? "", s),
+        { initialProps: { s: before } },
+      );
+      rerender({ s: after });
+      // The server sends the same position again a moment later: the die must still change on
+      // schedule, not wait another full walk from now.
+      await act(async () => { await vi.advanceTimersByTimeAsync(500); });
+      rerender({ s: { ...after } });
+      await act(async () => { await vi.advanceTimersByTimeAsync(600); });
+      expect(result.current).toBe("green");
+    } finally {
+      vi.useRealTimers();
+    }
   });
+});
 });
