@@ -386,6 +386,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display
 @media (orientation: landscape) and (max-height: 540px) { .match-info-bar { display: none; } }
 
 /* Compact notices: half size, linger, then fade away. */
-.mrb-toaster [data-sonner-toast] { width: auto !important; max-width: min(260px, 80vw); left: 50%; right: auto; transform: translateX(-50%) var(--y, translateY(0)); padding: 6px 12px !important; font-size: 11.5px !important; gap: 6px !important; border-radius: 9999px !important; }
+.mrb-toaster { --width: min(230px, 78vw) !important; }
+.mrb-toaster [data-sonner-toast] { padding: 6px 12px !important; font-size: 11.5px !important; gap: 6px !important; border-radius: 9999px !important; }
 .mrb-toaster [data-sonner-toast] [data-icon] { width: 14px; height: 14px; }
 .mrb-toaster [data-sonner-toast][data-removed="true"] { transition: opacity .7s ease, transform .7s ease !important; }
