@@ -184,7 +184,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         <clipPath id={`${boardId}-edge`}>
           <rect x="0" y="0" width="15" height="15" rx="0.4" />
         </clipPath>
-        <path id={`${boardId}-safe`} d="M 0,-0.25 Q 0.045,-0.045 0.25,0 Q 0.045,0.045 0,0.25 Q -0.045,0.045 -0.25,0 Q -0.045,-0.045 0,-0.25 Z" />
+        <path id={`${boardId}-safe`} d="M 0,-0.33 Q 0.06,-0.06 0.33,0 Q 0.06,0.06 0,0.33 Q -0.06,0.06 -0.33,0 Q -0.06,-0.06 0,-0.33 Z" />
         <linearGradient id={`${boardId}-pawn-shine`} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="var(--board-mark-line)" stopOpacity="0.5" />
           <stop offset="30%" stopColor="var(--board-mark)" stopOpacity="0.45" />
@@ -263,8 +263,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
           <g key={i}>
             <rect x={c} y={r} width={cell} height={cell} fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
             {startColor != null && <>
-              <circle cx={c + cell / 2} cy={r + cell / 2} r="0.37" fill={BOARD_FILL[startColor]} fillOpacity="0.18" stroke={BOARD_FILL[startColor]} strokeWidth="0.06" />
-              <use href={`#${boardId}-safe`} x={c + cell / 2} y={r + cell / 2} fill={BOARD_FILL[startColor]} stroke="var(--board-mark-line)" strokeWidth="0.014" strokeLinejoin="round" />
+              <circle cx={c + cell / 2} cy={r + cell / 2} r="0.42" fill={BOARD_FILL[startColor]} fillOpacity="0.24" stroke={BOARD_FILL[startColor]} strokeWidth="0.08" />
+              <use href={`#${boardId}-safe`} x={c + cell / 2} y={r + cell / 2} fill={BOARD_FILL[startColor]} stroke="var(--board-mark-line)" strokeWidth="0.02" strokeLinejoin="round" />
             </>}
           </g>
         );
