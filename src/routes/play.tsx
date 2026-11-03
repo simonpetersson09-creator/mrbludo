@@ -5,6 +5,7 @@ import {
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
+import { MatchInfoBar } from "@/components/ludo/MatchInfoBar";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { applyMove, canWalkOut, applyRoll, forfeit, legalMoves, rollDie, absSquare, variantOf, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
@@ -162,6 +163,7 @@ function PlayPage() {
 
   return (
     <main className="game-screen">
+      <MatchInfoBar state={state} gameKey={"local"} />
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
        <div className="game-board-stack flex flex-col">
         <SeatCardRow state={state} seats={seatInfo} edge="top" ownSeat={ownSeat} />

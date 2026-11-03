@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { supabase } from "@/lib/auth/client";
 import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
+import { MatchInfoBar } from "@/components/ludo/MatchInfoBar";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { goalOf, legalMoves, variantOf, type GameState } from "@/lib/ludo/engine";
@@ -186,6 +187,7 @@ function OnlineMatchPage() {
 
   return (
     <main className="game-screen">
+      <MatchInfoBar state={state} gameKey={matchId} />
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
         <div className="game-board-stack flex flex-col">
         <SeatCardRow state={state} seats={seatInfo} edge="top" ownSeat={mySeat} />
