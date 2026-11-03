@@ -174,6 +174,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
                 <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill={`url(#${boardId}-pit)`} />
                 <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill="none" stroke="var(--board-mark)" strokeOpacity="0.6" strokeWidth="0.04" />
               </g>
+            ))}
           </g>
         );
       })}
