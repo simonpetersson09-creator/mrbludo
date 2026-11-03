@@ -7,7 +7,7 @@ import {
 import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
-import { applyMove, applyRoll, forfeit, legalMoves, rollDie, absSquare, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
+import { applyMove, applyRoll, forfeit, legalMoves, rollDie, absSquare, variantOf, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
 import { chooseMove } from "@/lib/ludo/ai";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { pieceCenter } from "@/lib/ludo/board";
@@ -146,7 +146,7 @@ function PlayPage() {
 
   const ev = state.lastEvent;
   const captureAt = ev?.kind === "moved" && ev.captured.length
-    ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece) as [number, number])
+    ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece, variantOf(state)) as [number, number])
     : null;
   void absSquare;
 

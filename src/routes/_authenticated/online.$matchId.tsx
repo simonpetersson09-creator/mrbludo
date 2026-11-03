@@ -12,7 +12,7 @@ import { supabase } from "@/lib/auth/client";
 import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
-import { GOAL, legalMoves, type GameState } from "@/lib/ludo/engine";
+import { goalOf, legalMoves, variantOf, type GameState } from "@/lib/ludo/engine";
 import { RollLabel } from "@/components/ludo/RollLabel";
 import { QuickChat } from "@/components/ludo/QuickChat";
 import { pieceCenter } from "@/lib/ludo/board";
@@ -174,7 +174,7 @@ function OnlineMatchPage() {
   const legal = myTurn && state.phase === "move" && !rolling ? legalMoves(state) : [];
   const canRoll = myTurn && state.phase === "roll" && !rolling && !pending && !offline;
   const ev = state.lastEvent;
-  const captureAt = ev?.kind === "moved" && ev.captured.length ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece) as [number, number]) : null;
+  const captureAt = ev?.kind === "moved" && ev.captured.length ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece, variantOf(state)) as [number, number]) : null;
   const seatOf = (id: string) => seats.find((s) => s.user_id === id);
 
   let status = "";
@@ -259,7 +259,7 @@ function OnlineMatchPage() {
                     <span className="w-5 font-bold text-gold">{place + 1}.</span>
                     <span className="h-3 w-3 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
                     <span className="flex-1 truncate">{p.name}</span>
-                    <span className="text-xs text-muted-foreground">{p.forfeited ? t("gaveUp") : t("inGoal", { n: state.pieces[seat].filter((x) => x === GOAL).length })}</span>
+                    <span className="text-xs text-muted-foreground">{p.forfeited ? t("gaveUp") : t("inGoal", { n: state.pieces[seat].filter((x) => x === goalOf(variantOf(state))).length })}</span>
                     {!p.isBot && p.id !== userId && seatOf(p.id) && (
                       <AddFriendButton matchId={match.id} userId={p.id} />
                     )}
