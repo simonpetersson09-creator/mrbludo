@@ -12,6 +12,13 @@ export const SEAT_COLORS: Record<number, Color[]> = { 2: [0, 2], 3: [0, 1, 2], 4
 export const TURN_SECONDS = 30;
 /** Seconds without a heartbeat before a player counts as dropped and is forfeited on their turn. */
 export const DROP_SECONDS = 90;
+/** Yatzy's invite rules: a shared match code stops working 6 hours after the match was made. */
+export const CODE_TTL_MS = 6 * 3600_000;
+/** True once a match code is older than its lifetime (or its creation time is unusable). */
+export function codeExpired(createdAtIso: string, now = Date.now(), ttlMs = CODE_TTL_MS): boolean {
+  const created = Date.parse(createdAtIso);
+  return !Number.isFinite(created) || now - created > ttlMs;
+}
 
 export interface SeatInfo { user_id: string; seat: number; display_name: string }
 
