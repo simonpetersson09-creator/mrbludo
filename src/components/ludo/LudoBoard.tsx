@@ -184,7 +184,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         <clipPath id={`${boardId}-edge`}>
           <rect x="0" y="0" width="15" height="15" rx="0.4" />
         </clipPath>
-        <path id={`${boardId}-safe`} d="M 0,-0.25 L 0.074,-0.102 L 0.238,-0.077 L 0.12,0.039 L 0.147,0.202 L 0,0.125 L -0.147,0.202 L -0.12,0.039 L -0.238,-0.077 L -0.074,-0.102 Z" />
+        <path id={`${boardId}-safe`} d="M 0,-0.25 Q 0.045,-0.045 0.25,0 Q 0.045,0.045 0,0.25 Q -0.045,0.045 -0.25,0 Q -0.045,-0.045 0,-0.25 Z" />
         <linearGradient id={`${boardId}-pawn-shine`} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="var(--board-mark-line)" stopOpacity="0.5" />
           <stop offset="30%" stopColor="var(--board-mark)" stopOpacity="0.45" />
