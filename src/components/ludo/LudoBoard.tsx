@@ -72,7 +72,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         for (const side of [-1, 1]) {
           const e = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
           e.setAttribute("cx", String(side * 0.075)); e.setAttribute("cy", String(side * 0.05));
-          e.setAttribute("rx", "0.045"); e.setAttribute("ry", "0.08"); e.setAttribute("fill", fill);
+          e.setAttribute("rx", "0.05"); e.setAttribute("ry", "0.085"); e.setAttribute("fill", "var(--board-ink)"); e.setAttribute("stroke", fill); e.setAttribute("stroke-width", "0.02");
           g.appendChild(e);
         }
         trail.appendChild(g);
@@ -86,8 +86,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         const a = g.animate([
           { opacity: 0, offset: 0 },
           { opacity: 0, offset: appear / total },
-          { opacity: 0.5, offset: shown / total },
-          { opacity: 0.4, offset: fade / total },
+          { opacity: 0.38, offset: shown / total },
+          { opacity: 0.3, offset: fade / total },
           { opacity: 0, offset: gone / total },
           ...(gone < total ? [{ opacity: 0, offset: 1 }] : []),
         ], { duration: total, easing: "ease-in-out" });
@@ -340,7 +340,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
           {p.legal && <circle className="piece-ring" r="0.5" fill="none" stroke="var(--game-gold)" strokeWidth="0.1" />}
           {p.done && <circle className="piece-done-glow" r="0.36" fill="var(--game-gold)" fillOpacity="0.35" stroke="var(--game-gold)" strokeWidth="0.06" pointerEvents="none" />}
           <g className="pawn" pointerEvents="none">
-          <g transform={p.done ? (fia ? "translate(0 0.06) scale(0.5)" : "translate(0 0.08) scale(0.62)") : "translate(0 0.1)"}>
+          <g transform={p.done ? (fia ? "translate(0 0.06) scale(0.48)" : "translate(0 0.08) scale(0.6)") : "translate(0 0.1)"}>
             <ellipse cx="0.05" cy="0.3" rx="0.36" ry="0.13" fill="var(--board-mark-line)" opacity="0.4" />
             <ellipse cy="0.23" rx="0.32" ry="0.12" fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />
             <use href={`#${boardId}-pawn-body`} fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />

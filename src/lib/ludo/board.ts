@@ -88,8 +88,8 @@ const GOAL_ANGLE: Record<Color, number> = { 0: 180, 1: 270, 2: 0, 3: 90 };
 /** Finished pieces fan out in a tidy arc on their own side of the goal, one fixed slot per piece. */
 export function goalSpot(color: Color, piece: number, variant: Variant = "classic"): [number, number] {
   const fia = variant === "fia";
-  const r = fia ? 0.31 : 0.62;
-  const step = fia ? 22 : 24;
+  const r = fia ? 0.4 : 1.02;
+  const step = fia ? 30 : 27;
   const a = ((GOAL_ANGLE[color] + (piece - 1.5) * step) * Math.PI) / 180;
   return [7.5 + Math.cos(a) * r, 7.5 + Math.sin(a) * r];
 }
