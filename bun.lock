@@ -6,6 +6,7 @@
       "name": "tanstack_start_ts",
       "dependencies": {
         "@capacitor-community/admob": "8.2.1",
+        "@capacitor-community/in-app-review": "^8.0.0",
         "@capacitor/android": "^8.6.0",
         "@capacitor/app": "^8.1.2",
         "@capacitor/barcode-scanner": "^2",
@@ -156,6 +157,8 @@
     "@babel/types": ["@babel/types@7.29.8", "", { "dependencies": { "@babel/helper-string-parser": "^7.29.7", "@babel/helper-validator-identifier": "^7.29.7" } }, "sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg=="],
 
     "@capacitor-community/admob": ["@capacitor-community/admob@8.2.1", "", { "dependencies": { "@capacitor/core": "^8.0.0", "@rdlabo/capacitor-docgen": "^0.4.1" } }, "sha512-kJRy6EMNrutDZL0ETChg5pAJ9pQFxkcsinrTRD4wkYp7NGkLZmG0m/YBMyXvUhMkbMIqlCGkNRSjgXi25F9/ww=="],
+
+    "@capacitor-community/in-app-review": ["@capacitor-community/in-app-review@8.0.0", "", { "peerDependencies": { "@capacitor/core": ">=8.0.0" } }, "sha512-AYpEkIjdv27WGS3hnlc7xAQ1BhaBvD2svgQBfHF4P2Olw1N6a7MSCOQC6O4SuxmdBdJ2fM6uFeo1jyNjKLtIPw=="],
 
     "@capacitor/android": ["@capacitor/android@8.6.0", "", { "peerDependencies": { "@capacitor/core": "^8.6.0" } }, "sha512-6IJS0TCfV/F/8+324CCwYd3xL6r+TH0W7zzaxYzPz9IV3YWCNvsZDuCCPHUIBC5iASb9od827ddSJ6rz+9Pu1Q=="],
 

@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@capacitor-community/admob": "8.2.1",
+    "@capacitor-community/in-app-review": "^8.0.0",
     "@capacitor/android": "^8.6.0",
     "@capacitor/app": "^8.1.2",
     "@capacitor/barcode-scanner": "^2",
