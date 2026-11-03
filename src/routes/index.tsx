@@ -1,4 +1,5 @@
 import { randomBotNames } from "@/lib/ludo/bot-names";
+import { VariantPicker, useVariant } from "@/components/ludo/VariantPicker";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { BarChart3, Check, Globe, Play, Settings, Users } from "lucide-react";
@@ -52,6 +53,7 @@ function HomePage() {
   const toggleLangs = () => setShowLangs((v) => !v);
 
   const [showQuick, setShowQuick] = useState(false);
+  const [variant, setVariant] = useVariant();
   const [search, setSearch] = useState<number | null>(null);
 
   // Nobody found online → local game with computer opponents (Yatzy fallback).
@@ -63,7 +65,7 @@ function HomePage() {
     const botNames = randomBotNames(cs.length);
     saveGame(createGame(cs.map((c, i) => i === 0
       ? { id: "p0", name, color: c, isBot: false }
-      : { id: `p${i}`, name: botNames[i], color: c, isBot: true })));
+      : { id: `p${i}`, name: botNames[i], color: c, isBot: true }), variant));
     navigate({ to: "/play" });
   };
 
@@ -101,6 +103,7 @@ function HomePage() {
         <button className="home-action font-display" aria-expanded={showQuick} onClick={() => setShowQuick((v) => !v)}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
         {showQuick && (
           <div className="space-y-2 overflow-hidden">
+            <VariantPicker value={variant} onChange={setVariant} />
             <p className="text-center text-sm font-medium text-muted-foreground">{t("selectPlayerCount")}</p>
             <div className="flex gap-2">
               {[1, 2, 3].map((n) => (
@@ -158,6 +161,7 @@ function HomePage() {
       {search && (
         <QuickMatchSearch
           players={search}
+          variant={variant}
           onCancel={() => setSearch(null)}
           onNoMatch={() => { const n = search; setSearch(null); startLocal(n); }}
           onMatch={(id) => { setSearch(null); navigate({ to: "/online/$matchId", params: { matchId: id } }); }}

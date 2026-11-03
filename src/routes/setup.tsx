@@ -1,4 +1,5 @@
 import { randomBotNames } from "@/lib/ludo/bot-names";
+import { VariantPicker, useVariant } from "@/components/ludo/VariantPicker";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Bot, User } from "lucide-react";
@@ -29,6 +30,7 @@ function SetupPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [count, setCount] = useState(2);
+  const [variant, setVariant] = useVariant();
   const [bots, setBots] = useState<boolean[]>([false, true, true, true]);
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
   useEffect(() => {
@@ -45,7 +47,7 @@ function SetupPage() {
       isBot: i === 0 ? false : bots[i],
       name: i > 0 && bots[i] ? botNames[i] : names[i].trim() || t("playerN", { n: i + 1 }),
     }));
-    saveGame(createGame(players));
+    saveGame(createGame(players, variant));
     navigate({ to: "/play" });
   };
 
@@ -60,6 +62,7 @@ function SetupPage() {
             <button key={n} className={`home-action ${n === count ? "home-action-gold" : "home-action-ghost"}`} onClick={() => setCount(n)}>{n}</button>
           ))}
         </div>
+        <div className="mt-4"><VariantPicker value={variant} onChange={setVariant} /></div>
         <div className="mt-4 flex flex-col gap-[7px]">
           {SEATS[count].map((color, i) => (
             <div key={i} className="flex h-[52px] items-center gap-2 rounded-[10px] border bg-card px-3">

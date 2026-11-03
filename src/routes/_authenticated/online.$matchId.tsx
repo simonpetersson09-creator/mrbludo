@@ -327,7 +327,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
     <main className="app-screen">
       <div className="home-stack">
         <h1 className="brand-title text-3xl">{t("waitingRoom")}</h1>
-        <p className="text-sm text-muted-foreground">{match.is_private ? t("privateMatch") : t("quickMatch")} · {t("playersCount", { n: seats.length, max: match.max_players })}</p>
+        <p className="text-sm text-muted-foreground">{match.is_private ? t("privateMatch") : t("quickMatch")} · {t(match.variant === "fia" ? "modeFia" : "modeClassic")} · {t("playersCount", { n: seats.length, max: match.max_players })}</p>
         <button className="mt-3 flex items-center justify-center gap-2 rounded-[10px] border border-gold bg-card py-3" onClick={() => { navigator.clipboard?.writeText(match.code); toast.success(t("codeCopied")); }}>
           <span className="text-xs text-muted-foreground">{t("matchCode")}</span>
           <span className="font-display text-2xl font-bold tracking-[0.3em] text-gold">{match.code}</span>

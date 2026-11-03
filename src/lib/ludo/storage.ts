@@ -1,4 +1,4 @@
-import type { GameState } from "./engine";
+import type { GameState, Variant } from "./engine";
 
 /** All Ludo keys live in their own namespace; never shared with Yatzy. */
 const NS = "mrb-ludo:v1:";
@@ -48,3 +48,11 @@ const NOTIFS = NS + "notifications";
 const DEFAULT_NOTIFS: NotificationPrefs = { turnNotifications: true, reminderNotifications: true, playReminders: false };
 export const loadNotificationPrefs = () => read(NOTIFS, DEFAULT_NOTIFS);
 export const saveNotificationPrefs = (p: NotificationPrefs) => write(NOTIFS, p);
+
+/** Last chosen rule variant; Classic is the default. */
+const VARIANT = NS + "variant";
+export const loadVariant = (): Variant => {
+  if (typeof window === "undefined") return "classic";
+  try { return localStorage.getItem(VARIANT) === "fia" ? "fia" : "classic"; } catch { return "classic"; }
+};
+export const saveVariant = (v: Variant) => { try { localStorage.setItem(VARIANT, v); } catch { /* noop */ } };

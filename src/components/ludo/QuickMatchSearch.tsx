@@ -67,7 +67,7 @@ export function QuickMatchSearch({ players, onMatch, onNoMatch, onCancel }: Prop
       if (typeof navigator !== "undefined" && !navigator.onLine) return local();
       try {
         await ensurePlayerSession();
-        const r = await quickMatch({ data: { maxPlayers: players } });
+        const r = await quickMatch({ data: { maxPlayers: players, variant } });
         if (cancelled) { void leaveMatch({ data: { matchId: r.id } }).catch(() => {}); return; }
         matchRef.current = r.id;
         void poll();
