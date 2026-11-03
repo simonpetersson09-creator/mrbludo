@@ -43,6 +43,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
   const boardId = useId().replace(/:/g, "");
   const previousState = useRef(state);
   const pieceElements = useRef(new Map<string, SVGGElement>());
+  const trailRef = useRef<SVGGElement>(null);
 
   useLayoutEffect(() => {
     const previous = previousState.current;
@@ -58,6 +59,42 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
     const animations: Animation[] = [];
     const waypoints = pieceWaypoints(player.color, from, ev.to, ev.piece, previous.dice, variantOf(state));
     const walk = (waypoints.length - 1) * STEP_MS;
+    // Soft footsteps: a pair of prints appears on each square the piece leaves, then fades from the back.
+    const trail = trailRef.current;
+    if (trail && waypoints.length > 2) {
+      const fill = FILL[player.color];
+      for (let i = 0; i < waypoints.length - 1; i++) {
+        const [x0, y0] = waypoints[i], [x1, y1] = waypoints[i + 1];
+        const deg = (Math.atan2(y1 - y0, x1 - x0) * 180) / Math.PI + 90;
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.setAttribute("transform", `translate(${x0 + (x1 - x0) * 0.35} ${y0 + (y1 - y0) * 0.35}) rotate(${deg})`);
+        g.setAttribute("opacity", "0");
+        for (const side of [-1, 1]) {
+          const e = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+          e.setAttribute("cx", String(side * 0.075)); e.setAttribute("cy", String(side * 0.05));
+          e.setAttribute("rx", "0.05"); e.setAttribute("ry", "0.085"); e.setAttribute("fill", "var(--board-ink)"); e.setAttribute("stroke", fill); e.setAttribute("stroke-width", "0.02");
+          g.appendChild(e);
+        }
+        trail.appendChild(g);
+        // Each print shows up as the piece steps off, lingers ~2 squares, then fades — oldest first,
+        // and the last one is gone just after the piece lands.
+        const total = walk + 360;
+        const appear = (i + 0.55) * STEP_MS;
+        const shown = Math.min(appear + 140, total - 2);
+        const fade = Math.max(shown + 1, Math.min(appear + 2.2 * STEP_MS, total - 341));
+        const gone = Math.max(fade + 1, Math.min(fade + 340, total));
+        const a = g.animate([
+          { opacity: 0, offset: 0 },
+          { opacity: 0, offset: appear / total },
+          { opacity: 0.38, offset: shown / total },
+          { opacity: 0.3, offset: fade / total },
+          { opacity: 0, offset: gone / total },
+          ...(gone < total ? [{ opacity: 0, offset: 1 }] : []),
+        ], { duration: total, easing: "ease-in-out" });
+        a.onfinish = a.oncancel = () => g.remove();
+        animations.push(a);
+      }
+    }
     animations.push(element.animate(waypoints.map(([x, y], index) => ({
       transform: index === waypoints.length - 1 ? element.style.transform : `translate(${x}px, ${y}px)`,
       offset: index / (waypoints.length - 1),
@@ -112,11 +149,16 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       const k = `${x.toFixed(2)},${y.toFixed(2)}`;
       const n = spots.get(k) ?? 0;
       spots.set(k, n + 1);
-      if (n > 0) { x += (n % 2 ? 0.18 : -0.18); y -= 0.14 * n; }
+      if (n > 0 && pr !== goal) { x += (n % 2 ? 0.18 : -0.18); y -= 0.14 * n; }
       pieces.push({ key: `${seat}-${idx}`, x, y, color: pl.color, seat, idx, done: pr === goal, legal: seat === state.current && legal.includes(idx) });
     });
   });
 
+  // A piece just reached the goal: gold sparkles burst from the center as it lands.
+  const lastEv = state.lastEvent;
+  const celebrate = lastEv?.kind === "moved" && lastEv.reachedGoal && state.players[lastEv.player]
+    ? { color: state.players[lastEv.player]!.color, delay: Math.max(0, Math.min(lastEv.to - lastEv.from, 12)) * STEP_MS }
+    : null;
   const seatByColor = new Map<Color, number>(state.players.map((p, i) => [p.color, i]));
   const turnColor = state.phase !== "finished" ? state.players[state.current]?.color : undefined;
 
@@ -267,6 +309,24 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         <circle key={`cap-${captureAt.join()}-${state.turnCount}`} cx={captureAt[0]} cy={captureAt[1]} r="0.6" fill="none" stroke="var(--destructive)" strokeWidth="0.12" className="capture-flash" style={{ transformOrigin: `${captureAt[0]}px ${captureAt[1]}px` }} />
       )}
 
+      <g ref={trailRef} pointerEvents="none" />
+      {celebrate && (
+        <g key={`goal-${state.turnCount}`} className="goal-burst" pointerEvents="none" style={{ ["--d" as string]: `${celebrate.delay}ms`, ["--bc" as string]: FILL[celebrate.color] }}>
+          <circle className="goal-burst-ring" cx="7.5" cy="7.5" r={fia ? 0.5 : 1.1} fill="none" stroke="var(--game-gold)" strokeWidth="0.09" />
+          <circle className="goal-burst-ring goal-burst-ring-2" cx="7.5" cy="7.5" r={fia ? 0.5 : 1.1} fill="none" stroke="var(--bc)" strokeWidth="0.06" />
+          {Array.from({ length: 14 }, (_, i) => {
+            const a = (i / 14) * Math.PI * 2;
+            const far = (i % 2 ? 1.5 : 2.1) * (fia ? 0.75 : 1);
+            return (
+              <g key={i} transform={`translate(7.5 7.5) rotate(${(a * 180) / Math.PI})`}>
+                <path className="goal-burst-spark" style={{ ["--far" as string]: `${far}px`, ["--i" as string]: i % 3 }}
+                  d="M 0,-0.13 L 0.035,-0.035 L 0.13,0 L 0.035,0.035 L 0,0.13 L -0.035,0.035 L -0.13,0 L -0.035,-0.035 Z"
+                  fill={i % 3 === 0 ? "var(--bc)" : "var(--game-gold)"} />
+              </g>
+            );
+          })}
+        </g>
+      )}
       {pieces.map((p) => (
         <g
           key={p.key}
@@ -280,7 +340,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
           {p.legal && <circle className="piece-ring" r="0.5" fill="none" stroke="var(--game-gold)" strokeWidth="0.1" />}
           {p.done && <circle className="piece-done-glow" r="0.36" fill="var(--game-gold)" fillOpacity="0.35" stroke="var(--game-gold)" strokeWidth="0.06" pointerEvents="none" />}
           <g className="pawn" pointerEvents="none">
-          <g transform={p.done ? "translate(0 0.08) scale(0.76)" : "translate(0 0.1)"}>
+          <g transform={p.done ? (fia ? "translate(0 0.06) scale(0.48)" : "translate(0 0.08) scale(0.6)") : "translate(0 0.1)"}>
             <ellipse cx="0.05" cy="0.3" rx="0.36" ry="0.13" fill="var(--board-mark-line)" opacity="0.4" />
             <ellipse cy="0.23" rx="0.32" ry="0.12" fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />
             <use href={`#${boardId}-pawn-body`} fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />

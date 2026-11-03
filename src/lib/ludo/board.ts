@@ -82,14 +82,23 @@ export function yardSpot(color: Color, piece: number, variant: Variant = "classi
   return [cx + offs[piece][0], cy + offs[piece][1]];
 }
 
-const GOAL_SPOT: Record<Color, [number, number]> = { 0: [6.85, 7.5], 1: [7.5, 6.85], 2: [8.15, 7.5], 3: [7.5, 8.15] };
-const FIA_GOAL_SPOT: Record<Color, [number, number]> = { 0: [7.28, 7.5], 1: [7.5, 7.28], 2: [7.72, 7.5], 3: [7.5, 7.72] };
+/** Direction (degrees) each color enters the center from: red left, green top, yellow right, blue bottom. */
+const GOAL_ANGLE: Record<Color, number> = { 0: 180, 1: 270, 2: 0, 3: 90 };
+
+/** Finished pieces fan out in a tidy arc on their own side of the goal, one fixed slot per piece. */
+export function goalSpot(color: Color, piece: number, variant: Variant = "classic"): [number, number] {
+  const fia = variant === "fia";
+  const r = fia ? 0.4 : 1.02;
+  const step = fia ? 30 : 27;
+  const a = ((GOAL_ANGLE[color] + (piece - 1.5) * step) * Math.PI) / 180;
+  return [7.5 + Math.cos(a) * r, 7.5 + Math.sin(a) * r];
+}
 
 /** Center of the cell a piece occupies (grid units). */
 export function pieceCenter(color: Color, progress: number, piece: number, variant: Variant = "classic"): [number, number] {
   const path = PATHS[variant];
   if (progress === YARD) return yardSpot(color, piece, variant);
-  if (progress === path.goal) return (variant === "fia" ? FIA_GOAL_SPOT : GOAL_SPOT)[color];
+  if (progress === path.goal) return goalSpot(color, piece, variant);
   if (progress <= path.lastTrack) {
     const [c, r] = trackOf(variant)[(startSquare(color, variant) + progress) % path.trackLen];
     return [c + cellSizeOf(variant) / 2, r + cellSizeOf(variant) / 2];
