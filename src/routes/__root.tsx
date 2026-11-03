@@ -88,7 +88,23 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+/** The server needs the address it was asked for to know whether it may serve the game. */
+async function serverRequestTarget() {
+  const { getRequestUrl } = await import("@tanstack/react-start/server");
+  const url = getRequestUrl({ xForwardedHost: true });
+  return { hostname: url.hostname, pathname: url.pathname };
+}
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  // Yatzy's rule: the published website never plays the game, it points to the app.
+  beforeLoad: async ({ location }) => {
+    const target = import.meta.env.SSR
+      ? await serverRequestTarget()
+      : { hostname: window.location.hostname, pathname: window.location.pathname, isNative: isNativeWindow(), isDev: import.meta.env.DEV };
+    if (!webPlayBlocked(target)) return;
+    const code = parseMatchCode(new URL(location.href, "http://localhost").searchParams.get("code") ?? "");
+    throw redirect({ to: "/join", search: code ? { code } : {} });
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -158,6 +174,8 @@ function RootComponent() {
     return () => { window.removeEventListener("error", onError); window.removeEventListener("unhandledrejection", onRejection); };
   }, []);
   useEffect(() => {
+    // A plain browser on the published site is a visitor, not a player: no identity, no usage log.
+    if (isDownloadOnlyVisitor({ hostname: window.location.hostname, isNative: isNativeWindow(), isDev: import.meta.env.DEV })) return;
     const ping = () => logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
     // Admin login has its own credentials; ordinary app launch creates a player automatically.
     if (window.location.pathname !== "/admin-login") ensurePlayerSession().then(ping).catch(() => {});

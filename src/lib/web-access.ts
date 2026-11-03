@@ -33,3 +33,12 @@ export function isNativeWindow(): boolean {
   if (typeof window === "undefined") return false;
   return Boolean((window as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor?.isNativePlatform?.());
 }
+
+/**
+ * A plain browser on the published site only ever sees the download page, so it
+ * must never be turned into a player or a device record.
+ */
+export function isDownloadOnlyVisitor(opts: { hostname: string; isNative?: boolean; isDev?: boolean }): boolean {
+  if (opts.isNative || opts.isDev) return false;
+  return !isPreviewHost(opts.hostname);
+}
