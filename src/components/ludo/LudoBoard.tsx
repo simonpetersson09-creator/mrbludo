@@ -274,9 +274,9 @@ export function SeatCardRow({ state, seats, edge }: { state: GameState; seats?: 
         <span className="min-w-0 leading-tight">
           <span className={`flex items-center gap-1 ${c === right ? "justify-end" : ""}`}>
             <span className="truncate font-display text-[13px] font-bold">{name}</span>
-            {kind === "online" && <span className={`seat-card-presence${info?.away ? " seat-card-presence-away" : ""}`} aria-label={info?.away ? undefined : t("onlineNow")} />}
+            {kind === "online" && <span className={`seat-card-presence${info?.away ? " seat-card-presence-away" : ""}`} />}
           </span>
-          <span className="block text-[10px] font-semibold opacity-60">{t("piecesHome", { n: home })}</span>
+          <span className={`flex items-center gap-0.5 text-[10px] font-semibold opacity-60 ${c === right ? "justify-end" : ""}`}><Trophy className="h-2.5 w-2.5" strokeWidth={2.4} />{home}/4</span>
         </span>
       </div>
     );
