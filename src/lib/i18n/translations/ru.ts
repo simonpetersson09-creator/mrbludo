@@ -31,7 +31,7 @@ export const ru: Record<TranslationKey, string> = {
   modeClassic: "Классическое лудо",
   modeFia: "Шведская Fia",
   modeClassicRules: "Выход на 6 · 6 даёт ещё бросок · три 6 подряд завершают ход · стартовые клетки безопасны · в финиш точным броском.",
-  modeFiaRules: "Выход на 1 или 6 · 6 выводит две фишки · 6 даёт ещё бросок · безопасных клеток нет · свои фишки нельзя обгонять · лишние очки отсчитываются назад от финиша.",
+  modeFiaRules: "(Шведский вариант)",
 
   colorRed: "Красный",
   colorGreen: "Зелёный",
@@ -84,7 +84,6 @@ export const ru: Record<TranslationKey, string> = {
   statWinrate: "Процент побед",
   statCaptures: "Выбито фишек",
   statPiecesHome: "Фишек на финише",
-  statForfeits: "Сдано матчей",
   resetStats: "Сбросить статистику",
 
   signIn: "Войти",

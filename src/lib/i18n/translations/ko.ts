@@ -31,7 +31,7 @@ export const ko: Record<TranslationKey, string> = {
   modeClassic: "클래식 루도",
   modeFia: "스웨덴식 피아",
   modeClassicRules: "6이면 출발 · 6이면 한 번 더 · 6이 세 번 연속이면 턴 종료 · 출발 칸은 안전 · 정확한 눈으로 골인.",
-  modeFiaRules: "1 또는 6이면 출발 · 6이면 말 두 개 출발 · 6이면 한 번 더 · 안전한 칸 없음 · 내 말은 추월 불가 · 눈이 넘치면 골에서 되돌아감.",
+  modeFiaRules: "(스웨덴식)",
 
   colorRed: "빨강",
   colorGreen: "초록",
@@ -84,7 +84,6 @@ export const ko: Record<TranslationKey, string> = {
   statWinrate: "승률",
   statCaptures: "잡은 횟수",
   statPiecesHome: "골인한 말",
-  statForfeits: "포기한 경기",
   resetStats: "통계 초기화",
 
   signIn: "로그인",

@@ -31,7 +31,7 @@ export const ja: Record<TranslationKey, string> = {
   modeClassic: "クラシック・ルード",
   modeFia: "スウェーデン式フィア",
   modeClassicRules: "6で出発 · 6でもう一回 · 6が3回連続でターン終了 · スタートマスは安全 · ゴールはぴったりで。",
-  modeFiaRules: "1か6で出発 · 6なら2コマ出せる · 6でもう一回 · 安全マスなし · 自分のコマは追い越せない · 出目が多すぎるとゴールから戻る。",
+  modeFiaRules: "(スウェーデン版)",
 
   colorRed: "赤",
   colorGreen: "緑",
@@ -84,7 +84,6 @@ export const ja: Record<TranslationKey, string> = {
   statWinrate: "勝率",
   statCaptures: "キャプチャー数",
   statPiecesHome: "ゴールした駒",
-  statForfeits: "降参した対局",
   resetStats: "統計をリセット",
 
   signIn: "ログイン",

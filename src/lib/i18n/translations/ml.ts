@@ -31,7 +31,7 @@ export const ml: Record<TranslationKey, string> = {
   modeClassic: "ക്ലാസിക് ലൂഡോ",
   modeFia: "സ്വീഡിഷ് ഫിയ",
   modeClassicRules: "6 വന്നാൽ പുറത്ത് · 6 വന്നാൽ വീണ്ടും എറിയാം · തുടർച്ചയായി മൂന്ന് 6 വന്നാൽ ഊഴം തീരും · തുടക്ക കളങ്ങൾ സുരക്ഷിതം · ലക്ഷ്യത്തിലെത്താൻ കൃത്യ എണ്ണം.",
-  modeFiaRules: "1 അല്ലെങ്കിൽ 6 വന്നാൽ പുറത്ത് · 6 വന്നാൽ രണ്ട് കരു പുറത്ത് · 6 വന്നാൽ വീണ്ടും എറിയാം · സുരക്ഷിത കളങ്ങളില്ല · സ്വന്തം കരു കടക്കാനാവില്ല · കൂടുതലായാൽ ലക്ഷ്യത്തിൽ നിന്ന് പിന്നോട്ട്.",
+  modeFiaRules: "(സ്വീഡിഷ് പതിപ്പ്)",
 
   colorRed: "ചുവപ്പ്",
   colorGreen: "പച്ച",
@@ -84,7 +84,6 @@ export const ml: Record<TranslationKey, string> = {
   statWinrate: "വിജയ ശതമാനം",
   statCaptures: "പിടിച്ചവ",
   statPiecesHome: "വീട്ടിലെത്തിയ കായുകൾ",
-  statForfeits: "കീഴടങ്ങിയ മത്സരങ്ങൾ",
   resetStats: "സ്ഥിതിവിവരക്കണക്ക് പുനഃസജ്ജമാക്കൂ",
 
   signIn: "ലോഗിൻ",

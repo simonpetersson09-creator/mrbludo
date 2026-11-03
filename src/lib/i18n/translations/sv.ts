@@ -33,7 +33,7 @@ export const sv = {
   modeClassic: "Classic Ludo",
   modeFia: "Fia med knuff",
   modeClassicRules: "Ut på 6 · 6 ger nytt kast · tre sexor i rad avbryter turen · startrutor är säkra · exakt slag i mål.",
-  modeFiaRules: "Ut på 1 eller 6 · en 6 tar ut två pjäser · 6 ger nytt kast · inga säkra rutor · egna pjäser får inte passeras · för högt slag studsar tillbaka från mål.",
+  modeFiaRules: "(Svensk variant)",
 
   // Färger
   colorRed: "Röd",
@@ -89,9 +89,8 @@ export const sv = {
   statPlayed: "Spelade matcher",
   statWins: "Vinster",
   statWinrate: "Vinstprocent",
-  statCaptures: "Utslagningar",
+  statCaptures: "Utslagna pjäser",
   statPiecesHome: "Pjäser i mål",
-  statForfeits: "Uppgivna matcher",
   resetStats: "Nollställ statistik",
 
   // Inloggning

@@ -31,7 +31,7 @@ export const bn: Record<TranslationKey, string> = {
   modeClassic: "ক্লাসিক লুডো",
   modeFia: "সুইডিশ ফিয়া",
   modeClassicRules: "৬ পেলে বের হও · ৬ পেলে আবার চাল · পরপর তিনটি ৬ পেলে পালা শেষ · শুরুর ঘর নিরাপদ · ঘরে ঢুকতে ঠিক সংখ্যা।",
-  modeFiaRules: "১ বা ৬ পেলে বের হও · ৬ পেলে দুটি গুটি বের · ৬ পেলে আবার চাল · কোনো নিরাপদ ঘর নেই · নিজের গুটি পেরোনো যাবে না · বেশি হলে লক্ষ্য থেকে পিছিয়ে যাবে।",
+  modeFiaRules: "(সুইডিশ সংস্করণ)",
 
   colorRed: "লাল",
   colorGreen: "সবুজ",
@@ -84,7 +84,6 @@ export const bn: Record<TranslationKey, string> = {
   statWinrate: "জয়ের হার",
   statCaptures: "ধরা গুটি",
   statPiecesHome: "ঘরে পৌঁছানো গুটি",
-  statForfeits: "হার মানা ম্যাচ",
   resetStats: "পরিসংখ্যান রিসেট",
 
   signIn: "লগ ইন",

@@ -31,7 +31,7 @@ export const kn: Record<TranslationKey, string> = {
   modeClassic: "ಕ್ಲಾಸಿಕ್ ಲೂಡೊ",
   modeFia: "ಸ್ವೀಡಿಷ್ ಫಿಯಾ",
   modeClassicRules: "6 ಬಂದರೆ ಹೊರಗೆ · 6 ಬಂದರೆ ಮತ್ತೊಂದು ಎಸೆತ · ಸತತ ಮೂರು 6 ಬಂದರೆ ಸರದಿ ಮುಗಿಯುತ್ತದೆ · ಆರಂಭದ ಚೌಕಗಳು ಸುರಕ್ಷಿತ · ಗುರಿಗೆ ನಿಖರ ಎಸೆತ.",
-  modeFiaRules: "1 ಅಥವಾ 6 ಬಂದರೆ ಹೊರಗೆ · 6 ಬಂದರೆ ಎರಡು ಕಾಯಿ ಹೊರಗೆ · 6 ಬಂದರೆ ಮತ್ತೊಂದು ಎಸೆತ · ಸುರಕ್ಷಿತ ಚೌಕಗಳಿಲ್ಲ · ಸ್ವಂತ ಕಾಯಿಗಳನ್ನು ದಾಟುವಂತಿಲ್ಲ · ಹೆಚ್ಚಾದರೆ ಗುರಿಯಿಂದ ಹಿಂದೆ ಸರಿಯುತ್ತದೆ.",
+  modeFiaRules: "(ಸ್ವೀಡಿಷ್ ಆವೃತ್ತಿ)",
 
   colorRed: "ಕೆಂಪು",
   colorGreen: "ಹಸಿರು",
@@ -84,7 +84,6 @@ export const kn: Record<TranslationKey, string> = {
   statWinrate: "ಗೆಲುವಿನ ಶೇಕಡಾವಾರು",
   statCaptures: "ಹಿಡಿದ ಗುಟ್ಟೆಗಳು",
   statPiecesHome: "ಮನೆ ತಲುಪಿದ ಗುಟ್ಟೆಗಳು",
-  statForfeits: "ಹಾರು ಬಿಟ್ಟ ಪಂದ್ಯಗಳು",
   resetStats: "ಅಂಕಿಅಂಶಗಳನ್ನು ಮರುಹೊಂದಿಸಿ",
 
   signIn: "ಲಾಗ್ ಇನ್",

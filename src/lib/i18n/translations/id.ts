@@ -31,7 +31,7 @@ export const id: Record<TranslationKey, string> = {
   modeClassic: "Ludo klasik",
   modeFia: "Fia Swedia",
   modeClassicRules: "Keluar dengan 6 · 6 dapat lempar lagi · tiga 6 berturut-turut mengakhiri giliran · kotak awal aman · harus pas untuk finis.",
-  modeFiaRules: "Keluar dengan 1 atau 6 · 6 mengeluarkan dua bidak · 6 dapat lempar lagi · tidak ada kotak aman · tidak boleh melewati bidak sendiri · lemparan berlebih memantul mundur dari finis.",
+  modeFiaRules: "(Varian Swedia)",
 
   colorRed: "Merah",
   colorGreen: "Hijau",
@@ -84,7 +84,6 @@ export const id: Record<TranslationKey, string> = {
   statWinrate: "Persentase menang",
   statCaptures: "Tangkapan",
   statPiecesHome: "Bidak di rumah",
-  statForfeits: "Pertandingan menyerah",
   resetStats: "Atur ulang statistik",
 
   signIn: "Masuk",

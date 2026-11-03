@@ -31,7 +31,7 @@ export const uk: Record<TranslationKey, string> = {
   modeClassic: "Класичне лудо",
   modeFia: "Шведська Fia",
   modeClassicRules: "Вихід на 6 · 6 дає ще кидок · три 6 поспіль завершують хід · стартові клітинки безпечні · у фініш точним кидком.",
-  modeFiaRules: "Вихід на 1 або 6 · 6 виводить дві фішки · 6 дає ще кидок · безпечних клітинок немає · свої фішки не можна обганяти · зайві очки відраховуються назад від фінішу.",
+  modeFiaRules: "(Шведський варіант)",
 
   colorRed: "Червоний",
   colorGreen: "Зелений",
@@ -84,7 +84,6 @@ export const uk: Record<TranslationKey, string> = {
   statWinrate: "Відсоток перемог",
   statCaptures: "Вибито фішок",
   statPiecesHome: "Фішок на фініші",
-  statForfeits: "Здано матчів",
   resetStats: "Скинути статистику",
 
   signIn: "Увійти",

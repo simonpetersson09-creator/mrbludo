@@ -31,7 +31,7 @@ export const hi: Record<TranslationKey, string> = {
   modeClassic: "क्लासिक लूडो",
   modeFia: "स्वीडिश फ़िया",
   modeClassicRules: "6 पर बाहर · 6 पर एक और चाल · लगातार तीन 6 पर बारी खत्म · शुरुआती खाने सुरक्षित · घर के लिए सटीक अंक।",
-  modeFiaRules: "1 या 6 पर बाहर · 6 पर दो गोटियाँ बाहर · 6 पर एक और चाल · कोई सुरक्षित खाना नहीं · अपनी गोटी पार नहीं कर सकते · ज़्यादा अंक पर घर से वापस लौटें।",
+  modeFiaRules: "(स्वीडिश संस्करण)",
 
   colorRed: "लाल",
   colorGreen: "हरा",
@@ -84,7 +84,6 @@ export const hi: Record<TranslationKey, string> = {
   statWinrate: "जीत प्रतिशत",
   statCaptures: "पकड़ी गई गोटियां",
   statPiecesHome: "घर पहुंची गोटियां",
-  statForfeits: "हार माने गए मैच",
   resetStats: "आंकड़े रीसेट करें",
 
   signIn: "लॉग इन",

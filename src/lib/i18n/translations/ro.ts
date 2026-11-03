@@ -31,7 +31,7 @@ export const ro: Record<TranslationKey, string> = {
   modeClassic: "Ludo clasic",
   modeFia: "Fia suedeză",
   modeClassicRules: "Ieși cu 6 · un 6 dă încă o aruncare · trei de 6 la rând încheie tura · căsuțele de start sunt sigure · aruncare exactă la final.",
-  modeFiaRules: "Ieși cu 1 sau 6 · un 6 scoate două piese · un 6 dă încă o aruncare · nicio căsuță sigură · nu poți trece peste piesele tale · o aruncare prea mare revine de la final.",
+  modeFiaRules: "(Variantă suedeză)",
 
   colorRed: "Roșu",
   colorGreen: "Verde",
@@ -84,7 +84,6 @@ export const ro: Record<TranslationKey, string> = {
   statWinrate: "Procent de victorii",
   statCaptures: "Capturi",
   statPiecesHome: "Piese la țintă",
-  statForfeits: "Meciuri abandonate",
   resetStats: "Resetează statisticile",
 
   signIn: "Conectează-te",

@@ -31,7 +31,7 @@ export const no: Record<TranslationKey, string> = {
   modeClassic: "Klassisk Ludo",
   modeFia: "Svensk Fia",
   modeClassicRules: "Ut på 6 · en sekser gir nytt kast · tre seksere på rad avslutter turen · startrutene er trygge · nøyaktig kast til mål.",
-  modeFiaRules: "Ut på 1 eller 6 · en sekser setter ut to brikker · en sekser gir nytt kast · ingen trygge ruter · egne brikker kan ikke passeres · for høyt kast spretter tilbake fra mål.",
+  modeFiaRules: "(Svensk variant)",
 
   colorRed: "Rød",
   colorGreen: "Grønn",
@@ -84,7 +84,6 @@ export const no: Record<TranslationKey, string> = {
   statWinrate: "Vinstprosent",
   statCaptures: "Utslagninger",
   statPiecesHome: "Brikker i mål",
-  statForfeits: "Oppgitte kamper",
   resetStats: "Nullstill statistikk",
 
   signIn: "Logg inn",
