@@ -27,7 +27,6 @@ function HomePage() {
   const { t, lang } = useTranslation();
   const [resume, setResume] = useState<{ myTurn: boolean; names: string } | null>(null);
   const [showLangs, setShowLangs] = useState(false);
-  const [langDown, setLangDown] = useState(false);
   const langBtnRef = useRef<HTMLButtonElement>(null);
   const langPopRef = useRef<HTMLDivElement>(null);
 
