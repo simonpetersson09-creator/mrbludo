@@ -154,7 +154,6 @@ function OnlineLobby() {
         </div>
 
         <div className="grid grid-cols-1 gap-[7px]">
-          <Link to="/leaderboard" className="home-action home-action-ghost"><Trophy size={16} /> {t("leaderboard")}</Link>
           {me?.isAdmin && <Link to="/admin" className="home-action home-action-ghost"><Crown size={16} /> {t("admin")}</Link>}
         </div>
       </div>

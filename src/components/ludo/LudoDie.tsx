@@ -23,7 +23,7 @@ export function LudoDie({ value, rolling, pipColor, onTap, disabled }: Props) {
       aria-label={t("rollDiceAria")}
       onClick={disabled ? undefined : onTap}
       aria-disabled={disabled}
-      className="relative h-full w-full overflow-hidden rounded-xl bg-surface"
+      className="relative h-full w-full overflow-hidden rounded-xl bg-transparent"
     >
       {mounted && (
         <Suspense fallback={null}>

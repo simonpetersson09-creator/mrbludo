@@ -183,17 +183,13 @@ function PlayPage() {
         <div className="w-[132px] shrink-0">
           <LudoDie value={face} rolling={rolling} onTap={doRoll} disabled={!canRoll} pipColor={COLOR_VAR[me.color]} />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col justify-end gap-[7px]">
-          <button className="home-action home-action-gold" onClick={doRoll} disabled={!canRoll}>
-            <Dice5 size={16} /> {t("roll")}
+        <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-2">
+          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={doRoll} disabled={!canRoll}>
+            {t("roll")}
           </button>
-          <div className="grid grid-cols-2 gap-[7px]">
-            <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/" })}>
-              <Home size={16} /> {t("home")}
-            </button>
-            <button className="home-action home-action-danger" onClick={() => setConfirmForfeit(true)} disabled={state.phase === "finished"}>
-              <Flag size={16} /> {t("forfeit")}
-            </button>
+          <div className="flex items-center justify-center gap-2">
+            <button className="game-nav-btn" onClick={() => navigate({ to: "/" })}>{t("home")}</button>
+            <button className="game-nav-btn game-nav-btn-danger" onClick={() => setConfirmForfeit(true)} disabled={state.phase === "finished"}>{t("forfeit")}</button>
           </div>
         </div>
       </div>
