@@ -77,7 +77,7 @@ function HomePage() {
       className="flex min-h-[100dvh] flex-col items-center px-6 py-3"
       style={{ paddingTop: "calc(12px + env(safe-area-inset-top))", paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }}
     >
-     <div className="relative flex w-full max-w-sm flex-col items-center gap-4 my-auto sm:gap-8">
+     <div className="relative flex w-full max-w-sm flex-col items-center gap-4 sm:gap-8">
       <div className="space-y-1 text-center sm:space-y-2">
         <div className="brand-logo mb-2 inline-flex h-28 w-28 items-center justify-center sm:mb-4 sm:h-36 sm:w-36">
           <img src={mrBDie} alt="" width={383} height={512} className="h-full w-full object-contain" loading="eager" decoding="async" />
