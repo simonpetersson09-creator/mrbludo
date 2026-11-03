@@ -264,6 +264,21 @@ export type Database = {
         }
         Relationships: []
       }
+      quick_search_locks: {
+        Row: {
+          locked_at: string
+          user_id: string
+        }
+        Insert: {
+          locked_at?: string
+          user_id: string
+        }
+        Update: {
+          locked_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -287,6 +302,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_player_stats: {
+        Args: {
+          _captures: number
+          _forfeits: number
+          _pieces_home: number
+          _played: number
+          _uid: string
+          _wins: number
+        }
+        Returns: undefined
+      }
       get_my_ranks: { Args: never; Returns: Json }
       get_top_countries: {
         Args: { _limit?: number }
