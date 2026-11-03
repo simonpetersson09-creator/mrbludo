@@ -230,8 +230,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
                 <Globe x={ax + 0.2} y={ay + 0.17} width={0.26} height={0.26} color={info?.away ? "var(--board-red)" : "var(--board-mark)"} strokeWidth={2.4} />
               </g>
             )}
-            <text x={x + 1.62} y={py + 0.68} fontSize="0.4" fontWeight="700" fill="var(--board-ink)" className="font-display">
-              {short(name, info?.flag ? 10 : 12)}{info?.flag ? ` ${info.flag}` : ""}
+            <text x={x + 1.62} y={py + 0.68} fontSize="0.37" fontWeight="700" fill="var(--board-ink)" className="font-display">
+              {short(name, info?.flag ? 12 : 15)}{info?.flag ? ` ${info.flag}` : ""}
             </text>
             <text x={x + 5.32} y={py + 0.67} textAnchor="end" fontSize="0.3" fontWeight="700" fill="var(--board-ink)" fillOpacity="0.6">{home}/4</text>
           </g>
