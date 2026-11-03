@@ -4,7 +4,9 @@
  * reachable there. Local dev, the Lovable preview and the native apps (served
  * from "localhost") are never gated.
  */
-export const WEB_OPEN_PATHS = ["/join", "/auth", "/admin", "/admin-login", "/api"];
+export const WEB_OPEN_PATHS = ["/join", "/auth", "/admin", "/admin-login", "/api", "/.well-known"];
+/** Files the host must still hand out: app-ads.txt, favicons, robots.txt … */
+const STATIC_FILE = /\.[a-z0-9]{1,10}$/i;
 
 /** Dev servers and Lovable previews must stay playable. */
 export function isPreviewHost(hostname: string): boolean {
@@ -25,6 +27,7 @@ export function webPlayBlocked(opts: {
 }): boolean {
   if (opts.isNative || opts.isDev) return false;
   if (isPreviewHost(opts.hostname)) return false;
+  if (STATIC_FILE.test(opts.pathname)) return false;
   return !WEB_OPEN_PATHS.some((path) => opts.pathname === path || opts.pathname.startsWith(`${path}/`));
 }
 
