@@ -31,7 +31,7 @@ export const gu: Record<TranslationKey, string> = {
   modeClassic: "ક્લાસિક લૂડો",
   modeFia: "સ્વીડિશ ફિયા",
   modeClassicRules: "6 પર બહાર · 6 પર ફરી ચાલ · સતત ત્રણ 6 પર વારો પૂરો · શરૂઆતના ખાના સુરક્ષિત · ઘર માટે ચોક્કસ અંક.",
-  modeFiaRules: "1 અથવા 6 પર બહાર · 6 પર બે સોગઠી બહાર · 6 પર ફરી ચાલ · કોઈ સુરક્ષિત ખાનું નથી · પોતાની સોગઠી ઓળંગી ન શકાય · વધારે અંક ઘરથી પાછા ફરે.",
+  modeFiaRules: "(સ્વીડિશ પ્રકાર)",
 
   colorRed: "લાલ",
   colorGreen: "લીલો",
@@ -73,7 +73,6 @@ export const gu: Record<TranslationKey, string> = {
   settingsTitle: "સેટિંગ્સ",
   yourName: "તમારું નામ",
   botSpeed: "કમ્પ્યુટરની ગતિ",
-  speedSlow: "ધીમું",
   speedNormal: "સામાન્ય",
   speedFast: "ઝડપી",
   haptics: "કંપન",
@@ -85,7 +84,6 @@ export const gu: Record<TranslationKey, string> = {
   statWinrate: "જીત ટકાવારી",
   statCaptures: "પકડાયેલા પાસાં",
   statPiecesHome: "ઘરે પહોંચેલા પાસાં",
-  statForfeits: "હાર માનેલી મેચો",
   resetStats: "આંકડા રીસેટ કરો",
 
   signIn: "લોગ ઇન",

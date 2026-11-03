@@ -172,11 +172,11 @@ function SettingsPage() {
           <Card>
             <div className="flex items-center gap-3 px-3 py-2.5">
               <Gauge className="h-4 w-4 shrink-0 text-primary" />
-              <div className="grid flex-1 grid-cols-3 gap-1.5">
-                {(["slow", "normal", "fast"] as const).map((v) => (
+              <div className="grid flex-1 grid-cols-2 gap-1.5">
+                {(["normal", "fast"] as const).map((v) => (
                   <button key={v} onClick={() => update({ botSpeed: v })}
                     className={`min-h-9 rounded-full px-2 text-xs font-semibold transition-colors ${s.botSpeed === v ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"}`}>
-                    {v === "slow" ? t("speedSlow") : v === "normal" ? t("speedNormal") : t("speedFast")}
+                    {v === "normal" ? t("speedNormal") : t("speedFast")}
                   </button>
                 ))}
               </div>

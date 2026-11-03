@@ -158,8 +158,11 @@
 .seat-card-bubble-text { display: block; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .seat-card-bubble-me { animation: seat-card-bubble-in .26s cubic-bezier(.3,1.4,.5,1), kasta-pulse-shadow 2.4s ease-in-out .3s infinite; }
-.seat-card-bubble-top { bottom: calc(100% + 4px); }
-.seat-card-bubble-bottom { top: calc(100% + 4px); }
+.seat-card-bubble-top { bottom: calc(100% + 9px); }
+.seat-card-bubble-bottom { top: calc(100% + 9px); }
+/* Diagonal, toward the board's center: left cards push right, right cards push left. */
+.seat-card-bubble-in-left { left: 78%; }
+.seat-card-bubble-in-right { left: 22%; }
 @keyframes seat-card-bubble-in {
   from { opacity: 0; transform: translateX(-50%) scale(.86); }
   to { opacity: 1; transform: translateX(-50%) scale(1); }
@@ -170,9 +173,9 @@
 @keyframes player-card-turn { 0%, 100% { filter: drop-shadow(0 0 0.04px var(--game-gold)); } 50% { filter: drop-shadow(0 0 0.22px var(--game-gold)); } }
 .player-card-turn { animation: player-card-turn 1.6s ease-in-out infinite; }
 @keyframes piece-done-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
-.piece-done-glow { animation: piece-done-glow 2.2s ease-in-out infinite; }
+.piece-done-glow { opacity: .8; }
 @keyframes base-turn-glow { 0%, 100% { opacity: 0.14; } 50% { opacity: 0.42; } }
-.base-turn-glow { animation: base-turn-glow 1.6s ease-in-out infinite; }
+.base-turn-glow { animation: base-turn-glow 2.4s ease-in-out infinite; }
 @keyframes turn-banner-pop {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
   15% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
@@ -181,7 +184,7 @@
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
 }
 .turn-banner { position: fixed; left: 50%; top: 42%; z-index: 60; pointer-events: none; animation: turn-banner-pop 1.4s ease forwards; }
-.turn-banner span { text-shadow: 0 2px 14px color-mix(in oklab, var(--pc) 70%, transparent), 0 1px 3px rgba(0, 0, 0, 0.45); }
+.turn-banner span { color: var(--board-ink) !important; padding: 6px 18px; border-radius: 9999px; background: color-mix(in oklch, var(--board-mark) 92%, transparent); box-shadow: 0 0 0 2px var(--pc), 0 6px 18px -6px oklch(0 0 0 / 0.45); }
 .game-player-list-four > div { min-height: 38px; }
 .game-bottom-controls { display: flex; height: 132px; flex-shrink: 0; gap: 12px; }
 .game-throw-area { min-width: 0; flex: 1; }
@@ -290,7 +293,7 @@
 
 .piece { transition: transform 260ms cubic-bezier(.3,.8,.4,1); }
 .piece-legal circle.piece-ring { animation: piece-pulse 900ms ease-in-out infinite; }
-@keyframes piece-pulse { 0%,100% { opacity: .35; r: .46; } 50% { opacity: 1; r: .52; } }
+@keyframes piece-pulse { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
 .capture-flash { animation: capture 500ms ease-out; }
 @keyframes capture { 0% { opacity: 1; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.6); } }
 @media (prefers-reduced-motion: reduce) {
@@ -356,3 +359,18 @@
 .quick-chat-panel { position: fixed; z-index: 76; right: calc(env(safe-area-inset-right) + 12px); bottom: calc(env(safe-area-inset-bottom) + 80px); width: min(320px, calc(100vw - 24px)); overflow: hidden; border-radius: 24px; border: 1px solid color-mix(in oklab, var(--border) 60%, transparent); background: var(--card); box-shadow: 0 24px 48px -12px oklch(0 0 0 / .6); animation: quick-chat-in .25s ease; }
 .game-bottom-controls-chat { height: 176px; }
 @media (prefers-reduced-motion: reduce) { .kasta-pulse { animation: none; } }
+
+/* Home effects ported from Yatzy: soft brand glow, faint dice pattern, staggered entrance, idle logo wiggle. */
+.home-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.home-bg-glow { position: absolute; top: 25%; left: 50%; width: 500px; height: 500px; transform: translateX(-50%); border-radius: 9999px; background: radial-gradient(circle, color-mix(in oklch, var(--primary) 9%, transparent), transparent 70%); }
+.home-bg-dice { position: fixed; inset: 0; opacity: .035; background-size: 60px 60px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect x='10' y='10' width='40' height='40' rx='8' fill='none' stroke='white' stroke-width='1.5'/%3E%3Ccircle cx='22' cy='22' r='3' fill='white'/%3E%3Ccircle cx='38' cy='22' r='3' fill='white'/%3E%3Ccircle cx='22' cy='38' r='3' fill='white'/%3E%3Ccircle cx='38' cy='38' r='3' fill='white'/%3E%3Ccircle cx='30' cy='30' r='3' fill='white'/%3E%3C/svg%3E"); }
+@keyframes home-item-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.home-enter > * { animation: home-item-in .45s ease-out backwards; }
+.home-enter > *:nth-child(1) { animation-delay: .15s; }
+.home-enter > *:nth-child(2) { animation-delay: .23s; }
+.home-enter > *:nth-child(3) { animation-delay: .31s; }
+.home-enter > *:nth-child(4) { animation-delay: .39s; }
+.home-enter > *:nth-child(5) { animation-delay: .47s; }
+@keyframes home-logo-wiggle { 0%, 71% { transform: none; } 80% { transform: rotate(4deg) scale(1.05); } 89% { transform: rotate(-3deg) scale(1.02); } 100% { transform: none; } }
+.home-logo-wiggle { animation: home-logo-wiggle 4.2s ease-in-out infinite; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .home-enter > *, .home-logo-wiggle { animation: none; } }

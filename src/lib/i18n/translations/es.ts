@@ -31,7 +31,7 @@ export const es: Record<TranslationKey, string> = {
   modeClassic: "Ludo clásico",
   modeFia: "Fia sueco",
   modeClassicRules: "Sales con 6 · un 6 da otra tirada · tres 6 seguidos terminan el turno · las casillas de salida son seguras · tirada exacta para la meta.",
-  modeFiaRules: "Sales con 1 o 6 · un 6 saca dos fichas · un 6 da otra tirada · no hay casillas seguras · no puedes saltar tus fichas · si te pasas, rebotas desde la meta.",
+  modeFiaRules: "(Variante sueca)",
 
   colorRed: "Rojo",
   colorGreen: "Verde",
@@ -73,7 +73,6 @@ export const es: Record<TranslationKey, string> = {
   settingsTitle: "Ajustes",
   yourName: "Tu nombre",
   botSpeed: "Ritmo de la máquina",
-  speedSlow: "Lento",
   speedNormal: "Normal",
   speedFast: "Rápido",
   haptics: "Vibración",
@@ -85,7 +84,6 @@ export const es: Record<TranslationKey, string> = {
   statWinrate: "Porcentaje de victorias",
   statCaptures: "Capturas",
   statPiecesHome: "Fichas en meta",
-  statForfeits: "Partidas abandonadas",
   resetStats: "Restablecer estadísticas",
 
   signIn: "Iniciar sesión",

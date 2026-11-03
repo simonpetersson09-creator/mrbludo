@@ -49,7 +49,6 @@ function StatsPage() {
     [t("statWinrate"), s.played ? `${Math.round((s.wins / s.played) * 100)} %` : "–"],
     [t("statCaptures"), s.captures],
     [t("statPiecesHome"), s.piecesHome],
-    [t("statForfeits"), s.forfeits],
   ] : [];
   return (
     <main className="app-screen">

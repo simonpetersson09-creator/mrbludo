@@ -31,7 +31,7 @@ export const fr: Record<TranslationKey, string> = {
   modeClassic: "Ludo classique",
   modeFia: "Fia suédois",
   modeClassicRules: "Sortie sur 6 · un 6 donne un autre lancer · trois 6 de suite terminent le tour · cases de départ protégées · lancer exact pour finir.",
-  modeFiaRules: "Sortie sur 1 ou 6 · un 6 sort deux pions · un 6 donne un autre lancer · aucune case protégée · impossible de dépasser ses pions · un lancer trop fort rebondit depuis l'arrivée.",
+  modeFiaRules: "(Variante suédoise)",
 
   colorRed: "Rouge",
   colorGreen: "Vert",
@@ -73,7 +73,6 @@ export const fr: Record<TranslationKey, string> = {
   settingsTitle: "Réglages",
   yourName: "Ton nom",
   botSpeed: "Vitesse de l'ordinateur",
-  speedSlow: "Lent",
   speedNormal: "Normal",
   speedFast: "Rapide",
   haptics: "Vibration",
@@ -85,7 +84,6 @@ export const fr: Record<TranslationKey, string> = {
   statWinrate: "Taux de victoire",
   statCaptures: "Captures",
   statPiecesHome: "Pions arrivés",
-  statForfeits: "Parties abandonnées",
   resetStats: "Réinitialiser les statistiques",
 
   signIn: "Se connecter",

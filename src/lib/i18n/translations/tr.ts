@@ -31,7 +31,7 @@ export const tr: Record<TranslationKey, string> = {
   modeClassic: "Klasik Ludo",
   modeFia: "İsveç Fia",
   modeClassicRules: "6 ile çıkış · 6 yeni zar hakkı verir · üst üste üç 6 turu bitirir · başlangıç kareleri güvenlidir · bitirmek için tam zar.",
-  modeFiaRules: "1 veya 6 ile çıkış · 6 iki taş çıkarır · 6 yeni zar hakkı verir · güvenli kare yok · kendi taşlarını geçemezsin · fazla zar hedeften geri seker.",
+  modeFiaRules: "(İsveç varyantı)",
 
   colorRed: "Kırmızı",
   colorGreen: "Yeşil",
@@ -73,7 +73,6 @@ export const tr: Record<TranslationKey, string> = {
   settingsTitle: "Ayarlar",
   yourName: "Adın",
   botSpeed: "Bilgisayar hızı",
-  speedSlow: "Yavaş",
   speedNormal: "Normal",
   speedFast: "Hızlı",
   haptics: "Titreşim",
@@ -85,7 +84,6 @@ export const tr: Record<TranslationKey, string> = {
   statWinrate: "Galibiyet oranı",
   statCaptures: "Yakalamalar",
   statPiecesHome: "Hedefteki taşlar",
-  statForfeits: "Pes edilen maçlar",
   resetStats: "İstatistikleri sıfırla",
 
   signIn: "Giriş yap",

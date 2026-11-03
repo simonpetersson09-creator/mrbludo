@@ -31,7 +31,7 @@ export const or: Record<TranslationKey, string> = {
   modeClassic: "କ୍ଲାସିକ୍ ଲୁଡୋ",
   modeFia: "ସ୍ୱିଡିଶ୍ ଫିଆ",
   modeClassicRules: "6ରେ ବାହାର · 6ରେ ପୁଣି ଥରେ · ଲଗାତାର ତିନି 6ରେ ପାଳି ଶେଷ · ଆରମ୍ଭ ଘର ସୁରକ୍ଷିତ · ଘର ପାଇଁ ଠିକ୍ ସଂଖ୍ୟା।",
-  modeFiaRules: "1 କିମ୍ବା 6ରେ ବାହାର · 6ରେ ଦୁଇଟି ଗୋଟି ବାହାର · 6ରେ ପୁଣି ଥରେ · କୌଣସି ସୁରକ୍ଷିତ ଘର ନାହିଁ · ନିଜ ଗୋଟି ଟପିହେବ ନାହିଁ · ଅଧିକ ହେଲେ ଘରୁ ପଛକୁ ଫେରେ।",
+  modeFiaRules: "(ସ୍ୱିଡିଶ ସଂସ୍କରଣ)",
 
   colorRed: "ନାଲି",
   colorGreen: "ସବୁଜ",
@@ -73,7 +73,6 @@ export const or: Record<TranslationKey, string> = {
   settingsTitle: "ସେଟିଂସ୍",
   yourName: "ତୁମର ନାମ",
   botSpeed: "କମ୍ପ୍ୟୁଟର ଗତି",
-  speedSlow: "ଧୀର",
   speedNormal: "ସାଧାରଣ",
   speedFast: "ଦ୍ରୁତ",
   haptics: "କମ୍ପନ",
@@ -85,7 +84,6 @@ export const or: Record<TranslationKey, string> = {
   statWinrate: "ବିଜୟ ହାର",
   statCaptures: "ଧରାଯାଇଥିବା ଗୁଟି",
   statPiecesHome: "ଘରେ ପହଞ୍ଚିଥିବା ଗୁଟି",
-  statForfeits: "ହାର ମାନିଥିବା ମ୍ୟାଚ୍",
   resetStats: "ପରିସଂଖ୍ୟାନ ରିସେଟ୍",
 
   signIn: "ଲଗ୍ ଇନ୍",

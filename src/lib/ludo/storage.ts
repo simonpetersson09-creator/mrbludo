@@ -6,7 +6,7 @@ const GAME = NS + "active-game";
 const STATS = NS + "stats";
 const SETTINGS = NS + "settings";
 
-export interface Settings { name: string; botSpeed: "slow" | "normal" | "fast"; haptics: boolean }
+export interface Settings { name: string; botSpeed: "normal" | "fast"; haptics: boolean }
 export interface Stats { played: number; wins: number; captures: number; piecesHome: number; forfeits: number }
 
 const DEFAULT_SETTINGS: Settings = { name: "Spelare", botSpeed: "normal", haptics: true };
@@ -16,7 +16,9 @@ function read<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
     const raw = localStorage.getItem(key);
-    return raw ? { ...fallback, ...JSON.parse(raw) } : fallback;
+    const v = raw ? { ...fallback, ...JSON.parse(raw) } : fallback;
+    if (v && typeof v === "object" && (v as { botSpeed?: string }).botSpeed === "slow") (v as { botSpeed: string }).botSpeed = "normal";
+    return v;
   } catch {
     return fallback;
   }

@@ -31,7 +31,7 @@ export const da: Record<TranslationKey, string> = {
   modeClassic: "Klassisk Ludo",
   modeFia: "Svensk Fia",
   modeClassicRules: "Ud på 6 · en 6'er giver et nyt slag · tre 6'ere i træk afslutter turen · startfelter er sikre · præcist slag i mål.",
-  modeFiaRules: "Ud på 1 eller 6 · en 6'er sætter to brikker ud · en 6'er giver et nyt slag · ingen sikre felter · egne brikker må ikke passeres · for højt slag går tilbage fra mål.",
+  modeFiaRules: "(Svensk variant)",
 
   colorRed: "Rød",
   colorGreen: "Grøn",
@@ -73,7 +73,6 @@ export const da: Record<TranslationKey, string> = {
   settingsTitle: "Indstillinger",
   yourName: "Dit navn",
   botSpeed: "Computerens tempo",
-  speedSlow: "Roligt",
   speedNormal: "Normalt",
   speedFast: "Hurtigt",
   haptics: "Vibration",
@@ -85,7 +84,6 @@ export const da: Record<TranslationKey, string> = {
   statWinrate: "Sejrsprocent",
   statCaptures: "Udslyngninger",
   statPiecesHome: "Brikker i mål",
-  statForfeits: "Opgivne kampe",
   resetStats: "Nulstil statistik",
 
   signIn: "Log ind",

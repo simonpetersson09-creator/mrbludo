@@ -31,7 +31,7 @@ export const te: Record<TranslationKey, string> = {
   modeClassic: "క్లాసిక్ లూడో",
   modeFia: "స్వీడిష్ ఫియా",
   modeClassicRules: "6 వస్తే బయటకు · 6 వస్తే మళ్లీ వేయండి · వరుసగా మూడు 6లు వస్తే వంతు ముగుస్తుంది · ప్రారంభ గడులు సురక్షితం · గమ్యానికి కచ్చిత సంఖ్య.",
-  modeFiaRules: "1 లేదా 6 వస్తే బయటకు · 6 వస్తే రెండు కాయలు బయటకు · 6 వస్తే మళ్లీ వేయండి · సురక్షిత గడులు లేవు · సొంత కాయలను దాటలేరు · ఎక్కువైతే గమ్యం నుంచి వెనక్కి.",
+  modeFiaRules: "(స్వీడిష్ రూపం)",
 
   colorRed: "ఎరుపు",
   colorGreen: "ఆకుపచ్చ",
@@ -73,7 +73,6 @@ export const te: Record<TranslationKey, string> = {
   settingsTitle: "సెట్టింగ్స్",
   yourName: "నీ పేరు",
   botSpeed: "కంప్యూటర్ వేగం",
-  speedSlow: "నెమ్మది",
   speedNormal: "సాధారణం",
   speedFast: "వేగం",
   haptics: "కంపనం",
@@ -85,7 +84,6 @@ export const te: Record<TranslationKey, string> = {
   statWinrate: "విజయ శాతం",
   statCaptures: "పట్టుకున్న కాయలు",
   statPiecesHome: "ఇంటికి చేరిన కాయలు",
-  statForfeits: "ఓటమి ఒప్పుకున్న మ్యాచ్‌లు",
   resetStats: "గణాంకాలను రీసెట్ చేయి",
 
   signIn: "లాగిన్",

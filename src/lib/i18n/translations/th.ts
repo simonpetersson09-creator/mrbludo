@@ -31,7 +31,7 @@ export const th: Record<TranslationKey, string> = {
   modeClassic: "ลูโดคลาสสิก",
   modeFia: "ฟีอาแบบสวีเดน",
   modeClassicRules: "ออกด้วย 6 · ได้ 6 ทอยอีกครั้ง · 6 สามครั้งติดจบตา · ช่องเริ่มปลอดภัย · ต้องทอยพอดีเข้าเส้นชัย",
-  modeFiaRules: "ออกด้วย 1 หรือ 6 · ได้ 6 นำออกสองตัว · ได้ 6 ทอยอีกครั้ง · ไม่มีช่องปลอดภัย · ห้ามข้ามหมากตัวเอง · ทอยเกินจะเด้งกลับจากเส้นชัย",
+  modeFiaRules: "(แบบสวีเดน)",
 
   colorRed: "แดง",
   colorGreen: "เขียว",
@@ -73,7 +73,6 @@ export const th: Record<TranslationKey, string> = {
   settingsTitle: "การตั้งค่า",
   yourName: "ชื่อของคุณ",
   botSpeed: "ความเร็วคอมพิวเตอร์",
-  speedSlow: "ช้า",
   speedNormal: "ปกติ",
   speedFast: "เร็ว",
   haptics: "การสั่น",
@@ -85,7 +84,6 @@ export const th: Record<TranslationKey, string> = {
   statWinrate: "อัตราการชนะ",
   statCaptures: "การจับ",
   statPiecesHome: "ตัวหมากเข้าเป้าหมาย",
-  statForfeits: "แมตช์ที่ยอมแพ้",
   resetStats: "รีเซ็ตสถิติ",
 
   signIn: "เข้าสู่ระบบ",

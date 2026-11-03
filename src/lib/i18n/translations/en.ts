@@ -31,7 +31,7 @@ export const en: Record<TranslationKey, string> = {
   modeClassic: "Classic Ludo",
   modeFia: "Swedish Fia",
   modeClassicRules: "Out on a 6 · a 6 gives another roll · three 6s in a row end the turn · start squares are safe · exact roll to finish.",
-  modeFiaRules: "Out on a 1 or 6 · a 6 brings two pieces out · a 6 gives another roll · no safe squares · you can't pass your own pieces · too high a roll bounces back from the goal.",
+  modeFiaRules: "(Swedish variant)",
 
   colorRed: "Red",
   colorGreen: "Green",
@@ -73,7 +73,6 @@ export const en: Record<TranslationKey, string> = {
   settingsTitle: "Settings",
   yourName: "Your name",
   botSpeed: "Computer speed",
-  speedSlow: "Slow",
   speedNormal: "Normal",
   speedFast: "Fast",
   haptics: "Vibration",
@@ -83,9 +82,8 @@ export const en: Record<TranslationKey, string> = {
   statPlayed: "Matches played",
   statWins: "Wins",
   statWinrate: "Win rate",
-  statCaptures: "Captures",
+  statCaptures: "Pieces knocked out",
   statPiecesHome: "Pieces home",
-  statForfeits: "Matches given up",
   resetStats: "Reset statistics",
 
   signIn: "Sign in",

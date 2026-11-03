@@ -31,7 +31,7 @@ export const pa: Record<TranslationKey, string> = {
   modeClassic: "ਕਲਾਸਿਕ ਲੂਡੋ",
   modeFia: "ਸਵੀਡਿਸ਼ ਫ਼ੀਆ",
   modeClassicRules: "6 'ਤੇ ਬਾਹਰ · 6 'ਤੇ ਇੱਕ ਹੋਰ ਵਾਰੀ · ਲਗਾਤਾਰ ਤਿੰਨ 6 'ਤੇ ਵਾਰੀ ਖਤਮ · ਸ਼ੁਰੂਆਤੀ ਖਾਨੇ ਸੁਰੱਖਿਅਤ · ਘਰ ਲਈ ਸਹੀ ਅੰਕ।",
-  modeFiaRules: "1 ਜਾਂ 6 'ਤੇ ਬਾਹਰ · 6 'ਤੇ ਦੋ ਗੋਟੀਆਂ ਬਾਹਰ · 6 'ਤੇ ਇੱਕ ਹੋਰ ਵਾਰੀ · ਕੋਈ ਸੁਰੱਖਿਅਤ ਖਾਨਾ ਨਹੀਂ · ਆਪਣੀ ਗੋਟੀ ਪਾਰ ਨਹੀਂ ਕਰ ਸਕਦੇ · ਵੱਧ ਅੰਕ 'ਤੇ ਘਰ ਤੋਂ ਵਾਪਸ।",
+  modeFiaRules: "(ਸਵੀਡਿਸ਼ ਰੂਪ)",
 
   colorRed: "ਲਾਲ",
   colorGreen: "ਹਰਾ",
@@ -73,7 +73,6 @@ export const pa: Record<TranslationKey, string> = {
   settingsTitle: "ਸੈਟਿੰਗਾਂ",
   yourName: "ਤੁਹਾਡਾ ਨਾਮ",
   botSpeed: "ਕੰਪਿਊਟਰ ਦੀ ਰਫ਼ਤਾਰ",
-  speedSlow: "ਹੌਲੀ",
   speedNormal: "ਆਮ",
   speedFast: "ਤੇਜ਼",
   haptics: "ਕੰਬਣੀ",
@@ -85,7 +84,6 @@ export const pa: Record<TranslationKey, string> = {
   statWinrate: "ਜਿੱਤ ਪ੍ਰਤੀਸ਼ਤ",
   statCaptures: "ਫੜੀਆਂ ਗੋਟੀਆਂ",
   statPiecesHome: "ਘਰ ਪਹੁੰਚੀਆਂ ਗੋਟੀਆਂ",
-  statForfeits: "ਹਾਰ ਮਨੇ ਮੈਚ",
   resetStats: "ਅੰਕੜੇ ਰੀਸੈਟ ਕਰੋ",
 
   signIn: "ਲੌਗ ਇਨ",

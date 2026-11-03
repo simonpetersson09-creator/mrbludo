@@ -31,7 +31,7 @@ export const pt: Record<TranslationKey, string> = {
   modeClassic: "Ludo clássico",
   modeFia: "Fia sueco",
   modeClassicRules: "Sai com 6 · um 6 dá outro lançamento · três 6 seguidos terminam a vez · casas de partida são seguras · lançamento exato para terminar.",
-  modeFiaRules: "Sai com 1 ou 6 · um 6 tira duas peças · um 6 dá outro lançamento · sem casas seguras · não podes passar as tuas peças · lançamento alto demais recua a partir da meta.",
+  modeFiaRules: "(Variante sueca)",
 
   colorRed: "Vermelho",
   colorGreen: "Verde",
@@ -73,7 +73,6 @@ export const pt: Record<TranslationKey, string> = {
   settingsTitle: "Definições",
   yourName: "O teu nome",
   botSpeed: "Ritmo do computador",
-  speedSlow: "Calmo",
   speedNormal: "Normal",
   speedFast: "Rápido",
   haptics: "Vibração",
@@ -85,7 +84,6 @@ export const pt: Record<TranslationKey, string> = {
   statWinrate: "Percentagem de vitórias",
   statCaptures: "Capturas",
   statPiecesHome: "Peças na meta",
-  statForfeits: "Partidas desistidas",
   resetStats: "Repor estatísticas",
 
   signIn: "Iniciar sessão",
