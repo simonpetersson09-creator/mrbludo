@@ -1,7 +1,7 @@
 import { memo, useId, useLayoutEffect, useRef } from "react";
 import { Bot, Globe, Trophy } from "lucide-react";
 import { goalOf, startSquare, variantOf, type Color, type GameState } from "@/lib/ludo/engine";
-import { homeColumnOf, TRACK, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardNestCenter } from "@/lib/ludo/board";
+import { homeColumnOf, trackOf, cellSizeOf, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardNestCenter } from "@/lib/ludo/board";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 import { movePreviews } from "@/lib/ludo/move-preview";
 import { pieceWaypoints } from "@/lib/ludo/piece-motion";
@@ -87,6 +87,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
   const variant = variantOf(state);
   const goal = goalOf(variant);
   const fia = variant === "fia";
+  const cell = cellSizeOf(variant);
+  const yardSize = fia ? 4 * cell : 6;
   // Group pieces by spot so stacked pieces get a small offset.
   const spots = new Map<string, number>();
   const pieces: { key: string; x: number; y: number; color: Color; seat: number; idx: number; legal: boolean; done: boolean }[] = [];
@@ -156,18 +158,20 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
 
       {/* Yards: fully colored, compact piece nest + player card. */}
       {([0, 1, 2, 3] as Color[]).map((c) => {
-        const [x, y] = YARD_ORIGIN[c];
+        const [ox, oy] = YARD_ORIGIN[c];
+        const x = ox === 0 ? 0 : 15 - yardSize;
+        const y = oy === 0 ? 0 : 15 - yardSize;
         const seat = seatByColor.get(c);
         const active = seat != null;
         const isTurn = turnColor === c;
-        const [nx, ny] = yardNestCenter(c);
+        const [nx, ny] = yardNestCenter(c, variant);
         const half = YARD_SPOT_GAP * Math.SQRT2 + 0.78;
         return (
           <g key={c} opacity={active ? 1 : 0.35}>
-            <rect x={x} y={y} width="6" height="6" fill={BOARD_FILL[c]} />
-            <rect x={x} y={y} width="6" height="6" fill={`url(#${boardId}-yard)`} />
-            {isTurn && <rect x={x} y={y} width="6" height="6" fill={BOARD_FILL[c]} className="base-turn-glow" />}
-            <rect x={x} y={y} width="6" height="6" fill={`url(#${boardId}-yard-dots)`} />
+            <rect x={x} y={y} width={yardSize} height={yardSize} fill={BOARD_FILL[c]} />
+            <rect x={x} y={y} width={yardSize} height={yardSize} fill={`url(#${boardId}-yard)`} />
+            {isTurn && <rect x={x} y={y} width={yardSize} height={yardSize} fill={BOARD_FILL[c]} className="base-turn-glow" />}
+            <rect x={x} y={y} width={yardSize} height={yardSize} fill={`url(#${boardId}-yard-dots)`} />
             <circle cx={nx} cy={ny} r={half} fill="var(--board-ink)" fillOpacity="0.16" />
             <circle cx={nx} cy={ny + 0.06} r={half} fill={BOARD_FILL[c]} />
             <circle cx={nx} cy={ny + 0.06} r={half} fill={`url(#${boardId}-plate)`} stroke="var(--board-mark)" strokeOpacity="0.55" strokeWidth="0.06" />
@@ -182,14 +186,14 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         );
       })}
 
-      {TRACK.map(([c, r], i) => {
+      {trackOf(variant).map(([c, r], i) => {
         const startColor = ([0, 1, 2, 3] as Color[]).find((c) => startSquare(c, variant) === i) ?? null;
         return (
           <g key={i}>
-            <rect x={c} y={r} width="1" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+            <rect x={c} y={r} width={cell} height={cell} fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
             {startColor != null && <>
-              <circle cx={c + 0.5} cy={r + 0.5} r="0.37" fill={BOARD_FILL[startColor]} fillOpacity="0.18" stroke={BOARD_FILL[startColor]} strokeWidth="0.06" />
-              <use href={`#${boardId}-safe`} x={c + 0.5} y={r + 0.5} fill={BOARD_FILL[startColor]} stroke="var(--board-mark-line)" strokeWidth="0.014" strokeLinejoin="round" />
+              <circle cx={c + cell / 2} cy={r + cell / 2} r="0.37" fill={BOARD_FILL[startColor]} fillOpacity="0.18" stroke={BOARD_FILL[startColor]} strokeWidth="0.06" />
+              <use href={`#${boardId}-safe`} x={c + cell / 2} y={r + cell / 2} fill={BOARD_FILL[startColor]} stroke="var(--board-mark-line)" strokeWidth="0.014" strokeLinejoin="round" />
             </>}
           </g>
         );
@@ -197,20 +201,19 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       {([0, 1, 2, 3] as Color[]).map((c) =>
         homeColumnOf(variant)[c].map(([x, y], i) => (
           <g key={`${c}-${i}`}>
-            <rect x={x} y={y} width="1" height="1" fill={BOARD_FILL[c]} stroke="var(--board-grid)" strokeWidth="0.026" />
-            <circle cx={x + 0.5} cy={y + 0.5} r="0.37" fill="none" stroke="var(--board-mark)" strokeOpacity="0.45" strokeWidth="0.04" />
+            <rect x={x} y={y} width={cell} height={cell} fill={BOARD_FILL[c]} stroke="var(--board-grid)" strokeWidth="0.026" />
+            <circle cx={x + cell / 2} cy={y + cell / 2} r="0.37" fill="none" stroke="var(--board-mark)" strokeOpacity="0.45" strokeWidth="0.04" />
           </g>
         )),
       )}
 
       {/* Finish: a clear checkered goal with a gold center. */}
       {fia ? <>
-        {/* Fia: a one-square finish; the 6th lane squares sit around it. */}
-        {[[6, 6], [8, 6], [6, 8], [8, 8]].map(([x, y]) => <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />)}
-        <rect x="7" y="7" width="1" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
-        <circle cx="7.5" cy="7.5" r="0.47" fill={`url(#${boardId}-checker)`} stroke="var(--board-ink)" strokeWidth="0.04" />
-        <circle cx="7.5" cy="7.5" r="0.32" fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.05" />
-        <Trophy x={7.36} y={7.36} width={0.28} height={0.28} color="var(--board-gold-ink)" strokeWidth={2.2} />
+        {/* Four lane positions lead to the separate central goal. */}
+        <rect x={5 * cell} y={5 * cell} width={cell} height={cell} fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+        <circle cx="7.5" cy="7.5" r={0.47 * cell} fill={`url(#${boardId}-checker)`} stroke="var(--board-ink)" strokeWidth="0.04" />
+        <circle cx="7.5" cy="7.5" r={0.32 * cell} fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.05" />
+        <Trophy x={7.5 - 0.14 * cell} y={7.5 - 0.14 * cell} width={0.28 * cell} height={0.28 * cell} color="var(--board-gold-ink)" strokeWidth={2.2} />
       </> : <>
       <rect x="6" y="6" width="3" height="3" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
       <circle cx="7.5" cy="7.5" r="1.22" fill={`url(#${boardId}-checker)`} stroke="var(--board-ink)" strokeWidth="0.05" />
