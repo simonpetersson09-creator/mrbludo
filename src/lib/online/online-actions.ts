@@ -87,7 +87,7 @@ export const INVITE_TTL_MS = 6 * 3600_000;
 export const SEND_COOLDOWN_MS = 10_000;
 async function rateLimit(db: Admin, table: "friendships" | "match_invites", col: "requester" | "from_user", userId: string) {
   const since = new Date(Date.now() - SEND_COOLDOWN_MS).toISOString();
-  const { count } = await db.from(table).select("id", { count: "exact", head: true }).eq(col, userId).gte("created_at", since);
+  const { count } = await db.from(table).select("id", { count: "exact", head: true }).eq(col as never, userId as never).gte("created_at", since);
   if ((count ?? 0) > 0) throw new Error("err:rate_limited");
 }
 
