@@ -4,7 +4,8 @@ import { HOME_COLUMN, TRACK, pieceCenter } from "./board";
 
 const COLORS: Color[] = [0, 1, 2, 3];
 const key = ([c, r]: [number, number]) => `${c},${r}`;
-const adjacent = (a: [number, number], b: [number, number]) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) === 1;
+// Neighbouring squares; the four inner corners of the cross are crossed diagonally, as on a classic board.
+const adjacent = (a: [number, number], b: [number, number]) => Math.max(Math.abs(a[0] - b[0]), Math.abs(a[1] - b[1])) === 1;
 // Rotate a grid cell 90° clockwise around the board center.
 const rot = ([c, r]: [number, number]): [number, number] => [14 - r, c];
 
