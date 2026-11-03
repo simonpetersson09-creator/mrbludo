@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ChevronRight, Crown, KeyRound, Loader2, ScanLine, Send, Trophy, Users } from "lucide-react";
+import { ArrowLeft, ChevronRight, Crown, KeyRound, Loader2, ScanLine, Send, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/auth/client";
 import { createMatch, getMe, joinByCode, listFriends, respondInvite } from "@/lib/online/online.functions";

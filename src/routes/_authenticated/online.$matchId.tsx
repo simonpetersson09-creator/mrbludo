@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Check, Copy, Dice5, Flag, Home, Play, Share2, UserPlus, WifiOff } from "lucide-react";
+import { Check, Copy, Play, Share2, UserPlus, WifiOff } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { matchQrValue } from "@/lib/online/match-code";
 import { toast } from "sonner";
