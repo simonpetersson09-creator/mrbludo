@@ -27,6 +27,11 @@ export const hi: Record<TranslationKey, string> = {
   human: "इंसान",
   computerColor: "कंप्यूटर {color}",
   startMatch: "मैच शुरू करें",
+  gameMode: "गेम मोड",
+  modeClassic: "क्लासिक लूडो",
+  modeFia: "स्वीडिश फ़िया",
+  modeClassicRules: "6 पर बाहर · 6 पर एक और चाल · लगातार तीन 6 पर बारी खत्म · शुरुआती खाने सुरक्षित · घर के लिए सटीक अंक।",
+  modeFiaRules: "1 या 6 पर बाहर · 6 पर दो गोटियाँ बाहर · 6 पर एक और चाल · कोई सुरक्षित खाना नहीं · अपनी गोटी पार नहीं कर सकते · ज़्यादा अंक पर घर से वापस लौटें।",
 
   colorRed: "लाल",
   colorGreen: "हरा",

@@ -27,6 +27,11 @@ export const pt: Record<TranslationKey, string> = {
   human: "Humano",
   computerColor: "Computador {color}",
   startMatch: "Começar partida",
+  gameMode: "Modo de jogo",
+  modeClassic: "Ludo clássico",
+  modeFia: "Fia sueco",
+  modeClassicRules: "Sai com 6 · um 6 dá outro lançamento · três 6 seguidos terminam a vez · casas de partida são seguras · lançamento exato para terminar.",
+  modeFiaRules: "Sai com 1 ou 6 · um 6 tira duas peças · um 6 dá outro lançamento · sem casas seguras · não podes passar as tuas peças · lançamento alto demais recua a partir da meta.",
 
   colorRed: "Vermelho",
   colorGreen: "Verde",

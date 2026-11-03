@@ -27,6 +27,11 @@ export const ko: Record<TranslationKey, string> = {
   human: "사람",
   computerColor: "컴퓨터 {color}",
   startMatch: "경기 시작",
+  gameMode: "게임 모드",
+  modeClassic: "클래식 루도",
+  modeFia: "스웨덴식 피아",
+  modeClassicRules: "6이면 출발 · 6이면 한 번 더 · 6이 세 번 연속이면 턴 종료 · 출발 칸은 안전 · 정확한 눈으로 골인.",
+  modeFiaRules: "1 또는 6이면 출발 · 6이면 말 두 개 출발 · 6이면 한 번 더 · 안전한 칸 없음 · 내 말은 추월 불가 · 눈이 넘치면 골에서 되돌아감.",
 
   colorRed: "빨강",
   colorGreen: "초록",

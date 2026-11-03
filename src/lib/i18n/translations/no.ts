@@ -27,6 +27,11 @@ export const no: Record<TranslationKey, string> = {
   human: "Menneske",
   computerColor: "Datamaskin {color}",
   startMatch: "Start kamp",
+  gameMode: "Spillmodus",
+  modeClassic: "Klassisk Ludo",
+  modeFia: "Svensk Fia",
+  modeClassicRules: "Ut på 6 · en sekser gir nytt kast · tre seksere på rad avslutter turen · startrutene er trygge · nøyaktig kast til mål.",
+  modeFiaRules: "Ut på 1 eller 6 · en sekser setter ut to brikker · en sekser gir nytt kast · ingen trygge ruter · egne brikker kan ikke passeres · for høyt kast spretter tilbake fra mål.",
 
   colorRed: "Rød",
   colorGreen: "Grønn",

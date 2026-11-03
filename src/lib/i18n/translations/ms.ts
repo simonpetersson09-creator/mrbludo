@@ -27,6 +27,11 @@ export const ms: Record<TranslationKey, string> = {
   human: "Manusia",
   computerColor: "Komputer {color}",
   startMatch: "Mula perlawanan",
+  gameMode: "Mod permainan",
+  modeClassic: "Ludo klasik",
+  modeFia: "Fia Sweden",
+  modeClassicRules: "Keluar dengan 6 · 6 dapat baling lagi · tiga 6 berturut-turut tamatkan giliran · petak mula selamat · mesti tepat untuk tamat.",
+  modeFiaRules: "Keluar dengan 1 atau 6 · 6 keluarkan dua buah · 6 dapat baling lagi · tiada petak selamat · tidak boleh melepasi buah sendiri · balingan berlebihan melantun balik dari garisan tamat.",
 
   colorRed: "Merah",
   colorGreen: "Hijau",
