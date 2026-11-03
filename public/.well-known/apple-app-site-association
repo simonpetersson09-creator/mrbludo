@@ -1,7 +1,14 @@
 {
   "applinks": {
     "details": [
-      { "appIDs": ["F43HQMHCAT.com.simonpetersson.mrbludo"], "components": [{ "/": "/online", "?": { "code": "??????" } }, { "/": "/online/*" }] }
+      {
+        "appIDs": ["F43HQMHCAT.com.simonpetersson.mrbludo"],
+        "components": [
+          { "/": "/join", "?": { "code": "??????" } },
+          { "/": "/online", "?": { "code": "??????" } },
+          { "/": "/online/*" }
+        ]
+      }
     ]
   }
 }
