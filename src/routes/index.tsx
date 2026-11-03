@@ -10,6 +10,11 @@ import { QuickMatchSearch } from "@/components/ludo/QuickMatchSearch";
 import { HomeStats } from "@/components/ludo/HomeStats";
 import mrBDie from "@/assets/mr-b-die.png";
 import { startHomeAds } from "@/lib/ads/home-ads";
+import { Capacitor } from "@capacitor/core";
+import { getRankedGames } from "@/lib/ads/local-stats";
+import { trackEvent } from "@/lib/ads/analytics";
+import { completeRatePrompt, requestAppReview, shouldShowRatePrompt, snoozeRatePrompt } from "@/lib/rate-app";
+import { RateAppPrompt } from "@/components/ludo/RateAppPrompt";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,6 +39,16 @@ function HomePage() {
   const langPopRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => startHomeAds(), []);
+
+  // Yatzy-style rating prompt after 5, then 15 and 35 finished games (app only).
+  const [showRate, setShowRate] = useState(false);
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform() || !shouldShowRatePrompt(getRankedGames())) return;
+    const timer = setTimeout(() => setShowRate(true), 700);
+    return () => clearTimeout(timer);
+  }, []);
+  const rateNow = () => { setShowRate(false); completeRatePrompt(); trackEvent("rate_prompt_accepted"); void requestAppReview(); };
+  const rateLater = () => { setShowRate(false); snoozeRatePrompt(getRankedGames()); trackEvent("rate_prompt_later"); };
 
   useEffect(() => {
     const g = loadGame();
@@ -182,6 +197,7 @@ function HomePage() {
           onMatch={(id) => { setSearch(null); navigate({ to: "/online/$matchId", params: { matchId: id } }); }}
         />
       )}
+      {showRate && !search && <RateAppPrompt onRate={rateNow} onLater={rateLater} />}
     </main>
   );
 }
