@@ -280,7 +280,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
 export const LudoBoard = memo(LudoBoardImpl);
 
 /** Round player cards placed outside the board, in the corner next to each yard. */
-export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState; seats?: (SeatInfo | undefined)[]; edge: "top" | "bottom"; ownSeat?: number }) {
+export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState; seats?: (SeatInfo | undefined)[]; edge: "top" | "bottom"; ownSeat?: number | undefined }) {
   const { t } = useTranslation();
   const left: Color = edge === "top" ? 0 : 3;
 
