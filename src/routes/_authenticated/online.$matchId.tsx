@@ -133,11 +133,18 @@ function OnlineMatchPage() {
 
   // Haptics for turn handover and win (same events as Yatzy's TurnTransition / success pulse).
   const prevTurn = useRef(-1);
+  const [turnBanner, setTurnBanner] = useState(false);
   useEffect(() => {
     if (!state || !userId) return;
     const mine = state.players.findIndex((p) => p.id === userId);
     if (state.phase === "finished") { if (prevTurn.current >= 0 && state.winner === mine) void playSuccessHaptic(); prevTurn.current = -2; return; }
-    if (prevTurn.current >= 0 && prevTurn.current !== state.current && state.current === mine) void playTurnHaptic();
+    if (prevTurn.current >= 0 && prevTurn.current !== state.current && state.current === mine) {
+      void playTurnHaptic();
+      setTurnBanner(true);
+      const tm = window.setTimeout(() => setTurnBanner(false), 1500);
+      prevTurn.current = state.current;
+      return () => window.clearTimeout(tm);
+    }
     prevTurn.current = state.current;
   }, [state?.current, state?.phase, userId]); // eslint-disable-line react-hooks/exhaustive-deps
 

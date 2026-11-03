@@ -96,9 +96,16 @@ function PlayPage() {
 
   // "Your turn" pulse when control returns to a human player (Yatzy TurnTransition)
   const prevCurrent = useRef(-1);
+  const [turnBanner, setTurnBanner] = useState<Color | null>(null);
   useEffect(() => {
     if (!state || state.phase === "finished") return;
-    if (prevCurrent.current !== -1 && prevCurrent.current !== state.current && !state.players[state.current].isBot) void playTurnHaptic();
+    if (prevCurrent.current !== -1 && prevCurrent.current !== state.current && !state.players[state.current].isBot) {
+      void playTurnHaptic();
+      setTurnBanner(state.players[state.current].color);
+      const tm = window.setTimeout(() => setTurnBanner(null), 1500);
+      prevCurrent.current = state.current;
+      return () => window.clearTimeout(tm);
+    }
     prevCurrent.current = state.current;
   }, [state?.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
