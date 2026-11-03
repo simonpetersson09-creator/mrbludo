@@ -208,7 +208,7 @@ export const startMatchAction = async ({ data, context }: { data: ReturnType<typ
     if (m.status !== "waiting") return { ok: true };
     const { data: seats } = await db.from("match_players").select("user_id, seat, display_name").eq("match_id", m.id);
     if ((seats?.length ?? 0) < 2) throw new Error("err:min_players");
-    await doStart(db, m.id, m.version, seats ?? []);
+    await doStart(db, m.id, m.version, seats ?? [], undefined, m.variant);
     return { ok: true };
   };
 
