@@ -25,6 +25,9 @@ import { rememberOnlineMatch } from "@/lib/online/snapshot";
 import { RESUME_EVENT } from "@/lib/native/runtime";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { errorMessage, useTranslation } from "@/lib/i18n";
+import { AppOpenGameGate } from "@/components/AppOpenGameGate";
+import { usePostMatchExit } from "@/lib/ads/usePostMatchExit";
+import { markOnlineMatchFinished } from "@/lib/ads/local-stats";
 
 export const Route = createFileRoute("/_authenticated/online/$matchId")({
   head: () => ({
@@ -37,7 +40,7 @@ export const Route = createFileRoute("/_authenticated/online/$matchId")({
       { property: "og:description", content: "Spela Ludo online i realtid." },
     ],
   }),
-  component: OnlineMatchPage,
+  component: () => <AppOpenGameGate><OnlineMatchPage /></AppOpenGameGate>,
 });
 
 const ROLL_MS = 1150;
@@ -254,13 +257,25 @@ function OnlineMatchPage() {
             </ol>
             <p className="mt-2 text-xs text-muted-foreground">{t("countsOnLeaderboard")}</p>
             <div className="home-stack mt-4">
-              <button className="home-action home-action-gold" onClick={() => navigate({ to: "/online" })}>{t("playAgain")}</button>
-              <button className="home-action home-action-ghost" onClick={() => navigate({ to: "/" })}>{t("home")}</button>
+              <OnlineResultButtons matchId={match.id} completed={!state.players.some((p) => p.forfeited)} onAgain={() => navigate({ to: "/online" })} onHome={() => navigate({ to: "/" })} />
             </div>
           </div>
         </div>
       )}
     </main>
+  );
+}
+
+/** Result exits run Yatzy's post-match interstitial only for fully played matches (no forfeits). */
+function OnlineResultButtons({ matchId, completed, onAgain, onHome }: { matchId: string; completed: boolean; onAgain: () => void; onHome: () => void }) {
+  const { t } = useTranslation();
+  useEffect(() => { if (completed) markOnlineMatchFinished(matchId); }, [completed, matchId]);
+  const { leaving, leave } = usePostMatchExit(`online:${matchId}`, completed, onHome);
+  return (
+    <>
+      <button className="home-action home-action-gold" disabled={leaving} onClick={() => void leave(onAgain)}>{t("playAgain")}</button>
+      <button className="home-action home-action-ghost" disabled={leaving} onClick={() => void leave()}>{t("home")}</button>
+    </>
   );
 }
 

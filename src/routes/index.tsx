@@ -9,6 +9,7 @@ import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 import { QuickMatchSearch } from "@/components/ludo/QuickMatchSearch";
 import { HomeStats } from "@/components/ludo/HomeStats";
 import mrBDie from "@/assets/mr-b-die.png";
+import { startHomeAds } from "@/lib/ads/home-ads";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,6 +32,8 @@ function HomePage() {
   const [showLangs, setShowLangs] = useState(false);
   const langBtnRef = useRef<HTMLButtonElement>(null);
   const langPopRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => startHomeAds(), []);
 
   useEffect(() => {
     const g = loadGame();

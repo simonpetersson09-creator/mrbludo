@@ -24,7 +24,7 @@ try {
     const capacitorPackages = ["core", "cli", "android", "ios"].map(name => JSON.parse(readFileSync(`node_modules/@capacitor/${name}/package.json`, "utf8")).version);
     if (new Set(capacitorPackages).size !== 1 || capacitorPackages[0] !== "8.6.0") throw new Error("Capacitor core/CLI/platform version mismatch; use bun install --frozen-lockfile");
     const spm = readFileSync("ios/App/CapApp-SPM/Package.swift", "utf8");
-    for (const plugin of ["@capacitor/app", "@capacitor/haptics", "@capacitor/barcode-scanner", "@capacitor/network", "@capacitor/status-bar", "capacitor-secure-storage-plugin"]) {
+    for (const plugin of ["@capacitor/app", "@capacitor/haptics", "@capacitor/barcode-scanner", "@capacitor/network", "@capacitor/status-bar", "capacitor-secure-storage-plugin", "@capacitor-community/admob"]) {
       requireFiles([`node_modules/${plugin}/package.json`, `node_modules/${plugin}/Package.swift`]);
       if (!spm.includes(`node_modules/${plugin}`)) throw new Error(`iOS plugin missing: ${plugin}; run native:sync:ios`);
       const pluginId = plugin.replace("@", "").replaceAll("/", "-");
@@ -63,7 +63,14 @@ try {
     console.log("Mac/Xcode available:", existsSync("/Applications/Xcode.app"), "Android SDK configured:", !!(process.env.ANDROID_HOME || process.env.ANDROID_SDK_ROOT));
   } else if (["sync", "open", "build"].includes(action) && ["ios", "android"].includes(platform)) {
     if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web before sync or build");
+    const patches = platform === "ios"
+      ? ["patch-admob-rewarded.js ios", "patch-admob-consent.js ios", "patch-admob-app-open.js", "patch-admob-privacy-cache.js ios", "patch-admob-fullscreen-loads.js ios", "patch-admob-ios-diagnostics.js", "patch-admob-ios-consent-lifecycle.js", "patch-admob-ios-app-open-generation.js"]
+      : ["patch-admob-rewarded.js android", "patch-admob-consent.js android", "patch-admob-privacy-cache.js android", "patch-admob-fullscreen-loads.js android", "patch-admob-app-open-android.js"];
+    for (const p of patches) { const [file, ...args] = p.split(" "); run("node", [`scripts/${file}`, ...args]); }
+    run("node", ["scripts/verify-admob-patches.js", platform]);
     run("bunx", ["cap", "sync", platform]);
+    run("node", ["scripts/verify-admob-patches.js", platform]);
+    run("node", [platform === "ios" ? "scripts/set-ios-admob-plist.js" : "scripts/set-android-admob-manifest.js"]);
     run("node", ["scripts/set-native-icons.mjs", platform]);
     if (action === "open") run("bunx", ["cap", "open", platform]);
     if (action === "build" && platform === "android") run(process.platform === "win32" ? "gradlew.bat" : "./gradlew", ["assembleDebug"], "android");

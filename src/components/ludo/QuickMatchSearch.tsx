@@ -5,6 +5,7 @@ import { Dices, Users } from "lucide-react";
 import { ensurePlayerSession } from "@/lib/auth/player";
 import { leaveMatch, quickFinalize, quickMatch, quickStatus } from "@/lib/online/online.functions";
 import { useTranslation } from "@/lib/i18n";
+import { setQuickSearchActive } from "@/lib/ads/waiting-room";
 
 /** Same timing as Yatzy's QuickMatchSearch. */
 const SEARCH_MS = 15_000;
@@ -31,6 +32,8 @@ export function QuickMatchSearch({ players, variant, onMatch, onNoMatch, onCance
   const doneRef = useRef(false);
   const cb = useRef({ onMatch, onNoMatch });
   cb.current = { onMatch, onNoMatch };
+
+  useEffect(() => { setQuickSearchActive(true); return () => setQuickSearchActive(false); }, []);
 
   useEffect(() => {
     let timer: number | undefined;

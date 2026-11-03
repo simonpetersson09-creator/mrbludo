@@ -34,7 +34,7 @@
 - Keep Capacitor, iOS and Android app identities aligned; the native verifier checks the approved public Apple team and environment-specific APNs entitlements, never private signing credentials.
 - Native locale declarations map the 40 app dictionaries to platform tags (no → nb, pt → pt-PT); regression tests prevent platform language lists from drifting.
 - AndroidBackButton is the only owner of native back events; lifecycle/network runtime must not install a competing back handler that bypasses confirmation.
-- AdMob and push remain inert adapter boundaries until activation is separately approved; no SDK initialization or permission request on launch.
+- Ads are Yatzy's AdMob flow copied into `src/lib/ads/` (logic identical, only Ludo IDs; rewarded/banner IDs null) plus Yatzy's plugin patch scripts run on install/sync; push stays inert until approved.
 - Temporary native diagnostics are build-time opt-in and accept only allowlisted event/status labels plus elapsed time; never collect errors, URLs, identities, request data or credentials, and never persist or upload diagnostics.
 - Android back button (`src/components/AndroidBackButton.tsx` + pure `src/lib/native/back-policy.ts`) and haptics (`src/lib/native/haptics.ts`) are ports of Yatzy's equivalents; leaving a match via back never forfeits.
 - App icon/splash source is `resources/icon.png`; `scripts/make-icons.mjs` regenerates committed `resources/`, and `scripts/set-native-icons.mjs` (run by native sync) overwrites Capacitor defaults, mirroring Yatzy's pipeline.
