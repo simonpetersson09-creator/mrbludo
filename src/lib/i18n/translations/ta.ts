@@ -189,6 +189,7 @@ export const ta: Record<TranslationKey, string> = {
   errMissing: "காணவில்லை",
   errNotFriends: "நீங்கள் நண்பர்கள் இல்லை",
   errNotInMatch: "நீ போட்டியில் இல்லை",
+  errRateLimited: "மீண்டும் அனுப்பும் முன் சிறிது காத்திருக்கவும்",
   errForbidden: "அணுகல் மறுக்கப்பட்டது",
   errNotMember: "நீ போட்டியில் இல்லை",
   errFinished: "போட்டி முடிந்தது",

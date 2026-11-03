@@ -174,6 +174,7 @@ export const ptBR: Record<TranslationKey, string> = {
   errMissing: "Não encontrado",
   errNotFriends: "Vocês não são amigos",
   errNotInMatch: "Você não está na partida",
+  errRateLimited: "Aguarde um momento antes de enviar novamente",
   errForbidden: "Acesso negado",
   errNotMember: "Você não está na partida",
   errFinished: "A partida terminou",

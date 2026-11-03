@@ -204,6 +204,7 @@ export const sv = {
   errMissing: "Saknas",
   errNotFriends: "Ni är inte vänner",
   errNotInMatch: "Du är inte med i matchen",
+  errRateLimited: "Vänta en stund innan du skickar igen",
   errForbidden: "Åtkomst nekad",
   errNotMember: "Du är inte med i matchen",
   errFinished: "Matchen är slut",

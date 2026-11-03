@@ -189,6 +189,7 @@ export const ro: Record<TranslationKey, string> = {
   errMissing: "Lipsește",
   errNotFriends: "Nu sunteți prieteni",
   errNotInMatch: "Nu ești în meci",
+  errRateLimited: "Așteaptă puțin înainte de a trimite din nou",
   errForbidden: "Acces interzis",
   errNotMember: "Nu ești în meci",
   errFinished: "Meciul s-a terminat",

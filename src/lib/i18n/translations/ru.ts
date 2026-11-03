@@ -189,6 +189,7 @@ export const ru: Record<TranslationKey, string> = {
   errMissing: "Не найдено",
   errNotFriends: "Вы не друзья",
   errNotInMatch: "Ты не участвуешь в матче",
+  errRateLimited: "Подождите немного перед повторной отправкой",
   errForbidden: "Доступ запрещён",
   errNotMember: "Ты не участвуешь в матче",
   errFinished: "Матч окончен",

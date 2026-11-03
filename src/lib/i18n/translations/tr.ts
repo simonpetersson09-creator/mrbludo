@@ -189,6 +189,7 @@ export const tr: Record<TranslationKey, string> = {
   errMissing: "Bulunamadı",
   errNotFriends: "Arkadaş değilsiniz",
   errNotInMatch: "Maçta değilsin",
+  errRateLimited: "Tekrar göndermeden önce biraz bekle",
   errForbidden: "Erişim reddedildi",
   errNotMember: "Maçta değilsin",
   errFinished: "Maç bitti",

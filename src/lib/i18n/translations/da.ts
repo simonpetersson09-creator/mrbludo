@@ -189,6 +189,7 @@ export const da: Record<TranslationKey, string> = {
   errMissing: "Mangler",
   errNotFriends: "I er ikke venner",
   errNotInMatch: "Du er ikke med i kampen",
+  errRateLimited: "Vent et øjeblik, før du sender igen",
   errForbidden: "Adgang nægtet",
   errNotMember: "Du er ikke med i kampen",
   errFinished: "Kampen er slut",

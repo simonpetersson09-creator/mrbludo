@@ -189,6 +189,7 @@ export const uk: Record<TranslationKey, string> = {
   errMissing: "Не знайдено",
   errNotFriends: "Ви не друзі",
   errNotInMatch: "Ти не береш участі в матчі",
+  errRateLimited: "Зачекайте трохи перед повторним надсиланням",
   errForbidden: "Доступ заборонено",
   errNotMember: "Ти не береш участі в матчі",
   errFinished: "Матч завершено",

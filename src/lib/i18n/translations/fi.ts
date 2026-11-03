@@ -174,6 +174,7 @@ export const fi: Record<TranslationKey, string> = {
   errMissing: "Puuttuu",
   errNotFriends: "Ette ole kavereita",
   errNotInMatch: "Et ole mukana pelissä",
+  errRateLimited: "Odota hetki ennen kuin lähetät uudelleen",
   errForbidden: "Pääsy estetty",
   errNotMember: "Et ole mukana pelissä",
   errFinished: "Peli on päättynyt",

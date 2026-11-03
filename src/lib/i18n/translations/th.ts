@@ -189,6 +189,7 @@ export const th: Record<TranslationKey, string> = {
   errMissing: "ไม่พบ",
   errNotFriends: "คุณไม่ได้เป็นเพื่อนกัน",
   errNotInMatch: "คุณไม่ได้อยู่ในแมตช์",
+  errRateLimited: "โปรดรอสักครู่ก่อนส่งอีกครั้ง",
   errForbidden: "ถูกปฏิเสธการเข้าถึง",
   errNotMember: "คุณไม่ได้อยู่ในแมตช์",
   errFinished: "แมตช์จบแล้ว",

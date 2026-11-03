@@ -189,6 +189,7 @@ export const hi: Record<TranslationKey, string> = {
   errMissing: "नहीं मिला",
   errNotFriends: "आप दोस्त नहीं हैं",
   errNotInMatch: "आप मैच में नहीं हैं",
+  errRateLimited: "फिर से भेजने से पहले थोड़ा रुकें",
   errForbidden: "पहुंच अस्वीकृत",
   errNotMember: "आप मैच में नहीं हैं",
   errFinished: "मैच समाप्त हो गया",

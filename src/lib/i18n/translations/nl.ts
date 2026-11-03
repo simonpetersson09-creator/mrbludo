@@ -174,6 +174,7 @@ export const nl: Record<TranslationKey, string> = {
   errMissing: "Ontbreekt",
   errNotFriends: "Jullie zijn geen vrienden",
   errNotInMatch: "Je doet niet mee aan dit potje",
+  errRateLimited: "Wacht even voordat je opnieuw verstuurt",
   errForbidden: "Toegang geweigerd",
   errNotMember: "Je doet niet mee aan dit potje",
   errFinished: "Het potje is afgelopen",

@@ -174,6 +174,7 @@ export const el: Record<TranslationKey, string> = {
   errMissing: "Λείπει",
   errNotFriends: "Δεν είστε φίλοι",
   errNotInMatch: "Δεν συμμετέχεις στο παιχνίδι",
+  errRateLimited: "Περίμενε λίγο πριν στείλεις ξανά",
   errForbidden: "Δεν επιτρέπεται η πρόσβαση",
   errNotMember: "Δεν συμμετέχεις στο παιχνίδι",
   errFinished: "Το παιχνίδι τελείωσε",

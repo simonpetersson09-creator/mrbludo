@@ -189,6 +189,7 @@ export const ja: Record<TranslationKey, string> = {
   errMissing: "見つかりません",
   errNotFriends: "フレンドではありません",
   errNotInMatch: "対局に参加していません",
+  errRateLimited: "再送信する前に少しお待ちください",
   errForbidden: "アクセスが拒否されました",
   errNotMember: "対局に参加していません",
   errFinished: "対局は終了しました",

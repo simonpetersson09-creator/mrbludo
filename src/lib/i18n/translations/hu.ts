@@ -174,6 +174,7 @@ export const hu: Record<TranslationKey, string> = {
   errMissing: "Hiányzik",
   errNotFriends: "Nem vagytok barátok",
   errNotInMatch: "Nem vagy ebben a játékban",
+  errRateLimited: "Várj egy kicsit, mielőtt újra küldesz",
   errForbidden: "Hozzáférés megtagadva",
   errNotMember: "Nem vagy ebben a játékban",
   errFinished: "A játék véget ért",

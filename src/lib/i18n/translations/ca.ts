@@ -174,6 +174,7 @@ export const ca: Record<TranslationKey, string> = {
   errMissing: "Falta",
   errNotFriends: "No sou amics",
   errNotInMatch: "No formes part de la partida",
+  errRateLimited: "Espera un moment abans de tornar a enviar",
   errForbidden: "Accés denegat",
   errNotMember: "No formes part de la partida",
   errFinished: "La partida s'ha acabat",

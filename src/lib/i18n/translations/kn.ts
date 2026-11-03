@@ -189,6 +189,7 @@ export const kn: Record<TranslationKey, string> = {
   errMissing: "ಸಿಗಲಿಲ್ಲ",
   errNotFriends: "ನೀವು ಸ್ನೇಹಿತರಲ್ಲ",
   errNotInMatch: "ನೀವು ಪಂದ್ಯದಲ್ಲಿಲ್ಲ",
+  errRateLimited: "ಮತ್ತೆ ಕಳುಹಿಸುವ ಮೊದಲು ಸ್ವಲ್ಪ ಕಾಯಿರಿ",
   errForbidden: "ಪ್ರವೇಶ ನಿರಾಕರಿಸಲಾಗಿದೆ",
   errNotMember: "ನೀವು ಪಂದ್ಯದಲ್ಲಿಲ್ಲ",
   errFinished: "ಪಂದ್ಯ ಮುಗಿದಿದೆ",
