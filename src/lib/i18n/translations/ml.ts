@@ -73,7 +73,6 @@ export const ml: Record<TranslationKey, string> = {
   settingsTitle: "സെറ്റിംഗ്സ്",
   yourName: "നിന്റെ പേര്",
   botSpeed: "കമ്പ്യൂട്ടർ വേഗത",
-  speedSlow: "സാവധാനം",
   speedNormal: "സാധാരണ",
   speedFast: "വേഗത്തിൽ",
   haptics: "വൈബ്രേഷൻ",

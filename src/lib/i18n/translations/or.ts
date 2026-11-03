@@ -73,7 +73,6 @@ export const or: Record<TranslationKey, string> = {
   settingsTitle: "ସେଟିଂସ୍",
   yourName: "ତୁମର ନାମ",
   botSpeed: "କମ୍ପ୍ୟୁଟର ଗତି",
-  speedSlow: "ଧୀର",
   speedNormal: "ସାଧାରଣ",
   speedFast: "ଦ୍ରୁତ",
   haptics: "କମ୍ପନ",

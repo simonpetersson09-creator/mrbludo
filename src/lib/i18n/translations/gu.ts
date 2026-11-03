@@ -73,7 +73,6 @@ export const gu: Record<TranslationKey, string> = {
   settingsTitle: "સેટિંગ્સ",
   yourName: "તમારું નામ",
   botSpeed: "કમ્પ્યુટરની ગતિ",
-  speedSlow: "ધીમું",
   speedNormal: "સામાન્ય",
   speedFast: "ઝડપી",
   haptics: "કંપન",

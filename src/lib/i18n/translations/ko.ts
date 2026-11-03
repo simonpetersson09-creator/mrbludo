@@ -73,7 +73,6 @@ export const ko: Record<TranslationKey, string> = {
   settingsTitle: "설정",
   yourName: "이름",
   botSpeed: "컴퓨터 속도",
-  speedSlow: "느리게",
   speedNormal: "보통",
   speedFast: "빠르게",
   haptics: "진동",

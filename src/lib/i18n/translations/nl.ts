@@ -67,7 +67,6 @@ export const nl: Record<TranslationKey, string> = {
   settingsTitle: "Instellingen",
   yourName: "Jouw naam",
   botSpeed: "Tempo van de computer",
-  speedSlow: "Rustig",
   speedNormal: "Normaal",
   speedFast: "Snel",
   haptics: "Trillen",

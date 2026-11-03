@@ -73,7 +73,6 @@ export const th: Record<TranslationKey, string> = {
   settingsTitle: "การตั้งค่า",
   yourName: "ชื่อของคุณ",
   botSpeed: "ความเร็วคอมพิวเตอร์",
-  speedSlow: "ช้า",
   speedNormal: "ปกติ",
   speedFast: "เร็ว",
   haptics: "การสั่น",

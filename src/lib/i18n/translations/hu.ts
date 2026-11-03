@@ -67,7 +67,6 @@ export const hu: Record<TranslationKey, string> = {
   settingsTitle: "Beállítások",
   yourName: "Neved",
   botSpeed: "A gép tempója",
-  speedSlow: "Lassú",
   speedNormal: "Normál",
   speedFast: "Gyors",
   haptics: "Rezgés",

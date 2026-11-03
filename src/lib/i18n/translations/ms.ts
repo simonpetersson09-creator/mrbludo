@@ -73,7 +73,6 @@ export const ms: Record<TranslationKey, string> = {
   settingsTitle: "Tetapan",
   yourName: "Nama anda",
   botSpeed: "Kelajuan komputer",
-  speedSlow: "Perlahan",
   speedNormal: "Biasa",
   speedFast: "Pantas",
   haptics: "Getaran",

@@ -73,7 +73,6 @@ export const uk: Record<TranslationKey, string> = {
   settingsTitle: "Налаштування",
   yourName: "Твоє ім'я",
   botSpeed: "Швидкість комп'ютера",
-  speedSlow: "Повільно",
   speedNormal: "Нормально",
   speedFast: "Швидко",
   haptics: "Вібрація",

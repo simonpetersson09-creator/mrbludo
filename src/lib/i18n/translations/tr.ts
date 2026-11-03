@@ -73,7 +73,6 @@ export const tr: Record<TranslationKey, string> = {
   settingsTitle: "Ayarlar",
   yourName: "Adın",
   botSpeed: "Bilgisayar hızı",
-  speedSlow: "Yavaş",
   speedNormal: "Normal",
   speedFast: "Hızlı",
   haptics: "Titreşim",

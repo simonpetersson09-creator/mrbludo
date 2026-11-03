@@ -73,7 +73,6 @@ export const vi: Record<TranslationKey, string> = {
   settingsTitle: "Cài đặt",
   yourName: "Tên của bạn",
   botSpeed: "Tốc độ của máy",
-  speedSlow: "Chậm",
   speedNormal: "Bình thường",
   speedFast: "Nhanh",
   haptics: "Rung",

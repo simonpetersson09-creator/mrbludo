@@ -73,7 +73,6 @@ export const te: Record<TranslationKey, string> = {
   settingsTitle: "సెట్టింగ్స్",
   yourName: "నీ పేరు",
   botSpeed: "కంప్యూటర్ వేగం",
-  speedSlow: "నెమ్మది",
   speedNormal: "సాధారణం",
   speedFast: "వేగం",
   haptics: "కంపనం",

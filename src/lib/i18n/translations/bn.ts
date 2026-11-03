@@ -73,7 +73,6 @@ export const bn: Record<TranslationKey, string> = {
   settingsTitle: "সেটিংস",
   yourName: "আপনার নাম",
   botSpeed: "কম্পিউটারের গতি",
-  speedSlow: "ধীর",
   speedNormal: "স্বাভাবিক",
   speedFast: "দ্রুত",
   haptics: "কম্পন",

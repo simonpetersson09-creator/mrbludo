@@ -158,8 +158,11 @@
 .seat-card-bubble-text { display: block; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .seat-card-bubble-me { animation: seat-card-bubble-in .26s cubic-bezier(.3,1.4,.5,1), kasta-pulse-shadow 2.4s ease-in-out .3s infinite; }
-.seat-card-bubble-top { bottom: calc(100% + 4px); }
-.seat-card-bubble-bottom { top: calc(100% + 4px); }
+.seat-card-bubble-top { bottom: calc(100% + 9px); }
+.seat-card-bubble-bottom { top: calc(100% + 9px); }
+/* Diagonal, toward the board's center: left cards push right, right cards push left. */
+.seat-card-bubble-in-left { left: 78%; }
+.seat-card-bubble-in-right { left: 22%; }
 @keyframes seat-card-bubble-in {
   from { opacity: 0; transform: translateX(-50%) scale(.86); }
   to { opacity: 1; transform: translateX(-50%) scale(1); }
@@ -181,7 +184,7 @@
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
 }
 .turn-banner { position: fixed; left: 50%; top: 42%; z-index: 60; pointer-events: none; animation: turn-banner-pop 1.4s ease forwards; }
-.turn-banner span { text-shadow: 0 2px 14px color-mix(in oklab, var(--pc) 70%, transparent), 0 1px 3px rgba(0, 0, 0, 0.45); }
+.turn-banner span { color: var(--board-ink) !important; padding: 6px 18px; border-radius: 9999px; background: color-mix(in oklch, var(--board-mark) 92%, transparent); box-shadow: 0 0 0 2px var(--pc), 0 6px 18px -6px oklch(0 0 0 / 0.45); }
 .game-player-list-four > div { min-height: 38px; }
 .game-bottom-controls { display: flex; height: 132px; flex-shrink: 0; gap: 12px; }
 .game-throw-area { min-width: 0; flex: 1; }

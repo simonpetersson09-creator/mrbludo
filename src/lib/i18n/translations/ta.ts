@@ -73,7 +73,6 @@ export const ta: Record<TranslationKey, string> = {
   settingsTitle: "அமைப்புகள்",
   yourName: "உன் பெயர்",
   botSpeed: "கணினி வேகம்",
-  speedSlow: "மெதுவாக",
   speedNormal: "சாதாரண",
   speedFast: "வேகமாக",
   haptics: "அதிர்வு",

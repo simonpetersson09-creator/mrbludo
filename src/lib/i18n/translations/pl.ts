@@ -67,7 +67,6 @@ export const pl: Record<TranslationKey, string> = {
   settingsTitle: "Ustawienia",
   yourName: "Twoja nazwa",
   botSpeed: "Tempo komputera",
-  speedSlow: "Wolne",
   speedNormal: "Normalne",
   speedFast: "Szybkie",
   haptics: "Wibracje",

@@ -73,7 +73,6 @@ export const pa: Record<TranslationKey, string> = {
   settingsTitle: "ਸੈਟਿੰਗਾਂ",
   yourName: "ਤੁਹਾਡਾ ਨਾਮ",
   botSpeed: "ਕੰਪਿਊਟਰ ਦੀ ਰਫ਼ਤਾਰ",
-  speedSlow: "ਹੌਲੀ",
   speedNormal: "ਆਮ",
   speedFast: "ਤੇਜ਼",
   haptics: "ਕੰਬਣੀ",

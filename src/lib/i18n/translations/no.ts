@@ -73,7 +73,6 @@ export const no: Record<TranslationKey, string> = {
   settingsTitle: "Innstillinger",
   yourName: "Ditt navn",
   botSpeed: "Datamaskinens tempo",
-  speedSlow: "Rolig",
   speedNormal: "Normalt",
   speedFast: "Raskt",
   haptics: "Vibrasjon",

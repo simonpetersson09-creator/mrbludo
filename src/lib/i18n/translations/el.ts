@@ -67,7 +67,6 @@ export const el: Record<TranslationKey, string> = {
   settingsTitle: "Ρυθμίσεις",
   yourName: "Το όνομά σου",
   botSpeed: "Ταχύτητα υπολογιστή",
-  speedSlow: "Αργή",
   speedNormal: "Κανονική",
   speedFast: "Γρήγορη",
   haptics: "Δόνηση",

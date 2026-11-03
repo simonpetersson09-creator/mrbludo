@@ -67,7 +67,6 @@ export const fi: Record<TranslationKey, string> = {
   settingsTitle: "Asetukset",
   yourName: "Nimesi",
   botSpeed: "Tietokoneen nopeus",
-  speedSlow: "Hidas",
   speedNormal: "Normaali",
   speedFast: "Nopea",
   haptics: "Värinä",

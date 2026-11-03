@@ -67,7 +67,6 @@ export const sl: Record<TranslationKey, string> = {
   settingsTitle: "Nastavitve",
   yourName: "Tvoje ime",
   botSpeed: "Hitrost računalnika",
-  speedSlow: "Počasi",
   speedNormal: "Običajno",
   speedFast: "Hitro",
   haptics: "Vibriranje",

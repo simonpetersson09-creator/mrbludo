@@ -79,7 +79,6 @@ export const sv = {
   settingsTitle: "Inställningar",
   yourName: "Ditt namn",
   botSpeed: "Datorns tempo",
-  speedSlow: "Lugnt",
   speedNormal: "Normalt",
   speedFast: "Snabbt",
   haptics: "Vibration",

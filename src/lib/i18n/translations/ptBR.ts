@@ -67,7 +67,6 @@ export const ptBR: Record<TranslationKey, string> = {
   settingsTitle: "Configurações",
   yourName: "Seu nome",
   botSpeed: "Velocidade do computador",
-  speedSlow: "Devagar",
   speedNormal: "Normal",
   speedFast: "Rápido",
   haptics: "Vibração",

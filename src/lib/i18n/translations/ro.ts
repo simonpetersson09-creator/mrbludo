@@ -73,7 +73,6 @@ export const ro: Record<TranslationKey, string> = {
   settingsTitle: "Setări",
   yourName: "Numele tău",
   botSpeed: "Viteza calculatorului",
-  speedSlow: "Lent",
   speedNormal: "Normal",
   speedFast: "Rapid",
   haptics: "Vibrație",

@@ -73,7 +73,6 @@ export const ja: Record<TranslationKey, string> = {
   settingsTitle: "設定",
   yourName: "あなたの名前",
   botSpeed: "コンピューターの速度",
-  speedSlow: "ゆっくり",
   speedNormal: "ふつう",
   speedFast: "はやい",
   haptics: "振動",

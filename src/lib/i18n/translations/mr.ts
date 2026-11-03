@@ -73,7 +73,6 @@ export const mr: Record<TranslationKey, string> = {
   settingsTitle: "सेटिंग्ज",
   yourName: "तुमचे नाव",
   botSpeed: "संगणकाचा वेग",
-  speedSlow: "हळूवार",
   speedNormal: "सामान्य",
   speedFast: "जलद",
   haptics: "कंपन",
