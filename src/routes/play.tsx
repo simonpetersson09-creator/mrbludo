@@ -146,7 +146,7 @@ function PlayPage() {
 
   const ev = state.lastEvent;
   const captureAt = ev?.kind === "moved" && ev.captured.length
-    ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece) as [number, number])
+    ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece, variantOf(state)) as [number, number])
     : null;
   void absSquare;
 
