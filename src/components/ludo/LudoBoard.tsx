@@ -92,8 +92,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         const a = g.animate([
           { opacity: 0, offset: 0 },
           { opacity: 0, offset: appear / total },
-          { opacity: 0.78, offset: shown / total },
-          { opacity: 0.62, offset: fade / total },
+          { opacity: 0.86, offset: shown / total },
+          { opacity: 0.72, offset: fade / total },
           { opacity: 0, offset: gone / total },
           ...(gone < total ? [{ opacity: 0, offset: 1 }] : []),
         ], { duration: total, easing: "ease-in-out" });
