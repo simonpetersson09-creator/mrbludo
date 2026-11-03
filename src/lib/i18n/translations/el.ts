@@ -253,4 +253,8 @@ export const el: Record<TranslationKey, string> = {
   hofMatches: "παιχνίδια",
   hofEmpty: "Κανείς δεν έχει παίξει ακόμα αυτή την εβδομάδα",
   topCountriesYearTitle: "Οι 10 κορυφαίες χώρες {year}",
+  quickMessages: "Γρήγορα μηνύματα",
+  waitCooldown: "Περίμενε {sec}δ. πριν το επόμενο μήνυμα",
+  close: "Κλείσιμο",
+  you: "Εσύ",
 };

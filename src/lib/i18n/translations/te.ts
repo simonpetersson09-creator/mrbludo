@@ -268,4 +268,8 @@ export const te: Record<TranslationKey, string> = {
   hofMatches: "మ్యాచ్‌లు",
   hofEmpty: "ఈ వారం ఇంకా ఎవరూ ఆడలేదు",
   topCountriesYearTitle: "టాప్ 10 దేశాలు {year}",
+  quickMessages: "త్వరిత సందేశాలు",
+  waitCooldown: "మరో సందేశం పంపడానికి {sec}సె వేచి ఉండు",
+  close: "మూసేయి",
+  you: "నువ్వు",
 };

@@ -253,4 +253,8 @@ export const ptBR: Record<TranslationKey, string> = {
   hofMatches: "partidas",
   hofEmpty: "Ninguém jogou ainda nesta semana",
   topCountriesYearTitle: "Top 10 países em {year}",
+  quickMessages: "Mensagens rápidas",
+  waitCooldown: "Espere {sec}s antes da próxima mensagem",
+  close: "Fechar",
+  you: "Você",
 };

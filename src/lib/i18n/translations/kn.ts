@@ -268,4 +268,8 @@ export const kn: Record<TranslationKey, string> = {
   hofMatches: "ಆಟಗಳು",
   hofEmpty: "ಈ ವಾರ ಇನ್ನೂ ಯಾರೂ ಆಡಿಲ್ಲ",
   topCountriesYearTitle: "ಅಗ್ರ 10 ದೇಶಗಳು {year}",
+  quickMessages: "ತ್ವರಿತ ಸಂದೇಶಗಳು",
+  waitCooldown: "ಮುಂದಿನ ಸಂದೇಶಕ್ಕೆ {sec} ಸೆಕೆಂಡ್ ಕಾಯು",
+  close: "ಮುಚ್ಚು",
+  you: "ನೀನು",
 };

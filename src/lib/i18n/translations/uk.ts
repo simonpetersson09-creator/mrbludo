@@ -268,4 +268,8 @@ export const uk: Record<TranslationKey, string> = {
   hofMatches: "матчі",
   hofEmpty: "Цього тижня ще ніхто не грав",
   topCountriesYearTitle: "Топ-10 країн за {year}",
+  quickMessages: "Швидкі повідомлення",
+  waitCooldown: "Зачекай {sec} с перед наступним повідомленням",
+  close: "Закрити",
+  you: "Ти",
 };

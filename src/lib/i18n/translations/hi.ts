@@ -268,4 +268,8 @@ export const hi: Record<TranslationKey, string> = {
   hofMatches: "मैच",
   hofEmpty: "इस हफ़्ते अभी तक किसी ने नहीं खेला",
   topCountriesYearTitle: "{year} के शीर्ष 10 देश",
+  quickMessages: "झटपट संदेश",
+  waitCooldown: "अगले संदेश से पहले {sec} सेकंड रुको",
+  close: "बंद करो",
+  you: "तुम",
 };

@@ -268,4 +268,8 @@ export const id: Record<TranslationKey, string> = {
   hofMatches: "pertandingan",
   hofEmpty: "Belum ada yang bermain minggu ini",
   topCountriesYearTitle: "10 negara teratas {year}",
+  quickMessages: "Pesan cepat",
+  waitCooldown: "Tunggu {sec}d sebelum kirim pesan lagi",
+  close: "Tutup",
+  you: "Kamu",
 };

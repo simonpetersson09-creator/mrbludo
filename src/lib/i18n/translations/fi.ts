@@ -253,4 +253,8 @@ export const fi: Record<TranslationKey, string> = {
   hofMatches: "peliä",
   hofEmpty: "Kukaan ei ole vielä pelannut tällä viikolla",
   topCountriesYearTitle: "Top 10 maat – {year}",
+  quickMessages: "Pikaviestit",
+  waitCooldown: "Odota {sec}s ennen seuraavaa viestiä",
+  close: "Sulje",
+  you: "Sinä",
 };

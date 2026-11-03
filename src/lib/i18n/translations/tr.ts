@@ -268,4 +268,8 @@ export const tr: Record<TranslationKey, string> = {
   hofMatches: "maç",
   hofEmpty: "Bu hafta henüz kimse oynamadı",
   topCountriesYearTitle: "İlk 10 ülke – {year}",
+  quickMessages: "Hızlı mesajlar",
+  waitCooldown: "Sonraki mesaj için {sec} sn bekle",
+  close: "Kapat",
+  you: "Sen",
 };

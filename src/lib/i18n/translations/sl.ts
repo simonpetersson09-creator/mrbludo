@@ -253,4 +253,8 @@ export const sl: Record<TranslationKey, string> = {
   hofMatches: "tekme",
   hofEmpty: "Ta teden še ni nihče igral",
   topCountriesYearTitle: "Najboljših 10 držav {year}",
+  quickMessages: "Hitra sporočila",
+  waitCooldown: "Počakaj {sec}s pred naslednjim sporočilom",
+  close: "Zapri",
+  you: "Ti",
 };

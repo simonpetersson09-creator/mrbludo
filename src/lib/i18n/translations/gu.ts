@@ -268,4 +268,8 @@ export const gu: Record<TranslationKey, string> = {
   hofMatches: "મેચો",
   hofEmpty: "આ અઠવાડિયે હજી સુધી કોઈએ રમ્યું નથી",
   topCountriesYearTitle: "ટોચના 10 દેશો {year}",
+  quickMessages: "ઝડપી સંદેશા",
+  waitCooldown: "આગલા સંદેશા પહેલાં {sec}s રાહ જુઓ",
+  close: "બંધ કરો",
+  you: "તમે",
 };

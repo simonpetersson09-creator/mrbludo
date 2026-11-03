@@ -283,6 +283,10 @@ export const sv = {
   hofMatches: "matcher",
   hofEmpty: "Ingen har spelat än den här veckan",
   topCountriesYearTitle: "Topp 10 länder {year}",
+  quickMessages: "Snabbmeddelanden",
+  waitCooldown: "Vänta {sec}s innan nästa meddelande",
+  close: "Stäng",
+  you: "Du",
 };
 
 export type TranslationKey = keyof typeof sv;

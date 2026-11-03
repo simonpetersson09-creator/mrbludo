@@ -253,4 +253,8 @@ export const it: Record<TranslationKey, string> = {
   hofMatches: "partite",
   hofEmpty: "Nessuno ha ancora giocato questa settimana",
   topCountriesYearTitle: "I 10 migliori paesi {year}",
+  quickMessages: "Messaggi rapidi",
+  waitCooldown: "Aspetta {sec}s prima del prossimo messaggio",
+  close: "Chiudi",
+  you: "Tu",
 };

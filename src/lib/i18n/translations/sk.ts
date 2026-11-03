@@ -253,4 +253,8 @@ export const sk: Record<TranslationKey, string> = {
   hofMatches: "zápasy",
   hofEmpty: "Tento týždeň ešte nikto nehral",
   topCountriesYearTitle: "Top 10 krajín {year}",
+  quickMessages: "Rýchle správy",
+  waitCooldown: "Pred ďalšou správou počkaj {sec}s",
+  close: "Zavrieť",
+  you: "Ty",
 };

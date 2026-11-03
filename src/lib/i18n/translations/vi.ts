@@ -268,4 +268,8 @@ export const vi: Record<TranslationKey, string> = {
   hofMatches: "trận",
   hofEmpty: "Chưa có ai chơi trong tuần này",
   topCountriesYearTitle: "Top 10 quốc gia {year}",
+  quickMessages: "Tin nhắn nhanh",
+  waitCooldown: "Chờ {sec} giây để nhắn tiếp",
+  close: "Đóng",
+  you: "Bạn",
 };

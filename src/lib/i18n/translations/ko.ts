@@ -268,4 +268,8 @@ export const ko: Record<TranslationKey, string> = {
   hofMatches: "경기",
   hofEmpty: "이번 주에 아직 아무도 플레이하지 않았어",
   topCountriesYearTitle: "{year}년 상위 10개국",
+  quickMessages: "빠른 메시지",
+  waitCooldown: "{sec}초 뒤에 메시지를 보낼 수 있어",
+  close: "닫기",
+  you: "나",
 };

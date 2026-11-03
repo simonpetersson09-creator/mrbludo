@@ -268,4 +268,8 @@ export const pa: Record<TranslationKey, string> = {
   hofMatches: "ਮੈਚ",
   hofEmpty: "ਇਸ ਹਫ਼ਤੇ ਅਜੇ ਕਿਸੇ ਨੇ ਨਹੀਂ ਖੇਡਿਆ",
   topCountriesYearTitle: "ਸਿਖਰਲੇ 10 ਦੇਸ਼ {year}",
+  quickMessages: "ਝਟਪਟ ਸੁਨੇਹੇ",
+  waitCooldown: "ਅਗਲੇ ਸੁਨੇਹੇ ਤੋਂ ਪਹਿਲਾਂ {sec} ਸਕਿੰਟ ਉਡੀਕੋ",
+  close: "ਬੰਦ ਕਰੋ",
+  you: "ਤੁਸੀਂ",
 };

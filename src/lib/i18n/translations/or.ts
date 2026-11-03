@@ -268,4 +268,8 @@ export const or: Record<TranslationKey, string> = {
   hofMatches: "ମ୍ୟାଚ୍",
   hofEmpty: "ଏହି ସପ୍ତାହରେ ଏଯାଏଁ କେହି ଖେଳିନାହାନ୍ତି",
   topCountriesYearTitle: "ଶୀର୍ଷ ୧୦ଟି ଦେଶ {year}",
+  quickMessages: "ଝଟପଟ ସନ୍ଦେଶ",
+  waitCooldown: "ପର ସନ୍ଦେଶ ପାଇଁ {sec} ସେକେଣ୍ଡ ଅପେକ୍ଷା କର",
+  close: "ବନ୍ଦ କର",
+  you: "ତୁମେ",
 };
