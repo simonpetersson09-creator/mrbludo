@@ -29,6 +29,7 @@ export const fi: Record<TranslationKey, string> = {
   gameMode: "Pelitila",
   modeClassic: "Klassinen Ludo",
   modeFia: "Ruotsalainen Fia",
+  roundN: "Kierros {n}",
   modeFiaRules: "(Ruotsalainen muunnelma)",
   colorRed: "Punainen",
   colorGreen: "Vihreä",

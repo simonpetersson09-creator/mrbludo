@@ -31,6 +31,7 @@ export const ml: Record<TranslationKey, string> = {
   gameMode: "ഗെയിം മോഡ്",
   modeClassic: "ക്ലാസിക് ലൂഡോ",
   modeFia: "സ്വീഡിഷ് ഫിയ",
+  roundN: "റൗണ്ട് {n}",
   modeFiaRules: "(സ്വീഡിഷ് പതിപ്പ്)",
 
   colorRed: "ചുവപ്പ്",

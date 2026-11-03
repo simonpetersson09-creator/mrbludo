@@ -31,6 +31,7 @@ export const te: Record<TranslationKey, string> = {
   gameMode: "ఆట మోడ్",
   modeClassic: "క్లాసిక్ లూడో",
   modeFia: "స్వీడిష్ ఫియా",
+  roundN: "రౌండ్ {n}",
   modeFiaRules: "(స్వీడిష్ రూపం)",
 
   colorRed: "ఎరుపు",

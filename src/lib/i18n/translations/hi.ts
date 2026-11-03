@@ -31,6 +31,7 @@ export const hi: Record<TranslationKey, string> = {
   gameMode: "गेम मोड",
   modeClassic: "क्लासिक लूडो",
   modeFia: "स्वीडिश फ़िया",
+  roundN: "राउंड {n}",
   modeFiaRules: "(स्वीडिश संस्करण)",
 
   colorRed: "लाल",

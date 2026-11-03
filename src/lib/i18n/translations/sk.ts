@@ -29,6 +29,7 @@ export const sk: Record<TranslationKey, string> = {
   gameMode: "Herný režim",
   modeClassic: "Klasické Ludo",
   modeFia: "Švédska Fia",
+  roundN: "Kolo {n}",
   modeFiaRules: "(Švédska varianta)",
   colorRed: "Červená",
   colorGreen: "Zelená",

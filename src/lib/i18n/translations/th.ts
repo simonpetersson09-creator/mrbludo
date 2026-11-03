@@ -31,6 +31,7 @@ export const th: Record<TranslationKey, string> = {
   gameMode: "โหมดเกม",
   modeClassic: "ลูโดคลาสสิก",
   modeFia: "ฟีอาแบบสวีเดน",
+  roundN: "รอบ {n}",
   modeFiaRules: "(แบบสวีเดน)",
 
   colorRed: "แดง",

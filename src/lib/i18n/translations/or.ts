@@ -31,6 +31,7 @@ export const or: Record<TranslationKey, string> = {
   gameMode: "ଖେଳ ମୋଡ୍",
   modeClassic: "କ୍ଲାସିକ୍ ଲୁଡୋ",
   modeFia: "ସ୍ୱିଡିଶ୍ ଫିଆ",
+  roundN: "ରାଉଣ୍ଡ {n}",
   modeFiaRules: "(ସ୍ୱିଡିଶ ସଂସ୍କରଣ)",
 
   colorRed: "ନାଲି",

@@ -31,6 +31,7 @@ export const ro: Record<TranslationKey, string> = {
   gameMode: "Mod de joc",
   modeClassic: "Ludo clasic",
   modeFia: "Fia suedeză",
+  roundN: "Runda {n}",
   modeFiaRules: "(Variantă suedeză)",
 
   colorRed: "Roșu",

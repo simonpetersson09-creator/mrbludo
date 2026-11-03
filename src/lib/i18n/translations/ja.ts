@@ -31,6 +31,7 @@ export const ja: Record<TranslationKey, string> = {
   gameMode: "ゲームモード",
   modeClassic: "クラシック・ルード",
   modeFia: "スウェーデン式フィア",
+  roundN: "ラウンド {n}",
   modeFiaRules: "(スウェーデン版)",
 
   colorRed: "赤",

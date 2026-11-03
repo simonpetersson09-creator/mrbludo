@@ -31,6 +31,7 @@ export const tr: Record<TranslationKey, string> = {
   gameMode: "Oyun modu",
   modeClassic: "Klasik Ludo",
   modeFia: "İsveç Fia",
+  roundN: "Tur {n}",
   modeFiaRules: "(İsveç varyantı)",
 
   colorRed: "Kırmızı",

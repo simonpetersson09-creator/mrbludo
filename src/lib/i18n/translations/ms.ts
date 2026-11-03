@@ -31,6 +31,7 @@ export const ms: Record<TranslationKey, string> = {
   gameMode: "Mod permainan",
   modeClassic: "Ludo klasik",
   modeFia: "Fia Sweden",
+  roundN: "Pusingan {n}",
   modeFiaRules: "(Varian Sweden)",
 
   colorRed: "Merah",

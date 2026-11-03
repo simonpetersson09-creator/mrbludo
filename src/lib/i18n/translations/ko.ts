@@ -31,6 +31,7 @@ export const ko: Record<TranslationKey, string> = {
   gameMode: "게임 모드",
   modeClassic: "클래식 루도",
   modeFia: "스웨덴식 피아",
+  roundN: "라운드 {n}",
   modeFiaRules: "(스웨덴식)",
 
   colorRed: "빨강",

@@ -29,6 +29,7 @@ export const el: Record<TranslationKey, string> = {
   gameMode: "Λειτουργία",
   modeClassic: "Κλασικό Ludo",
   modeFia: "Σουηδική Fia",
+  roundN: "Γύρος {n}",
   modeFiaRules: "(Σουηδική παραλλαγή)",
   colorRed: "Κόκκινο",
   colorGreen: "Πράσινο",

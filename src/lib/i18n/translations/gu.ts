@@ -31,6 +31,7 @@ export const gu: Record<TranslationKey, string> = {
   gameMode: "ગેમ મોડ",
   modeClassic: "ક્લાસિક લૂડો",
   modeFia: "સ્વીડિશ ફિયા",
+  roundN: "રાઉન્ડ {n}",
   modeFiaRules: "(સ્વીડિશ પ્રકાર)",
 
   colorRed: "લાલ",

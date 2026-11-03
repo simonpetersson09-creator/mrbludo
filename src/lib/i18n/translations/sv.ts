@@ -33,6 +33,7 @@ export const sv = {
   gameMode: "Spelläge",
   modeClassic: "Classic Ludo",
   modeFia: "Fia med knuff",
+  roundN: "Omgång {n}",
   modeFiaRules: "(Svensk variant)",
 
   // Färger
