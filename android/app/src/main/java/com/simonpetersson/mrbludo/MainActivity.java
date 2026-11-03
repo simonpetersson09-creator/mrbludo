@@ -1,4 +1,4 @@
-package com.mrbgames.ludo;
+package com.simonpetersson.mrbludo;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -1,4 +1,8 @@
 # Roadmap
+- [x] Audit native language, iOS/Android settings and Yatzy read-only reference
+- [x] Correct verified native configuration issues and add regression checks
+- [x] Run available tests and report exact changes plus physical-device/build blockers
+- [ ] Full package/sync, native compilation and physical iPhone/Android verification — blocked by absent package, Mac/Xcode, Android toolchain and devices
 - [x] Remove leaderboard from Play with friends page
 - [x] Quick play search duration = Yatzy (15 s, verified 17 s incl. start)
 - [x] Language popover placement = Yatzy
