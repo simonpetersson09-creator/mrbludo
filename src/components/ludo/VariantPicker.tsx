@@ -19,8 +19,8 @@ export function VariantPicker({ value, onChange }: { value: Variant; onChange: (
       <div className="grid grid-cols-2 gap-[7px]" role="radiogroup" aria-label={t("gameMode")}>
         {(["classic", "fia"] as const).map((v) => (
           <button key={v} type="button" role="radio" aria-checked={v === value} onClick={() => onChange(v)}
-            className={`min-h-10 rounded-xl px-2 font-display text-sm font-bold leading-tight transition active:scale-95 ${v === value ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"}`}>
-            <span className="block">{t(v === "classic" ? "modeClassic" : "modeFia")}</span>
+            className={`min-h-10 rounded-xl border-2 px-2 font-display text-sm font-bold leading-tight transition active:scale-95 ${v === value ? "border-primary bg-primary text-primary-foreground shadow-md" : "border-transparent bg-secondary text-secondary-foreground opacity-80"}`}>
+            <span className="block">{v === value && <span aria-hidden="true">✓ </span>}{t(v === "classic" ? "modeClassic" : "modeFia")}</span>
             {v === "fia" && <span className="block text-[10px] font-medium opacity-75">{t("modeFiaRules")}</span>}
           </button>
         ))}
