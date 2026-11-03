@@ -155,6 +155,8 @@ function PlayPage() {
 
   return (
     <main className="game-screen">
+      <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
+       <div className="flex flex-col gap-2" style={{ width: "min(100cqw, calc(100cqh - 34px))" }}>
       <div className="flex gap-1.5">
         {state.players.map((p, i) => (
           <div
@@ -168,10 +170,10 @@ function PlayPage() {
         ))}
       </div>
 
-      <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
-        <div className="h-[min(100cqw,100cqh)] w-[min(100cqw,100cqh)] overflow-hidden rounded-xl shadow-2xl">
+        <div className="aspect-square w-full overflow-hidden rounded-xl shadow-2xl">
           <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} />
         </div>
+       </div>
       </div>
 
       <div className="text-center" aria-live="polite">
