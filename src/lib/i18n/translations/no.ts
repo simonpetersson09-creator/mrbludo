@@ -30,7 +30,6 @@ export const no: Record<TranslationKey, string> = {
   gameMode: "Spillmodus",
   modeClassic: "Klassisk Ludo",
   modeFia: "Svensk Fia",
-  modeClassicRules: "Ut på 6 · en sekser gir nytt kast · tre seksere på rad avslutter turen · startrutene er trygge · nøyaktig kast til mål.",
   modeFiaRules: "(Svensk variant)",
 
   colorRed: "Rød",

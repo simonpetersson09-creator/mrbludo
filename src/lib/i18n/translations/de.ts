@@ -30,7 +30,6 @@ export const de: Record<TranslationKey, string> = {
   gameMode: "Spielmodus",
   modeClassic: "Klassisches Ludo",
   modeFia: "Schwedisches Fia",
-  modeClassicRules: "Raus mit 6 · 6 gibt neuen Wurf · drei 6er in Folge beenden den Zug · Startfelder sind sicher · exakter Wurf ins Ziel.",
   modeFiaRules: "(Schwedische Variante)",
 
   colorRed: "Rot",

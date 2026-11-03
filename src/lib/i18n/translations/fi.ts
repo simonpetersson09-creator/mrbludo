@@ -28,7 +28,6 @@ export const fi: Record<TranslationKey, string> = {
   gameMode: "Pelitila",
   modeClassic: "Klassinen Ludo",
   modeFia: "Ruotsalainen Fia",
-  modeClassicRules: "Ulos kuutosella · kuutonen antaa uuden heiton · kolme kuutosta peräkkäin päättää vuoron · aloitusruudut ovat turvallisia · maaliin tarkalla heitolla.",
   modeFiaRules: "(Ruotsalainen muunnelma)",
   colorRed: "Punainen",
   colorGreen: "Vihreä",

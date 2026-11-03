@@ -25,7 +25,6 @@ export function VariantPicker({ value, onChange }: { value: Variant; onChange: (
           </button>
         ))}
       </div>
-      {value === "classic" && <p className="mt-1.5 text-[11px] leading-snug text-muted-foreground">{value === "classic" ? t("modeClassicRules") : null}</p>}
     </div>
   );
 }

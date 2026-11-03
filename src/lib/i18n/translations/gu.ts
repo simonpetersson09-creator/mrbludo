@@ -30,7 +30,6 @@ export const gu: Record<TranslationKey, string> = {
   gameMode: "ગેમ મોડ",
   modeClassic: "ક્લાસિક લૂડો",
   modeFia: "સ્વીડિશ ફિયા",
-  modeClassicRules: "6 પર બહાર · 6 પર ફરી ચાલ · સતત ત્રણ 6 પર વારો પૂરો · શરૂઆતના ખાના સુરક્ષિત · ઘર માટે ચોક્કસ અંક.",
   modeFiaRules: "(સ્વીડિશ પ્રકાર)",
 
   colorRed: "લાલ",

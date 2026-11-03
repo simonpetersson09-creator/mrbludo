@@ -30,7 +30,6 @@ export const vi: Record<TranslationKey, string> = {
   gameMode: "Chế độ chơi",
   modeClassic: "Ludo cổ điển",
   modeFia: "Fia Thụy Điển",
-  modeClassicRules: "Ra quân bằng 6 · 6 được tung thêm · ba lần 6 liên tiếp hết lượt · ô xuất phát an toàn · về đích phải đúng số.",
   modeFiaRules: "(Biến thể Thụy Điển)",
 
   colorRed: "Đỏ",

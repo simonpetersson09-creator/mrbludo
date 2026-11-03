@@ -30,7 +30,6 @@ export const th: Record<TranslationKey, string> = {
   gameMode: "โหมดเกม",
   modeClassic: "ลูโดคลาสสิก",
   modeFia: "ฟีอาแบบสวีเดน",
-  modeClassicRules: "ออกด้วย 6 · ได้ 6 ทอยอีกครั้ง · 6 สามครั้งติดจบตา · ช่องเริ่มปลอดภัย · ต้องทอยพอดีเข้าเส้นชัย",
   modeFiaRules: "(แบบสวีเดน)",
 
   colorRed: "แดง",

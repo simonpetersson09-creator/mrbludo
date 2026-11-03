@@ -30,7 +30,6 @@ export const te: Record<TranslationKey, string> = {
   gameMode: "ఆట మోడ్",
   modeClassic: "క్లాసిక్ లూడో",
   modeFia: "స్వీడిష్ ఫియా",
-  modeClassicRules: "6 వస్తే బయటకు · 6 వస్తే మళ్లీ వేయండి · వరుసగా మూడు 6లు వస్తే వంతు ముగుస్తుంది · ప్రారంభ గడులు సురక్షితం · గమ్యానికి కచ్చిత సంఖ్య.",
   modeFiaRules: "(స్వీడిష్ రూపం)",
 
   colorRed: "ఎరుపు",

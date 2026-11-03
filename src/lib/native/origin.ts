@@ -7,9 +7,11 @@ export function validateLudoOrigin(value: string): string {
   return url.origin;
 }
 
+/** Ludo's own published server; the app talks to it directly. */
+export const PUBLISHED_LUDO_ORIGIN = "https://mrbludo.lovable.app";
+
 export function nativeOnlineOrigin(): string {
-  const value = import.meta.env['VITE_MRB_LUDO_ONLINE_ORIGIN'];
-  if (!value) throw new Error("err:missing");
+  const value = import.meta.env['VITE_MRB_LUDO_ONLINE_ORIGIN'] || PUBLISHED_LUDO_ORIGIN;
   return validateLudoOrigin(value);
 }
 

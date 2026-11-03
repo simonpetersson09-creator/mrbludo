@@ -30,7 +30,6 @@ export const en: Record<TranslationKey, string> = {
   gameMode: "Game mode",
   modeClassic: "Classic Ludo",
   modeFia: "Swedish Fia",
-  modeClassicRules: "Out on a 6 · a 6 gives another roll · three 6s in a row end the turn · start squares are safe · exact roll to finish.",
   modeFiaRules: "(Swedish variant)",
 
   colorRed: "Red",

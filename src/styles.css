@@ -183,8 +183,8 @@
   75% { opacity: 1; }
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
 }
-.turn-banner { position: fixed; left: 50%; top: 42%; z-index: 60; pointer-events: none; animation: turn-banner-pop 1.4s ease forwards; }
-.turn-banner span { color: var(--board-ink) !important; padding: 6px 18px; border-radius: 9999px; background: color-mix(in oklch, var(--board-mark) 92%, transparent); box-shadow: 0 0 0 2px var(--pc), 0 6px 18px -6px oklch(0 0 0 / 0.45); }
+.turn-banner { position: fixed; left: 50%; top: 42%; width: max-content; max-width: calc(100vw - 32px); text-align: center; z-index: 60; pointer-events: none; animation: turn-banner-pop 1.4s ease forwards; }
+.turn-banner span { display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; line-height: 1.15; color: var(--board-ink) !important; padding: 6px 18px; border-radius: 9999px; background: color-mix(in oklch, var(--board-mark) 92%, transparent); box-shadow: 0 0 0 2px var(--pc), 0 6px 18px -6px oklch(0 0 0 / 0.45); }
 .game-player-list-four > div { min-height: 38px; }
 .game-bottom-controls { display: flex; height: 132px; flex-shrink: 0; gap: 12px; }
 .game-throw-area { min-width: 0; flex: 1; }
@@ -374,3 +374,6 @@
 @keyframes home-logo-wiggle { 0%, 71% { transform: none; } 80% { transform: rotate(4deg) scale(1.05); } 89% { transform: rotate(-3deg) scale(1.02); } 100% { transform: none; } }
 .home-logo-wiggle { animation: home-logo-wiggle 4.2s ease-in-out infinite; will-change: transform; }
 @media (prefers-reduced-motion: reduce) { .home-enter > *, .home-logo-wiggle { animation: none; } }
+/* Scrollable pages keep scrolling but never show a scrollbar. */
+html, body, * { scrollbar-width: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display: none; }

@@ -30,7 +30,6 @@ export const or: Record<TranslationKey, string> = {
   gameMode: "ଖେଳ ମୋଡ୍",
   modeClassic: "କ୍ଲାସିକ୍ ଲୁଡୋ",
   modeFia: "ସ୍ୱିଡିଶ୍ ଫିଆ",
-  modeClassicRules: "6ରେ ବାହାର · 6ରେ ପୁଣି ଥରେ · ଲଗାତାର ତିନି 6ରେ ପାଳି ଶେଷ · ଆରମ୍ଭ ଘର ସୁରକ୍ଷିତ · ଘର ପାଇଁ ଠିକ୍ ସଂଖ୍ୟା।",
   modeFiaRules: "(ସ୍ୱିଡିଶ ସଂସ୍କରଣ)",
 
   colorRed: "ନାଲି",

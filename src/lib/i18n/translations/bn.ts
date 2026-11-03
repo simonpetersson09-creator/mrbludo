@@ -30,7 +30,6 @@ export const bn: Record<TranslationKey, string> = {
   gameMode: "গেম মোড",
   modeClassic: "ক্লাসিক লুডো",
   modeFia: "সুইডিশ ফিয়া",
-  modeClassicRules: "৬ পেলে বের হও · ৬ পেলে আবার চাল · পরপর তিনটি ৬ পেলে পালা শেষ · শুরুর ঘর নিরাপদ · ঘরে ঢুকতে ঠিক সংখ্যা।",
   modeFiaRules: "(সুইডিশ সংস্করণ)",
 
   colorRed: "লাল",

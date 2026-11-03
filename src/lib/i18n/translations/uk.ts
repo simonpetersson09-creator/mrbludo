@@ -30,7 +30,6 @@ export const uk: Record<TranslationKey, string> = {
   gameMode: "Режим гри",
   modeClassic: "Класичне лудо",
   modeFia: "Шведська Fia",
-  modeClassicRules: "Вихід на 6 · 6 дає ще кидок · три 6 поспіль завершують хід · стартові клітинки безпечні · у фініш точним кидком.",
   modeFiaRules: "(Шведський варіант)",
 
   colorRed: "Червоний",

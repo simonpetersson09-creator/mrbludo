@@ -28,7 +28,6 @@ export const ca: Record<TranslationKey, string> = {
   gameMode: "Mode de joc",
   modeClassic: "Ludo clàssic",
   modeFia: "Fia suec",
-  modeClassicRules: "Surts amb 6 · un 6 dona una altra tirada · tres 6 seguits acaben el torn · les caselles de sortida són segures · tirada exacta per arribar.",
   modeFiaRules: "(Variant sueca)",
   colorRed: "Vermell",
   colorGreen: "Verd",

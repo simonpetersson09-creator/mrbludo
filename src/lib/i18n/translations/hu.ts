@@ -28,7 +28,6 @@ export const hu: Record<TranslationKey, string> = {
   gameMode: "Játékmód",
   modeClassic: "Klasszikus Ludo",
   modeFia: "Svéd Fia",
-  modeClassicRules: "Kijutás 6-tal · a 6 új dobást ad · három 6 egymás után véget vet a körnek · a kezdőmezők biztonságosak · pontos dobás a célba.",
   modeFiaRules: "(Svéd változat)",
   colorRed: "Piros",
   colorGreen: "Zöld",

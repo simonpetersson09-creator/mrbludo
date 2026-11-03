@@ -28,7 +28,6 @@ export const el: Record<TranslationKey, string> = {
   gameMode: "Λειτουργία",
   modeClassic: "Κλασικό Ludo",
   modeFia: "Σουηδική Fia",
-  modeClassicRules: "Έξοδος με 6 · το 6 δίνει νέα ζαριά · τρία 6 στη σειρά τελειώνουν τη σειρά · τα αρχικά τετράγωνα είναι ασφαλή · ακριβής ζαριά για τερματισμό.",
   modeFiaRules: "(Σουηδική παραλλαγή)",
   colorRed: "Κόκκινο",
   colorGreen: "Πράσινο",

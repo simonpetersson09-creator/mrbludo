@@ -28,7 +28,6 @@ export const pl: Record<TranslationKey, string> = {
   gameMode: "Tryb gry",
   modeClassic: "Klasyczne Ludo",
   modeFia: "Szwedzka Fia",
-  modeClassicRules: "Wyjście na 6 · 6 daje kolejny rzut · trzy 6 z rzędu kończą turę · pola startowe są bezpieczne · do mety dokładnym rzutem.",
   modeFiaRules: "(Wariant szwedzki)",
   colorRed: "Czerwony",
   colorGreen: "Zielony",
