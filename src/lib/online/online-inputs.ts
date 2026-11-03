@@ -16,7 +16,7 @@ export const leaveMatchInput = (d: { matchId: string }) => ({ matchId: String(d.
 export const actInput = (d: { matchId: string; version: number; action: Action }) => {
     const a = d.action;
     if (!a || !["roll", "move", "forfeit"].includes(a.kind)) throw new Error("err:bad_action");
-    const action: Action = a.kind === "move" ? { kind: "move", piece: Math.trunc(Number(a.piece)) } : { kind: a.kind };
+    const action: Action = a.kind === "move" ? { kind: "move", piece: Math.trunc(Number(a.piece)), ...(a.walkOut === true ? { walkOut: true } : {}) } : { kind: a.kind };
     return { matchId: String(d.matchId), version: Math.trunc(Number(d.version)), action };
   };
 export const heartbeatInput = (d: { matchId: string }) => ({ matchId: String(d.matchId) });

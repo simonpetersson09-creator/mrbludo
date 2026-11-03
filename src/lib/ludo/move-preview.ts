@@ -1,4 +1,4 @@
-import { targetOf, variantOf, type GameState } from "./engine";
+import { canWalkOut, targetOf, variantOf, type GameState } from "./engine";
 import { pieceCenter } from "./board";
 
 /** Presentation only: use the engine's exact targets without applying a move. */
@@ -6,16 +6,22 @@ export function movePreviews(state: GameState, legal: number[]) {
   const player = state.players[state.current];
   if (!player || state.phase !== "move" || state.dice == null) return [];
   const seen = new Set<string>();
-  return legal.flatMap((piece) => {
-    const progress = state.pieces[state.current]?.[piece];
-    if (progress == null) return [];
-    const variant = variantOf(state);
-    const target = targetOf(progress, state.dice ?? 0, variant);
-    if (target == null) return [];
+  const variant = variantOf(state);
+  const out: { x: number; y: number; color: typeof player.color; piece: number; walkOut: boolean }[] = [];
+  const add = (piece: number, target: number, walkOut: boolean) => {
     const [x, y] = pieceCenter(player.color, target, piece, variant);
     const key = `${x},${y}`;
-    if (seen.has(key)) return [];
+    if (seen.has(key)) return;
     seen.add(key);
-    return [{ x, y, color: player.color, piece }];
-  });
+    out.push({ x, y, color: player.color, piece, walkOut });
+  };
+  for (const piece of legal) {
+    const progress = state.pieces[state.current]?.[piece];
+    if (progress == null) continue;
+    const target = targetOf(progress, state.dice ?? 0, variant);
+    if (target != null) add(piece, target, false);
+    // Fia six: a second marker six steps ahead lets one piece come out and walk.
+    if (canWalkOut(state, piece)) add(piece, 6, true);
+  }
+  return out;
 }

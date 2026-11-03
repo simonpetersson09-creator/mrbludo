@@ -4,7 +4,7 @@ import { randomBotNames } from "@/lib/ludo/bot-names";
  * Server functions call these after loading a match row; the same engine rules
  * apply to local and online games.
  */
-import { applyMove, applyRoll, createGame, forfeit, goalOf, isVariant, variantOf, legalMoves, type Color, type GameState, type Variant } from "@/lib/ludo/engine";
+import { applyMove, canWalkOut, applyRoll, createGame, forfeit, goalOf, isVariant, variantOf, legalMoves, type Color, type GameState, type Variant } from "@/lib/ludo/engine";
 import { chooseMove } from "@/lib/ludo/ai";
 
 export const SEAT_COLORS: Record<number, Color[]> = { 2: [0, 2], 3: [0, 1, 2], 4: [0, 1, 2, 3] };
@@ -15,7 +15,7 @@ export const DROP_SECONDS = 90;
 
 export interface SeatInfo { user_id: string; seat: number; display_name: string }
 
-export type Action = { kind: "roll" } | { kind: "move"; piece: number } | { kind: "forfeit" };
+export type Action = { kind: "roll" } | { kind: "move"; piece: number; walkOut?: boolean } | { kind: "forfeit" };
 
 export class MatchError extends Error {
   constructor(public code: "not_member" | "not_your_turn" | "bad_phase" | "illegal" | "finished" | "conflict", msg?: string) {
@@ -57,7 +57,8 @@ export function performAction(state: GameState, userId: string, action: Action, 
   }
   if (state.phase !== "move") throw new MatchError("bad_phase");
   if (!legalMoves(state).includes(action.piece)) throw new MatchError("illegal");
-  return applyMove(state, action.piece);
+  if (action.walkOut && !canWalkOut(state, action.piece)) throw new MatchError("illegal");
+  return applyMove(state, action.piece, !!action.walkOut);
 }
 
 /** Server auto-step for an idle/absent current player (roll, or best legal move). */
