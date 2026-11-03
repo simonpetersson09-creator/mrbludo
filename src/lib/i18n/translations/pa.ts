@@ -40,6 +40,8 @@ export const pa: Record<TranslationKey, string> = {
 
   roll: "ਸੁੱਟੋ",
   home: "ਹੋਮ",
+  notFoundTitle: "ਪੰਨਾ ਨਹੀਂ ਮਿਲਿਆ",
+  notFoundBody: "ਤੁਸੀਂ ਜੋ ਪੰਨਾ ਲੱਭ ਰਹੇ ਹੋ ਉਹ ਮੌਜੂਦ ਨਹੀਂ ਜਾਂ ਹਟਾਇਆ ਗਿਆ ਹੈ।",
   forfeit: "ਹਾਰ ਮਨੋ",
   yourTurn: "ਤੁਹਾਡੀ ਵਾਰੀ – ਪਾਸਾ ਸੁੱਟੋ",
   theirTurn: "{name} ਦੀ ਵਾਰੀ",

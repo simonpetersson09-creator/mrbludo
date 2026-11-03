@@ -40,6 +40,8 @@ export const gu: Record<TranslationKey, string> = {
 
   roll: "ફેંકો",
   home: "હોમ",
+  notFoundTitle: "પેજ મળ્યું નથી",
+  notFoundBody: "તમે શોધો છો તે પેજ અસ્તિત્વમાં નથી અથવા ખસેડાયું છે.",
   forfeit: "હાર માનો",
   yourTurn: "તમારો વારો – પાસો ફેંકો",
   theirTurn: "{name} નો વારો",

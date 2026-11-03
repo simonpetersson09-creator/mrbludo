@@ -40,6 +40,8 @@ export const da: Record<TranslationKey, string> = {
 
   roll: "Kast",
   home: "Hjem",
+  notFoundTitle: "Siden findes ikke",
+  notFoundBody: "Siden, du leder efter, findes ikke eller er flyttet.",
   forfeit: "Giv op",
   yourTurn: "Din tur – kast terningen",
   theirTurn: "{name}s tur",

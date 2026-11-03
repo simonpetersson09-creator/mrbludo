@@ -36,6 +36,8 @@ export const sk: Record<TranslationKey, string> = {
   colorBlue: "Modrá",
   roll: "Hodiť",
   home: "Domov",
+  notFoundTitle: "Stránka sa nenašla",
+  notFoundBody: "Hľadaná stránka neexistuje alebo bola presunutá.",
   forfeit: "Vzdať sa",
   yourTurn: "Si na ťahu – hoď kockou",
   theirTurn: "Na ťahu: {name}",

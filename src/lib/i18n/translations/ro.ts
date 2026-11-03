@@ -40,6 +40,8 @@ export const ro: Record<TranslationKey, string> = {
 
   roll: "Aruncă",
   home: "Acasă",
+  notFoundTitle: "Pagina nu a fost găsită",
+  notFoundBody: "Pagina căutată nu există sau a fost mutată.",
   forfeit: "Renunță",
   yourTurn: "Rândul tău – aruncă zarul",
   theirTurn: "Rândul lui {name}",

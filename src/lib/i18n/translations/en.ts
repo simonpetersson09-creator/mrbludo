@@ -40,6 +40,8 @@ export const en: Record<TranslationKey, string> = {
 
   roll: "Roll",
   home: "Home",
+  notFoundTitle: "Page not found",
+  notFoundBody: "The page you're looking for doesn't exist or has been moved.",
   forfeit: "Give up",
   yourTurn: "Your turn – roll the die",
   theirTurn: "{name}'s turn",

@@ -40,6 +40,8 @@ export const ja: Record<TranslationKey, string> = {
 
   roll: "振る",
   home: "ホーム",
+  notFoundTitle: "ページが見つかりません",
+  notFoundBody: "お探しのページは存在しないか、移動しました。",
   forfeit: "降参",
   yourTurn: "あなたの番 – サイコロを振ってください",
   theirTurn: "{name}の番",

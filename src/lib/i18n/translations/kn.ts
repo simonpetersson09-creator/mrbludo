@@ -40,6 +40,8 @@ export const kn: Record<TranslationKey, string> = {
 
   roll: "ಎಸೆ",
   home: "ಮುಖಪುಟ",
+  notFoundTitle: "ಪುಟ ಕಂಡುಬಂದಿಲ್ಲ",
+  notFoundBody: "ನೀವು ಹುಡುಕುತ್ತಿರುವ ಪುಟ ಇಲ್ಲ ಅಥವಾ ಸ್ಥಳಾಂತರಿಸಲಾಗಿದೆ.",
   forfeit: "ಹಾರು ಬಿಡು",
   yourTurn: "ನಿಮ್ಮ ಸರದಿ – ದಾಳ ಎಸೆಯಿರಿ",
   theirTurn: "{name} ಅವರ ಸರದಿ",

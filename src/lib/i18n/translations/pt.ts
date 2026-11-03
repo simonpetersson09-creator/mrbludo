@@ -40,6 +40,8 @@ export const pt: Record<TranslationKey, string> = {
 
   roll: "Lançar",
   home: "Início",
+  notFoundTitle: "Página não encontrada",
+  notFoundBody: "A página que procuras não existe ou foi movida.",
   forfeit: "Desistir",
   yourTurn: "A tua vez – lança o dado",
   theirTurn: "Vez de {name}",

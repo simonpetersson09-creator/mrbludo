@@ -40,6 +40,8 @@ export const vi: Record<TranslationKey, string> = {
 
   roll: "Tung",
   home: "Trang chủ",
+  notFoundTitle: "Không tìm thấy trang",
+  notFoundBody: "Trang bạn tìm không tồn tại hoặc đã được chuyển.",
   forfeit: "Đầu hàng",
   yourTurn: "Lượt của bạn – tung xúc xắc",
   theirTurn: "Lượt của {name}",

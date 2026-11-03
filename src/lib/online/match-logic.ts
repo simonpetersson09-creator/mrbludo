@@ -5,7 +5,7 @@ import { randomBotNames } from "@/lib/ludo/bot-names";
  * apply to local and online games.
  */
 import { applyMove, canWalkOut, applyRoll, createGame, forfeit, goalOf, isVariant, variantOf, legalMoves, type Color, type GameState, type Variant } from "@/lib/ludo/engine";
-import { chooseMove } from "@/lib/ludo/ai";
+import { chooseBotAction } from "@/lib/ludo/ai";
 
 export const SEAT_COLORS: Record<number, Color[]> = { 2: [0, 2], 3: [0, 1, 2], 4: [0, 1, 2, 3] };
 /** Seconds a player has for one step (roll or move) before the server plays for them. */
@@ -65,7 +65,8 @@ export function performAction(state: GameState, userId: string, action: Action, 
 export function autoStep(state: GameState, roll: () => number): GameState {
   if (state.phase === "finished") return state;
   if (state.phase === "roll") return applyRoll(state, roll());
-  return applyMove(state, chooseMove(state));
+  const a = chooseBotAction(state);
+  return applyMove(state, a.piece, a.walkOut);
 }
 
 export interface StatDelta { played: number; wins: number; captures: number; pieces_home: number; forfeits: number }

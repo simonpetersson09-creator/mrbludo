@@ -40,6 +40,8 @@ export const ta: Record<TranslationKey, string> = {
 
   roll: "உருட்டு",
   home: "முகப்பு",
+  notFoundTitle: "பக்கம் கிடைக்கவில்லை",
+  notFoundBody: "நீங்கள் தேடும் பக்கம் இல்லை அல்லது நகர்த்தப்பட்டது.",
   forfeit: "சரணடை",
   yourTurn: "உன் சுற்று – பகடையை உருட்டு",
   theirTurn: "{name} சுற்று",

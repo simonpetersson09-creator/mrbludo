@@ -36,6 +36,8 @@ export const ca: Record<TranslationKey, string> = {
   colorBlue: "Blau",
   roll: "Tira",
   home: "Inici",
+  notFoundTitle: "Pàgina no trobada",
+  notFoundBody: "La pàgina que busques no existeix o s'ha mogut.",
   forfeit: "Abandona",
   yourTurn: "És el teu torn – tira el dau",
   theirTurn: "Torn de {name}",

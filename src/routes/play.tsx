@@ -8,7 +8,7 @@ import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { applyMove, canWalkOut, applyRoll, forfeit, legalMoves, rollDie, absSquare, variantOf, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
-import { chooseMove } from "@/lib/ludo/ai";
+import { chooseBotAction } from "@/lib/ludo/ai";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { pieceCenter } from "@/lib/ludo/board";
 import { AppOpenGameGate } from "@/components/AppOpenGameGate";
@@ -102,7 +102,7 @@ function PlayPage() {
     if (!state || !me?.isBot || state.phase === "finished" || rolling) return;
     const t = window.setTimeout(() => {
       if (state.phase === "roll") doRoll();
-      else if (state.phase === "move") doMove(chooseMove(state));
+      else if (state.phase === "move") { const a = chooseBotAction(state); doMove(a.piece, a.walkOut); }
     }, BOT_DELAY[settings.botSpeed]);
     return () => window.clearTimeout(t);
   }, [state, me, rolling, doRoll, doMove, settings.botSpeed]);
