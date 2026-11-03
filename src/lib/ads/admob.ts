@@ -37,16 +37,14 @@ const GOOGLE_TEST_IDS: Record<'ios' | 'android', Omit<PlatformAdIds, 'appId'>> =
 };
 
 export const ADMOB_IDS: Record<'ios' | 'android', PlatformAdIds> = {
+  // Mr. B Ludo's own IDs. `optional` is the post-match interstitial unit.
   ios: {
-    appId: 'ca-app-pub-7448540924654868~6494873071',
-    appOpen: 'ca-app-pub-7448540924654868/8707432437',
-    optional: 'ca-app-pub-7448540924654868/6422685490',
+    appId: 'ca-app-pub-7448540924654868~5267706252',
+    appOpen: 'ca-app-pub-7448540924654868/8436795076',
+    optional: 'ca-app-pub-7448540924654868/7239438484',
   },
-  android: {
-    appId: 'ca-app-pub-7448540924654868~1382689760',
-    appOpen: 'ca-app-pub-7448540924654868/2580221366',
-    optional: 'ca-app-pub-7448540924654868/2558286041',
-  },
+  // Android stays ad-free until Ludo has its own Android IDs.
+  android: { appId: null, appOpen: null, optional: null },
 };
 
 export const ADMOB_CONFIG = {
@@ -637,10 +635,7 @@ async function showInterstitial(kind: 'optional' | 'postMatch', context?: { matc
 /* ------------------------------------------------------------------ */
 
 /** Rewarded ad units for the optional XP button (own IDs per platform). */
-const REWARDED_IDS: Record<'ios' | 'android', { real: string; test: string }> = {
-  ios: { real: 'ca-app-pub-7448540924654868/2605382885', test: 'ca-app-pub-3940256099942544/1712485313' },
-  android: { real: 'ca-app-pub-7448540924654868/7926737182', test: 'ca-app-pub-3940256099942544/5224354917' },
-};
+const REWARDED_IDS: Record<'ios' | 'android', { real: string; test: string } | null> = { ios: null, android: null };
 /** Android: load and "ad actually opened" limits; never cuts a running ad. */
 const ANDROID_REWARDED_LOAD_TIMEOUT_MS = 20_000;
 const ANDROID_REWARDED_OPEN_TIMEOUT_MS = 20_000;
@@ -657,7 +652,9 @@ let suppressAppOpenUntil = 0;
 function rewardedUnitId(): string | null {
   const p = adPlatform();
   if (!p || !ADMOB_IDS[p].appId) return null;
-  return ADMOB_CONFIG.useTestAds ? REWARDED_IDS[p].test : REWARDED_IDS[p].real;
+  const ids = REWARDED_IDS[p];
+  if (!ids) return null;
+  return ADMOB_CONFIG.useTestAds ? ids.test : ids.real;
 }
 
 /** Rewarded on iOS and Android. */
