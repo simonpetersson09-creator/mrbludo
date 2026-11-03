@@ -1,3 +1,4 @@
+import { randomBotNames } from "@/lib/ludo/bot-names";
 /**
  * Online match rules on top of the shared local engine. Pure: no DB, no network.
  * Server functions call these after loading a match row; the same engine rules
@@ -24,7 +25,6 @@ export class MatchError extends Error {
 
 /** Seconds the server waits before playing a computer seat's step. */
 export const BOT_SECONDS = 1;
-const BOT_NAMES = ["Lucky", "Sixer", "Dicey", "Rex", "Nova", "Bingo"];
 export const isBotId = (id: string) => id.startsWith("bot:");
 
 /** Humans sorted by seat; `total` > humans fills the rest with server-played computer seats (quick play). */
@@ -34,7 +34,8 @@ export function startState(seats: SeatInfo[], total = seats.length): GameState {
   const colors = SEAT_COLORS[n];
   if (!colors || sorted.length < 1) throw new Error("2–4 players required");
   const humans = sorted.map((s, i) => ({ id: s.user_id, name: s.display_name, color: colors[i], isBot: false }));
-  const bots = Array.from({ length: n - sorted.length }, (_, k) => ({ id: `bot:${k + 1}`, name: BOT_NAMES[k], color: colors[sorted.length + k], isBot: true }));
+  const botNames = randomBotNames(n - sorted.length);
+  const bots = Array.from({ length: n - sorted.length }, (_, k) => ({ id: `bot:${k + 1}`, name: botNames[k], color: colors[sorted.length + k], isBot: true }));
   return createGame([...humans, ...bots]);
 }
 

@@ -39,7 +39,7 @@ export function yardNestCenter(color: Color): [number, number] {
   return [x + 3, y + 3];
 }
 
-export const YARD_SPOT_GAP = 0.62;
+export const YARD_SPOT_GAP = 0.95;
 
 export function yardSpot(color: Color, piece: number): [number, number] {
   const [cx, cy] = yardNestCenter(color);
