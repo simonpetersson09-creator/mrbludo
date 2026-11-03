@@ -109,6 +109,12 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/* Runs before the app's modules: if an outdated module fails to load after an update, reload once instead of a blank screen. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var K="mrb-ludo:v1:boot-reload";function f(m){m=String(m||"");if(!/Importing a module script failed|Failed to fetch dynamically imported module|error loading dynamically imported module/i.test(m))return;try{if(sessionStorage.getItem(K))return;sessionStorage.setItem(K,"1")}catch(e){return}location.reload()}addEventListener("error",function(e){f(e&&e.message)},true);addEventListener("unhandledrejection",function(e){f(e&&e.reason&&(e.reason.message||e.reason))});addEventListener("load",function(){setTimeout(function(){try{sessionStorage.removeItem(K)}catch(e){}},10000)})})();`,
+          }}
+        />
         <HeadContent />
       </head>
       <body>
