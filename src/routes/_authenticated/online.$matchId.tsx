@@ -249,6 +249,12 @@ function OnlineMatchPage() {
         </AlertDialogContent>
       </AlertDialog>
 
+      {turnBanner && (
+        <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[state.players[mySeat]?.color ?? 0] } as React.CSSProperties}>
+          <span className="font-display text-2xl font-bold" style={{ color: COLOR_VAR[state.players[mySeat]?.color ?? 0] }}>{t("yourTurn")}</span>
+        </div>
+      )}
+
       {state.phase === "finished" && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm">
           <div className="w-full max-w-[360px] rounded-2xl border bg-card p-5 text-center shadow-2xl">
