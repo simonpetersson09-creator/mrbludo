@@ -40,6 +40,8 @@ export const hi: Record<TranslationKey, string> = {
 
   roll: "फेंकें",
   home: "होम",
+  notFoundTitle: "पेज नहीं मिला",
+  notFoundBody: "आप जो पेज ढूंढ रहे हैं वह मौजूद नहीं है या हटा दिया गया है।",
   forfeit: "हार मानें",
   yourTurn: "आपकी बारी – पासा फेंकें",
   theirTurn: "{name} की बारी",

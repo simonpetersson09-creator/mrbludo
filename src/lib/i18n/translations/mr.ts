@@ -40,6 +40,8 @@ export const mr: Record<TranslationKey, string> = {
 
   roll: "फेका",
   home: "मुख्यपृष्ठ",
+  notFoundTitle: "पृष्ठ सापडले नाही",
+  notFoundBody: "तुम्ही शोधत असलेले पृष्ठ अस्तित्वात नाही किंवा हलवले आहे.",
   forfeit: "हार माना",
   yourTurn: "तुमची फेरी – पासा फेका",
   theirTurn: "{name} ची फेरी",

@@ -44,6 +44,8 @@ export const sv = {
   // Spelskärm
   roll: "Kasta",
   home: "Hem",
+  notFoundTitle: "Sidan finns inte",
+  notFoundBody: "Sidan du letar efter finns inte eller har flyttats.",
   forfeit: "Ge upp",
   yourTurn: "Din tur – kasta tärningen",
   theirTurn: "{name}s tur",

@@ -40,6 +40,8 @@ export const ko: Record<TranslationKey, string> = {
 
   roll: "굴리기",
   home: "홈",
+  notFoundTitle: "페이지를 찾을 수 없습니다",
+  notFoundBody: "찾는 페이지가 없거나 이동되었습니다.",
   forfeit: "포기",
   yourTurn: "당신의 차례 – 주사위를 굴리세요",
   theirTurn: "{name}의 차례",

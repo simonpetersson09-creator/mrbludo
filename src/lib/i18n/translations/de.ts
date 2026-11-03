@@ -40,6 +40,8 @@ export const de: Record<TranslationKey, string> = {
 
   roll: "Würfeln",
   home: "Startseite",
+  notFoundTitle: "Seite nicht gefunden",
+  notFoundBody: "Die gesuchte Seite existiert nicht oder wurde verschoben.",
   forfeit: "Aufgeben",
   yourTurn: "Du bist dran – würfle",
   theirTurn: "{name} ist dran",

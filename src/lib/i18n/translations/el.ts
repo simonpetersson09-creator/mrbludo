@@ -36,6 +36,8 @@ export const el: Record<TranslationKey, string> = {
   colorBlue: "Μπλε",
   roll: "Ρίξε",
   home: "Αρχική",
+  notFoundTitle: "Η σελίδα δεν βρέθηκε",
+  notFoundBody: "Η σελίδα που ψάχνεις δεν υπάρχει ή έχει μετακινηθεί.",
   forfeit: "Παραίτηση",
   yourTurn: "Η σειρά σου – ρίξε το ζάρι",
   theirTurn: "Σειρά: {name}",

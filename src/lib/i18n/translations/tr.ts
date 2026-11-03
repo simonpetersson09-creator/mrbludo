@@ -40,6 +40,8 @@ export const tr: Record<TranslationKey, string> = {
 
   roll: "At",
   home: "Ana sayfa",
+  notFoundTitle: "Sayfa bulunamadı",
+  notFoundBody: "Aradığın sayfa yok veya taşınmış.",
   forfeit: "Pes et",
   yourTurn: "Sıra sende – zarı at",
   theirTurn: "{name} adlı oyuncunun sırası",

@@ -36,6 +36,8 @@ export const ptBR: Record<TranslationKey, string> = {
   colorBlue: "Azul",
   roll: "Rolar",
   home: "Início",
+  notFoundTitle: "Página não encontrada",
+  notFoundBody: "A página que você procura não existe ou foi movida.",
   forfeit: "Desistir",
   yourTurn: "Sua vez – role o dado",
   theirTurn: "Vez de {name}",

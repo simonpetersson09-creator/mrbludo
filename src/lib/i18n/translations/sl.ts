@@ -36,6 +36,8 @@ export const sl: Record<TranslationKey, string> = {
   colorBlue: "Modra",
   roll: "Vrzi",
   home: "Domov",
+  notFoundTitle: "Strani ni mogoče najti",
+  notFoundBody: "Stran, ki jo iščeš, ne obstaja ali je bila premaknjena.",
   forfeit: "Predaj se",
   yourTurn: "Na vrsti si – vrzi kocko",
   theirTurn: "Na vrsti: {name}",

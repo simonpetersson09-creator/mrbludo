@@ -40,6 +40,8 @@ export const te: Record<TranslationKey, string> = {
 
   roll: "వేయి",
   home: "హోమ్",
+  notFoundTitle: "పేజీ కనుగొనబడలేదు",
+  notFoundBody: "మీరు వెతుకుతున్న పేజీ లేదు లేదా తరలించబడింది.",
   forfeit: "ఓటమి ఒప్పుకో",
   yourTurn: "నీ టర్న్ – పాచిక వేయి",
   theirTurn: "{name} టర్న్",

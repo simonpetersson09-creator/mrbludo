@@ -40,6 +40,8 @@ export const uk: Record<TranslationKey, string> = {
 
   roll: "Кинути",
   home: "Додому",
+  notFoundTitle: "Сторінку не знайдено",
+  notFoundBody: "Сторінка, яку ви шукаєте, не існує або переміщена.",
   forfeit: "Здатися",
   yourTurn: "Твій хід – кинь кубик",
   theirTurn: "Хід гравця {name}",
