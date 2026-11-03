@@ -13,6 +13,7 @@ export const ca: Record<TranslationKey, string> = {
   tagline: "Ludo clàssic – quatre fitxes, un dau",
   resumeMatch: "Reprèn la partida en curs",
   yourTurnLabel: "Et toca",
+  extraRoll: "Torna a tirar!",
   waitingShort: "Esperant",
   quickMatchBot: "Partida ràpida contra l'ordinador",
   playOnline: "Juga en línia",

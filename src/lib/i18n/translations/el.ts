@@ -13,6 +13,7 @@ export const el: Record<TranslationKey, string> = {
   tagline: "Κλασικό Ludo – τέσσερα πιόνια, ένα ζάρι",
   resumeMatch: "Συνέχεια του παιχνιδιού",
   yourTurnLabel: "Η σειρά σου",
+  extraRoll: "Ρίξε ξανά!",
   waitingShort: "Αναμονή",
   quickMatchBot: "Γρήγορο παιχνίδι με τον υπολογιστή",
   playOnline: "Παίξε online",

@@ -15,6 +15,7 @@ import { AppOpenGameGate } from "@/components/AppOpenGameGate";
 import { usePostMatchExit } from "@/lib/ads/usePostMatchExit";
 import { clearGame, loadGame, loadSettings, loadStats, saveGame, saveStats } from "@/lib/ludo/storage";
 import { RollLabel } from "@/components/ludo/RollLabel";
+import { ExtraRollBanner } from "@/components/ludo/ExtraRollBanner";
 import { useOwnAvatar } from "@/lib/ludo/avatar";
 import { flag } from "@/lib/online/profile-options";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
@@ -213,6 +214,7 @@ function PlayPage() {
         </AlertDialogContent>
       </AlertDialog>
 
+      <ExtraRollBanner state={state} />
       {turnBanner != null && (
         <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[turnBanner] } as React.CSSProperties}>
           <span className="font-display text-2xl font-bold" style={{ color: COLOR_VAR[turnBanner] }}>{t("yourTurn")}</span>

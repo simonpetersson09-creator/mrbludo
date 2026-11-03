@@ -125,7 +125,7 @@ function OnlineLobby() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3 -my-0.5">
+          <div className="flex items-center gap-3 py-1.5">
             <div className="h-px flex-1 bg-border" />
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("or")}</span>
             <div className="h-px flex-1 bg-border" />

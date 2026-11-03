@@ -14,6 +14,7 @@ export const kn: Record<TranslationKey, string> = {
   tagline: "ಕ್ಲಾಸಿಕ್ ಲುಡೋ – ನಾಲ್ಕು ಗುಟ್ಟೆಗಳು, ಒಂದು ದಾಳ",
   resumeMatch: "ಚಾಲ್ತಿಯಲ್ಲಿರುವ ಪಂದ್ಯ ಮುಂದುವರಿಸಿ",
   yourTurnLabel: "ನಿನ್ನ ಸರದಿ",
+  extraRoll: "ಮತ್ತೆ ಎಸೆಯಿರಿ!",
   waitingShort: "ಕಾಯಲಾಗುತ್ತಿದೆ",
   quickMatchBot: "ಕಂಪ್ಯೂಟರ್ ವಿರುದ್ಧ ತ್ವರಿತ ಪಂದ್ಯ",
   playOnline: "ಆನ್‌ಲೈನ್ ಆಡಿ",

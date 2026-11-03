@@ -14,6 +14,7 @@ export const th: Record<TranslationKey, string> = {
   tagline: "ลูโด้คลาสสิก – สี่ตัวหมาก ลูกเต๋าหนึ่งลูก",
   resumeMatch: "เล่นเกมที่ค้างต่อ",
   yourTurnLabel: "ตาคุณแล้ว",
+  extraRoll: "ทอยอีกครั้ง!",
   waitingShort: "กำลังรอ",
   quickMatchBot: "แมตช์ด่วนกับคอมพิวเตอร์",
   playOnline: "เล่นออนไลน์",

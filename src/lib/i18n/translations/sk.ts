@@ -13,6 +13,7 @@ export const sk: Record<TranslationKey, string> = {
   tagline: "Klasické Ludo – štyri figúrky, jedna kocka",
   resumeMatch: "Pokračovať v rozohranej hre",
   yourTurnLabel: "Si na ťahu",
+  extraRoll: "Hoď znova!",
   waitingShort: "Čaká sa",
   quickMatchBot: "Rýchla hra proti počítaču",
   playOnline: "Hrať online",

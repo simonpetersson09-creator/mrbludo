@@ -14,6 +14,7 @@ export const ta: Record<TranslationKey, string> = {
   tagline: "கிளாசிக் லூடோ – நான்கு காய்கள், ஒரு பகடை",
   resumeMatch: "நடந்த போட்டியைத் தொடர்",
   yourTurnLabel: "உங்கள் முறை",
+  extraRoll: "மீண்டும் வீசுங்கள்!",
   waitingShort: "காத்திருக்கிறோம்",
   quickMatchBot: "கணினியுடன் விரைவு போட்டி",
   playOnline: "ஆன்லைனில் விளையாடு",

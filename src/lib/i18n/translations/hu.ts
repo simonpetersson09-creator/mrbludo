@@ -13,6 +13,7 @@ export const hu: Record<TranslationKey, string> = {
   tagline: "Klasszikus Ludo – négy bábu, egy dobókocka",
   resumeMatch: "Folyamatban lévő játék folytatása",
   yourTurnLabel: "Te jössz",
+  extraRoll: "Dobj újra!",
   waitingShort: "Várakozás",
   quickMatchBot: "Gyors játék a gép ellen",
   playOnline: "Online játék",

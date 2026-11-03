@@ -13,6 +13,7 @@ export const fi: Record<TranslationKey, string> = {
   tagline: "Klassinen Ludo – neljä nappulaa, yksi noppa",
   resumeMatch: "Jatka kesken olevaa peliä",
   yourTurnLabel: "Sinun vuorosi",
+  extraRoll: "Heitä uudelleen!",
   waitingShort: "Odotetaan",
   quickMatchBot: "Pikapeli tietokonetta vastaan",
   playOnline: "Pelaa verkossa",

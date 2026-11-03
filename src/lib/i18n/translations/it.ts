@@ -13,6 +13,7 @@ export const it: Record<TranslationKey, string> = {
   tagline: "Ludo classico – quattro pedine, un dado",
   resumeMatch: "Riprendi la partita in corso",
   yourTurnLabel: "Il tuo turno",
+  extraRoll: "Tira ancora!",
   waitingShort: "In attesa",
   quickMatchBot: "Partita rapida contro il computer",
   playOnline: "Gioca online",

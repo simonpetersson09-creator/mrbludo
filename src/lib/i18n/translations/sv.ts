@@ -15,6 +15,7 @@ export const sv = {
   tagline: "Klassiskt Ludo – fyra pjäser, en tärning",
   resumeMatch: "Fortsätt pågående match",
   yourTurnLabel: "Din tur",
+  extraRoll: "Slå igen!",
   waitingShort: "Väntar",
   quickMatchBot: "Snabbspel",
   playOnline: "Spela med vän",
