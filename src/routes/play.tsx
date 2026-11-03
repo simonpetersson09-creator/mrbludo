@@ -168,7 +168,7 @@ function PlayPage() {
         ))}
       </div>
 
-      <div className="flex min-h-0 flex-1 items-start justify-center [container-type:size]">
+      <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
         <div className="h-[min(100cqw,100cqh)] w-[min(100cqw,100cqh)] overflow-hidden rounded-xl shadow-2xl">
           <LudoBoard state={state} legal={humanTurn ? legal : []} onPick={doMove} captureAt={captureAt} />
         </div>
