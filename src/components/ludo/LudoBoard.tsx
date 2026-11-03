@@ -43,6 +43,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
   const boardId = useId().replace(/:/g, "");
   const previousState = useRef(state);
   const pieceElements = useRef(new Map<string, SVGGElement>());
+  const trailRef = useRef<SVGGElement>(null);
 
   useLayoutEffect(() => {
     const previous = previousState.current;
@@ -58,6 +59,38 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
     const animations: Animation[] = [];
     const waypoints = pieceWaypoints(player.color, from, ev.to, ev.piece, previous.dice, variantOf(state));
     const walk = (waypoints.length - 1) * STEP_MS;
+    // Soft footsteps: a pair of prints appears on each square the piece leaves, then fades from the back.
+    const trail = trailRef.current;
+    if (trail && waypoints.length > 2) {
+      const fill = FILL[player.color];
+      for (let i = 0; i < waypoints.length - 1; i++) {
+        const [x0, y0] = waypoints[i], [x1, y1] = waypoints[i + 1];
+        const deg = (Math.atan2(y1 - y0, x1 - x0) * 180) / Math.PI + 90;
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.setAttribute("transform", `translate(${x0 + (x1 - x0) * 0.35} ${y0 + (y1 - y0) * 0.35}) rotate(${deg})`);
+        g.setAttribute("opacity", "0");
+        for (const side of [-1, 1]) {
+          const e = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+          e.setAttribute("cx", String(side * 0.075)); e.setAttribute("cy", String(side * 0.05));
+          e.setAttribute("rx", "0.045"); e.setAttribute("ry", "0.08"); e.setAttribute("fill", fill);
+          g.appendChild(e);
+        }
+        trail.appendChild(g);
+        const appear = (i + 0.6) * STEP_MS;
+        const fadeEnd = walk + 260;
+        const fadeStart = Math.min(appear + 2 * STEP_MS, fadeEnd - 200);
+        const total = fadeEnd + i * 0 ;
+        const a = g.animate([
+          { opacity: 0 },
+          { opacity: 0, offset: appear / total },
+          { opacity: 0.55, offset: Math.min((appear + 120) / total, 0.99) },
+          { opacity: 0.45, offset: Math.max(fadeStart / total, (appear + 121) / total) },
+          { opacity: 0 },
+        ].map((k) => ({ ...k, offset: k.offset == null ? undefined : Math.min(Math.max(k.offset, 0), 1) })) as Keyframe[], { duration: total, easing: "ease-out" });
+        a.onfinish = a.oncancel = () => g.remove();
+        animations.push(a);
+      }
+    }
     animations.push(element.animate(waypoints.map(([x, y], index) => ({
       transform: index === waypoints.length - 1 ? element.style.transform : `translate(${x}px, ${y}px)`,
       offset: index / (waypoints.length - 1),
@@ -112,7 +145,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       const k = `${x.toFixed(2)},${y.toFixed(2)}`;
       const n = spots.get(k) ?? 0;
       spots.set(k, n + 1);
-      if (n > 0) { x += (n % 2 ? 0.18 : -0.18); y -= 0.14 * n; }
+      if (n > 0 && pr !== goal) { x += (n % 2 ? 0.18 : -0.18); y -= 0.14 * n; }
       pieces.push({ key: `${seat}-${idx}`, x, y, color: pl.color, seat, idx, done: pr === goal, legal: seat === state.current && legal.includes(idx) });
     });
   });
@@ -280,7 +313,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
           {p.legal && <circle className="piece-ring" r="0.5" fill="none" stroke="var(--game-gold)" strokeWidth="0.1" />}
           {p.done && <circle className="piece-done-glow" r="0.36" fill="var(--game-gold)" fillOpacity="0.35" stroke="var(--game-gold)" strokeWidth="0.06" pointerEvents="none" />}
           <g className="pawn" pointerEvents="none">
-          <g transform={p.done ? "translate(0 0.08) scale(0.76)" : "translate(0 0.1)"}>
+          <g transform={p.done ? (fia ? "translate(0 0.06) scale(0.5)" : "translate(0 0.08) scale(0.62)") : "translate(0 0.1)"}>
             <ellipse cx="0.05" cy="0.3" rx="0.36" ry="0.13" fill="var(--board-mark-line)" opacity="0.4" />
             <ellipse cy="0.23" rx="0.32" ry="0.12" fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />
             <use href={`#${boardId}-pawn-body`} fill={FILL[p.color]} stroke="var(--board-mark-line)" strokeWidth="0.035" />
