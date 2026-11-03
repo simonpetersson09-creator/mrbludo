@@ -15,6 +15,7 @@ import { LudoDie } from "@/components/ludo/LudoDie";
 import type { DiceValue } from "@/components/dice-engine/types";
 import { goalOf, legalMoves, variantOf, type GameState } from "@/lib/ludo/engine";
 import { RollLabel } from "@/components/ludo/RollLabel";
+import { ExtraRollBanner } from "@/components/ludo/ExtraRollBanner";
 import { QuickChat } from "@/components/ludo/QuickChat";
 import { pieceCenter } from "@/lib/ludo/board";
 import { act, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, startMatch } from "@/lib/online/online.functions";
@@ -229,6 +230,7 @@ function OnlineMatchPage() {
         </AlertDialogContent>
       </AlertDialog>
 
+      <ExtraRollBanner state={state} />
       {turnBanner && (
         <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[state.players[mySeat]?.color ?? 0] } as React.CSSProperties}>
           <span className="font-display text-2xl font-bold" style={{ color: COLOR_VAR[state.players[mySeat]?.color ?? 0] }}>{t("yourTurn")}</span>
