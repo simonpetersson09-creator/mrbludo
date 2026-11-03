@@ -222,7 +222,7 @@ function PlayPage() {
       <ExtraRollBanner state={state} />
       {turnBanner != null && (
         <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[turnBanner] } as React.CSSProperties}>
-          <span className="font-display text-2xl font-bold" style={{ color: COLOR_VAR[turnBanner] }}>{t("yourTurn")}</span>
+          <span className="font-display text-[13px] font-bold" style={{ color: COLOR_VAR[turnBanner] }}>{t("yourTurn")}</span>
         </div>
       )}
 

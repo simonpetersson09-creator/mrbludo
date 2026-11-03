@@ -250,7 +250,7 @@ function OnlineMatchPage() {
       <ExtraRollBanner state={state} />
       {turnBanner && (
         <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[state.players[mySeat]?.color ?? 0] } as React.CSSProperties}>
-          <span className="font-display text-2xl font-bold" style={{ color: COLOR_VAR[state.players[mySeat]?.color ?? 0] }}>{t("yourTurn")}</span>
+          <span className="font-display text-[13px] font-bold" style={{ color: COLOR_VAR[state.players[mySeat]?.color ?? 0] }}>{t("yourTurn")}</span>
         </div>
       )}
 
@@ -360,7 +360,7 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
         <p className="text-sm text-muted-foreground">{match.is_private ? t("privateMatch") : t("quickMatch")} · {t(match.variant === "fia" ? "modeFia" : "modeClassic")} · {t("playersCount", { n: seats.length, max: match.max_players })}</p>
         <button className="mt-3 flex items-center justify-center gap-2 rounded-[10px] border border-gold bg-card py-3" onClick={() => { navigator.clipboard?.writeText(match.code); toast.success(t("codeCopied")); }}>
           <span className="text-xs text-muted-foreground">{t("matchCode")}</span>
-          <span className="font-display text-2xl font-bold tracking-[0.3em] text-gold">{match.code}</span>
+          <span className="font-display text-[13px] font-bold tracking-[0.3em] text-gold">{match.code}</span>
           <Copy size={14} />
         </button>
         {match.is_private && (

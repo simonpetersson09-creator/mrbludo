@@ -21,7 +21,7 @@ export function ExtraRollBanner({ state }: { state: GameState }) {
   if (color == null) return null;
   return (
     <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[color] } as React.CSSProperties}>
-      <span className="font-display text-2xl font-bold" style={{ color: COLOR_VAR[color] }}>🎲 {t("extraRoll")}</span>
+      <span className="font-display text-[13px] font-bold" style={{ color: COLOR_VAR[color] }}>🎲 {t("extraRoll")}</span>
     </div>
   );
 }
