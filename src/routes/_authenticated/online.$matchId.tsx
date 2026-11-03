@@ -187,8 +187,8 @@ function OnlineMatchPage() {
   return (
     <main className="game-screen">
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
-       <div className="flex flex-col gap-2" style={{ width: "min(100cqw, calc(100cqh - 34px))" }}>
-      <div className="flex gap-1.5">
+       <div className={`game-board-stack flex flex-col gap-2 ${state.players.length === 4 ? "game-board-stack-four" : ""}`}>
+      <div className={`game-player-list ${state.players.length === 4 ? "game-player-list-four" : ""}`}>
         {state.players.map((p, i) => {
           const s = seatOf(p.id);
           const away = s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited;
@@ -196,7 +196,7 @@ function OnlineMatchPage() {
             <div key={p.id} className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "border-gold bg-card" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}>
               <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
               {p.isBot ? <span className="shrink-0 text-sm">🤖</span> : <PlayerAvatar emoji={s?.avatar ?? "🎲"} image={pics[s?.user_id ?? ""]} className="h-5 w-5 text-xs" />}
-              <span className="truncate font-semibold">{p.name}</span>
+              <span className="game-player-name font-semibold">{p.name}</span>
               <span className="ml-auto shrink-0 text-muted-foreground">{away ? <WifiOff size={11} className="inline" /> : s ? flag(s.country) : ""} {state.pieces[i].filter((x) => x === GOAL).length}/4</span>
             </div>
           );
@@ -214,11 +214,11 @@ function OnlineMatchPage() {
         <p className="h-4 text-xs text-muted-foreground">{sub || (state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
       </div>
 
-      <div className="flex h-[132px] shrink-0 gap-2.5">
-        <div className="w-[132px] shrink-0">
+      <div className="game-bottom-controls">
+        <div className="game-throw-area">
           <LudoDie value={face} rolling={rolling} onTap={() => send({ kind: "roll" })} disabled={!canRoll} pipColor={COLOR_VAR[me.color]} />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-2">
+        <div className="game-command-area">
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
             {t("roll")}
           </button>

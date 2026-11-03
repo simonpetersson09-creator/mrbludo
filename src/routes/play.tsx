@@ -156,15 +156,15 @@ function PlayPage() {
   return (
     <main className="game-screen">
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
-       <div className="flex flex-col gap-2" style={{ width: "min(100cqw, calc(100cqh - 34px))" }}>
-      <div className="flex gap-1.5">
+       <div className={`game-board-stack flex flex-col gap-2 ${state.players.length === 4 ? "game-board-stack-four" : ""}`}>
+       <div className={`game-player-list ${state.players.length === 4 ? "game-player-list-four" : ""}`}>
         {state.players.map((p, i) => (
           <div
             key={p.id}
             className={`flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border px-2 py-1 text-xs transition ${i === state.current && state.phase !== "finished" ? "border-gold bg-card" : "border-transparent bg-surface opacity-70"} ${p.forfeited ? "line-through opacity-40" : ""}`}
           >
             <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
-            <span className="truncate font-semibold">{p.name}</span>
+            <span className="game-player-name font-semibold">{p.name}</span>
             <span className="ml-auto shrink-0 text-muted-foreground">{p.isBot ? "🤖" : ""}{state.pieces[i].filter((x) => x === 56).length}/4</span>
           </div>
         ))}
@@ -181,11 +181,11 @@ function PlayPage() {
         <p className="h-4 text-xs text-muted-foreground">{sub}</p>
       </div>
 
-      <div className="flex h-[132px] shrink-0 gap-2.5">
-        <div className="w-[132px] shrink-0">
+      <div className="game-bottom-controls">
+        <div className="game-throw-area">
           <LudoDie value={face} rolling={rolling} onTap={doRoll} disabled={!canRoll} pipColor={COLOR_VAR[me.color]} />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-2">
+        <div className="game-command-area">
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={doRoll} disabled={!canRoll}>
             {t("roll")}
           </button>

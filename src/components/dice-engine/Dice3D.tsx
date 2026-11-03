@@ -485,7 +485,7 @@ function Dice3DImpl({
                   smoothness={10}
                   bevelSegments={8}
                   creaseAngle={0.5}
-                  material={design ? designMaterial(design, held) : platMat ? (held ? platMat.held : platMat.body) : skin && skin !== 'white' && skin in SKIN_MATERIALS ? (held ? SKIN_MATERIALS[skin as keyof typeof SKIN_MATERIALS].held : SKIN_MATERIALS[skin as keyof typeof SKIN_MATERIALS].body) : held ? heldMaterial : bodyMaterial}
+                  material={design ? designMaterial(design, held) : platMat ? (held ? platMat.held : platMat.body) : typeof skin === 'string' && skin !== 'white' && skin in SKIN_MATERIALS ? (held ? SKIN_MATERIALS[skin as keyof typeof SKIN_MATERIALS].held : SKIN_MATERIALS[skin as keyof typeof SKIN_MATERIALS].body) : held ? heldMaterial : bodyMaterial}
                 />
                 {FACES.map((face) => (
                   <group key={face.value} rotation={face.rotation}>
