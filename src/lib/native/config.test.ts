@@ -12,6 +12,11 @@ describe("approved native configuration", () => {
   it("uses approved public Apple team F43HQMHCAT for Debug and Release", () => {
     expect(read("ios/App/App.xcodeproj/project.pbxproj").match(/DEVELOPMENT_TEAM = F43HQMHCAT;/g)).toHaveLength(2);
   });
+  it("connects the existing QR scanner to iOS and Android", () => {
+    expect(read("ios/App/CapApp-SPM/Package.swift")).toContain("node_modules/@capacitor/barcode-scanner");
+    expect(read("android/capacitor.settings.gradle")).toContain("node_modules/@capacitor/barcode-scanner/android");
+    expect(read("android/app/capacitor.build.gradle")).toContain("implementation project(':capacitor-barcode-scanner')");
+  });
   it("declares all 40 actual UI languages on both platforms", () => {
     const plist = read("ios/App/App/Info.plist");
     const locales = plist.match(/<key>CFBundleLocalizations<\/key>\s*<array>([\s\S]*?)<\/array>/)?.[1] ?? "";

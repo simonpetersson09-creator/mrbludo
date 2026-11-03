@@ -46,6 +46,7 @@ bun run native:open:ios
 `native:build:ios` attempts an unsigned simulator build, not an installable IPA. In Xcode verify target App → Signing & Capabilities → team `F43HQMHCAT` and Bundle ID `com.simonpetersson.mrbludo`, select the connected iPhone, then Product → Run. Debug prepares the development APNs environment; Release prepares production. Xcode archive/export must validate the final signed entitlements against the provisioning profile. No registration, permission request or push delivery is implemented by these settings.
 
 After both syncs, `bun run native:verify` checks both platforms' files, versions, plugins and copied package. It does not compile Swift or Java.
+Without a generated `dist-native` package, `bun run native:verify --source-only` checks only source configuration and plugin references; it does not establish sync/build readiness.
 
 ## Temporary diagnostics
 

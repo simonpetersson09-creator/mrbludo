@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 const [action = "verify", platform] = process.argv.slice(2);
+const sourceOnly = process.argv.includes("--source-only");
 function run(command, args, cwd) {
   const result = spawnSync(command, args, { stdio: "inherit", env: process.env, cwd, shell: process.platform === "win32" });
   if (result.error) { console.error(`${command} is unavailable: ${result.error.message}`); process.exit(1); }
@@ -31,9 +32,9 @@ try {
     }
     const config = readFileSync("capacitor.config.ts", "utf8");
     if (!config.includes('webDir: "dist-native"') || config.includes("server:")) throw new Error("Native app must launch the packaged game, not a remote website");
-    if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web first");
-    const files = readdirSync("dist-native/assets");
-    if (!files.some(f => f.endsWith("woff2")) || !files.some(f => f.startsWith("DiceScene"))) throw new Error("Bundled fonts or 3D die missing");
+    if (!sourceOnly && !existsSync("dist-native/index.html")) throw new Error("Source checks available with --source-only; full verification requires bun run native:web and both platform syncs");
+    const files = sourceOnly ? [] : readdirSync("dist-native/assets");
+    if (!sourceOnly && (!files.some(f => f.endsWith("woff2")) || !files.some(f => f.startsWith("DiceScene")))) throw new Error("Bundled fonts or 3D die missing");
     for (const file of files.filter(f => /\.(js|html|css)$/.test(f))) {
       // The auth SDK contains a literal prefix detector; reject real keys, not that detector.
       if (/ixzqnmocplgbsawuufsm|sb_secret_[A-Za-z0-9_-]{12,}|supabaseAdmin|SUPABASE_SERVICE_ROLE_KEY/.test(readFileSync(`dist-native/assets/${file}`, "utf8"))) throw new Error("Forbidden backend configuration in native package");
@@ -44,7 +45,7 @@ try {
     if (!config.includes('appId: "com.simonpetersson.mrbludo"') || !gradle.includes('applicationId "com.simonpetersson.mrbludo"') || (ios.match(/PRODUCT_BUNDLE_IDENTIFIER = com\.simonpetersson\.mrbludo;/g) || []).length !== 2) throw new Error("Approved Ludo app identity missing");
     if (!gradle.includes('versionCode 1') || !gradle.includes('versionName "1.0"') || (ios.match(/CURRENT_PROJECT_VERSION = 1;/g) || []).length !== 2 || (ios.match(/MARKETING_VERSION = 1.0;/g) || []).length !== 2) throw new Error("Android/iOS app versions differ");
     if (!spm.includes('exact: "8.6.0"')) throw new Error("iOS Capacitor package version differs");
-    for (const path of ["android/app/src/main/assets", "ios/App/App"]) {
+    for (const path of sourceOnly ? [] : ["android/app/src/main/assets", "ios/App/App"]) {
       requireFiles([`${path}/public/index.html`, `${path}/capacitor.config.json`]);
       const synced = JSON.parse(readFileSync(`${path}/capacitor.config.json`, "utf8"));
       if (synced.appId !== "com.simonpetersson.mrbludo" || synced.server?.url) throw new Error("Synced native configuration loads wrong identity or remote website");
@@ -57,7 +58,8 @@ try {
     for (const file of ["capacitor.config.ts", "android/app/build.gradle", "ios/App/App.xcodeproj/project.pbxproj"]) {
       if (/ixzqnmocplgbsawuufsm|sb_secret_|SERVICE_ROLE_KEY/.test(readFileSync(file, "utf8"))) throw new Error("Forbidden production configuration");
     }
-    console.log("Required native files, Capacitor 8.6.0 plugins, app version 1.0 (1), synced local package, approved identity/team, language declarations and push entitlements verified. No signing credentials; this is not a native compilation.");
+    console.log("Required native files, Capacitor 8.6.0 plugins, app version 1.0 (1), approved identity/team, language declarations and push entitlements verified. No signing credentials; this is not a native compilation.");
+    console.log(sourceOnly ? "Source-only: packaged assets and platform sync are NOT verified." : "Synced local package and bundled resources verified.");
     console.log("Mac/Xcode available:", existsSync("/Applications/Xcode.app"), "Android SDK configured:", !!(process.env.ANDROID_HOME || process.env.ANDROID_SDK_ROOT));
   } else if (["sync", "open", "build"].includes(action) && ["ios", "android"].includes(platform)) {
     if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web before sync or build");
