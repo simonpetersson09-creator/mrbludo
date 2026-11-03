@@ -26,3 +26,11 @@
 - [x] Friend list layout vs Yatzy
 - [~] Pre-release check — 138 tests + browser screens done; live two-device online run, push not built
 - [ ] App talks directly to server (native) — needs publish approval (server address) or larger rewrite
+- [x] Launch audit C1–C4: heartbeat/quick-status membership check, account deletion uses "playing", atomic stats increment, one quick-play search per player (194 tests; not live two-device tested)
+## Waiting on Simon
+- [ ] AdMob: publisher ID (pub-…) for app-ads.txt, Android app ID + ad units
+- [ ] Apple push key (APNs) as server secret; enable Push + Associated Domains for Ludo app ID
+- [ ] Firebase project for Android notifications (google-services.json)
+- [ ] Android signing key fingerprint (app links)
+- [ ] Privacy policy: approve text + company/support details
+- [ ] Store material: screenshots, descriptions, age rating, privacy/Data safety, ad declarations

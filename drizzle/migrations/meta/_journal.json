@@ -36,6 +36,13 @@
       "when": 1793705176001,
       "tag": "0004_match_variant",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793725791941,
+      "tag": "0005_atomic_stats_and_quick_lock",
+      "breakpoints": true
     }
   ]
 }

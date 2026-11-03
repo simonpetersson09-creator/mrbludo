@@ -64,17 +64,22 @@ async function commit(db: Admin, matchId: string, version: number, prev: GameSta
   if (error) throw error;
   if (!data?.length) throw new MatchError("conflict");
   const deltas = statDeltas(prev, next);
+  // One atomic increment per player in the database, so concurrent matches never overwrite each other.
   for (const [uid, d] of Object.entries(deltas)) {
-    const { data: s } = await db.from("player_stats").select("*").eq("user_id", uid).maybeSingle();
-    const base = s ?? { user_id: uid, played: 0, wins: 0, captures: 0, pieces_home: 0, forfeits: 0 };
-    await db.from("player_stats").upsert({
-      user_id: uid, played: base.played + d.played, wins: base.wins + d.wins, captures: base.captures + d.captures,
-      pieces_home: base.pieces_home + d.pieces_home, forfeits: base.forfeits + d.forfeits, updated_at: now,
+    const { error: statErr } = await db.rpc("add_player_stats", {
+      _uid: uid, _played: d.played, _wins: d.wins, _captures: d.captures, _pieces_home: d.pieces_home, _forfeits: d.forfeits,
     });
+    if (statErr) console.error("add_player_stats failed", uid, statErr.message);
   }
   if (next.lastEvent?.kind === "forfeit" && next.lastEvent !== prev.lastEvent)
     await logEventRow(db, { user_id: next.players[next.lastEvent.player].id, kind: "forfeit", detail: { match_id: matchId } });
   if (finished) await logEventRow(db, { kind: "match_finished", detail: { match_id: matchId, winner: next.winner == null ? null : next.players[next.winner]?.id, turns: next.turnCount } });
+}
+
+/** Only seated players may poll or drive a match (heartbeat, quick-play status). */
+async function isMember(db: Admin, matchId: string, userId: string) {
+  const { data } = await db.from("match_players").select("user_id").eq("match_id", matchId).eq("user_id", userId).maybeSingle();
+  return !!data;
 }
 
 function fail(e: unknown): never {
@@ -143,6 +148,20 @@ async function pruneQuickSeats(db: Admin, matchId: string) {
 
 export const quickMatchAction = async ({ data, context }: { data: ReturnType<typeof quickMatchInput>; context: OnlineContext }) => {
     const db = await admin();
+    // One search at a time per player: a parallel request waits briefly instead of seating the player twice.
+    const stale = new Date(Date.now() - 15_000).toISOString();
+    await db.from("quick_search_locks").delete().eq("user_id", context.userId).lt("locked_at", stale);
+    let locked = false;
+    for (let i = 0; i < 20 && !locked; i++) {
+      const { error } = await db.from("quick_search_locks").insert({ user_id: context.userId });
+      if (!error) locked = true; else await new Promise((r) => setTimeout(r, 250));
+    }
+    if (!locked) throw new Error("err:conflict");
+    try { return await quickMatchInner(db, data, context); }
+    finally { await db.from("quick_search_locks").delete().eq("user_id", context.userId); }
+  };
+
+async function quickMatchInner(db: Admin, data: ReturnType<typeof quickMatchInput>, context: OnlineContext) {
     // A new search replaces any earlier unfinished search by this player (double tap, reload).
     const { data: mineWaiting } = await db.from("match_players").select("match_id, matches!inner(status, is_private)")
       .eq("user_id", context.userId).eq("matches.status", "waiting").eq("matches.is_private", false);
@@ -164,7 +183,7 @@ export const quickMatchAction = async ({ data, context }: { data: ReturnType<typ
     if (!m) throw new Error("err:create_failed");
     await seatUser(db, m.id, data.maxPlayers, context.userId);
     return { id: m.id };
-  };
+}
 
 /**
  * Yatzy's finalize step: after the search window, start with the humans found and
@@ -191,6 +210,7 @@ export const quickFinalizeAction = async ({ data, context }: { data: ReturnType<
 
 export const quickStatusAction = async ({ data, context }: { data: ReturnType<typeof startMatchInput>; context: OnlineContext }) => {
     const db = await admin();
+    if (!(await isMember(db, data.matchId, context.userId))) return { status: "abandoned", count: 0, others: [] as string[] };
     await db.from("match_players").update({ last_seen: new Date().toISOString() }).eq("match_id", data.matchId).eq("user_id", context.userId);
     const { data: m } = await db.from("matches").select("status").eq("id", data.matchId).single();
     const { data: seats } = await db.from("match_players").select("user_id, display_name").eq("match_id", data.matchId);
@@ -250,6 +270,7 @@ export const actAction = async ({ data, context }: { data: ReturnType<typeof act
 export const heartbeatAction = async ({ data, context }: { data: ReturnType<typeof heartbeatInput>; context: OnlineContext }) => {
     const db = await admin();
     const now = Date.now();
+    if (!(await isMember(db, data.matchId, context.userId))) throw new Error("err:not_in_match");
     await db.from("match_players").update({ last_seen: new Date(now).toISOString() }).eq("match_id", data.matchId).eq("user_id", context.userId);
     const { data: m } = await db.from("matches").select("*").eq("id", data.matchId).single();
     if (!m || m.status !== "playing" || !m.turn_started_at) return { ok: true };
@@ -438,7 +459,7 @@ export const deletePlayerDataAction = async ({ context }: { data?: unknown; cont
     const db = await admin();
     const uid = context.userId;
     const { data: seats } = await db.from("match_players").select("match_id, matches(status)").eq("user_id", uid);
-    const active = (seats ?? []).filter((r) => (r.matches as { status?: string } | null)?.status === "active").map((r) => r.match_id);
+    const active = (seats ?? []).filter((r) => (r.matches as { status?: string } | null)?.status === "playing").map((r) => r.match_id);
     // In a running match the seat stays (the board needs it) but loses the name and is treated as left.
     if (active.length) await db.from("match_players").update({ display_name: "—", avatar: "🎲", left_at: new Date().toISOString() }).eq("user_id", uid).in("match_id", active);
     let seatDelete = db.from("match_players").delete().eq("user_id", uid);
