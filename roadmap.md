@@ -1,5 +1,5 @@
 # Roadmap
-- [ ] Verify Fia geometry against the supplied board photograph: count outer/lane positions and confirm ambiguous starting circles before changing geometry
+- [x] Correct Fia to the supplied photo and confirmed start: 40 outer positions, four lane positions per color and separate goal; 135 tests passed, local browser move checked, no publication (live online/device checks not performed)
 - [x] Black-framed game cloth, turn lock verification, clickable destinations and square-by-square piece animation — 13 tests and local browser flow passed; online turn gate reviewed, not live-session tested
 - [x] Game view: two-column player names, right-edge controls, framed throw cloth, smaller player-colored left-entry die, board depth and legal destination markers; local mobile-browser flow and 10 tests passed (physical phone and online-session rendering not tested)
 - [x] Audit native language, iOS/Android settings and Yatzy read-only reference
