@@ -20,7 +20,8 @@ export function LudoDie({ value, rolling, pipColor, onTap, disabled }: Props) {
   useEffect(() => setMounted(true), []);
   useEffect(() => {
     const token = pipColor?.match(/^var\((--[^)]+)\)$/)?.[1]?.replace(/^--ludo-/, "--board-");
-    setBodyColor(token ? getComputedStyle(document.documentElement).getPropertyValue(token).trim() : pipColor ?? "");
+    const raw = token ? getComputedStyle(document.documentElement).getPropertyValue(token).trim() : pipColor ?? "";
+    setBodyColor(toRgb(raw));
   }, [pipColor]);
   return (
     <button
@@ -34,9 +35,21 @@ export function LudoDie({ value, rolling, pipColor, onTap, disabled }: Props) {
       <span className="throw-cloth" aria-hidden="true" />
       {mounted && (
         <Suspense fallback={null}>
-          <DiceScene className={`throw-die ${rolling ? "throw-die-enter" : ""}`} values={[value]} rolling={rolling} fill={0.68} entryFrom="center" skin={bodyColor ? { id: `ludo-${bodyColor}`, body: bodyColor, pip: getComputedStyle(document.documentElement).getPropertyValue("--board-mark").trim() } : undefined} />
+          <DiceScene className={`throw-die ${rolling ? "throw-die-enter" : ""}`} values={[value]} rolling={rolling} fill={0.68} entryFrom="center" skin={bodyColor ? { id: `ludo-${bodyColor}`, body: bodyColor, pip: toRgb(getComputedStyle(document.documentElement).getPropertyValue("--board-mark").trim()) } : undefined} />
         </Suspense>
       )}
     </button>
   );
+}
+
+/** Three.js cannot parse oklch(); let the browser convert any CSS color to rgb hex. */
+function toRgb(color: string): string {
+  if (!color) return "";
+  const ctx = document.createElement("canvas").getContext("2d");
+  if (!ctx) return color;
+  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, 1, 1);
+  const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+  return `#${[r, g, b].map((v) => (v ?? 0).toString(16).padStart(2, "0")).join("")}`;
 }
