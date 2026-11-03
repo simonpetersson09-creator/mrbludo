@@ -85,7 +85,7 @@ function HomePage() {
         <h1 className="brand-wordmark text-4xl sm:text-5xl">Mr B Ludo</h1>
         <p className="brand-tagline">{t("tagline")}</p>
       </div>
-      <div className="w-full mt-8 sm:mt-10 flex flex-col gap-4">
+      <div className="w-full mt-8 sm:mt-10">
       {resume && (
         <div className="home-stack">
           <Link to="/play" className={`home-match-card font-display ${resume.myTurn ? "home-match-card-turn" : "home-match-card-waiting"}`}>
@@ -100,6 +100,8 @@ function HomePage() {
           </Link>
         </div>
       )}
+      </div>
+      <div className="w-full">
       <div className="home-stack">
         <button className="home-action font-display" aria-expanded={showQuick} onClick={() => setShowQuick((v) => !v)}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
         {showQuick && (
@@ -150,7 +152,9 @@ function HomePage() {
           </div>
         )}
       </div>
+      </div>
       <HomeStats />
+     </div>
       {search && (
         <QuickMatchSearch
           players={search}
