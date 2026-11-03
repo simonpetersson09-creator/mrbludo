@@ -19,7 +19,7 @@ export function LudoDie({ value, rolling, pipColor, onTap, disabled }: Props) {
   const [bodyColor, setBodyColor] = useState("");
   useEffect(() => setMounted(true), []);
   useEffect(() => {
-    const token = pipColor?.match(/^var\((--[^)]+)\)$/)?.[1];
+    const token = pipColor?.match(/^var\((--[^)]+)\)$/)?.[1]?.replace(/^--ludo-/, "--board-");
     setBodyColor(token ? getComputedStyle(document.documentElement).getPropertyValue(token).trim() : pipColor ?? "");
   }, [pipColor]);
   return (
