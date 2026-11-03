@@ -59,6 +59,8 @@ export const da: Record<TranslationKey, string> = {
   reconnecting: "Genopretter forbindelse…",
   turnTimeLeft: "{s} s tilbage på trækket",
   turnTimeOut: "Tiden er gået – serveren spiller trækket",
+  autoPlayedMine: "Tiden er gået – tricket blev spillet for dig",
+  autoPlayedOther: "Tiden er gået – serveren spillede for {name}",
   forfeitTitle: "Give op i kampen?",
   leaveMatchConfirm: "Forlad kampen? Den gemmes, og du kan fortsætte senere.",
   forfeitBodyLocal: "Kampen afsluttes og tæller som et nederlag. Det kan ikke fortrydes.",

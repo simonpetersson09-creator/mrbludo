@@ -59,6 +59,8 @@ export const ja: Record<TranslationKey, string> = {
   reconnecting: "再接続中…",
   turnTimeLeft: "残り{s}秒",
   turnTimeOut: "時間切れ – サーバーが自動で動かします",
+  autoPlayedMine: "時間切れ – あなたの番が自動で指されました",
+  autoPlayedOther: "時間切れ – サーバーが{name}の番を指しました",
   forfeitTitle: "対局を降参しますか？",
   leaveMatchConfirm: "試合を離れますか？保存されるので、後で続けられます。",
   forfeitBodyLocal: "対局は終了し、敗北として記録されます。取り消せません。",

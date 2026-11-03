@@ -59,6 +59,8 @@ export const pa: Record<TranslationKey, string> = {
   reconnecting: "ਮੁੜ ਜੁੜ ਰਿਹਾ ਹੈ…",
   turnTimeLeft: "ਚਾਲ ਲਈ {s} ਸਕਿੰਟ ਬਾਕੀ",
   turnTimeOut: "ਸਮਾਂ ਖਤਮ – ਸਰਵਰ ਚਾਲ ਚਲੇਗਾ",
+  autoPlayedMine: "ਸਮਾਂ ਖਤਮ – ਚਾਲ ਤੁਹਾਡੇ ਲਈ ਖੇਡੀ ਗਈ",
+  autoPlayedOther: "ਸਮਾਂ ਖਤਮ – ਸਰਵਰ ਨੇ {name} ਲਈ ਖੇਡਿਆ",
   forfeitTitle: "ਮੈਚ ਵਿੱਚ ਹਾਰ ਮਨੋਗੇ?",
   leaveMatchConfirm: "ਮੈਚ ਛੱਡਣਾ ਹੈ? ਇਹ ਸੰਭਾਲਿਆ ਗਿਆ ਹੈ ਅਤੇ ਤੁਸੀਂ ਬਾਅਦ ਵਿੱਚ ਜਾਰੀ ਰੱਖ ਸਕਦੇ ਹੋ।",
   forfeitBodyLocal: "ਮੈਚ ਖਤਮ ਹੋਵੇਗਾ ਅਤੇ ਹਾਰ ਗਿਣਿਆ ਜਾਵੇਗਾ। ਇਹ ਵਾਪਸ ਨਹੀਂ ਲਿਆ ਜਾ ਸਕਦਾ।",

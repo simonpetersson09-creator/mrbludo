@@ -59,6 +59,8 @@ export const tr: Record<TranslationKey, string> = {
   reconnecting: "Yeniden bağlanıyor…",
   turnTimeLeft: "Hamle için {s} sn kaldı",
   turnTimeOut: "Süre doldu – sunucu hamleyi oynuyor",
+  autoPlayedMine: "Süre doldu – hamle senin için oynandı",
+  autoPlayedOther: "Süre doldu – sunucu {name} için oynadı",
   forfeitTitle: "Maçtan pes edilsin mi?",
   leaveMatchConfirm: "Maçtan çıkılsın mı? Kaydedilir, daha sonra devam edebilirsin.",
   forfeitBodyLocal: "Maç biter ve yenilgi sayılır. Geri alınamaz.",

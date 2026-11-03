@@ -50,30 +50,44 @@ export function seatOf(state: GameState, userId: string): number {
   return state.players.findIndex((p) => p.id === userId);
 }
 
+/** Marks a step the server played for a player who was away, so the app can say so afterwards. */
+export interface AutoMark { seat: number; at: number }
+export type MarkedState = GameState & { auto?: AutoMark };
+
+/** A step the player took themselves is never "played for you": drop an old mark. */
+export function unmark(state: GameState): GameState {
+  if ((state as MarkedState).auto === undefined) return state;
+  const { auto: _auto, ...rest } = state as MarkedState;
+  return rest as GameState;
+}
+
 /** Apply one player action. `roll` is the server-generated die value. */
 export function performAction(state: GameState, userId: string, action: Action, roll: () => number): GameState {
   const seat = seatOf(state, userId);
   if (seat < 0) throw new MatchError("not_member");
   if (state.phase === "finished") throw new MatchError("finished");
-  if (action.kind === "forfeit") return forfeit(state, seat);
+  if (action.kind === "forfeit") return unmark(forfeit(state, seat));
   if (state.players[seat].forfeited) throw new MatchError("not_member");
   if (state.current !== seat) throw new MatchError("not_your_turn");
   if (action.kind === "roll") {
     if (state.phase !== "roll") throw new MatchError("bad_phase");
-    return applyRoll(state, roll());
+    return unmark(applyRoll(state, roll()));
   }
   if (state.phase !== "move") throw new MatchError("bad_phase");
   if (!legalMoves(state).includes(action.piece)) throw new MatchError("illegal");
   if (action.walkOut && !canWalkOut(state, action.piece)) throw new MatchError("illegal");
-  return applyMove(state, action.piece, !!action.walkOut);
+  return unmark(applyMove(state, action.piece, !!action.walkOut));
 }
 
 /** Server auto-step for an idle/absent current player (roll, or best legal move). */
 export function autoStep(state: GameState, roll: () => number): GameState {
   if (state.phase === "finished") return state;
-  if (state.phase === "roll") return applyRoll(state, roll());
-  const a = chooseBotAction(state);
-  return applyMove(state, a.piece, a.walkOut);
+  const seat = state.current;
+  const next = state.phase === "roll"
+    ? applyRoll(state, roll())
+    : (() => { const a = chooseBotAction(state); return applyMove(state, a.piece, a.walkOut); })();
+  // Computer seats need no notice; only a human who was away is told the server moved for them.
+  return state.players[seat]?.isBot ? next : ({ ...next, auto: { seat, at: Date.now() } } as MarkedState);
 }
 
 export interface StatDelta { played: number; wins: number; captures: number; pieces_home: number; forfeits: number }

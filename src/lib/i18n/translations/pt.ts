@@ -59,6 +59,8 @@ export const pt: Record<TranslationKey, string> = {
   reconnecting: "A reconectar…",
   turnTimeLeft: "{s} s restantes para a jogada",
   turnTimeOut: "Tempo esgotado – o servidor joga a jogada",
+  autoPlayedMine: "O tempo acabou – a jogada foi feita por ti",
+  autoPlayedOther: "O tempo acabou – o servidor jogou por {name}",
   forfeitTitle: "Desistir da partida?",
   leaveMatchConfirm: "Sair da partida? Ela fica guardada e podes continuar mais tarde.",
   forfeitBodyLocal: "A partida termina e conta como derrota. Não pode ser anulado.",

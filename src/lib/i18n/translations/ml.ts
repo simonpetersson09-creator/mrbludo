@@ -59,6 +59,8 @@ export const ml: Record<TranslationKey, string> = {
   reconnecting: "വീണ്ടും ബന്ധിപ്പിക്കുന്നു…",
   turnTimeLeft: "നീക്കത്തിന് {s} സെക്കൻഡ് ബാക്കി",
   turnTimeOut: "സമയം കഴിഞ്ഞു – സെർവർ നീക്കം ചെയ്യും",
+  autoPlayedMine: "സമയം തീർന്നു – നിങ്ങൾക്കായി ചലം കളിച്ചു",
+  autoPlayedOther: "സമയം തീർന്നു – സെർവർ {name}-നായി കളിച്ചു",
   forfeitTitle: "മത്സരത്തിൽ കീഴടങ്ങുമോ?",
   leaveMatchConfirm: "മത്സരം വിടണോ? ഇത് സേവ് ചെയ്യപ്പെടും, പിന്നീട് തുടരാം.",
   forfeitBodyLocal: "മത്സരം അവസാനിക്കും, തോൽവിയായി കണക്കാക്കും. പഴയപടിയാക്കാൻ കഴിയില്ല.",

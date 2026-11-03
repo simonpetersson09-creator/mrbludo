@@ -55,6 +55,8 @@ export const ca: Record<TranslationKey, string> = {
   reconnecting: "S'està reconnectant…",
   turnTimeLeft: "Queden {s} s per al moviment",
   turnTimeOut: "Temps esgotat – el servidor fa el moviment",
+  autoPlayedMine: "El temps s'ha acabat – la jugada es va fer per vostè",
+  autoPlayedOther: "El temps s'ha acabat – el servidor va jugar per {name}",
   forfeitTitle: "Vols abandonar la partida?",
   leaveMatchConfirm: "Sortir de la partida? Es desa i podràs continuar més tard.",
   forfeitBodyLocal: "La partida s'acaba i compta com una derrota. No es pot desfer.",

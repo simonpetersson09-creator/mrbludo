@@ -55,6 +55,8 @@ export const hu: Record<TranslationKey, string> = {
   reconnecting: "Újracsatlakozás…",
   turnTimeLeft: "Még {s} mp a lépésre",
   turnTimeOut: "Lejárt az idő – a szerver lép helyetted",
+  autoPlayedMine: "Lejárt az idő – a lépést helyetted játszották",
+  autoPlayedOther: "Lejárt az idő – a szerver játszott {name} helyett",
   forfeitTitle: "Feladod a játékot?",
   leaveMatchConfirm: "Kilépsz a meccsből? El lesz mentve, később folytathatod.",
   forfeitBodyLocal: "A játék véget ér, és vereségnek számít. Ezt nem lehet visszavonni.",
