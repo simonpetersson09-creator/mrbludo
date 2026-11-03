@@ -25,11 +25,7 @@ export async function startNativeRuntime(goHome: () => void) {
     window.dispatchEvent(new Event(connected ? "online" : "offline"));
     if (connected) resume();
   }));
-  handles.push(await App.addListener("backButton", () => {
-    if (document.querySelector('[role="alertdialog"], [role="dialog"]')) {
-      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-    } else if (window.location.pathname !== "/") goHome();
-    else App.exitApp();
-  }));
+  // AndroidBackButton owns back navigation; a second handler bypassed its
+  // leave-match confirmation and could exit instead of minimizing.
   return () => { handles.forEach(handle => { void handle.remove(); }); };
 }

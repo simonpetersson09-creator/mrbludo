@@ -56,7 +56,7 @@ export const LANGUAGES: { code: Language; label: string; flag: string }[] = [
 
 /** Map a BCP-47 tag (e.g. "sv-SE", "nb-NO") to a supported app language. */
 export function mapTagToLanguage(tag: string): Language | null {
-  const parts = tag.toLowerCase().split(/[-_]/);
+  const parts = tag.trim().toLowerCase().split(/[-_]/);
   const base = parts[0];
   switch (base) {
     case "sv": return "sv";
@@ -82,7 +82,7 @@ export function mapTagToLanguage(tag: string): Language | null {
     case "bs":
     case "sr": return "hr";
     case "hu": return "hu";
-    case "pt": return parts[1] === "pt" ? "pt" : "pt-BR";
+    case "pt": return parts.slice(1).includes("pt") ? "pt" : "pt-BR";
     case "id":
     case "in": return "id";
     case "ms": return "ms";
@@ -126,8 +126,12 @@ export function detectDeviceLanguage(): Language {
 
 export function getLanguage(): Language {
   if (typeof window === "undefined") return "sv";
-  const v = localStorage.getItem(LANG_KEY) as Language | null;
-  if (v && LANGUAGES.some((l) => l.code === v)) return v;
+  try {
+    const v = localStorage.getItem(LANG_KEY) as Language | null;
+    if (v && LANGUAGES.some((l) => l.code === v)) return v;
+  } catch {
+    // Device detection must still work if storage is unavailable.
+  }
   // First launch: pick the device language (Swedish fallback) and remember it
   // as an automatic choice, so a later manual pick always wins.
   const auto = detectDeviceLanguage();
@@ -143,10 +147,12 @@ export function getLanguage(): Language {
 /** True when the user actively picked the language in Settings. */
 export function isLanguageManuallySet(): boolean {
   if (typeof window === "undefined") return false;
-  return (
-    localStorage.getItem(LANG_SOURCE_KEY) === "manual" ||
-    (localStorage.getItem(LANG_SOURCE_KEY) === null && localStorage.getItem(LANG_KEY) !== null)
-  );
+  try {
+    return (
+      localStorage.getItem(LANG_SOURCE_KEY) === "manual" ||
+      (localStorage.getItem(LANG_SOURCE_KEY) === null && localStorage.getItem(LANG_KEY) !== null)
+    );
+  } catch { return false; }
 }
 
 export function setLanguage(lang: Language): void {
