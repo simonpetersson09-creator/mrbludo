@@ -128,6 +128,19 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
           <stop offset="0%" stopColor="var(--board-mark)" stopOpacity="0.14" />
           <stop offset="100%" stopColor="var(--board-ink)" stopOpacity="0.12" />
         </radialGradient>
+        <radialGradient id={`${boardId}-plate`} cx="40%" cy="32%" r="75%">
+          <stop offset="0%" stopColor="var(--board-mark)" stopOpacity="0.28" />
+          <stop offset="70%" stopColor="var(--board-mark)" stopOpacity="0.06" />
+          <stop offset="100%" stopColor="var(--board-ink)" stopOpacity="0.12" />
+        </radialGradient>
+        <radialGradient id={`${boardId}-pit`} cx="50%" cy="62%" r="60%">
+          <stop offset="0%" stopColor="var(--board-ink)" stopOpacity="0.08" />
+          <stop offset="75%" stopColor="var(--board-ink)" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="var(--board-ink)" stopOpacity="0.42" />
+        </radialGradient>
+        <pattern id={`${boardId}-yard-dots`} width="0.5" height="0.5" patternUnits="userSpaceOnUse">
+          <circle cx="0.25" cy="0.25" r="0.045" fill="var(--board-mark)" fillOpacity="0.16" />
+        </pattern>
         <pattern id={`${boardId}-checker`} x="6" y="6" width="0.5" height="0.5" patternUnits="userSpaceOnUse">
           <rect width="0.5" height="0.5" fill="var(--board-mark)" />
           <rect width="0.25" height="0.25" fill="var(--board-ink)" />
@@ -145,17 +158,21 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         const active = seat != null;
         const isTurn = turnColor === c;
         const [nx, ny] = yardNestCenter(c);
-        const half = YARD_SPOT_GAP + 0.82;
+        const half = YARD_SPOT_GAP * Math.SQRT2 + 0.78;
         return (
           <g key={c} opacity={active ? 1 : 0.35}>
             <rect x={x} y={y} width="6" height="6" fill={BOARD_FILL[c]} />
             <rect x={x} y={y} width="6" height="6" fill={`url(#${boardId}-yard)`} />
             {isTurn && <rect x={x} y={y} width="6" height="6" fill={BOARD_FILL[c]} className="base-turn-glow" />}
-            <rect x={nx - half} y={ny - half} width={half * 2} height={half * 2} rx="0.5" fill="var(--board-ink)" fillOpacity="0.14" stroke="var(--board-mark)" strokeOpacity="0.45" strokeWidth="0.04" />
+            <rect x={x} y={y} width="6" height="6" fill={`url(#${boardId}-yard-dots)`} />
+            <circle cx={nx} cy={ny} r={half} fill="var(--board-ink)" fillOpacity="0.16" />
+            <circle cx={nx} cy={ny + 0.06} r={half} fill={BOARD_FILL[c]} />
+            <circle cx={nx} cy={ny + 0.06} r={half} fill={`url(#${boardId}-plate)`} stroke="var(--board-mark)" strokeOpacity="0.55" strokeWidth="0.06" />
             {[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([dx, dy], i) => (
               <g key={i}>
-                <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill="var(--board-ink)" fillOpacity="0.16" />
-                <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill="none" stroke="var(--board-mark)" strokeOpacity="0.85" strokeWidth="0.06" />
+                <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill={BOARD_FILL[c]} />
+                <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill={`url(#${boardId}-pit)`} />
+                <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill="none" stroke="var(--board-mark)" strokeOpacity="0.6" strokeWidth="0.04" />
               </g>
             ))}
           </g>
