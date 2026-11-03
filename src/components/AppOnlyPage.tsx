@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { storeLinks } from "@/lib/app-links";
-import { errorMessage } from "@/lib/i18n";
 import mrBDie from "@/assets/mr-b-die.png";
 
 /**
@@ -79,6 +78,3 @@ export function AppOnlyPage({ code }: { code?: string }) {
     </main>
   );
 }
-
-/** Kept next to the page so a stray import of the translator can't be flagged unused. */
-export const appOnlyErrorMessage = errorMessage;
