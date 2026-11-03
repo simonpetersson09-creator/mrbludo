@@ -1,4 +1,4 @@
-import { extractMatchCode } from "@/lib/online/match-code";
+import { parseMatchCode } from "@/lib/online/match-code";
 
 const LUDO_HOSTS = new Set(["mrbludo.lovable.app"]);
 
@@ -9,7 +9,7 @@ export function deepLinkPath(raw: string): string | null {
   const custom = url.protocol === "mrbludo:";
   if (!custom && !(url.protocol === "https:" && LUDO_HOSTS.has(url.hostname))) return null;
   const path = custom ? "/" + (url.hostname + url.pathname).replace(/^\/+/, "") : url.pathname;
-  const code = extractMatchCode(url.searchParams.get("code") ?? "");
+  const code = parseMatchCode(url.searchParams.get("code") ?? "");
   if ((path === "/join" || path === "/online" || path === "/online/") && code) return `/online?code=${code}`;
   if (/^\/online\/[A-Za-z0-9-]+$/.test(path)) return path;
   return null;
