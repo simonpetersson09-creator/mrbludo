@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { applyMove, applyRoll, createGame } from "@/lib/ludo/engine";
 import { walkDurationMs } from "@/lib/ludo/piece-motion";
 import { dieColorHoldMs, useDieColor } from "./useDieColor";
@@ -44,9 +44,9 @@ describe("useDieColor", () => {
       expect(result.current).toBe("red");
       rerender({ s: after });
       expect(result.current).toBe("red"); // the turn has not gone over yet
-      await vi.advanceTimersByTimeAsync(900);
+      await act(async () => { await vi.advanceTimersByTimeAsync(900); });
       expect(result.current).toBe("red");
-      await vi.advanceTimersByTimeAsync(300);
+      await act(async () => { await vi.advanceTimersByTimeAsync(300); });
       expect(result.current).toBe("green");
     } finally {
       vi.useRealTimers();
