@@ -33,5 +33,7 @@ export function reportAppError(error: unknown, source: string): void {
 }
 
 export function reportAdEvent(name: string, data: Record<string, unknown> = {}): void {
+  // Consent and tracking-permission answers stay on the device.
+  if (/consent|att_|privacy/i.test(name)) return;
   void send("ad", { name: name.slice(0, 60), ...clean(data) });
 }
