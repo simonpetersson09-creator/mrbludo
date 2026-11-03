@@ -249,6 +249,7 @@ export const sk: Record<TranslationKey, string> = {
   or: "alebo",
   createGame: "Vytvoriť hru",
   addFriendBtn: "Pridať priateľa",
+  alreadyFriends: "Ste priatelia",
   friendRequestSent: "Žiadosť odoslaná",
   shareInvite: "Zdieľať pozvánku",
   shareInviteText: "Zahraj si so mnou Ludo! 🎲 Kód: {code}",

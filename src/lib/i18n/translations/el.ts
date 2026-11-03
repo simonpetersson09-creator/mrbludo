@@ -249,6 +249,7 @@ export const el: Record<TranslationKey, string> = {
   or: "ή",
   createGame: "Δημιουργία",
   addFriendBtn: "Προσθήκη φίλου",
+  alreadyFriends: "Είστε φίλοι",
   friendRequestSent: "Το αίτημα στάλθηκε",
   shareInvite: "Κοινοποίηση πρόσκλησης",
   shareInviteText: "Παίξε Ludo μαζί μου! 🎲 Κωδικός: {code}",

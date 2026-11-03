@@ -49,6 +49,7 @@ export const Route = createFileRoute("/api/public/native")({ server: { handlers:
         case "act": return reply(await actions.actAction({ data: inputs.actInput(body.data as Parameters<typeof inputs.actInput>[0]), context }));
         case "heartbeat": return reply(await actions.heartbeatAction({ data: inputs.heartbeatInput(body.data as Parameters<typeof inputs.heartbeatInput>[0]), context }));
         case "sendFriendRequest": return reply(await actions.sendFriendRequestAction({ data: inputs.sendFriendRequestInput(body.data as Parameters<typeof inputs.sendFriendRequestInput>[0]), context }));
+        case "getPlayerCard": return reply(await actions.getPlayerCardAction({ data: inputs.sendFriendRequestInput(body.data as Parameters<typeof inputs.sendFriendRequestInput>[0]), context }));
         case "respondFriend": return reply(await actions.respondFriendAction({ data: inputs.respondFriendInput(body.data as Parameters<typeof inputs.respondFriendInput>[0]), context }));
         case "listFriends": return reply(await actions.listFriendsAction({ context }));
         case "inviteFriend": return reply(await actions.inviteFriendAction({ data: inputs.inviteFriendInput(body.data as Parameters<typeof inputs.inviteFriendInput>[0]), context }));

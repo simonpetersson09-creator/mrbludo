@@ -264,6 +264,7 @@ export const uk: Record<TranslationKey, string> = {
   or: "або",
   createGame: "Створити гру",
   addFriendBtn: "Додати в друзі",
+  alreadyFriends: "Ви друзі",
   friendRequestSent: "Запит надіслано",
   shareInvite: "Поділитися запрошенням",
   shareInviteText: "Зіграй зі мною в Ludo! 🎲 Код: {code}",

@@ -264,6 +264,7 @@ export const es: Record<TranslationKey, string> = {
   or: "o",
   createGame: "Crear partida",
   addFriendBtn: "Añadir amigo",
+  alreadyFriends: "Sois amigos",
   friendRequestSent: "Solicitud enviada",
   shareInvite: "Compartir invitación",
   shareInviteText: "¡Juega a Ludo conmigo! 🎲 Código: {code}",

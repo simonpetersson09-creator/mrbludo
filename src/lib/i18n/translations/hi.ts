@@ -264,6 +264,7 @@ export const hi: Record<TranslationKey, string> = {
   or: "या",
   createGame: "खेल बनाओ",
   addFriendBtn: "दोस्त जोड़ें",
+  alreadyFriends: "आप दोस्त हैं",
   friendRequestSent: "अनुरोध भेजा गया",
   shareInvite: "बुलावा भेजो",
   shareInviteText: "मेरे साथ Ludo खेलो! 🎲 कोड: {code}",

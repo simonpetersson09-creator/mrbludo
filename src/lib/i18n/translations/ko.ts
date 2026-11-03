@@ -264,6 +264,7 @@ export const ko: Record<TranslationKey, string> = {
   or: "또는",
   createGame: "방 만들기",
   addFriendBtn: "친구 추가",
+  alreadyFriends: "친구입니다",
   friendRequestSent: "친구 요청을 보냈어요",
   shareInvite: "초대 공유",
   shareInviteText: "나랑 Ludo 하자! 🎲 코드: {code}",

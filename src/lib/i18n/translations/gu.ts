@@ -264,6 +264,7 @@ export const gu: Record<TranslationKey, string> = {
   or: "અથવા",
   createGame: "રમત બનાવો",
   addFriendBtn: "મિત્ર ઉમેરો",
+  alreadyFriends: "તમે મિત્રો છો",
   friendRequestSent: "વિનંતી મોકલી",
   shareInvite: "આમંત્રણ મોકલો",
   shareInviteText: "મારી સાથે Ludo રમો! 🎲 કોડ: {code}",

@@ -52,6 +52,11 @@ export const sendFriendRequest = createServerFn({ method: "POST" }).middleware([
   return sendFriendRequestAction({ data, context });
 });
 
+export const getPlayerCard = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(sendFriendRequestInput).handler(async ({ data, context }) => {
+  const { getPlayerCardAction } = await import("./online-actions");
+  return getPlayerCardAction({ data, context });
+});
+
 export const respondFriend = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(respondFriendInput).handler(async ({ data, context }) => {
   const { respondFriendAction } = await import("./online-actions");
   return respondFriendAction({ data, context });

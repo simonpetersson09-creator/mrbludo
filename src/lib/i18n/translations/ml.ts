@@ -264,6 +264,7 @@ export const ml: Record<TranslationKey, string> = {
   or: "അല്ലെങ്കിൽ",
   createGame: "കളി സൃഷ്ടിക്കൂ",
   addFriendBtn: "സുഹൃത്തിനെ ചേർക്കുക",
+  alreadyFriends: "നിങ്ങൾ സുഹൃത്തുക്കളാണ്",
   friendRequestSent: "അഭ്യർത്ഥന അയച്ചു",
   shareInvite: "ക്ഷണം പങ്കിടൂ",
   shareInviteText: "എനിക്കൊപ്പം Ludo കളിക്കൂ! 🎲 കോഡ്: {code}",

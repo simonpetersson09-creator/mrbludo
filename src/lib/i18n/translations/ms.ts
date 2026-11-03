@@ -264,6 +264,7 @@ export const ms: Record<TranslationKey, string> = {
   or: "atau",
   createGame: "Cipta permainan",
   addFriendBtn: "Tambah rakan",
+  alreadyFriends: "Anda berkawan",
   friendRequestSent: "Permintaan dihantar",
   shareInvite: "Kongsi jemputan",
   shareInviteText: "Jom main Ludo dengan saya! 🎲 Kod: {code}",

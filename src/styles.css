@@ -192,7 +192,6 @@
 .throw-tray { isolation: isolate; border-radius: 18px; background: var(--throw-frame); padding: 2px; box-shadow: 0 0 0 1px var(--throw-frame-highlight), var(--control-shadow); }
 .throw-cloth { position: absolute; inset: 2px; overflow: hidden; border-radius: 16px; background: var(--throw-surface); box-shadow: inset 0 0 0 1px var(--throw-seam); pointer-events: none; }
 .throw-felt-texture { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .7; }
-.throw-cloth::before { content: ""; position: absolute; z-index: 1; inset: 8px; border: 1px dashed var(--throw-seam); border-radius: 10px; pointer-events: none; }
 .throw-cloth::after { content: ""; position: absolute; z-index: 1; inset: 0; border: 4px solid var(--throw-inlay); border-radius: inherit; box-shadow: inset 0 0 8px color-mix(in oklch, var(--throw-frame) 22%, transparent); pointer-events: none; }
 .throw-die { position: absolute; width: 130px; height: 130px; top: calc(50% - 65px); left: calc(50% - 65px); pointer-events: none; }
 .throw-die-enter { animation: throw-entry 760ms cubic-bezier(.16,.82,.3,1) both; }

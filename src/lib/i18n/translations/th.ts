@@ -264,6 +264,7 @@ export const th: Record<TranslationKey, string> = {
   or: "หรือ",
   createGame: "สร้างเกม",
   addFriendBtn: "เพิ่มเพื่อน",
+  alreadyFriends: "คุณเป็นเพื่อนกันแล้ว",
   friendRequestSent: "ส่งคำขอแล้ว",
   shareInvite: "แชร์คำเชิญ",
   shareInviteText: "มาเล่น Ludo ด้วยกัน! 🎲 รหัส: {code}",

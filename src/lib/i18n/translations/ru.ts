@@ -264,6 +264,7 @@ export const ru: Record<TranslationKey, string> = {
   or: "или",
   createGame: "Создать игру",
   addFriendBtn: "Добавить в друзья",
+  alreadyFriends: "Вы друзья",
   friendRequestSent: "Заявка отправлена",
   shareInvite: "Поделиться",
   shareInviteText: "Сыграй со мной в Ludo! 🎲 Код: {code}",

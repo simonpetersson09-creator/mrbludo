@@ -264,6 +264,7 @@ export const te: Record<TranslationKey, string> = {
   or: "లేదా",
   createGame: "ఆట సృష్టించు",
   addFriendBtn: "స్నేహితుడిని జోడించు",
+  alreadyFriends: "మీరు స్నేహితులు",
   friendRequestSent: "అభ్యర్థన పంపబడింది",
   shareInvite: "ఆహ్వానం పంచుకో",
   shareInviteText: "నాతో Ludo ఆడు! 🎲 కోడ్: {code}",

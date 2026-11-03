@@ -9,6 +9,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/lib/auth/client";
 import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
 import { MatchInfoBar } from "@/components/ludo/MatchInfoBar";
@@ -20,7 +21,7 @@ import { RollLabel } from "@/components/ludo/RollLabel";
 import { ExtraRollBanner } from "@/components/ludo/ExtraRollBanner";
 import { QuickChat } from "@/components/ludo/QuickChat";
 import { pieceCenter } from "@/lib/ludo/board";
-import { act, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, startMatch } from "@/lib/online/online.functions";
+import { act, getPlayerCard, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, startMatch } from "@/lib/online/online.functions";
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { flag } from "@/lib/online/profile-options";
@@ -157,6 +158,7 @@ function OnlineMatchPage() {
   // Haptics for turn handover and win (same events as Yatzy's TurnTransition / success pulse).
   const prevTurn = useRef(-1);
   const [turnBanner, setTurnBanner] = useState(false);
+  const [cardSeat, setCardSeat] = useState<number | null>(null);
   useEffect(() => {
     if (!state || !userId) return;
     const mine = state.players.findIndex((p) => p.id === userId);
@@ -205,11 +207,11 @@ function OnlineMatchPage() {
       <MatchInfoBar state={state} gameKey={matchId} />
       <div className="flex min-h-0 flex-1 items-center justify-center [container-type:size]">
         <div className="game-board-stack flex flex-col">
-        <SeatCardRow state={state} seats={seatInfo} edge="top" ownSeat={mySeat} />
+        <SeatCardRow state={state} seats={seatInfo} edge="top" ownSeat={mySeat} onSeatTap={setCardSeat} />
         <div className="aspect-square w-full rounded-xl shadow-2xl">
           <LudoBoard state={state} legal={legal} onPick={(piece, walkOut) => send({ kind: "move", piece, ...(walkOut ? { walkOut: true } : {}) })} captureAt={captureAt} seats={seatInfo} />
         </div>
-        <SeatCardRow state={state} seats={seatInfo} edge="bottom" ownSeat={mySeat} />
+        <SeatCardRow state={state} seats={seatInfo} edge="bottom" ownSeat={mySeat} onSeatTap={setCardSeat} />
 
        </div>
       </div>
@@ -247,6 +249,10 @@ function OnlineMatchPage() {
         </AlertDialogContent>
       </AlertDialog>
 
+      {cardSeat != null && state.players[cardSeat] && (() => {
+        const p = state.players[cardSeat]; const s = seatOf(p.id);
+        return <PlayerCardDialog matchId={match.id} userId={p.id} name={p.name} color={COLOR_VAR[p.color]} flagText={s ? flag(s.country) : ""} image={s ? pics[s.user_id] ?? null : null} emoji={s?.avatar ?? "🎲"} onClose={() => setCardSeat(null)} />;
+      })()}
       <ExtraRollBanner state={state} />
       {turnBanner && (
         <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[state.players[mySeat]?.color ?? 0] } as React.CSSProperties}>
@@ -296,6 +302,33 @@ function OnlineResultButtons({ matchId, completed, onAgain, onHome }: { matchId:
       <button className="home-action home-action-gold" disabled={leaving} onClick={() => void leave(onAgain)}>{t("playAgain")}</button>
       <button className="home-action home-action-ghost" disabled={leaving} onClick={() => void leave()}>{t("home")}</button>
     </>
+  );
+}
+
+/** Tap an opponent's seat card: their total online matches and wins, plus "Lägg till vän" like Yatzy. */
+function PlayerCardDialog({ matchId, userId, name, color, flagText, image, emoji, onClose }: { matchId: string; userId: string; name: string; color: string; flagText: string; image: string | null; emoji: string; onClose: () => void }) {
+  const { t } = useTranslation();
+  const [card, setCard] = useState<Awaited<ReturnType<typeof getPlayerCard>> | null>(null);
+  useEffect(() => { getPlayerCard({ data: { matchId, userId } }).then(setCard).catch(() => setCard({ played: 0, wins: 0, friend: "none" })); }, [matchId, userId]);
+  return (
+    <Dialog open onOpenChange={(o) => { if (!o) onClose(); }}>
+      <DialogContent className="max-w-[300px] rounded-2xl p-5 text-center">
+        <DialogTitle className="sr-only">{name}</DialogTitle>
+        <div className="mx-auto flex h-16 w-16 items-center justify-center overflow-hidden rounded-full text-3xl" style={{ boxShadow: `0 0 0 3px ${color}` }}>
+          <PlayerAvatar emoji={emoji} image={image} className="h-full w-full text-3xl" />
+        </div>
+        <p className="font-display text-lg font-bold">{flagText} {name}</p>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="rounded-xl bg-surface py-2"><p className="font-display text-xl font-bold">{card ? card.played : "–"}</p><p className="text-[11px] text-muted-foreground">{t("statPlayed")}</p></div>
+          <div className="rounded-xl bg-surface py-2"><p className="font-display text-xl font-bold text-gold">{card ? card.wins : "–"}</p><p className="text-[11px] text-muted-foreground">{t("statWins")}</p></div>
+        </div>
+        <div className="flex justify-center">
+          {!card ? null : card.friend === "friends" ? <span className="flex items-center gap-1 text-sm text-primary"><Check size={14} /> {t("alreadyFriends")}</span>
+            : card.friend === "sent" ? <span className="flex items-center gap-1 text-sm text-primary"><Check size={14} /> {t("friendRequestSent")}</span>
+            : <AddFriendButton matchId={matchId} userId={userId} />}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

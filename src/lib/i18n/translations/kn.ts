@@ -264,6 +264,7 @@ export const kn: Record<TranslationKey, string> = {
   or: "ಅಥವಾ",
   createGame: "ಆಟ ರಚಿಸು",
   addFriendBtn: "ಸ್ನೇಹಿತರನ್ನು ಸೇರಿಸಿ",
+  alreadyFriends: "ನೀವು ಸ್ನೇಹಿತರು",
   friendRequestSent: "ವಿನಂತಿ ಕಳುಹಿಸಲಾಗಿದೆ",
   shareInvite: "ಆಹ್ವಾನ ಹಂಚಿಕೊ",
   shareInviteText: "ನನ್ನ ಜೊತೆ Ludo ಆಡು! 🎲 ಕೋಡ್: {code}",

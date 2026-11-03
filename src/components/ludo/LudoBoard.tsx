@@ -378,7 +378,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
 export const LudoBoard = memo(LudoBoardImpl);
 
 /** Round player cards placed outside the board, in the corner next to each yard. */
-export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState; seats?: (SeatInfo | undefined)[]; edge: "top" | "bottom"; ownSeat?: number | undefined }) {
+export function SeatCardRow({ state, seats, edge, ownSeat, onSeatTap }: { state: GameState; seats?: (SeatInfo | undefined)[]; edge: "top" | "bottom"; ownSeat?: number | undefined; onSeatTap?: ((seat: number) => void) | undefined }) {
   const { t } = useTranslation();
   const left: Color = edge === "top" ? 0 : 3;
 
@@ -393,8 +393,11 @@ export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState;
     const name = info?.name ?? pl.name;
     const home = state.pieces[seat].filter((p) => p === goalOf(variantOf(state))).length;
     const isTurn = turnColor === c;
+    const tappable = !!onSeatTap && kind === "online" && seat !== ownSeat;
     return (
-      <div className={`seat-card${isTurn ? " seat-card-turn" : ""}${c === right ? " flex-row-reverse text-right" : ""}`} style={{ opacity: pl.forfeited ? 0.45 : 1, ["--pc" as string]: FILL[c] }}>
+      <div role={tappable ? "button" : undefined} tabIndex={tappable ? 0 : undefined} onClick={tappable ? () => onSeatTap(seat) : undefined}
+        onKeyDown={tappable ? (e) => { if (e.key === "Enter" || e.key === " ") onSeatTap(seat); } : undefined}
+        className={`seat-card${tappable ? " cursor-pointer active:scale-[0.97]" : ""}${isTurn ? " seat-card-turn" : ""}${c === right ? " flex-row-reverse text-right" : ""}`} style={{ opacity: pl.forfeited ? 0.45 : 1, ["--pc" as string]: FILL[c] }}>
         {isTurn && (
           <span className={`seat-card-bubble seat-card-bubble-${edge} seat-card-bubble-in-${c === right ? "right" : "left"}${ownSeat === seat ? " seat-card-bubble-me" : ""}`} aria-hidden="true">
             <span className="seat-card-bubble-text">{seat === ownSeat ? t("yourTurnLabel") : possessive(t("theirTurn", { name }), name)}</span>

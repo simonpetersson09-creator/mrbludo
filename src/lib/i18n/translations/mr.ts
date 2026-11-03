@@ -264,6 +264,7 @@ export const mr: Record<TranslationKey, string> = {
   or: "किंवा",
   createGame: "खेळ तयार कर",
   addFriendBtn: "मित्र जोडा",
+  alreadyFriends: "तुम्ही मित्र आहात",
   friendRequestSent: "विनंती पाठवली",
   shareInvite: "आमंत्रण पाठव",
   shareInviteText: "माझ्यासोबत Ludo खेळ! 🎲 कोड: {code}",

@@ -249,6 +249,7 @@ export const ca: Record<TranslationKey, string> = {
   or: "o",
   createGame: "Crea partida",
   addFriendBtn: "Afegeix amic",
+  alreadyFriends: "Sou amics",
   friendRequestSent: "Sol·licitud enviada",
   shareInvite: "Comparteix invitació",
   shareInviteText: "Juga a Ludo amb mi! 🎲 Codi: {code}",

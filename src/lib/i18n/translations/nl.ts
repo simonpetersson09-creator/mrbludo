@@ -249,6 +249,7 @@ export const nl: Record<TranslationKey, string> = {
   or: "of",
   createGame: "Spel maken",
   addFriendBtn: "Vriend toevoegen",
+  alreadyFriends: "Jullie zijn vrienden",
   friendRequestSent: "Vriendschapsverzoek verstuurd",
   shareInvite: "Uitnodiging delen",
   shareInviteText: "Speel Ludo met mij! 🎲 Code: {code}",

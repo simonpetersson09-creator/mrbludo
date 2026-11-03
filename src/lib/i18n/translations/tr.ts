@@ -264,6 +264,7 @@ export const tr: Record<TranslationKey, string> = {
   or: "veya",
   createGame: "Oyun kur",
   addFriendBtn: "Arkadaş ekle",
+  alreadyFriends: "Arkadaşsınız",
   friendRequestSent: "İstek gönderildi",
   shareInvite: "Daveti paylaş",
   shareInviteText: "Benimle Ludo oyna! 🎲 Kod: {code}",

@@ -249,6 +249,7 @@ export const sl: Record<TranslationKey, string> = {
   or: "ali",
   createGame: "Ustvari igro",
   addFriendBtn: "Dodaj prijatelja",
+  alreadyFriends: "Sta prijatelja",
   friendRequestSent: "Prošnja poslana",
   shareInvite: "Deli vabilo",
   shareInviteText: "Igraj Ludo z mano! 🎲 Koda: {code}",

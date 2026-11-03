@@ -264,6 +264,7 @@ export const da: Record<TranslationKey, string> = {
   or: "eller",
   createGame: "Opret spil",
   addFriendBtn: "Tilføj ven",
+  alreadyFriends: "I er venner",
   friendRequestSent: "Venneanmodning sendt",
   shareInvite: "Del invitation",
   shareInviteText: "Spil Ludo med mig! 🎲 Kode: {code}",

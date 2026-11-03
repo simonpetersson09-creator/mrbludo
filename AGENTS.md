@@ -40,7 +40,7 @@
 - App icon/splash source is `resources/icon.png`; `scripts/make-icons.mjs` regenerates committed `resources/`, and `scripts/set-native-icons.mjs` (run by native sync) overwrites Capacitor defaults, mirroring Yatzy's pipeline.
 - Quick play mirrors Yatzy: 15 s search; ≥2 humans start online with server-played `bot:*` seats (never get stats, played via heartbeat); alone → local bot game.
 - Profile pictures are small square JPEG data URLs kept in `profiles.avatar_image` (no storage bucket: this workspace blocks public ones), with the emoji in `profiles.avatar` as the fallback; the device copy drives the UI, and a device that has never seen the picture must adopt the server copy (`adoptOwnAvatarFromServer`) before it pushes, so a new device can never erase an existing picture.
-- Friend requests follow Yatzy: only between players who shared an online match (sent from the result screen); there is no friend-code entry.
+- Friend requests follow Yatzy: only between players seated in the same started or finished online match (seat-card popup or result screen); there is no friend-code entry.
 - Native invite links are parsed only by pure `src/lib/native/deep-link.ts` (own domain + `mrbludo://`; foreign hosts ignored).
 - App errors and ad events reach the admin panel only via `src/lib/online/report.ts` → `app_events` (deduplicated, capped per session, short fields only; consent/tracking answers never leave the device).
 - The published website is download-only: `src/server.ts` asks `src/lib/web-redirect.ts` (pure rules in `src/lib/web-access.ts`) to send browsers on the live origin to `/join`, so the game, admin panel and the app's own API stay reachable while visitors never become players; preview hosts and native origins must never be gated.

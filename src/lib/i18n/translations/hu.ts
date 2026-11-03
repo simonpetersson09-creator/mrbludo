@@ -249,6 +249,7 @@ export const hu: Record<TranslationKey, string> = {
   or: "vagy",
   createGame: "Játék létrehozása",
   addFriendBtn: "Barát hozzáadása",
+  alreadyFriends: "Barátok vagytok",
   friendRequestSent: "Jelölés elküldve",
   shareInvite: "Meghívó megosztása",
   shareInviteText: "Játssz velem Ludo-t! 🎲 Kód: {code}",

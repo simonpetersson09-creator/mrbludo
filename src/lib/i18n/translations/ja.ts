@@ -264,6 +264,7 @@ export const ja: Record<TranslationKey, string> = {
   or: "または",
   createGame: "部屋を作る",
   addFriendBtn: "友達に追加",
+  alreadyFriends: "フレンドです",
   friendRequestSent: "リクエストを送信しました",
   shareInvite: "招待をシェア",
   shareInviteText: "一緒にLudoで遊ぼう！ 🎲 コード: {code}",

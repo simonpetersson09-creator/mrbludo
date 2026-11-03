@@ -279,6 +279,7 @@ export const sv = {
   or: "eller",
   createGame: "Skapa spel",
   addFriendBtn: "Lägg till vän",
+  alreadyFriends: "Ni är vänner",
   friendRequestSent: "Vänförfrågan skickad",
   shareInvite: "Dela inbjudan",
   shareInviteText: "Spela Ludo med mig! 🎲 Kod: {code}",

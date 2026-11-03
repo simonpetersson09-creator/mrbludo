@@ -249,6 +249,7 @@ export const fi: Record<TranslationKey, string> = {
   or: "tai",
   createGame: "Luo peli",
   addFriendBtn: "Lisää kaveri",
+  alreadyFriends: "Olette ystäviä",
   friendRequestSent: "Kaveripyyntö lähetetty",
   shareInvite: "Jaa kutsu",
   shareInviteText: "Pelaa Ludoa kanssani! 🎲 Koodi: {code}",

@@ -313,7 +313,8 @@ export const sendFriendRequestAction = async ({ data, context }: { data: ReturnT
     const { data: seats } = await db.from("match_players").select("user_id").eq("match_id", data.matchId).in("user_id", [context.userId, data.userId]);
     if ((seats ?? []).length !== 2) throw new Error("err:not_in_match");
     const { data: shared } = await db.from("matches").select("status").eq("id", data.matchId).maybeSingle();
-    if (shared?.status !== "finished") throw new Error("err:not_in_match");
+    // Allowed from the seat card during play and from the result screen afterwards; never from a waiting room.
+    if (shared?.status !== "finished" && shared?.status !== "playing") throw new Error("err:not_in_match");
     await rateLimit(db, "friendships", "requester", context.userId);
     const { data: existing } = await db.from("friendships").select("*")
       .or(`and(requester.eq.${context.userId},addressee.eq.${data.userId}),and(requester.eq.${data.userId},addressee.eq.${context.userId})`).maybeSingle();
@@ -330,6 +331,20 @@ export const sendFriendRequestAction = async ({ data, context }: { data: ReturnT
       return { ok: true, already: true };
     }
     return { ok: true, already: false };
+  };
+
+/** Seat-card popup: another player's total online matches/wins and whether you are already friends. */
+export const getPlayerCardAction = async ({ data, context }: { data: ReturnType<typeof sendFriendRequestInput>; context: OnlineContext }) => {
+    const db = await admin();
+    const { data: seats } = await db.from("match_players").select("user_id").eq("match_id", data.matchId).in("user_id", [context.userId, data.userId]);
+    if ((seats ?? []).length !== 2) throw new Error("err:not_in_match");
+    const [{ data: st }, { data: fr }] = await Promise.all([
+      db.from("player_stats").select("played, wins").eq("user_id", data.userId).maybeSingle(),
+      db.from("friendships").select("status, requester")
+        .or(`and(requester.eq.${context.userId},addressee.eq.${data.userId}),and(requester.eq.${data.userId},addressee.eq.${context.userId})`).maybeSingle(),
+    ]);
+    const friend = !fr ? "none" : fr.status === "accepted" ? "friends" : fr.requester === context.userId ? "sent" : "incoming";
+    return { played: st?.played ?? 0, wins: st?.wins ?? 0, friend: friend as "none" | "friends" | "sent" | "incoming" };
   };
 
 export const respondFriendAction = async ({ data, context }: { data: ReturnType<typeof respondFriendInput>; context: OnlineContext }) => {

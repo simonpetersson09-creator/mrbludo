@@ -37,3 +37,5 @@ export const quickStatus = (args: Parameters<typeof Web.quickStatus>[0]) => invo
 export const setAvatar = (args: Parameters<typeof Web.setAvatar>[0]) => invoke<Awaited<ReturnType<typeof Web.setAvatar>>>("setAvatar", args.data);
 export const getAvatars = (args: Parameters<typeof Web.getAvatars>[0]) => invoke<Awaited<ReturnType<typeof Web.getAvatars>>>("getAvatars", args.data);
 export const deletePlayerData = (args?: Parameters<typeof Web.deletePlayerData>[0]) => invoke<Awaited<ReturnType<typeof Web.deletePlayerData>>>("deletePlayerData", args?.data ?? {});
+
+export const getPlayerCard = (args: Parameters<typeof Web.getPlayerCard>[0]) => invoke<Awaited<ReturnType<typeof Web.getPlayerCard>>>("getPlayerCard", args.data);

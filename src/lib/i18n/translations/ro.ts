@@ -264,6 +264,7 @@ export const ro: Record<TranslationKey, string> = {
   or: "sau",
   createGame: "Creează joc",
   addFriendBtn: "Adaugă prieten",
+  alreadyFriends: "Sunteți prieteni",
   friendRequestSent: "Cerere trimisă",
   shareInvite: "Trimite invitația",
   shareInviteText: "Joacă Ludo cu mine! 🎲 Cod: {code}",

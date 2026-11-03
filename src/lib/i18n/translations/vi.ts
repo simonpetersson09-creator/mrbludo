@@ -264,6 +264,7 @@ export const vi: Record<TranslationKey, string> = {
   or: "hoặc",
   createGame: "Tạo ván",
   addFriendBtn: "Thêm bạn",
+  alreadyFriends: "Hai bạn là bạn bè",
   friendRequestSent: "Đã gửi lời mời",
   shareInvite: "Chia sẻ lời mời",
   shareInviteText: "Chơi Ludo với mình nhé! 🎲 Mã: {code}",

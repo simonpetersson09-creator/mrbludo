@@ -264,6 +264,7 @@ export const pa: Record<TranslationKey, string> = {
   or: "ਜਾਂ",
   createGame: "ਖੇਡ ਬਣਾਓ",
   addFriendBtn: "ਦੋਸਤ ਜੋੜੋ",
+  alreadyFriends: "ਤੁਸੀਂ ਦੋਸਤ ਹੋ",
   friendRequestSent: "ਬੇਨਤੀ ਭੇਜੀ ਗਈ",
   shareInvite: "ਸੱਦਾ ਸਾਂਝਾ ਕਰੋ",
   shareInviteText: "ਮੇਰੇ ਨਾਲ Ludo ਖੇਡੋ! 🎲 ਕੋਡ: {code}",

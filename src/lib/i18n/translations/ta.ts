@@ -264,6 +264,7 @@ export const ta: Record<TranslationKey, string> = {
   or: "அல்லது",
   createGame: "ஆட்டம் உருவாக்கு",
   addFriendBtn: "நண்பரைச் சேர்",
+  alreadyFriends: "நீங்கள் நண்பர்கள்",
   friendRequestSent: "கோரிக்கை அனுப்பப்பட்டது",
   shareInvite: "அழைப்பைப் பகிர்",
   shareInviteText: "என்னுடன் Ludo ஆடுங்கள்! 🎲 குறியீடு: {code}",
