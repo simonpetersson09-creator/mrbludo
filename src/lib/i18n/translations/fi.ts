@@ -55,6 +55,8 @@ export const fi: Record<TranslationKey, string> = {
   reconnecting: "Yhdistetään uudelleen…",
   turnTimeLeft: "Vuoroa jäljellä {s} s",
   turnTimeOut: "Aika loppui – palvelin tekee siirron",
+  autoPlayedMine: "Aika loppui – siirto pelattiin puolestasi",
+  autoPlayedOther: "Aika loppui – palvelin pelasi pelaajan {name} siirron",
   forfeitTitle: "Luovutetaanko peli?",
   leaveMatchConfirm: "Poistutaanko ottelusta? Se tallennetaan ja voit jatkaa myöhemmin.",
   forfeitBodyLocal: "Peli päättyy ja lasketaan tappioksi. Tätä ei voi kumota.",

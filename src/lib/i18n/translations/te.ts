@@ -59,6 +59,8 @@ export const te: Record<TranslationKey, string> = {
   reconnecting: "మళ్లీ కనెక్ట్ అవుతోంది…",
   turnTimeLeft: "కదలికకు {s} సెకన్లు మిగిలాయి",
   turnTimeOut: "సమయం అయిపోయింది – సర్వర్ కదలిక ఆడుతుంది",
+  autoPlayedMine: "సమయం ముగిసింది – కదలిక మీ కోసం ఆడారు",
+  autoPlayedOther: "సమయం ముగిసింది – సర్వర్ {name} కోసం ఆడింది",
   forfeitTitle: "మ్యాచ్‌లో ఓటమి ఒప్పుకుంటారా?",
   leaveMatchConfirm: "మ్యాచ్ నుండి వెళ్లాలా? ఇది సేవ్ అవుతుంది, తర్వాత కొనసాగించవచ్చు.",
   forfeitBodyLocal: "మ్యాచ్ ముగుస్తుంది మరియు ఓటమిగా లెక్కించబడుతుంది. దీన్ని రద్దు చేయలేము.",

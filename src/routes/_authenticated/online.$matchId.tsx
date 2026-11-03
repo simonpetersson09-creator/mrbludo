@@ -23,7 +23,7 @@ import { act, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendReques
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { flag } from "@/lib/online/profile-options";
-import { TURN_SECONDS } from "@/lib/online/match-logic";
+import { TURN_SECONDS, type MarkedState } from "@/lib/online/match-logic";
 import { rememberOnlineMatch } from "@/lib/online/snapshot";
 import { RESUME_EVENT } from "@/lib/native/runtime";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
@@ -68,6 +68,7 @@ function OnlineMatchPage() {
   const [missing, setMissing] = useState(false);
   const animatedVersion = useRef(-1);
   const rollStart = useRef(0);
+  const autoShown = useRef(0);
 
   const load = useCallback(async () => {
     const [{ data: m, error }, { data: s }] = await Promise.all([
@@ -127,6 +128,17 @@ function OnlineMatchPage() {
     if (match.version <= animatedVersion.current) return;
     animatedVersion.current = match.version;
     const ev = state.lastEvent;
+    // Yatzy-style clarity: when the server plays a step for someone who was away, say so.
+    const mark = (state as MarkedState).auto;
+    if (mark && mark.at !== autoShown.current) {
+      autoShown.current = mark.at;
+      const who = state.players[mark.seat];
+      // A mark from a device that was away when it happened is not worth a late notice.
+      if (who && Date.now() - mark.at < 90_000) {
+        const mine = who.id === userId;
+        (mine ? toast.info : toast.message)(t(mine ? "autoPlayedMine" : "autoPlayedOther", { name: who.name }));
+      }
+    }
     // Like Yatzy: only my own actions vibrate (opponents/bots don't buzz my phone).
     const mineEv = !!ev && "player" in ev && state.players[ev.player]?.id === userId;
     if (ev?.kind === "moved" && mineEv) void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());

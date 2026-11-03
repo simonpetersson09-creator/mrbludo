@@ -55,6 +55,8 @@ export const it: Record<TranslationKey, string> = {
   reconnecting: "Riconnessione…",
   turnTimeLeft: "{s} s rimasti per la mossa",
   turnTimeOut: "Tempo scaduto – il server esegue la mossa",
+  autoPlayedMine: "Il tempo è scaduto – la mossa è stata giocata per te",
+  autoPlayedOther: "Il tempo è scaduto – il server ha giocato per {name}",
   forfeitTitle: "Abbandonare la partita?",
   leaveMatchConfirm: "Uscire dalla partita? Viene salvata e potrai continuare più tardi.",
   forfeitBodyLocal: "La partita termina e conta come una sconfitta. Non puoi annullare questa azione.",

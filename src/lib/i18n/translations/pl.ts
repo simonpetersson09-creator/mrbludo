@@ -55,6 +55,8 @@ export const pl: Record<TranslationKey, string> = {
   reconnecting: "Ponowne łączenie…",
   turnTimeLeft: "Pozostało {s} s na ruch",
   turnTimeOut: "Czas minął – serwer wykonuje ruch",
+  autoPlayedMine: "Czas minął – ruch został wykonany za Ciebie",
+  autoPlayedOther: "Czas minął – serwer zagrał za {name}",
   forfeitTitle: "Poddać grę?",
   leaveMatchConfirm: "Opuścić mecz? Zostanie zapisany i możesz kontynuować później.",
   forfeitBodyLocal: "Gra się zakończy i zostanie zaliczona jako porażka. Nie można tego cofnąć.",

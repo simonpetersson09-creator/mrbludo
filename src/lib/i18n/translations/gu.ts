@@ -59,6 +59,8 @@ export const gu: Record<TranslationKey, string> = {
   reconnecting: "ફરી જોડાય છે…",
   turnTimeLeft: "ચાલ માટે {s} સેકન્ડ બાકી",
   turnTimeOut: "સમય પૂરો – સર્વર ચાલ ચાલશે",
+  autoPlayedMine: "સમય પૂરો – ચાલ તમારા માટે રમાઈ",
+  autoPlayedOther: "સમય પૂરો – સર્વરે {name} માટે રમ્યું",
   forfeitTitle: "મેચમાં હાર માનશો?",
   leaveMatchConfirm: "મેચ છોડવી છે? તે સાચવેલી છે અને તમે પછી ચાલુ રાખી શકો છો.",
   forfeitBodyLocal: "મેચ પૂરી થશે અને હાર ગણાશે. તે પાછી લઈ શકાય નહીં.",

@@ -59,6 +59,8 @@ export const es: Record<TranslationKey, string> = {
   reconnecting: "Reconectando…",
   turnTimeLeft: "Quedan {s} s para el movimiento",
   turnTimeOut: "Se acabó el tiempo – el servidor juega el movimiento",
+  autoPlayedMine: "Se acabó el tiempo – la jugada se hizo por ti",
+  autoPlayedOther: "Se acabó el tiempo – el servidor jugó por {name}",
   forfeitTitle: "¿Rendirse en la partida?",
   leaveMatchConfirm: "¿Salir de la partida? Se guarda y puedes continuar más tarde.",
   forfeitBodyLocal: "La partida termina y cuenta como derrota. No se puede deshacer.",

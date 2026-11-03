@@ -55,6 +55,8 @@ export const cs: Record<TranslationKey, string> = {
   reconnecting: "Opětovné připojování…",
   turnTimeLeft: "Na tah zbývá {s} s",
   turnTimeOut: "Čas vypršel – tah provede server",
+  autoPlayedMine: "Čas vypršel – tah byl zahrán za vás",
+  autoPlayedOther: "Čas vypršel – server zahrál za {name}",
   forfeitTitle: "Vzdát hru?",
   leaveMatchConfirm: "Opustit zápas? Uloží se a můžeš pokračovat později.",
   forfeitBodyLocal: "Hra skončí a započítá se jako prohra. Nelze to vzít zpět.",

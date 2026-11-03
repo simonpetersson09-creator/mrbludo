@@ -55,6 +55,8 @@ export const sl: Record<TranslationKey, string> = {
   reconnecting: "Ponovno povezovanje…",
   turnTimeLeft: "Za potezo še {s} s",
   turnTimeOut: "Čas je potekel – potezo izvede strežnik",
+  autoPlayedMine: "Čas je potekel – poteza je bila odigrana namesto vas",
+  autoPlayedOther: "Čas je potekel – strežnik je odigral za {name}",
   forfeitTitle: "Predaš igro?",
   leaveMatchConfirm: "Zapustiš tekmo? Shrani se in lahko nadaljuješ pozneje.",
   forfeitBodyLocal: "Igra se bo končala in štela kot poraz. Tega ni mogoče razveljaviti.",

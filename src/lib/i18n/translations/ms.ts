@@ -59,6 +59,8 @@ export const ms: Record<TranslationKey, string> = {
   reconnecting: "Menyambung semula…",
   turnTimeLeft: "{s} s lagi untuk gerakan",
   turnTimeOut: "Masa tamat – pelayan memainkan gerakan",
+  autoPlayedMine: "Masa tamat – langkah dimainkan untuk anda",
+  autoPlayedOther: "Masa tamat – pelayan bermain untuk {name}",
   forfeitTitle: "Serah kalah dalam perlawanan?",
   leaveMatchConfirm: "Tinggalkan perlawanan? Ia disimpan dan anda boleh sambung kemudian.",
   forfeitBodyLocal: "Perlawanan tamat dan dikira sebagai kekalahan. Tidak boleh dibatalkan.",

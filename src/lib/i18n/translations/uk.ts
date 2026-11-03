@@ -59,6 +59,8 @@ export const uk: Record<TranslationKey, string> = {
   reconnecting: "Повторне підключення…",
   turnTimeLeft: "Залишилось {s} с на хід",
   turnTimeOut: "Час вийшов – сервер робить хід",
+  autoPlayedMine: "Час вийшов – хід було зроблено за вас",
+  autoPlayedOther: "Час вийшов – сервер зіграв за {name}",
   forfeitTitle: "Здатися в матчі?",
   leaveMatchConfirm: "Вийти з матчу? Його збережено, і ви зможете продовжити пізніше.",
   forfeitBodyLocal: "Матч завершиться і зарахується як поразка. Це не можна скасувати.",

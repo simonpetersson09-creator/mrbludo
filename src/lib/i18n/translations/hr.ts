@@ -55,6 +55,8 @@ export const hr: Record<TranslationKey, string> = {
   reconnecting: "Ponovno povezivanje…",
   turnTimeLeft: "Preostalo je {s} s za potez",
   turnTimeOut: "Vrijeme je isteklo – poslužitelj odigrava potez",
+  autoPlayedMine: "Vrijeme je isteklo – potez je odigran umjesto vas",
+  autoPlayedOther: "Vrijeme je isteklo – server je odigrao za {name}",
   forfeitTitle: "Predati igru?",
   leaveMatchConfirm: "Napustiti meč? Spremljen je i možeš nastaviti kasnije.",
   forfeitBodyLocal: "Igra će završiti i računati se kao poraz. To se ne može poništiti.",
