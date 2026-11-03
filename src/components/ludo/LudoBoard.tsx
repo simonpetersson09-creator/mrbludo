@@ -95,10 +95,21 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         animations.push(a);
       }
     }
-    animations.push(element.animate(waypoints.map(([x, y], index) => ({
-      transform: index === waypoints.length - 1 ? element.style.transform : `translate(${x}px, ${y}px)`,
-      offset: index / (waypoints.length - 1),
-    })), { duration: walk, easing: "linear" }));
+    // Knock slow motion: the final step onto a victim is drawn out, so the hit lands with weight.
+    const knock = ev.captured.length > 0 && waypoints.length > 1;
+    const lastStep = knock ? STEP_MS * 3.4 : STEP_MS;
+    const walkTotal = walk - STEP_MS + lastStep;
+    const lastStart = (walk - STEP_MS) / walkTotal;
+    animations.push(element.animate(waypoints.map(([x, y], index) => {
+      const n = waypoints.length - 1;
+      const offset = index === n ? 1 : (index * STEP_MS) / walkTotal;
+      return {
+        transform: index === n ? element.style.transform : `translate(${x}px, ${y}px)`,
+        offset,
+        ...(knock && index === n - 1 ? { easing: "cubic-bezier(.55,0,.85,.35)" } : {}),
+      };
+    }), { duration: walkTotal, easing: "linear" }));
+    if (knock && pieceElements.current) void lastStart;
     // Landing bounce.
     const pawn = element.querySelector<SVGGElement>(".pawn");
     if (pawn) animations.push(pawn.animate([
