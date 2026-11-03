@@ -71,12 +71,13 @@ function HomePage() {
 
   return (
     <main
-      className="flex min-h-[100dvh] flex-col items-center px-6 py-3"
+      className="relative flex min-h-[100dvh] flex-col items-center overflow-x-hidden px-6 py-3"
       style={{ paddingTop: "calc(12px + env(safe-area-inset-top))", paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }}
     >
-     <div className="relative flex w-full max-w-sm flex-col items-center gap-4 sm:gap-8">
+     <div className="home-bg" aria-hidden="true"><div className="home-bg-glow" /><div className="home-bg-dice" /></div>
+     <div className="home-enter relative z-10 flex w-full max-w-sm flex-col items-center gap-4 sm:gap-8">
       <div className="space-y-1 text-center sm:space-y-2">
-        <div className="brand-logo mb-2 inline-flex h-28 w-28 items-center justify-center sm:mb-4 sm:h-36 sm:w-36">
+        <div className="brand-logo home-logo-wiggle mb-2 inline-flex h-28 w-28 items-center justify-center sm:mb-4 sm:h-36 sm:w-36">
           <img src={mrBDie} alt="" width={383} height={512} className="h-full w-full object-contain" loading="eager" decoding="async" />
         </div>
         <h1 className="brand-wordmark text-4xl sm:text-5xl">Mr B Ludo</h1>
@@ -127,7 +128,7 @@ function HomePage() {
             <div
               ref={langPopRef}
               role="menu"
-              className="absolute top-full left-1/2 z-50 mt-2 max-h-48 w-44 -translate-x-1/2 overflow-y-auto rounded-2xl border border-border/60 bg-popover py-1.5 shadow-lg [&::-webkit-scrollbar]:hidden"
+              className="absolute top-full left-0 z-50 mt-2 max-h-48 w-44 overflow-y-auto rounded-2xl border border-border/60 bg-popover py-1.5 shadow-lg [&::-webkit-scrollbar]:hidden"
               style={{ overscrollBehaviorY: "contain", scrollbarWidth: "none" }}
             >
               {LANGUAGES.map((l) => (
