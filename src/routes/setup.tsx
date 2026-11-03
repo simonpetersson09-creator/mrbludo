@@ -56,7 +56,7 @@ function SetupPage() {
       <div className="home-stack">
         <Link to="/" className="mb-2 flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft size={16} /> {t("back")}</Link>
         <h1 className="brand-title text-3xl">{t("newMatchTitle")}</h1>
-        <p className="mb-3 text-sm text-muted-foreground">{t("playerCount")}</p>
+        <p className="mb-3 text-center text-sm text-muted-foreground">{t("playerCount")}</p>
         <div className="grid grid-cols-3 gap-[7px]">
           {[2, 3, 4].map((n) => (
             <button key={n} className={`home-action ${n === count ? "home-action-gold" : "home-action-ghost"}`} onClick={() => setCount(n)}>{n}</button>
