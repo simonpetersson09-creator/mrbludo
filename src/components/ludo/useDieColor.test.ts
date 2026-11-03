@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { applyMove, applyRoll, createGame } from "@/lib/ludo/engine";
+import { applyMove, applyRoll, createGame, type GameState } from "@/lib/ludo/engine";
 import { walkDurationMs } from "@/lib/ludo/piece-motion";
 import { dieColorHoldMs, useDieColor } from "./useDieColor";
 
@@ -30,7 +30,7 @@ describe("useDieColor", () => {
     { id: "b", name: "B", color: 1, isBot: true },
   ]);
   // Red on square 8 with a five rolled: the walk to square 13 takes five squares.
-  const ready = () => ({ ...game(), phase: "move" as const, dice: 5, pieces: [[8, -1, -1, -1], [-1, -1, -1, -1]] });
+  const ready = (): GameState => ({ ...game(), phase: "move", dice: 5, pieces: [[8, -1, -1, -1], [-1, -1, -1, -1]] });
 
   it("keeps the mover's colour while the piece walks, then hands over", async () => {
     vi.useFakeTimers();
