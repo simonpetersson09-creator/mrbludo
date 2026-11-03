@@ -46,6 +46,7 @@ function NotFoundComponent() {
 
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
+  const { t } = useTranslation();
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });

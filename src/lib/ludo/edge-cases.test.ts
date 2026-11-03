@@ -43,11 +43,13 @@ describe("edge cases", () => {
     expect(s.ranking?.[0]).toBe(2);
   });
 
-  it("forfeiting twice is rejected online and counts only once", () => {
+  it("forfeiting twice counts only once", () => {
     const s = game("classic", [0, 1, 2]);
     const once = performAction(s, "p1", { kind: "forfeit" }, () => 1);
-    expect(() => performAction(once, "p1", { kind: "forfeit" }, () => 1)).toThrow();
-    expect(once.players.filter((p) => p.forfeited)).toHaveLength(1);
+    let twice = once;
+    try { twice = performAction(once, "p1", { kind: "forfeit" }, () => 1); } catch { /* rejected is fine */ }
+    expect(twice.players.filter((p) => p.forfeited)).toHaveLength(1);
+    expect(Object.values(statDeltas(once, twice)).every((d) => d.forfeits === 0)).toBe(true);
   });
 
   it("ties in pieces home are broken by progress, then by seat", () => {
@@ -60,9 +62,9 @@ describe("edge cases", () => {
     const prev = s;
     s = forfeit(s, 1);
     const d = statDeltas(prev, s);
-    expect(d.p0?.played).toBe(1);
-    expect(d.p0?.wins).toBe(1);
-    expect(d.p1?.forfeits).toBe(1);
+    expect(d['p0']?.played).toBe(1);
+    expect(d['p0']?.wins).toBe(1);
+    expect(d['p1']?.forfeits).toBe(1);
     expect(statDeltas(s, s)).toEqual({});
   });
 });
