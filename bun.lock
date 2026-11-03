@@ -5,7 +5,7 @@
     "": {
       "name": "tanstack_start_ts",
       "dependencies": {
-        "@capacitor-community/admob": "^8.2.1",
+        "@capacitor-community/admob": "8.2.1",
         "@capacitor/android": "^8.6.0",
         "@capacitor/app": "^8.1.2",
         "@capacitor/barcode-scanner": "^2",
@@ -154,7 +154,7 @@
 
     "@babel/types": ["@babel/types@7.29.8", "", { "dependencies": { "@babel/helper-string-parser": "^7.29.7", "@babel/helper-validator-identifier": "^7.29.7" } }, "sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg=="],
 
-    "@capacitor-community/admob": ["@capacitor-community/admob@8.3.0", "", { "dependencies": { "@capacitor/core": "^8.0.0", "@rdlabo/capacitor-docgen": "^0.4.1", "@webview-native-ui/engine": "1.0.0" } }, "sha512-3KcvQ7eY05MwuR6ZyMj+XUMmjH2+dtOJPM8EFhO2dyVOmVxfQhgscI4puEjE29CAieCo3wybEJcCoST4uv2+1g=="],
+    "@capacitor-community/admob": ["@capacitor-community/admob@8.2.1", "", { "dependencies": { "@capacitor/core": "^8.0.0", "@rdlabo/capacitor-docgen": "^0.4.1" } }, "sha512-kJRy6EMNrutDZL0ETChg5pAJ9pQFxkcsinrTRD4wkYp7NGkLZmG0m/YBMyXvUhMkbMIqlCGkNRSjgXi25F9/ww=="],
 
     "@capacitor/android": ["@capacitor/android@8.6.0", "", { "peerDependencies": { "@capacitor/core": "^8.6.0" } }, "sha512-6IJS0TCfV/F/8+324CCwYd3xL6r+TH0W7zzaxYzPz9IV3YWCNvsZDuCCPHUIBC5iASb9od827ddSJ6rz+9Pu1Q=="],
 
@@ -729,8 +729,6 @@
     "@vitest/spy": ["@vitest/spy@4.1.11", "", {}, "sha512-apNa/prQy2qCeywhnixOHPRCgGNhvg7T4Dapfl1GahLp/R+uhBm5cPyFoNVyqsNd2h1nJxL6BqqdIjiABL60YA=="],
 
     "@vitest/utils": ["@vitest/utils@4.1.11", "", { "dependencies": { "@vitest/pretty-format": "4.1.11", "convert-source-map": "^2.0.0", "tinyrainbow": "^3.1.0" } }, "sha512-zTCVGpyFsGWBhllOyKlTw/vnr6D9qxsfSDyfbyZmTyjHw5N/VuvzHpHoQjm2ZJzn4RJgx5w4r7V0er69CmLgPQ=="],
-
-    "@webview-native-ui/engine": ["@webview-native-ui/engine@1.0.0", "", { "peerDependencies": { "@capacitor/core": ">=8.0.0 <9" }, "optionalPeers": ["@capacitor/core"] }, "sha512-BSjCUe6TDqJdoF4GNjwpyLU/ZWPTw9tTCMnmPVaAftjAWbhIrOVTpbYHJZnulmkMmfmoWi7s7qxML0gHLLS8RQ=="],
 
     "@xmldom/xmldom": ["@xmldom/xmldom@0.9.12", "", {}, "sha512-5AXjrcMClTryPe9LgZrygpB1lj7s0S9E0+W+AHaVKAVyHanafK86iPSvG5xHVSp/jC+VH1UXu0TAEmY279xH7A=="],
 
