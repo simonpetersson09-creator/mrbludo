@@ -328,7 +328,7 @@ export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState;
 
 
         <span className="seat-card-avatar">
-          {kind === "bot" ? <span className="seat-card-bot"><Bot className="h-[19px] w-[19px]" strokeWidth={2} /></span>
+          {kind === "bot" ? <span className="seat-card-bot"><Bot className="h-[16px] w-[16px]" strokeWidth={2} /></span>
             : info?.image ? <img src={info.image} alt="" className="h-full w-full object-cover" />
             : info?.flag ? <span className="seat-card-flag" aria-hidden="true">{info.flag}</span>
             : info?.emoji ? <span className="text-base leading-none">{info.emoji}</span>
@@ -337,7 +337,7 @@ export function SeatCardRow({ state, seats, edge, ownSeat }: { state: GameState;
         {kind === "online" && <span className="seat-card-globe" aria-hidden="true"><Globe className="h-3 w-3" strokeWidth={2.4} /></span>}
         <span className="min-w-0 leading-tight">
           <span className={`flex items-center gap-1 ${c === right ? "justify-end" : ""}`}>
-            <span className="truncate font-display text-[13px] font-bold">{name}</span>
+            <span className="truncate font-display text-[12px] font-bold">{name}</span>
             {kind === "online" && <span className={`seat-card-presence${info?.away ? " seat-card-presence-away" : ""}`} />}
           </span>
           <span className={`flex items-center gap-0.5 text-[10px] font-semibold opacity-60 ${c === right ? "justify-end" : ""}`}><Trophy className="h-2.5 w-2.5" strokeWidth={2.4} />{home}/4</span>
