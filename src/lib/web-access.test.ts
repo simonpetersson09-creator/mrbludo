@@ -15,6 +15,12 @@ it("keeps the landing page, the admin panel and the app's own API open", () => {
   }
 });
 
+it("still hands out the plain files the host needs", () => {
+  for (const path of ["/app-ads.txt", "/robots.txt", "/favicon.png", "/.well-known/apple-app-site-association"]) {
+    expect(webPlayBlocked({ hostname: "mrbludo.lovable.app", pathname: path })).toBe(false);
+  }
+});
+
 it("shows only the download page to ordinary visitors on the published site", () => {
   for (const path of ["/", "/play", "/setup", "/online", "/online/abc123", "/friends", "/stats", "/settings", "/rules"]) {
     expect(webPlayBlocked({ hostname: "mrbludo.lovable.app", pathname: path })).toBe(true);
