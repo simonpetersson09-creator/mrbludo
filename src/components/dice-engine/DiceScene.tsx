@@ -176,7 +176,7 @@ function DiceSceneImpl({
         <Warmup />
         <DemandDriver
           rolling={rolling}
-          wakeKey={`${values.join(",")}|${heldSafe.join(",")}|${resetKey}|${cleared}|${size}|${fill}|${spacing}|${pipColor ?? ""}|${holdColor ?? ""}|${typeof skin === "object" ? JSON.stringify(skin) : String(skin ?? "")}`}
+          wakeKey={`${values.join(",")}|${heldSafe.join(",")}|${resetKey}|${cleared}|${size}|${fill}|${spacing}|${entryFrom}|${pipColor ?? ""}|${holdColor ?? ""}|${typeof skin === "object" ? JSON.stringify(skin) : String(skin ?? "")}`}
         />
       </Canvas>
     </div>

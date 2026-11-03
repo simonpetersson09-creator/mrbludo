@@ -34,7 +34,7 @@ export function LudoDie({ value, rolling, pipColor, onTap, disabled }: Props) {
       <span className="throw-cloth" aria-hidden="true" />
       {mounted && (
         <Suspense fallback={null}>
-          <DiceScene className={`throw-die ${rolling ? "throw-die-enter" : ""}`} values={[value]} rolling={rolling} fill={0.68} entryFrom="left" skin={bodyColor ? { id: `ludo-${bodyColor}`, body: bodyColor, pip: getComputedStyle(document.documentElement).getPropertyValue("--board-mark").trim() } : undefined} />
+          <DiceScene className={`throw-die ${rolling ? "throw-die-enter" : ""}`} values={[value]} rolling={rolling} fill={0.68} entryFrom="center" skin={bodyColor ? { id: `ludo-${bodyColor}`, body: bodyColor, pip: getComputedStyle(document.documentElement).getPropertyValue("--board-mark").trim() } : undefined} />
         </Suspense>
       )}
     </button>
