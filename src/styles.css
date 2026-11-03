@@ -173,9 +173,9 @@
 @keyframes player-card-turn { 0%, 100% { filter: drop-shadow(0 0 0.04px var(--game-gold)); } 50% { filter: drop-shadow(0 0 0.22px var(--game-gold)); } }
 .player-card-turn { animation: player-card-turn 1.6s ease-in-out infinite; }
 @keyframes piece-done-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
-.piece-done-glow { animation: piece-done-glow 2.2s ease-in-out infinite; }
+.piece-done-glow { opacity: .8; }
 @keyframes base-turn-glow { 0%, 100% { opacity: 0.14; } 50% { opacity: 0.42; } }
-.base-turn-glow { animation: base-turn-glow 1.6s ease-in-out infinite; }
+.base-turn-glow { animation: base-turn-glow 2.4s ease-in-out infinite; }
 @keyframes turn-banner-pop {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
   15% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
@@ -293,7 +293,7 @@
 
 .piece { transition: transform 260ms cubic-bezier(.3,.8,.4,1); }
 .piece-legal circle.piece-ring { animation: piece-pulse 900ms ease-in-out infinite; }
-@keyframes piece-pulse { 0%,100% { opacity: .35; r: .46; } 50% { opacity: 1; r: .52; } }
+@keyframes piece-pulse { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
 .capture-flash { animation: capture 500ms ease-out; }
 @keyframes capture { 0% { opacity: 1; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.6); } }
 @media (prefers-reduced-motion: reduce) {
@@ -362,7 +362,7 @@
 
 /* Home effects ported from Yatzy: soft brand glow, faint dice pattern, staggered entrance, idle logo wiggle. */
 .home-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.home-bg-glow { position: absolute; top: 25%; left: 50%; width: 500px; height: 500px; transform: translateX(-50%); border-radius: 9999px; background: color-mix(in oklch, var(--primary) 6%, transparent); filter: blur(120px); }
+.home-bg-glow { position: absolute; top: 25%; left: 50%; width: 500px; height: 500px; transform: translateX(-50%); border-radius: 9999px; background: radial-gradient(circle, color-mix(in oklch, var(--primary) 9%, transparent), transparent 70%); }
 .home-bg-dice { position: fixed; inset: 0; opacity: .035; background-size: 60px 60px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect x='10' y='10' width='40' height='40' rx='8' fill='none' stroke='white' stroke-width='1.5'/%3E%3Ccircle cx='22' cy='22' r='3' fill='white'/%3E%3Ccircle cx='38' cy='22' r='3' fill='white'/%3E%3Ccircle cx='22' cy='38' r='3' fill='white'/%3E%3Ccircle cx='38' cy='38' r='3' fill='white'/%3E%3Ccircle cx='30' cy='30' r='3' fill='white'/%3E%3C/svg%3E"); }
 @keyframes home-item-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .home-enter > * { animation: home-item-in .45s ease-out both; }
