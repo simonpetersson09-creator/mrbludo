@@ -58,3 +58,26 @@ export function chooseMove(state: GameState, rng: () => number = Math.random): n
   }
   return best;
 }
+
+/**
+ * Full bot decision. In Fia a six may take one yard piece out alone six steps;
+ * the bot prefers that when it knocks someone on square 6 and nothing better exists.
+ */
+export function chooseBotAction(state: GameState, rng: () => number = Math.random): { piece: number; walkOut: boolean } {
+  const piece = chooseMove(state, rng);
+  const me = state.current;
+  const variant = variantOf(state);
+  const yardPiece = state.pieces[me].findIndex((p) => p === YARD);
+  if (yardPiece < 0 || !canWalkOut(state, yardPiece)) return { piece, walkOut: false };
+  const abs = absSquare(state.players[me].color, 6, variant);
+  const knocks = abs != null && state.players.some((op, oi) =>
+    oi !== me && !op.forfeited && state.pieces[oi].some((pr) => absSquare(op.color, pr, variant) === abs));
+  if (!knocks) return { piece, walkOut: false };
+  // A capture elsewhere with the normal move is as good; otherwise walk out and knock.
+  const from = state.pieces[me][piece];
+  const to = targetOf(from, state.dice!, variant);
+  const normalAbs = to == null ? null : absSquare(state.players[me].color, to, variant);
+  const normalKnocks = from !== YARD && normalAbs != null && state.players.some((op, oi) =>
+    oi !== me && !op.forfeited && state.pieces[oi].some((pr) => absSquare(op.color, pr, variant) === normalAbs));
+  return normalKnocks ? { piece, walkOut: false } : { piece: yardPiece, walkOut: true };
+}
