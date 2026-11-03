@@ -195,7 +195,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         HOME_COLUMN[c].map(([x, y], i) => (
           <g key={`${c}-${i}`}>
             <rect x={x} y={y} width="1" height="1" fill={BOARD_FILL[c]} stroke="var(--board-grid)" strokeWidth="0.026" />
-            <circle cx={x + 0.5} cy={y + 0.5} r="0.37" fill="none" stroke="var(--board-mark)" strokeOpacity="0.8" strokeWidth="0.05" />
+            <circle cx={x + 0.5} cy={y + 0.5} r="0.37" fill="none" stroke="var(--board-mark)" strokeOpacity="0.45" strokeWidth="0.04" />
           </g>
         )),
       )}
