@@ -104,7 +104,6 @@ export const ca: Record<TranslationKey, string> = {
   quickMatch: "Partida ràpida",
   matchCode: "Codi de partida",
   friends: "Amics",
-  leaderboard: "Classificació",
   profile: "Perfil",
   admin: "Administració",
   signOut: "Tanca la sessió",

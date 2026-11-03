@@ -104,7 +104,6 @@ export const ptBR: Record<TranslationKey, string> = {
   quickMatch: "Partida rápida",
   matchCode: "Código da partida",
   friends: "Amigos",
-  leaderboard: "Ranking",
   profile: "Perfil",
   admin: "Administração",
   signOut: "Sair",

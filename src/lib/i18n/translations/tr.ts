@@ -113,7 +113,6 @@ export const tr: Record<TranslationKey, string> = {
   quickMatch: "Hızlı maç",
   matchCode: "Maç kodu",
   friends: "Arkadaşlar",
-  leaderboard: "Sıralama",
   profile: "Profil",
   admin: "Yönetici",
   signOut: "Çıkış yap",

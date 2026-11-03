@@ -104,7 +104,6 @@ export const hu: Record<TranslationKey, string> = {
   quickMatch: "Gyors játék",
   matchCode: "Játékkód",
   friends: "Barátok",
-  leaderboard: "Ranglista",
   profile: "Profil",
   admin: "Adminisztráció",
   signOut: "Kijelentkezés",

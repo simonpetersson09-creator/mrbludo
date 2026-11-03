@@ -113,7 +113,6 @@ export const uk: Record<TranslationKey, string> = {
   quickMatch: "Швидкий матч",
   matchCode: "Код матчу",
   friends: "Друзі",
-  leaderboard: "Рейтинг",
   profile: "Профіль",
   admin: "Адмін",
   signOut: "Вийти",

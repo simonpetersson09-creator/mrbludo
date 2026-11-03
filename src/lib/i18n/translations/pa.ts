@@ -113,7 +113,6 @@ export const pa: Record<TranslationKey, string> = {
   quickMatch: "ਤੇਜ਼ ਮੈਚ",
   matchCode: "ਮੈਚ ਕੋਡ",
   friends: "ਦੋਸਤ",
-  leaderboard: "ਲੀਡਰਬੋਰਡ",
   profile: "ਪ੍ਰੋਫਾਈਲ",
   admin: "ਐਡਮਿਨ",
   signOut: "ਲੌਗ ਆਉਟ",

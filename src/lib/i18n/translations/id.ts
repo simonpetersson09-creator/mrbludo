@@ -113,7 +113,6 @@ export const id: Record<TranslationKey, string> = {
   quickMatch: "Pertandingan cepat",
   matchCode: "Kode pertandingan",
   friends: "Teman",
-  leaderboard: "Papan peringkat",
   profile: "Profil",
   admin: "Admin",
   signOut: "Keluar",

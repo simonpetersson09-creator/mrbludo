@@ -113,7 +113,6 @@ export const te: Record<TranslationKey, string> = {
   quickMatch: "క్విక్ మ్యాచ్",
   matchCode: "మ్యాచ్ కోడ్",
   friends: "స్నేహితులు",
-  leaderboard: "లీడర్‌బోర్డ్",
   profile: "ప్రొఫైల్",
   admin: "అడ్మిన్",
   signOut: "లాగ్ అవుట్",

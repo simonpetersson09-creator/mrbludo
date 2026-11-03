@@ -122,7 +122,6 @@ export const sv = {
   quickMatch: "Snabbmatch",
   matchCode: "Matchkod",
   friends: "Vänner",
-  leaderboard: "Topplista",
   profile: "Profil",
   admin: "Admin",
   signOut: "Logga ut",

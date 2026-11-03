@@ -113,7 +113,6 @@ export const th: Record<TranslationKey, string> = {
   quickMatch: "แมตช์ด่วน",
   matchCode: "รหัสแมตช์",
   friends: "เพื่อน",
-  leaderboard: "กระดานอันดับ",
   profile: "โปรไฟล์",
   admin: "ผู้ดูแล",
   signOut: "ออกจากระบบ",

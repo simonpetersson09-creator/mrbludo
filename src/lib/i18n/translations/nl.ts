@@ -104,7 +104,6 @@ export const nl: Record<TranslationKey, string> = {
   quickMatch: "Snel potje",
   matchCode: "Spelcode",
   friends: "Vrienden",
-  leaderboard: "Ranglijst",
   profile: "Profiel",
   admin: "Beheer",
   signOut: "Uitloggen",

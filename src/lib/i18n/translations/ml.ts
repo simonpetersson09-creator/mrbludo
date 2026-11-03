@@ -113,7 +113,6 @@ export const ml: Record<TranslationKey, string> = {
   quickMatch: "ദ്രുത മത്സരം",
   matchCode: "മത്സര കോഡ്",
   friends: "സുഹൃത്തുക്കൾ",
-  leaderboard: "ലീഡർബോർഡ്",
   profile: "പ്രൊഫൈൽ",
   admin: "അഡ്മിൻ",
   signOut: "ലോഗ് ഔട്ട്",

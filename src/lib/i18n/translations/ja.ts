@@ -113,7 +113,6 @@ export const ja: Record<TranslationKey, string> = {
   quickMatch: "クイックマッチ",
   matchCode: "対局コード",
   friends: "フレンド",
-  leaderboard: "ランキング",
   profile: "プロフィール",
   admin: "管理",
   signOut: "ログアウト",
