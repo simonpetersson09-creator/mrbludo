@@ -73,14 +73,21 @@ function HomePage() {
   };
 
   return (
-    <main className="app-screen flex flex-col items-center">
-      <div className="brand-logo mt-2 mb-2 inline-flex h-28 w-28 items-center justify-center sm:h-36 sm:w-36">
-        <img src={mrBDie} alt="" width={383} height={512} className="h-full w-full object-contain" loading="eager" decoding="async" />
+    <main
+      className="flex min-h-[100dvh] flex-col items-center px-6 py-3"
+      style={{ paddingTop: "calc(12px + env(safe-area-inset-top))", paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }}
+    >
+     <div className="relative flex w-full max-w-sm flex-col items-center gap-4 sm:gap-8">
+      <div className="space-y-1 text-center sm:space-y-2">
+        <div className="brand-logo mb-2 inline-flex h-28 w-28 items-center justify-center sm:mb-4 sm:h-36 sm:w-36">
+          <img src={mrBDie} alt="" width={383} height={512} className="h-full w-full object-contain" loading="eager" decoding="async" />
+        </div>
+        <h1 className="brand-wordmark text-4xl sm:text-5xl">Mr B Ludo</h1>
+        <p className="brand-tagline">{t("tagline")}</p>
       </div>
-      <h1 className="brand-wordmark text-4xl sm:text-5xl">Mr B Ludo</h1>
-      <p className="brand-tagline mt-1 mb-6 text-center">{t("tagline")}</p>
+      <div className="w-full mt-8 sm:mt-10">
       {resume && (
-        <div className="home-stack mb-3">
+        <div className="home-stack">
           <Link to="/play" className={`home-match-card font-display ${resume.myTurn ? "home-match-card-turn" : "home-match-card-waiting"}`}>
             <span className={`home-card-chip${resume.myTurn ? " home-card-chip-light" : ""}`}><Play /></span>
             <span className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
@@ -93,6 +100,8 @@ function HomePage() {
           </Link>
         </div>
       )}
+      </div>
+      <div className="w-full">
       <div className="home-stack">
         <button className="home-action font-display" aria-expanded={showQuick} onClick={() => setShowQuick((v) => !v)}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
         {showQuick && (
@@ -143,7 +152,9 @@ function HomePage() {
           </div>
         )}
       </div>
+      </div>
       <HomeStats />
+     </div>
       {search && (
         <QuickMatchSearch
           players={search}
