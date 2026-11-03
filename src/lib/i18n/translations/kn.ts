@@ -31,6 +31,7 @@ export const kn: Record<TranslationKey, string> = {
   gameMode: "ಆಟದ ಮೋಡ್",
   modeClassic: "ಕ್ಲಾಸಿಕ್ ಲೂಡೊ",
   modeFia: "ಸ್ವೀಡಿಷ್ ಫಿಯಾ",
+  roundN: "ಸುತ್ತು {n}",
   modeFiaRules: "(ಸ್ವೀಡಿಷ್ ಆವೃತ್ತಿ)",
 
   colorRed: "ಕೆಂಪು",

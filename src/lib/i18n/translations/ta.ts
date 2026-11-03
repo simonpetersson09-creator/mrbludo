@@ -31,6 +31,7 @@ export const ta: Record<TranslationKey, string> = {
   gameMode: "விளையாட்டு முறை",
   modeClassic: "கிளாசிக் லூடோ",
   modeFia: "ஸ்வீடிஷ் ஃபியா",
+  roundN: "சுற்று {n}",
   modeFiaRules: "(சுவீடிஷ் வகை)",
 
   colorRed: "சிவப்பு",

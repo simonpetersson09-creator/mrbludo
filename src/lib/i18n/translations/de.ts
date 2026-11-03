@@ -31,6 +31,7 @@ export const de: Record<TranslationKey, string> = {
   gameMode: "Spielmodus",
   modeClassic: "Klassisches Ludo",
   modeFia: "Schwedisches Fia",
+  roundN: "Runde {n}",
   modeFiaRules: "(Schwedische Variante)",
 
   colorRed: "Rot",

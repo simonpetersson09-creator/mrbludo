@@ -31,6 +31,7 @@ export const vi: Record<TranslationKey, string> = {
   gameMode: "Chế độ chơi",
   modeClassic: "Ludo cổ điển",
   modeFia: "Fia Thụy Điển",
+  roundN: "Vòng {n}",
   modeFiaRules: "(Biến thể Thụy Điển)",
 
   colorRed: "Đỏ",

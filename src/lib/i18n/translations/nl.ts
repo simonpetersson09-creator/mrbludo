@@ -29,6 +29,7 @@ export const nl: Record<TranslationKey, string> = {
   gameMode: "Spelmodus",
   modeClassic: "Klassiek Ludo",
   modeFia: "Zweeds Fia",
+  roundN: "Ronde {n}",
   modeFiaRules: "(Zweedse variant)",
   colorRed: "Rood",
   colorGreen: "Groen",

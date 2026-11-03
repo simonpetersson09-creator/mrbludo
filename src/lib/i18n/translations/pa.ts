@@ -31,6 +31,7 @@ export const pa: Record<TranslationKey, string> = {
   gameMode: "ਖੇਡ ਮੋਡ",
   modeClassic: "ਕਲਾਸਿਕ ਲੂਡੋ",
   modeFia: "ਸਵੀਡਿਸ਼ ਫ਼ੀਆ",
+  roundN: "ਗੇੜ {n}",
   modeFiaRules: "(ਸਵੀਡਿਸ਼ ਰੂਪ)",
 
   colorRed: "ਲਾਲ",

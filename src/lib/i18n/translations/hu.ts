@@ -29,6 +29,7 @@ export const hu: Record<TranslationKey, string> = {
   gameMode: "Játékmód",
   modeClassic: "Klasszikus Ludo",
   modeFia: "Svéd Fia",
+  roundN: "{n}. kör",
   modeFiaRules: "(Svéd változat)",
   colorRed: "Piros",
   colorGreen: "Zöld",
