@@ -53,6 +53,31 @@ export const RULES: Record<Variant, RuleConfig> = {
   fia: { exitRolls: [1, 6], maxSixes: Infinity, safeStarts: false, blockOwn: true, bounce: true, doubleExitOnSix: true },
 };
 
+/** Track geometry per variant: where a color starts and how long its path is. */
+export interface PathConfig {
+  /** Shift of each color's start square along the track (-1 = one step earlier). */
+  startOffset: number;
+  /** Last progress value on the shared track. */
+  lastTrack: number;
+  /** Colored home-column squares before the goal. */
+  laneLen: number;
+  /** Progress value of the goal (lastTrack + laneLen + 1). */
+  goal: number;
+}
+
+export const PATHS: Record<Variant, PathConfig> = {
+  classic: { startOffset: 0, lastTrack: 50, laneLen: 5, goal: 56 },
+  // Fia: start one step earlier, a full 52-square lap, 6 lane squares.
+  fia: { startOffset: -1, lastTrack: 51, laneLen: 6, goal: 58 },
+};
+
+export const goalOf = (variant: Variant = "classic") => PATHS[variant].goal;
+export const lastTrackOf = (variant: Variant = "classic") => PATHS[variant].lastTrack;
+/** Absolute track index of a color's start square. */
+export const startSquare = (color: Color, variant: Variant = "classic") =>
+  (color * 13 + PATHS[variant].startOffset + TRACK_LEN) % TRACK_LEN;
+
+
 export const variantOf = (state: { variant?: Variant }): Variant => (state.variant === "fia" ? "fia" : "classic");
 export const isVariant = (v: unknown): v is Variant => v === "classic" || v === "fia";
 
