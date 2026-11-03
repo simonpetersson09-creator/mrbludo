@@ -10,20 +10,19 @@
 - [x] Quick play search duration = Yatzy (15 s, verified 17 s incl. start)
 - [x] Language popover placement = Yatzy
 - [x] Bot speeds + haptics verified (only own actions vibrate)
-- [ ] Native server direct to backend like Yatzy — waiting on user decision (requires moving game server logic)
 - [x] Game buttons Yatzy design
 - [x] Die background blends with page
 - [x] Player bar + board centered lower, safe areas top/bottom
-- [ ] Turn bubble diagonal inward with gap
-- [ ] Status text above board black & clearer
-- [ ] Yatzy home-page effects on Ludo home
-- [ ] Smoothness / lag
-- [ ] Language list position
-- [ ] Stats: remove forfeited, "Utslagningar" -> "Utlagda pjäser"
-- [ ] Compress Play with friend page
-- [ ] Fia summary text removed -> "(Svensk variant)"; Spelläge heading centered like player-count heading
-- [ ] Tempo: two levels (normal, fast)
-- [ ] Info.plist proposals (suggestion only)
-- [ ] Friend list layout vs Yatzy
-- [ ] Pre-release check (quick play, friend play, invites, stats, friends, notifications, both modes, translations)
-- [ ] App talks directly to server (native)
+- [x] Turn bubble diagonal inward with gap
+- [x] Status text above board black & clearer
+- [x] Yatzy home-page effects on Ludo home
+- [x] Smoothness / lag
+- [x] Language list position
+- [x] Stats: remove forfeited, "Utslagningar" -> "Utlagda pjäser"
+- [x] Compress Play with friend page
+- [x] Fia summary text removed -> "(Svensk variant)"; Spelläge heading centered like player-count heading
+- [x] Tempo: two levels (normal, fast)
+- [x] Info.plist proposals (suggestion only)
+- [x] Friend list layout vs Yatzy
+- [~] Pre-release check — 138 tests + browser screens done; live two-device online run, push not built
+- [ ] App talks directly to server (native) — needs publish approval (server address) or larger rewrite
