@@ -10,8 +10,16 @@ export function trackEvent(name: string, data: Record<string, unknown> = {}): vo
 }
 
 /** Yatzy waits for one finished match before any App Open ad; Ludo counts finished local games. */
+const ONLINE_DONE_KEY = "mrb-ludo:v1:ads-online-finished";
+function onlineFinished(): string[] {
+  try { const v = JSON.parse(localStorage.getItem(ONLINE_DONE_KEY) ?? "[]"); return Array.isArray(v) ? v.filter((x) => typeof x === "string") : []; } catch { return []; }
+}
+/** Counts a finished online match once (local games are already counted in stats). */
+export function markOnlineMatchFinished(matchId: string): void {
+  try { const ids = onlineFinished(); if (!ids.includes(matchId)) localStorage.setItem(ONLINE_DONE_KEY, JSON.stringify([...ids, matchId].slice(-20))); } catch { /* storage off */ }
+}
 export function getRankedGames(): number {
-  try { return loadStats().played; } catch { return 0; }
+  try { return loadStats().played + onlineFinished().length; } catch { return 0; }
 }
 
 /** Quick-play search on Home acts as Yatzy's waiting room: no App Open ad on top of it. */
