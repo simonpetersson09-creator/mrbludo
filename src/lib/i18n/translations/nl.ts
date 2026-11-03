@@ -28,7 +28,6 @@ export const nl: Record<TranslationKey, string> = {
   gameMode: "Spelmodus",
   modeClassic: "Klassiek Ludo",
   modeFia: "Zweeds Fia",
-  modeClassicRules: "Eruit met 6 · een 6 geeft nog een worp · drie keer 6 achter elkaar beëindigt de beurt · startvakken zijn veilig · exact gooien om te finishen.",
   modeFiaRules: "(Zweedse variant)",
   colorRed: "Rood",
   colorGreen: "Groen",

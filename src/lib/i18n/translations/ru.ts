@@ -30,7 +30,6 @@ export const ru: Record<TranslationKey, string> = {
   gameMode: "Режим игры",
   modeClassic: "Классическое лудо",
   modeFia: "Шведская Fia",
-  modeClassicRules: "Выход на 6 · 6 даёт ещё бросок · три 6 подряд завершают ход · стартовые клетки безопасны · в финиш точным броском.",
   modeFiaRules: "(Шведский вариант)",
 
   colorRed: "Красный",

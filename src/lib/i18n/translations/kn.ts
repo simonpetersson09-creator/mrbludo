@@ -30,7 +30,6 @@ export const kn: Record<TranslationKey, string> = {
   gameMode: "ಆಟದ ಮೋಡ್",
   modeClassic: "ಕ್ಲಾಸಿಕ್ ಲೂಡೊ",
   modeFia: "ಸ್ವೀಡಿಷ್ ಫಿಯಾ",
-  modeClassicRules: "6 ಬಂದರೆ ಹೊರಗೆ · 6 ಬಂದರೆ ಮತ್ತೊಂದು ಎಸೆತ · ಸತತ ಮೂರು 6 ಬಂದರೆ ಸರದಿ ಮುಗಿಯುತ್ತದೆ · ಆರಂಭದ ಚೌಕಗಳು ಸುರಕ್ಷಿತ · ಗುರಿಗೆ ನಿಖರ ಎಸೆತ.",
   modeFiaRules: "(ಸ್ವೀಡಿಷ್ ಆವೃತ್ತಿ)",
 
   colorRed: "ಕೆಂಪು",

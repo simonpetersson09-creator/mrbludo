@@ -30,7 +30,6 @@ export const ml: Record<TranslationKey, string> = {
   gameMode: "ഗെയിം മോഡ്",
   modeClassic: "ക്ലാസിക് ലൂഡോ",
   modeFia: "സ്വീഡിഷ് ഫിയ",
-  modeClassicRules: "6 വന്നാൽ പുറത്ത് · 6 വന്നാൽ വീണ്ടും എറിയാം · തുടർച്ചയായി മൂന്ന് 6 വന്നാൽ ഊഴം തീരും · തുടക്ക കളങ്ങൾ സുരക്ഷിതം · ലക്ഷ്യത്തിലെത്താൻ കൃത്യ എണ്ണം.",
   modeFiaRules: "(സ്വീഡിഷ് പതിപ്പ്)",
 
   colorRed: "ചുവപ്പ്",

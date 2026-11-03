@@ -30,7 +30,6 @@ export const mr: Record<TranslationKey, string> = {
   gameMode: "खेळ प्रकार",
   modeClassic: "क्लासिक लुडो",
   modeFia: "स्वीडिश फिया",
-  modeClassicRules: "6 वर बाहेर · 6 वर पुन्हा फासा · सलग तीन 6 वर पाळी संपते · सुरुवातीची घरे सुरक्षित · घरी पोहोचायला अचूक आकडा.",
   modeFiaRules: "(स्वीडिश प्रकार)",
 
   colorRed: "लाल",

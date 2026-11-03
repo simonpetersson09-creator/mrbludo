@@ -30,7 +30,6 @@ export const da: Record<TranslationKey, string> = {
   gameMode: "Spiltilstand",
   modeClassic: "Klassisk Ludo",
   modeFia: "Svensk Fia",
-  modeClassicRules: "Ud på 6 · en 6'er giver et nyt slag · tre 6'ere i træk afslutter turen · startfelter er sikre · præcist slag i mål.",
   modeFiaRules: "(Svensk variant)",
 
   colorRed: "Rød",

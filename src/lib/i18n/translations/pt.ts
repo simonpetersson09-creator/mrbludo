@@ -30,7 +30,6 @@ export const pt: Record<TranslationKey, string> = {
   gameMode: "Modo de jogo",
   modeClassic: "Ludo clássico",
   modeFia: "Fia sueco",
-  modeClassicRules: "Sai com 6 · um 6 dá outro lançamento · três 6 seguidos terminam a vez · casas de partida são seguras · lançamento exato para terminar.",
   modeFiaRules: "(Variante sueca)",
 
   colorRed: "Vermelho",

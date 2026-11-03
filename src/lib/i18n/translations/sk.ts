@@ -28,7 +28,6 @@ export const sk: Record<TranslationKey, string> = {
   gameMode: "Herný režim",
   modeClassic: "Klasické Ludo",
   modeFia: "Švédska Fia",
-  modeClassicRules: "Von na 6 · 6 dáva ďalší hod · tri 6 za sebou ukončia ťah · štartové polia sú bezpečné · do cieľa presným hodom.",
   modeFiaRules: "(Švédska varianta)",
   colorRed: "Červená",
   colorGreen: "Zelená",

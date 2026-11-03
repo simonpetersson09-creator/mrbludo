@@ -32,7 +32,6 @@ export const sv = {
   gameMode: "Spelläge",
   modeClassic: "Classic Ludo",
   modeFia: "Fia med knuff",
-  modeClassicRules: "Ut på 6 · 6 ger nytt kast · tre sexor i rad avbryter turen · startrutor är säkra · exakt slag i mål.",
   modeFiaRules: "(Svensk variant)",
 
   // Färger

@@ -30,7 +30,6 @@ export const ro: Record<TranslationKey, string> = {
   gameMode: "Mod de joc",
   modeClassic: "Ludo clasic",
   modeFia: "Fia suedeză",
-  modeClassicRules: "Ieși cu 6 · un 6 dă încă o aruncare · trei de 6 la rând încheie tura · căsuțele de start sunt sigure · aruncare exactă la final.",
   modeFiaRules: "(Variantă suedeză)",
 
   colorRed: "Roșu",

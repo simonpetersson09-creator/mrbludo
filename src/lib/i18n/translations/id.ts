@@ -30,7 +30,6 @@ export const id: Record<TranslationKey, string> = {
   gameMode: "Mode permainan",
   modeClassic: "Ludo klasik",
   modeFia: "Fia Swedia",
-  modeClassicRules: "Keluar dengan 6 · 6 dapat lempar lagi · tiga 6 berturut-turut mengakhiri giliran · kotak awal aman · harus pas untuk finis.",
   modeFiaRules: "(Varian Swedia)",
 
   colorRed: "Merah",

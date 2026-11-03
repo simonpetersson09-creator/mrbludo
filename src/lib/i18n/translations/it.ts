@@ -28,7 +28,6 @@ export const it: Record<TranslationKey, string> = {
   gameMode: "Modalità",
   modeClassic: "Ludo classico",
   modeFia: "Fia svedese",
-  modeClassicRules: "Esci con 6 · un 6 dà un altro tiro · tre 6 di fila chiudono il turno · le caselle di partenza sono sicure · tiro esatto per arrivare.",
   modeFiaRules: "(Variante svedese)",
   colorRed: "Rosso",
   colorGreen: "Verde",

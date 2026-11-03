@@ -30,7 +30,6 @@ export const tr: Record<TranslationKey, string> = {
   gameMode: "Oyun modu",
   modeClassic: "Klasik Ludo",
   modeFia: "İsveç Fia",
-  modeClassicRules: "6 ile çıkış · 6 yeni zar hakkı verir · üst üste üç 6 turu bitirir · başlangıç kareleri güvenlidir · bitirmek için tam zar.",
   modeFiaRules: "(İsveç varyantı)",
 
   colorRed: "Kırmızı",

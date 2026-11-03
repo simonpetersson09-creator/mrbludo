@@ -28,7 +28,6 @@ export const hr: Record<TranslationKey, string> = {
   gameMode: "Način igre",
   modeClassic: "Klasični Ludo",
   modeFia: "Švedska Fia",
-  modeClassicRules: "Van sa 6 · 6 daje novo bacanje · tri 6 zaredom završavaju potez · početna polja su sigurna · u cilj točnim bacanjem.",
   modeFiaRules: "(Švedska varijanta)",
   colorRed: "Crvena",
   colorGreen: "Zelena",

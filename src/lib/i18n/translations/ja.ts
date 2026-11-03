@@ -30,7 +30,6 @@ export const ja: Record<TranslationKey, string> = {
   gameMode: "ゲームモード",
   modeClassic: "クラシック・ルード",
   modeFia: "スウェーデン式フィア",
-  modeClassicRules: "6で出発 · 6でもう一回 · 6が3回連続でターン終了 · スタートマスは安全 · ゴールはぴったりで。",
   modeFiaRules: "(スウェーデン版)",
 
   colorRed: "赤",
