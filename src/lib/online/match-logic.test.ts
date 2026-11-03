@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { GOAL } from "@/lib/ludo/engine";
-import { MatchError, performAction, startState, statDeltas, secureRoll } from "./match-logic";
+import { MatchError, autoStep, performAction, startState, statDeltas, secureRoll, type MarkedState } from "./match-logic";
 
 const seats = [{ user_id: "A", seat: 0, display_name: "Anna" }, { user_id: "B", seat: 1, display_name: "Bo" }];
 const fixed = (v: number) => () => v;
@@ -47,5 +47,25 @@ describe("online match logic", () => {
   });
   it("server dice are always 1..6", () => {
     for (let i = 0; i < 2000; i++) { const v = secureRoll(); expect(v >= 1 && v <= 6).toBe(true); }
+  });
+  it("a step played for an idle human is marked, so the app can tell them", () => {
+    const next = autoStep(startState(seats), fixed(3)) as MarkedState;
+    expect(next.auto?.seat).toBe(0);
+    expect(Math.abs(Date.now() - (next.auto?.at ?? 0)) < 5000).toBe(true);
+  });
+  it("a computer seat leaves no notice (nobody was away)", () => {
+    const s = startState(seats, 3);
+    s.current = 2; s.phase = "roll";
+    expect((autoStep(s, fixed(3)) as MarkedState).auto).toBeUndefined();
+  });
+  it("the player's own action clears the notice", () => {
+    const marked = autoStep(startState(seats), fixed(3));
+    const own = performAction(marked, "B", { kind: "roll" }, fixed(4)) as MarkedState;
+    expect(own.auto).toBeUndefined();
+  });
+  it("a following computer step keeps the pending notice alive", () => {
+    const marked = autoStep(startState(seats, 3), fixed(3)) as MarkedState;
+    marked.current = 2; marked.phase = "roll";
+    expect((autoStep(marked, fixed(3)) as MarkedState).auto?.seat).toBe(0);
   });
 });
