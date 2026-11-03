@@ -47,7 +47,7 @@ export const inviteFriendInput = (d: { matchId: string; userId: string }) => ({ 
 export const respondInviteInput = (d: { id: string; accept: boolean }) => ({ id: String(d.id), accept: !!d.accept });
 export const getLeaderboardInput = (d: { sort: "wins" | "played" | "captures" }) => ({ sort: (["wins", "played", "captures"] as const).includes(d.sort) ? d.sort : "wins" });
 export const logEventInput = (d: { kind: string; deviceId?: string; platform?: string; detail?: Record<string, unknown> }) => {
-    const kind = ["session", "error"].includes(d.kind) ? d.kind : "session";
+    const kind = ["session", "error", "ad"].includes(d.kind) ? d.kind : "session";
     const platform = ["ios", "android", "web"].includes(String(d.platform)) ? String(d.platform) : "web";
     const detail = JSON.parse(JSON.stringify(d.detail ?? {}).slice(0, 2000) || "{}");
     return { kind, platform, deviceId: String(d.deviceId ?? "").slice(0, 64) || null, detail };
