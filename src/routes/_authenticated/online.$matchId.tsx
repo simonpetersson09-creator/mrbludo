@@ -138,14 +138,13 @@ function OnlineMatchPage() {
     if (!state || !userId) return;
     const mine = state.players.findIndex((p) => p.id === userId);
     if (state.phase === "finished") { if (prevTurn.current >= 0 && state.winner === mine) void playSuccessHaptic(); prevTurn.current = -2; return; }
-    if (prevTurn.current >= 0 && prevTurn.current !== state.current && state.current === mine) {
-      void playTurnHaptic();
-      setTurnBanner(true);
-      const tm = window.setTimeout(() => setTurnBanner(false), 1500);
-      prevTurn.current = state.current;
-      return () => window.clearTimeout(tm);
-    }
+    const becameMine = prevTurn.current >= 0 && prevTurn.current !== state.current && state.current === mine;
     prevTurn.current = state.current;
+    if (!becameMine) return;
+    void playTurnHaptic();
+    setTurnBanner(true);
+    const tm = window.setTimeout(() => setTurnBanner(false), 1500);
+    return () => window.clearTimeout(tm);
   }, [state?.current, state?.phase, userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const send = useCallback(async (action: { kind: "roll" } | { kind: "move"; piece: number }) => {

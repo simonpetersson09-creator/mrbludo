@@ -99,14 +99,13 @@ function PlayPage() {
   const [turnBanner, setTurnBanner] = useState<Color | null>(null);
   useEffect(() => {
     if (!state || state.phase === "finished") return;
-    if (prevCurrent.current !== -1 && prevCurrent.current !== state.current && !state.players[state.current].isBot) {
-      void playTurnHaptic();
-      setTurnBanner(state.players[state.current].color);
-      const tm = window.setTimeout(() => setTurnBanner(null), 1500);
-      prevCurrent.current = state.current;
-      return () => window.clearTimeout(tm);
-    }
+    const becameHuman = prevCurrent.current !== -1 && prevCurrent.current !== state.current && !state.players[state.current].isBot;
     prevCurrent.current = state.current;
+    if (!becameHuman) return;
+    void playTurnHaptic();
+    setTurnBanner(state.players[state.current].color);
+    const tm = window.setTimeout(() => setTurnBanner(null), 1500);
+    return () => window.clearTimeout(tm);
   }, [state?.current]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Stats on finish (human player 0 is the device owner)
