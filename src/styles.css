@@ -124,7 +124,13 @@
   --board-gold-ink: oklch(0.4 0.08 70);
 }
 .game-screen div:has(> .ludo-board) { box-shadow: var(--board-shadow); }
-.game-board-stack { width: min(100cqw, 100cqh); }
+.game-board-stack { width: min(100cqw, calc(100cqh - 100px)); gap: 6px; }
+.seat-card-row { display: flex; justify-content: space-between; gap: 8px; width: 100%; }
+.seat-card { display: flex; align-items: center; gap: 7px; max-width: 48%; padding: 3px 12px 3px 3px; border-radius: 9999px; background: var(--card); color: var(--card-foreground); border: 2px solid var(--pc); box-shadow: 0 4px 12px -6px oklch(0 0 0 / 0.45); transition: box-shadow .3s, transform .3s; }
+.seat-card.flex-row-reverse { padding: 3px 3px 3px 12px; }
+.seat-card-avatar { position: relative; display: grid; place-items: center; width: 34px; height: 34px; flex: none; border-radius: 9999px; background: var(--pc); color: var(--board-mark); border: 2px solid var(--board-mark); }
+.seat-card-globe { position: absolute; right: -4px; bottom: -4px; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 9999px; background: var(--board-ink); color: var(--board-mark); border: 1.5px solid var(--board-mark); }
+.seat-card-turn { border-color: var(--game-gold); box-shadow: 0 0 0 2px var(--pc), 0 0 14px 2px var(--game-gold); transform: scale(1.04); }
 @keyframes player-card-turn { 0%, 100% { filter: drop-shadow(0 0 0.04px var(--game-gold)); } 50% { filter: drop-shadow(0 0 0.22px var(--game-gold)); } }
 .player-card-turn { animation: player-card-turn 1.6s ease-in-out infinite; }
 @keyframes piece-done-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }

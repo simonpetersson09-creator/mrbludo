@@ -1,7 +1,7 @@
 import { memo, useId, useLayoutEffect, useRef } from "react";
 import { Bot, Globe, Trophy } from "lucide-react";
 import { GOAL, type Color, type GameState } from "@/lib/ludo/engine";
-import { HOME_COLUMN, TRACK, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardIsTop, yardNestCenter } from "@/lib/ludo/board";
+import { HOME_COLUMN, TRACK, YARD_ORIGIN, YARD_SPOT_GAP, pieceCenter, yardNestCenter } from "@/lib/ludo/board";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 import { movePreviews } from "@/lib/ludo/move-preview";
 import { pieceWaypoints } from "@/lib/ludo/piece-motion";
