@@ -315,6 +315,19 @@ export const sv = {
   adminPushNone: "Ingen registrerad enhet – tillåt notiser i iPhone-appen.",
   adminPushOff: "Pushnotiser är inte konfigurerade på servern.",
   adminPushFailed: "Apple svarade med fel: {reason}",
+  friendRequestToast: "{name} vill bli din vän",
+  notifOffTitle: "Aviseringar är avstängda",
+  notifOffDesc: "Annars missar du när det är din tur.",
+  notifOffAction: "Slå på",
+  quickIntroTitle: "Dina motspelare",
+  quickIntroOnline: "Online",
+  aiSeat: "Datorn spelar",
+  h2hLine: "Inbördes {won}–{lost} · {n} matcher",
+  appVersion: "Version {v}",
+  adminChartDevices: "Appenheter per dag",
+  adminChartMinutes: "Snittid per besök (min)",
+  adminChartMinutesNote: "Hur länge appen är öppen per besök, iPhone och Android.",
+  adminSessions: "Besök",
 };
 
 export type TranslationKey = keyof typeof sv;

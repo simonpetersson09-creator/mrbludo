@@ -8,6 +8,7 @@ import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 import { QuickMatchSearch } from "@/components/ludo/QuickMatchSearch";
 import { HomeStats } from "@/components/ludo/HomeStats";
+import { NotificationsOffRow } from "@/components/NotificationsOffRow";
 import mrBDie from "@/assets/mr-b-die.png";
 import { startHomeAds } from "@/lib/ads/home-ads";
 import { Capacitor } from "@capacitor/core";
@@ -186,6 +187,7 @@ function HomePage() {
         </Link>
       </div>
       </div>
+      <NotificationsOffRow className="mx-auto mt-3 max-w-md" />
       <HomeStats />
      </div>
       {search && (

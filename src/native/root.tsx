@@ -4,6 +4,11 @@ import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AndroidBackButton } from "@/components/AndroidBackButton";
 import { NativeDeepLinks } from "@/components/NativeDeepLinks";
+import { SwipeBack } from "@/components/SwipeBack";
+import { AppPresence } from "@/components/AppPresence";
+import { logEvent } from "@/lib/online/online.functions";
+import { deviceId, platform } from "@/lib/online/telemetry";
+import { reportAppError } from "@/lib/online/report";
 import { ensurePlayerSession } from "@/lib/auth/player";
 import { supabase } from "@/lib/auth/client";
 import { startNativeRuntime, RESUME_EVENT } from "@/lib/native/runtime";
@@ -22,9 +27,18 @@ function NativeRoot() {
     const connect = () => {
       if (!navigator.onLine) { nativeDiagnostic("session", "offline"); return; }
       nativeDiagnostic("session", "started");
-      ensurePlayerSession().then(() => { nativeDiagnostic("session", "ready"); return router.invalidate(); }).catch(() => nativeDiagnostic("session", "failed"));
+      ensurePlayerSession().then(() => {
+        nativeDiagnostic("session", "ready");
+        // Counts this phone as an app device for today in the admin panel (was missing in the app build).
+        void logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
+        return router.invalidate();
+      }).catch(() => nativeDiagnostic("session", "failed"));
     };
     connect();
+    const onError = (e: ErrorEvent) => reportAppError(e.error ?? e.message, "onerror");
+    const onRejection = (e: PromiseRejectionEvent) => reportAppError(e.reason, "unhandledrejection");
+    window.addEventListener("error", onError);
+    window.addEventListener("unhandledrejection", onRejection);
     startNativeRuntime(() => { void router.navigate({ to: "/" }); }).then(fn => { if (stopped) fn(); else cleanup = fn; }).catch(() => nativeDiagnostic("runtime", "failed"));
     let pushCleanup: (() => void) | undefined;
     import("@/lib/native/push").then(({ startPush }) => startPush((path) => { void router.navigate({ href: path }); }))
@@ -36,7 +50,7 @@ function NativeRoot() {
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });
-    return () => { stopped = true; cleanup?.(); pushCleanup?.(); viewportCleanup(); data.subscription.unsubscribe(); window.removeEventListener("online", connect); window.removeEventListener(RESUME_EVENT, connect); };
+    return () => { stopped = true; cleanup?.(); pushCleanup?.(); viewportCleanup(); data.subscription.unsubscribe(); window.removeEventListener("online", connect); window.removeEventListener(RESUME_EVENT, connect); window.removeEventListener("error", onError); window.removeEventListener("unhandledrejection", onRejection); };
   }, [router, queryClient]);
-  return <QueryClientProvider client={queryClient}><HeadContent /><AndroidBackButton /><NativeDeepLinks /><Outlet /><Toaster position="top-center" /></QueryClientProvider>;
+  return <QueryClientProvider client={queryClient}><HeadContent /><AndroidBackButton /><SwipeBack /><NativeDeepLinks /><AppPresence /><Outlet /><Toaster position="top-center" /></QueryClientProvider>;
 }

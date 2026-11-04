@@ -409,6 +409,36 @@ export const respondFriendAction = async ({ data, context }: { data: ReturnType<
     }
     return { ok: true };
   };
+/** Finished online matches this player shared with each friend: played together, won, lost (Yatzy's "inbördes möten"). */
+export async function headToHead(db: Admin, userId: string, others: string[]) {
+  const out: Record<string, { played: number; won: number; lost: number }> = {};
+  if (!others.length) return out;
+  const { data: mine } = await db.from("match_players").select("match_id").eq("user_id", userId).limit(1000);
+  const ids = [...new Set((mine ?? []).map((r) => r.match_id))];
+  const pairs: { match_id: string; user_id: string }[] = [];
+  const done: { id: string; state: unknown }[] = [];
+  for (let i = 0; i < ids.length; i += 100) {
+    const chunk = ids.slice(i, i + 100);
+    const [{ data: p }, { data: m }] = await Promise.all([
+      db.from("match_players").select("match_id, user_id").in("match_id", chunk).in("user_id", others),
+      db.from("matches").select("id, state").in("id", chunk).eq("status", "finished"),
+    ]);
+    pairs.push(...(p ?? [])); done.push(...(m ?? []));
+  }
+  const winnerOf = new Map(done.map((m) => {
+    const st = m.state as { winner?: number | null; players?: { id: string }[] } | null;
+    return [m.id, st && st.winner != null ? st.players?.[st.winner]?.id ?? null : null] as const;
+  }));
+  for (const p of pairs) {
+    if (!winnerOf.has(p.match_id)) continue; // not finished
+    const r = (out[p.user_id] ??= { played: 0, won: 0, lost: 0 });
+    r.played++;
+    const w = winnerOf.get(p.match_id);
+    if (w === userId) r.won++; else if (w === p.user_id) r.lost++;
+  }
+  return out;
+}
+
 export const listFriendsAction = async ({ context }: { context: OnlineContext }) => {
   const { supabase, userId } = context;
   const { data: rows } = await supabase.from("friendships").select("*").or(`requester.eq.${userId},addressee.eq.${userId}`);
@@ -416,11 +446,13 @@ export const listFriendsAction = async ({ context }: { context: OnlineContext })
   // last_seen is not readable by other players directly; it is shown only to friends, read here on the server.
   const { data: profs } = ids.length ? await (await admin()).from("profiles").select("id, display_name, avatar, country, last_seen").in("id", ids) : { data: [] };
   const byId = new Map((profs ?? []).map((p) => [p.id, p]));
+  const friendIds = (rows ?? []).filter((r) => r.status === "accepted").map((r) => (r.requester === userId ? r.addressee : r.requester));
+  const h2h = await headToHead(await admin(), userId, friendIds).catch(() => ({} as Awaited<ReturnType<typeof headToHead>>));
   const { data: invites } = await supabase.from("match_invites").select("id, match_id, from_user, created_at").eq("to_user", userId).eq("status", "pending").gte("created_at", new Date(Date.now() - INVITE_TTL_MS).toISOString()).order("created_at", { ascending: false }).limit(10);
   return {
     friends: (rows ?? []).map((r) => {
       const other = r.requester === userId ? r.addressee : r.requester;
-      return { id: r.id, status: r.status, incoming: r.addressee === userId, user: byId.get(other) ?? { id: other, display_name: "?", avatar: "🎲", country: "SE", last_seen: null } };
+      return { id: r.id, status: r.status, incoming: r.addressee === userId, h2h: r.status === "accepted" ? h2h[other] ?? null : null, user: byId.get(other) ?? { id: other, display_name: "?", avatar: "🎲", country: "SE", last_seen: null } };
     }),
     invites: (invites ?? []).map((i) => ({ ...i, from: byId.get(i.from_user) ?? null })),
   };
@@ -501,13 +533,17 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
     db.from("match_players").select("user_id, last_seen").gte("last_seen", new Date(now - 2 * 60_000).toISOString()),
   ]);
   const ev = events.data ?? [];
-  const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; webDevices: number }[] = [];
+  const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; webDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
   for (let i = 29; i >= 0; i--) {
     const d = new Date(now - i * day).toISOString().slice(0, 10);
     const dayEv = ev.filter((e) => e.created_at.startsWith(d));
     const devs = (p: (x: string | null) => boolean) => new Set(dayEv.filter((e) => e.kind === "session" && e.device_id && p(e.platform)).map((e) => e.device_id)).size;
+    const visits = dayEv.filter((e) => e.kind === "session_end" && (e.platform === "ios" || e.platform === "android"))
+      .map((e) => Number((e.detail as { seconds?: number } | null)?.seconds) || 0).filter((x) => x > 0);
     days.push({
       date: d,
+      appSessions: visits.length,
+      avgMinutes: visits.length ? Math.round((visits.reduce((a, b) => a + b, 0) / visits.length / 60) * 10) / 10 : null,
       started: dayEv.filter((e) => e.kind === "match_started").length,
       finished: dayEv.filter((e) => e.kind === "match_finished").length,
       forfeits: dayEv.filter((e) => e.kind === "forfeit").length,

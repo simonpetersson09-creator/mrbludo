@@ -26,6 +26,8 @@ export interface SeatInfo {
   image?: string | null;
   emoji?: string | undefined;
   away?: boolean;
+  /** Quick play: the computer is playing this seat until its player returns. */
+  takenOver?: boolean;
 }
 
 interface Props {
@@ -442,7 +444,7 @@ export function SeatCardRow({ state, seats, edge, ownSeat, onSeatTap }: { state:
             <span className="truncate font-display text-[12px] font-bold">{name}</span>
             {kind === "online" && <span className={`seat-card-presence${info?.away ? " seat-card-presence-away" : ""}`} />}
           </span>
-          <span className={`flex items-center gap-0.5 text-[10px] font-semibold opacity-60 ${c === right ? "justify-end" : ""}`}><Trophy className="h-2.5 w-2.5" strokeWidth={2.4} />{home}/4</span>
+          <span className={`flex items-center gap-0.5 text-[10px] font-semibold opacity-60 ${c === right ? "justify-end" : ""}`}><Trophy className="h-2.5 w-2.5" strokeWidth={2.4} />{home}/4{info?.takenOver && <span className="ml-1 inline-flex items-center gap-0.5 rounded-full bg-secondary px-1.5 font-bold opacity-100"><Bot className="h-2.5 w-2.5" strokeWidth={2.4} />{t("aiSeat")}</span>}</span>
         </span>
       </div>
     );

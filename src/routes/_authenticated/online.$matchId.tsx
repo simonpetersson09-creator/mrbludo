@@ -2,7 +2,7 @@ import { sendOnce, withDeadline } from "@/lib/online/deadline";
 import type React from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Check, Copy, Play, Share2, UserPlus, WifiOff } from "lucide-react";
+import { Bot, Check, Copy, Play, Share2, UserPlus, WifiOff } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { matchQrValue } from "@/lib/online/match-code";
 import { PUBLISHED_LUDO_ORIGIN } from "@/lib/native/origin";
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/lib/auth/client";
-import { LudoBoard, SeatCardRow } from "@/components/ludo/LudoBoard";
+import { LudoBoard, SeatCardRow, type SeatInfo } from "@/components/ludo/LudoBoard";
 import { MatchInfoBar } from "@/components/ludo/MatchInfoBar";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import { useDieColor } from "@/components/ludo/useDieColor";
@@ -27,7 +27,7 @@ import { act, getPlayerCard, heartbeat, inviteFriend, leaveMatch, listFriends, s
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { flag } from "@/lib/online/profile-options";
-import { TURN_SECONDS, type MarkedState } from "@/lib/online/match-logic";
+import { TURN_SECONDS, isAway, type MarkedState } from "@/lib/online/match-logic";
 import { rememberOnlineMatch } from "@/lib/online/snapshot";
 import { RESUME_EVENT } from "@/lib/native/runtime";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
@@ -249,7 +249,7 @@ function OnlineMatchPage() {
   const captureAt = ev?.kind === "moved" && ev.captured.length ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece, variantOf(state)) as [number, number]) : null;
   const seatOf = (id: string) => seats.find((s) => s.user_id === id);
 
-  const seatInfo = state.players.map((p) => { const s = seatOf(p.id); return { name: p.name, kind: p.isBot ? "bot" as const : "online" as const, flag: s ? flag(s.country) : undefined, image: s ? pics[s.user_id] : null, emoji: s?.avatar, away: !!s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited }; });
+  const seatInfo = state.players.map((p) => { const s = seatOf(p.id); return { name: p.name, kind: p.isBot ? "bot" as const : "online" as const, flag: s ? flag(s.country) : undefined, image: s ? pics[s.user_id] : null, emoji: s?.avatar, away: !!s && Date.now() - new Date(s.last_seen).getTime() > 20_000 && !p.forfeited, takenOver: !match.is_private && !p.isBot && !p.forfeited && isAway(state, state.players.indexOf(p)) }; });
 
   return (
     <main className="game-screen">
@@ -303,6 +303,7 @@ function OnlineMatchPage() {
         return <PlayerCardDialog matchId={match.id} userId={p.id} name={p.name} color={COLOR_VAR[p.color]} flagText={s ? flag(s.country) : ""} image={s ? pics[s.user_id] ?? null : null} emoji={s?.avatar ?? "🎲"} onClose={() => setCardSeat(null)} />;
       })()}
       <ExtraRollBanner state={state} />
+      {!match.is_private && <QuickMatchIntro matchId={matchId} state={state} seats={seatInfo} mySeat={mySeat} />}
       {turnBanner && (
         <div className="turn-banner" aria-hidden="true" style={{ "--pc": COLOR_VAR[state.players[mySeat]?.color ?? 0] } as React.CSSProperties}>
           <span className="font-display text-[13px] font-bold" style={{ color: COLOR_VAR[state.players[mySeat]?.color ?? 0] }}>{t("yourTurn")}</span>
@@ -480,5 +481,40 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
         <button className="home-action home-action-ghost mt-4" onClick={onLeave}>{t("leaveWaiting")}</button>
       </div>
     </main>
+  );
+}
+
+/** Yatzy-style: for 2 seconds when a quick match begins, show who you are actually playing against. */
+function QuickMatchIntro({ matchId, state, seats, mySeat }: { matchId: string; state: GameState; seats: SeatInfo[]; mySeat: number }) {
+  const { t } = useTranslation();
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const key = `mrb-ludo:v1:intro:${matchId}`;
+    let seen = false;
+    try { seen = sessionStorage.getItem(key) === "1"; sessionStorage.setItem(key, "1"); } catch { /* private mode */ }
+    // Only right at the start, not when reopening a match that is well under way.
+    if (seen || state.phase === "finished" || state.turnCount > state.players.length) return;
+    setShow(true);
+    const tm = window.setTimeout(() => setShow(false), 2000);
+    return () => window.clearTimeout(tm);
+  }, [matchId]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (!show) return null;
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-background/70 backdrop-blur-sm" onClick={() => setShow(false)} role="dialog" aria-label={t("quickIntroTitle")}>
+      <div className="w-[min(88vw,340px)] rounded-2xl border border-gold/40 bg-card p-4 text-center shadow-2xl animate-in fade-in zoom-in-95">
+        <p className="font-display text-lg font-black text-gold">{t("quickIntroTitle")}</p>
+        <div className="mt-3 space-y-1.5">
+          {state.players.map((p, i) => i === mySeat ? null : (
+            <div key={p.id} className="flex items-center gap-2.5 rounded-xl bg-secondary/60 px-3 py-2 text-left">
+              <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
+              {seats[i]?.kind === "bot" ? <Bot className="h-5 w-5 shrink-0 text-muted-foreground" />
+                : <PlayerAvatar emoji={seats[i]?.emoji ?? "🎲"} image={seats[i]?.image ?? null} className="h-7 w-7 border border-border/60 bg-secondary text-sm" />}
+              <span className="min-w-0 flex-1 truncate font-display text-sm font-bold">{p.name} {seats[i]?.kind === "bot" ? "" : seats[i]?.flag ?? ""}</span>
+              <span className="shrink-0 text-[11px] text-muted-foreground">{seats[i]?.kind === "bot" ? t("bot") : t("quickIntroOnline")}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

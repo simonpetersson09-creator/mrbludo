@@ -55,3 +55,22 @@ export async function forgetPushToken(): Promise<void> {
   if (token) { try { await unregisterPushToken({ data: { token } }); } catch { /* server also deletes on erase */ } }
   try { await (await plugin()).unregister(); } catch { /* unavailable */ }
 }
+
+export type PushPermission = "granted" | "denied" | "prompt" | "unsupported";
+
+/** Current notification permission on this iPhone; other platforms report "unsupported". */
+export async function pushPermission(): Promise<PushPermission> {
+  if (!isIos()) return "unsupported";
+  try {
+    const s = (await (await plugin()).checkPermissions()).receive;
+    return s === "granted" ? "granted" : s === "denied" ? "denied" : "prompt";
+  } catch { return "unsupported"; }
+}
+
+/** "Slå på": asks if iOS still may ask, otherwise opens this app's page in iOS Settings. */
+export async function enablePush(): Promise<PushPermission> {
+  const now = await pushPermission();
+  if (now === "prompt") { await askPushPermission(); return pushPermission(); }
+  if (now === "denied") { try { window.location.href = "app-settings:"; } catch { /* not available */ } }
+  return now;
+}

@@ -109,6 +109,7 @@ function FriendsPage() {
                 <PlayerAvatar emoji={f.user.avatar} image={pics[f.user.id]} className="h-9 w-9 border border-border/60 bg-secondary text-base" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-display text-sm font-bold text-foreground">{f.user.display_name} {flag(f.user.country)}</p>
+                  {f.h2h && f.h2h.played > 0 && <p className="text-[10px] font-semibold text-gold">{t("h2hLine", { won: f.h2h.won, lost: f.h2h.lost, n: f.h2h.played })}</p>}
                   <p className="text-[10px] leading-snug text-muted-foreground">
                     <span className={`mr-1 inline-block h-1.5 w-1.5 rounded-full ${online(f.user.last_seen) ? "bg-success" : "bg-muted"}`} />
                     <button className="underline-offset-2 hover:underline" onClick={() => act(respondFriend({ data: { id: f.id, accept: false } }))}>{t("remove")}</button>

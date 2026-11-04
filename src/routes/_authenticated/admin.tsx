@@ -48,6 +48,8 @@ function AdminPage() {
             <Stat l={t("adminRetD30")} v={d.retention.d30} />
           </div>
           <PushTest />
+          <Chart title={t("adminChartDevices")} values={d.days.map((r) => r.appDevices)} dates={d.days.map((r) => r.date)} />
+          <Chart title={t("adminChartMinutes")} note={t("adminChartMinutesNote")} values={d.days.map((r) => r.avgMinutes ?? 0)} dates={d.days.map((r) => r.date)} extra={d.days.map((r) => r.appSessions)} extraLabel={t("adminSessions")} />
           <h2 className="mt-5 font-display text-lg font-bold">{t("last30Days")}</h2>
           <p className="text-xs text-muted-foreground">{t("appDevicesNote")}</p>
           <table className="mt-2 w-full text-xs">
@@ -67,6 +69,27 @@ function AdminPage() {
         </>)}
       </div>
     </main>
+  );
+}
+
+/** Simple 30-day bar chart (app devices or average visit minutes per day); tap a bar to read its value. */
+function Chart({ title, note, values, dates, extra, extraLabel }: { title: string; note?: string; values: number[]; dates: string[]; extra?: number[]; extraLabel?: string }) {
+  const [pick, setPick] = useState<number | null>(null);
+  const max = Math.max(1, ...values);
+  const i = pick ?? values.length - 1;
+  return (
+    <section className="mt-5">
+      <h2 className="font-display text-lg font-bold">{title}</h2>
+      {note && <p className="text-xs text-muted-foreground">{note}</p>}
+      <p className="mt-1 text-xs text-muted-foreground">{dates[i]}: <span className="font-bold text-gold">{values[i]}</span>{extra && extraLabel ? ` · ${extraLabel}: ${extra[i]}` : ""}</p>
+      <div className="mt-2 flex h-28 items-end gap-[3px] rounded-[10px] bg-surface p-2">
+        {values.map((v, k) => (
+          <button key={dates[k]} type="button" aria-label={`${dates[k]}: ${v}`} onClick={() => setPick(k)}
+            className={`min-w-0 flex-1 rounded-t-[3px] ${k === i ? "bg-gold" : "bg-primary/70"}`} style={{ height: `${Math.max(2, (v / max) * 100)}%` }} />
+        ))}
+      </div>
+      <div className="mt-1 flex justify-between text-[10px] text-muted-foreground"><span>{dates[0]?.slice(5)}</span><span>{dates[dates.length - 1]?.slice(5)}</span></div>
+    </section>
   );
 }
 

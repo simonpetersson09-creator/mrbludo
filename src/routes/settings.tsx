@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, BarChart3, Bell, BellRing, Camera, Check, ChevronRight, Dices, Globe, Gauge, ShieldCheck, Trash2, User, Vibrate } from "lucide-react";
+import { NotificationsOffRow } from "@/components/NotificationsOffRow";
+import { AppVersion } from "@/components/AppVersion";
 import { DeletePlayerDataDialog } from "@/components/ludo/DeletePlayerDataDialog";
 import { toast } from "sonner";
 import { loadNotificationPrefs, loadSettings, resetStats, saveNotificationPrefs, saveSettings, type NotificationPrefs, type Settings } from "@/lib/ludo/storage";
@@ -233,6 +235,7 @@ function SettingsPage() {
 
         {notifs && (
           <Section title={t("notifications")}>
+            <NotificationsOffRow />
             <p className="px-2 text-xs text-muted-foreground">{t("notifInactive")}</p>
             <Card>
               <ToggleRow icon={<Bell className="h-4 w-4 shrink-0 text-primary" />} label={t("notifTurnLabel")} description={t("notifTurnDesc")} value={notifs.turnNotifications} onChange={(v) => updateNotif("turnNotifications", v)} />
@@ -267,6 +270,7 @@ function SettingsPage() {
             <span className="text-sm font-medium text-destructive">{t("deleteData")}</span>
           </button>
         </Card>
+        <AppVersion />
         <DeletePlayerDataDialog open={deleteOpen} onClose={() => setDeleteOpen(false)} />
       </div>
     </main>
