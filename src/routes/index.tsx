@@ -135,25 +135,18 @@ function HomePage() {
         <button className={`home-action w-full font-display${firstHint ? " home-quick-glow" : ""}`} aria-expanded={showQuick} onClick={() => { doneFirstHint(); setShowQuick((v) => !v); }}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
         </div>
         {showQuick && (
-          <div className="space-y-3 overflow-hidden rounded-2xl border border-primary/30 bg-card/80 p-3">
-            <div className="flex items-start gap-2">
-              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary font-display text-xs font-bold text-primary-foreground">1</span>
-              <div className="min-w-0 flex-1 [&>div>p]:mb-2 [&>div>p]:text-left [&>div>p]:font-semibold [&>div>p]:text-foreground"><VariantPicker value={variant} onChange={setVariant} /></div>
-            </div>
+          <div className="space-y-2 overflow-hidden rounded-xl border border-primary/30 bg-card/80 p-2.5">
+            <VariantPicker value={variant} onChange={setVariant} compact />
             <div className="h-px bg-border/60" />
-            <div className="flex items-start gap-2">
-              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold font-display text-xs font-bold text-background">2</span>
-              <div className="min-w-0 flex-1">
-                <p className="mb-2 text-sm font-semibold text-foreground">{t("selectPlayerCount")}</p>
-                <div className="flex gap-2">
-                  {[1, 2, 3].map((n) => (
-                    <button key={n} type="button" onClick={() => setSearch(n + 1)}
-                      className="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl border border-gold/40 bg-gold/10 px-1 py-2 text-center font-display text-xs font-bold leading-tight text-foreground transition-all active:scale-95 active:bg-gold/25">
-                      <span aria-hidden="true" className="text-base leading-none tracking-tighter">{"👤".repeat(n)}</span>
-                      <span>{n} {n === 1 ? t("opponent") : t("opponents")}</span>
-                    </button>
-                  ))}
-                </div>
+            <div className="min-w-0">
+              <p className="mb-1 text-[11px] font-semibold text-foreground">{t("selectPlayerCount")}</p>
+              <div className="flex gap-1.5">
+                {[1, 2, 3].map((n) => (
+                  <button key={n} type="button" onClick={() => setSearch(n + 1)}
+                    className="min-h-9 flex-1 rounded-lg border border-gold/40 bg-gold/10 px-1 py-1.5 text-center font-display text-[11px] font-bold leading-tight text-foreground transition-all active:scale-95 active:bg-gold/25">
+                    {n} {n === 1 ? t("opponent") : t("opponents")}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
