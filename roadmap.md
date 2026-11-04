@@ -25,7 +25,7 @@
 - [x] Info.plist proposals (suggestion only)
 - [x] Friend list layout vs Yatzy
 - [~] Pre-release check — 138 tests + browser screens done; live two-device online run, push not built
-- [ ] App talks directly to server (native) — needs publish approval (server address) or larger rewrite
+- [x] App talks directly to server (native) — packaged app uses https://mrbludo.lovable.app through Ludo's own boundary (src/lib/native/origin.ts)
 - [x] Launch audit C1–C4: heartbeat/quick-status membership check, account deletion uses "playing", atomic stats increment, one quick-play search per player (194 tests; not live two-device tested)
 - [x] Rating prompt (Yatzy schedule 5/15/35, app only), error + ad events in admin logs, translated error page, 4-pieces-on-start Fia test (209 tests; not tried on a phone)
 ## Waiting on Simon
@@ -34,7 +34,8 @@
 - [ ] Firebase project for Android notifications (google-services.json)
 - [ ] Android signing key fingerprint (app links)
 - [ ] Privacy policy: approve text + company/support details
-- [ ] Store material: screenshots, descriptions, age rating, privacy/Data safety, ad declarations
+- [x] Store material (partly): iPhone screenshots 12 (sv/en/da, 1179x2556), iPad screenshots 15 (sv/en/da, 2048x2732), App Store headers (3840x2560 + 3840x1646); descriptions, age rating, Data safety and ad declarations still missing
+- [ ] iPad store pictures: review English and Danish sets; start-page shot still shows the old die-with-hat logo, not the new red pawn icon
 - [x] Invites expire after 6 h, single use, 10 s send limit; friend requests only after finished match; one friendship per pair
 - [x] C6/C7: others see only public profile/stat fields; forfeits excluded from weekly/country lists; country stored per match; only real country codes
 - [x] E5–E8: Fia bot walk-out choice, edge-case tests, translated 404 page, real unknown-key check (204 tests)
