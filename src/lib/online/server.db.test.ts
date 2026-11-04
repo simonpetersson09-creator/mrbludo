@@ -362,12 +362,16 @@ describe("12. invites to started matches and correct acceptance", () => {
 
 // ---------------------------------------------------------------- 15
 describe("15. profile picture and last-online permissions", () => {
-  it("signed-in players read only public profile columns", async () => {
+  it("signed-in players read only their own public profile columns", async () => {
     const [me, other] = [await user(), await user()];
     const c = client({ role: "authenticated", sub: me });
+    const own = await c.from("profiles").select("id, display_name, avatar, country").eq("id", me);
+    expect(own.error).toBeNull();
+    expect(own.data?.length).toBe(1);
+    // Other players' rows are served only by server functions (owner-only policy).
     const ok = await c.from("profiles").select("id, display_name, avatar, country").eq("id", other);
     expect(ok.error).toBeNull();
-    expect(ok.data?.length).toBe(1);
+    expect(ok.data?.length).toBe(0);
     for (const col of ["last_seen", "avatar_image", "friend_code", "created_at", "*"]) {
       const r = await c.from("profiles").select(col).eq("id", other);
       expect(r.error?.code, col).toBe("42501");
