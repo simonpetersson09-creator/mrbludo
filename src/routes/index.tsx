@@ -104,7 +104,7 @@ function HomePage() {
       style={{ paddingTop: "calc(12px + env(safe-area-inset-top))", paddingBottom: "calc(12px + env(safe-area-inset-bottom))" }}
     >
      <div className="home-bg" aria-hidden="true"><div className="home-bg-glow" /><div className="home-bg-dice" /></div>
-     <div className="home-enter relative z-10 flex w-full max-w-sm flex-col items-center gap-4 sm:gap-8">
+     <div className="home-enter relative z-10 my-auto flex w-full max-w-sm flex-col items-center gap-4 sm:gap-8 after:absolute after:left-0 after:top-[calc(100%+0.5rem)] after:h-40 after:w-px after:content-['']">
       <div className="space-y-1 text-center sm:space-y-2">
         <div className="brand-logo mb-2 inline-flex h-28 w-28 items-center justify-center sm:mb-4 sm:h-36 sm:w-36">
           <img src={mrBDie} alt="" width={383} height={512} className="h-full w-full object-contain" loading="eager" decoding="async" />
