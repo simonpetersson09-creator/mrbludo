@@ -6,7 +6,7 @@ import { getStatsBoards } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
-import { loadStats, resetStats, type Stats } from "@/lib/ludo/storage";
+import { loadStats, type Stats } from "@/lib/ludo/storage";
 import { useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/stats")({
@@ -60,7 +60,6 @@ function StatsPage() {
             <span className="text-muted-foreground">{k}</span><span className="font-bold">{v}</span>
           </div>
         ))}
-        <button className="home-action home-action-ghost mt-4" onClick={() => { resetStats(); setS(loadStats()); }}>{t("resetStats")}</button>
         <WeeklyMostActive boards={boards} loading={loading} />
         <TopCountries boards={boards} loading={loading} lang={lang} />
       </div>
