@@ -92,6 +92,13 @@
       "when": 1793802572379,
       "tag": "0012_nogo_fixes_rate_limits_cleanup_profile_columns",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1793803867197,
+      "tag": "0013_cleanup_ignores_ai_moves_and_invite_expired_status",
+      "breakpoints": true
     }
   ]
 }

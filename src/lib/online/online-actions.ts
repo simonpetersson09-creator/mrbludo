@@ -660,11 +660,11 @@ export const adminPinLoginAction = async ({ data, context }: { data: { pin: stri
     ...(ip ? [{ key: `pin:ip:${ip}`, max: PIN_LIMITS.perIp, win: PIN_LIMITS.windowSeconds }] : []),
     { key: "pin:all", max: PIN_LIMITS.global, win: PIN_LIMITS.globalWindowSeconds },
   ];
-  const peeks = await Promise.all(keys.map((k) => db.rpc("rate_peek", { _key: k.key, _window_seconds: k.win })));
-  if (peeks.some((r) => r.error)) throw new Error("err:rate_limited");
-  if (peeks.some((r, i) => (r.data ?? 0) >= keys[i].max)) throw new Error("err:rate_limited");
+  // Every attempt is counted atomically BEFORE the PIN is compared, so simultaneous requests cannot
+  // get more guesses than the limit (a peek-then-count check let every parallel request through).
+  const hits = await Promise.all(keys.map((k) => db.rpc("rate_hit", { _key: k.key, _max: k.max, _window_seconds: k.win })));
+  if (hits.some((r) => r.error || r.data !== true)) throw new Error("err:rate_limited");
   if (!(await pinMatches(data.pin, expected))) {
-    await Promise.all(keys.map((k) => db.rpc("rate_hit", { _key: k.key, _max: k.max, _window_seconds: k.win })));
     await logEventRow(db, { user_id: context.userId, kind: "admin_pin_fail" });
     throw new Error("err:forbidden");
   }

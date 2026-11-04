@@ -9,6 +9,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    // Database integration tests need the throwaway local database: run them with `bun run test:db`.
+    exclude: ["**/node_modules/**", "src/**/*.db.test.ts"],
   },
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },

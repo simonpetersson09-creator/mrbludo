@@ -20,7 +20,8 @@
     "native:open:ios": "node scripts/native.mjs open ios",
     "native:open:android": "node scripts/native.mjs open android",
     "native:web": "node scripts/native.mjs web",
-    "postinstall": "node scripts/patch-admob-rewarded.js android && node scripts/patch-admob-rewarded.js ios && node scripts/patch-admob-consent.js ios && node scripts/patch-admob-app-open.js && node scripts/patch-admob-privacy-cache.js ios && node scripts/patch-admob-fullscreen-loads.js ios && node scripts/patch-admob-ios-diagnostics.js && node scripts/patch-admob-ios-consent-lifecycle.js && node scripts/patch-admob-ios-app-open-generation.js && node scripts/patch-admob-consent.js android && node scripts/patch-admob-privacy-cache.js android && node scripts/patch-admob-fullscreen-loads.js android && node scripts/patch-admob-app-open-android.js"
+    "postinstall": "node scripts/patch-admob-rewarded.js android && node scripts/patch-admob-rewarded.js ios && node scripts/patch-admob-consent.js ios && node scripts/patch-admob-app-open.js && node scripts/patch-admob-privacy-cache.js ios && node scripts/patch-admob-fullscreen-loads.js ios && node scripts/patch-admob-ios-diagnostics.js && node scripts/patch-admob-ios-consent-lifecycle.js && node scripts/patch-admob-ios-app-open-generation.js && node scripts/patch-admob-consent.js android && node scripts/patch-admob-privacy-cache.js android && node scripts/patch-admob-fullscreen-loads.js android && node scripts/patch-admob-app-open-android.js",
+    "test:db": "bash scripts/test-db/run.sh"
   },
   "overrides": {
     "rolldown": "1.2.1"
