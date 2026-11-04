@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ChevronDown, Flame } from "lucide-react";
 import { supabase } from "@/lib/auth/client";
 import { getStatsBoards } from "@/lib/online/online.functions";
+import { readPageCache, writePageCache } from "@/lib/page-cache";
 import { flag } from "@/lib/online/profile-options";
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
@@ -37,8 +38,10 @@ function StatsPage() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     let alive = true;
+    const cached = readPageCache<Boards>("stats-boards");
+    if (cached) { setBoards(cached); setLoading(false); }
     void supabase.auth.getSession().then(({ data }) => (data.session ? getStatsBoards() : null))
-      .then((b) => { if (alive && b) setBoards(b); })
+      .then((b) => { if (alive && b) { setBoards(b); writePageCache("stats-boards", b); } })
       .catch(() => {})
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };

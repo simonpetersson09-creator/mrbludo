@@ -23,6 +23,7 @@ import { RollLabel } from "@/components/ludo/RollLabel";
 import { ExtraRollBanner } from "@/components/ludo/ExtraRollBanner";
 import { QuickChat } from "@/components/ludo/QuickChat";
 import { pieceCenter } from "@/lib/ludo/board";
+import { readPageCache, writePageCache } from "@/lib/page-cache";
 import { act, getPlayerCard, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, sentInvites, startMatch } from "@/lib/online/online.functions";
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
@@ -417,7 +418,8 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
   useEffect(() => { listFriends().then((r) => setFriends(r.friends.filter((f) => f.status === "accepted"))).catch(() => {}); }, []);
   const start = () => startMatch({ data: { matchId: match.id } }).catch((e) => toast.error(errorMessage(e, t)));
   const [sent, setSent] = useState<Awaited<ReturnType<typeof sentInvites>>["invites"]>([]);
-  const loadSent = useCallback(() => { sentInvites({ data: { matchId: match.id } }).then((r) => setSent(r.invites)).catch(() => {}); }, [match.id]);
+  const loadSent = useCallback(() => { sentInvites({ data: { matchId: match.id } }).then((r) => { setSent(r.invites); writePageCache(`sent-invites:${match.id}`, r.invites); }).catch(() => {}); }, [match.id]);
+  useEffect(() => { const c = readPageCache<typeof sent>(`sent-invites:${match.id}`); if (c) setSent(c); }, [match.id]);
   // Yatzy's sent-invite cards: refresh when someone sits down and every 8 s while waiting.
   useEffect(() => { loadSent(); const id = window.setInterval(loadSent, 8000); return () => window.clearInterval(id); }, [loadSent, seats.length]);
   const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => { toast.success(t("inviteSent")); loadSent(); }).catch((e) => toast.error(errorMessage(e, t)));

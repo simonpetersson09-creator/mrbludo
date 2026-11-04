@@ -1,3 +1,4 @@
+import { preloadDie } from "@/lib/page-cache";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -147,6 +148,7 @@ function RootComponent() {
     // The marker stays in the address while the notice is up: it is also what stops the app from
     // reloading in circles over the same missing file.
     setStale(isStaleNotice(window.location.search));
+    preloadDie();
   }, []);
   // After an app update, old code chunks disappear; reload a few times instead of showing a blank screen.
   useEffect(() => {

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { getLeaderboard } from "@/lib/online/online.functions";
+import { readPageCache, writePageCache } from "@/lib/page-cache";
 import { flag } from "@/lib/online/profile-options";
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
@@ -28,7 +29,16 @@ function LeaderboardPage() {
   const { t } = useTranslation();
   const [sort, setSort] = useState<"wins" | "played" | "captures">("wins");
   const [rows, setRows] = useState<Rows | null>(null);
-  useEffect(() => { setRows(null); getLeaderboard({ data: { sort } }).then(setRows).catch(() => setRows([])); }, [sort]);
+  // Show the saved list for this tab at once, then replace it with fresh rows (Yatzy pattern).
+  useEffect(() => {
+    let alive = true;
+    const cached = readPageCache<Rows>(`leaderboard:${sort}`);
+    setRows(cached);
+    getLeaderboard({ data: { sort } })
+      .then((r) => { if (!alive) return; setRows(r); writePageCache(`leaderboard:${sort}`, r); })
+      .catch(() => { if (alive && !cached) setRows([]); });
+    return () => { alive = false; };
+  }, [sort]);
   const pics = useAvatarImages((rows ?? []).map((r) => r.user_id));
   return (
     <main className="app-screen">

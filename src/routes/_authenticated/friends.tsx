@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { readPageCache, writePageCache } from "@/lib/page-cache";
 import { ArrowLeft, Loader2, UserPlus, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/auth/client";
@@ -29,8 +30,20 @@ function FriendsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [data, setData] = useState<Data | null>(null);
-  const load = useCallback(() => listFriends().then(setData).catch(() => {}), []);
+  const busy = useRef<Promise<void> | null>(null);
+  const again = useRef(false);
+  // One request at a time; bursts of realtime events collapse into one follow-up reload.
+  const load = useCallback((): Promise<void> => {
+    if (busy.current) { again.current = true; return busy.current; }
+    busy.current = listFriends()
+      .then((d) => { setData(d); writePageCache("friends", d); })
+      .catch(() => setData((cur) => cur ?? { friends: [], invites: [] } as unknown as Data))
+      .finally(() => { busy.current = null; if (again.current) { again.current = false; void load(); } });
+    return busy.current;
+  }, []);
   useEffect(() => {
+    const cached = readPageCache<Data>("friends");
+    if (cached) setData(cached);
     load();
     const ch = supabase.channel(`friends-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "friendships" }, load).subscribe();

@@ -1,3 +1,4 @@
+import { preloadDie } from "@/lib/page-cache";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, HeadContent, createRootRouteWithContext, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -24,6 +25,7 @@ function NativeRoot() {
     let stopped = false;
     const viewportCleanup = installViewportSync();
     nativeDiagnostic("startup", "ready");
+    preloadDie();
     const connect = () => {
       if (!navigator.onLine) { nativeDiagnostic("session", "offline"); return; }
       nativeDiagnostic("session", "started");

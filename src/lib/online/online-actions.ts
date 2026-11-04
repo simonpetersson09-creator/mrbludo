@@ -516,11 +516,15 @@ export const listFriendsAction = async ({ context }: { context: OnlineContext })
   const { data: rows } = await supabase.from("friendships").select("*").or(`requester.eq.${userId},addressee.eq.${userId}`);
   const ids = [...new Set((rows ?? []).map((r) => (r.requester === userId ? r.addressee : r.requester)))];
   // last_seen is not readable by other players directly; it is shown only to friends, read here on the server.
-  const { data: profs } = ids.length ? await (await admin()).from("profiles").select("id, display_name, avatar, country, last_seen").in("id", ids) : { data: [] };
-  const byId = new Map((profs ?? []).map((p) => [p.id, p]));
   const friendIds = (rows ?? []).filter((r) => r.status === "accepted").map((r) => (r.requester === userId ? r.addressee : r.requester));
-  const h2h = await headToHead(await admin(), userId, friendIds).catch(() => ({} as Awaited<ReturnType<typeof headToHead>>));
-  const { data: invites } = await supabase.from("match_invites").select("id, match_id, from_user, created_at").eq("to_user", userId).eq("status", "pending").gte("created_at", new Date(Date.now() - INVITE_TTL_MS).toISOString()).order("created_at", { ascending: false }).limit(10);
+  const db = await admin();
+  // Profiles, head-to-head and invites are independent: fetch them together instead of one after another.
+  const [{ data: profs }, h2h, { data: invites }] = await Promise.all([
+    ids.length ? db.from("profiles").select("id, display_name, avatar, country, last_seen").in("id", ids) : Promise.resolve({ data: [] as { id: string; display_name: string; avatar: string; country: string; last_seen: string | null }[] }),
+    headToHead(db, userId, friendIds).catch(() => ({} as Awaited<ReturnType<typeof headToHead>>)),
+    supabase.from("match_invites").select("id, match_id, from_user, created_at").eq("to_user", userId).eq("status", "pending").gte("created_at", new Date(Date.now() - INVITE_TTL_MS).toISOString()).order("created_at", { ascending: false }).limit(10),
+  ]);
+  const byId = new Map((profs ?? []).map((p) => [p.id, p]));
   return {
     friends: (rows ?? []).map((r) => {
       const other = r.requester === userId ? r.addressee : r.requester;
