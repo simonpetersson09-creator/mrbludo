@@ -59,6 +59,7 @@ export const nl: Record<TranslationKey, string> = {
   turnTimeOut: "Tijd om – de server doet de zet",
   autoPlayedMine: "De tijd is op – de zet werd voor je gespeeld",
   autoPlayedOther: "De tijd is op – de server speelde voor {name}",
+  playerBack: "{name} is terug",
   forfeitTitle: "Dit potje opgeven?",
   leaveMatchConfirm: "Wedstrijd verlaten? Hij wordt opgeslagen en je kunt later verder.",
   forfeitBodyLocal: "Het potje eindigt en telt als verlies. Dit kun je niet ongedaan maken.",

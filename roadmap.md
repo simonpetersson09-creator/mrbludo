@@ -1,50 +1,19 @@
-# Roadmap
-- [x] Correct Fia to the supplied photo and confirmed start: 40 outer positions, four lane positions per color and separate goal; 135 tests passed, local browser move checked, no publication (live online/device checks not performed)
-- [x] Black-framed game cloth, turn lock verification, clickable destinations and square-by-square piece animation — 13 tests and local browser flow passed; online turn gate reviewed, not live-session tested
-- [x] Game view: two-column player names, right-edge controls, framed throw cloth, smaller player-colored left-entry die, board depth and legal destination markers; local mobile-browser flow and 10 tests passed (physical phone and online-session rendering not tested)
-- [x] Audit native language, iOS/Android settings and Yatzy read-only reference
-- [x] Correct verified native configuration issues and add regression checks
-- [x] Run available tests and report exact changes plus physical-device/build blockers
-- [ ] Full package/sync, native compilation and physical iPhone/Android verification — blocked by absent package, Mac/Xcode, Android toolchain and devices
-- [x] Remove leaderboard from Play with friends page
-- [x] Quick play search duration = Yatzy (15 s, verified 17 s incl. start)
-- [x] Language popover placement = Yatzy
-- [x] Bot speeds + haptics verified (only own actions vibrate)
-- [x] Game buttons Yatzy design
-- [x] Die background blends with page
-- [x] Player bar + board centered lower, safe areas top/bottom
-- [x] Turn bubble diagonal inward with gap
-- [x] Status text above board black & clearer
-- [x] Yatzy home-page effects on Ludo home
-- [x] Smoothness / lag
-- [x] Language list position
-- [x] Stats: remove forfeited, "Utslagningar" -> "Utlagda pjäser"
-- [x] Compress Play with friend page
-- [x] Fia summary text removed -> "(Svensk variant)"; Spelläge heading centered like player-count heading
-- [x] Tempo: two levels (normal, fast)
-- [x] Info.plist proposals (suggestion only)
-- [x] Friend list layout vs Yatzy
-- [~] Pre-release check — 138 tests + browser screens done; live two-device online run, push built, not phone-tested
-- [x] App talks directly to server (native) — packaged app uses https://mrbludo.lovable.app through Ludo's own boundary (src/lib/native/origin.ts)
-- [x] Launch audit C1–C4: heartbeat/quick-status membership check, account deletion uses "playing", atomic stats increment, one quick-play search per player (194 tests; not live two-device tested)
-- [x] Rating prompt (Yatzy schedule 5/15/35, app only), error + ad events in admin logs, translated error page, 4-pieces-on-start Fia test (209 tests; not tried on a phone)
-## Waiting on Simon
-- [ ] AdMob: publisher ID (pub-…) for app-ads.txt, Android app ID + ad units
-- [x] iOS push built (turn, ready, invite, friend, admin test); APNs key verified with Apple
-- [ ] Push on physical iPhone (Xcode build + TestFlight) — needs your Mac/iPhone and a publish; Push capability on the Ludo App ID in Apple Developer
-- [ ] Firebase project for Android notifications (google-services.json)
-- [ ] Android signing key fingerprint (app links)
-- [ ] Privacy policy: approve text + company/support details
-- [x] Store material (partly): iPhone screenshots 12 (sv/en/da, 1179x2556), iPad screenshots 15 (sv/en/da, 2048x2732), App Store headers (3840x2560 + 3840x1646); descriptions, age rating, Data safety and ad declarations still missing
-- [ ] iPad store pictures: review English and Danish sets; start-page shot still shows the old die-with-hat logo, not the new red pawn icon
-- [x] Invites expire after 6 h, single use, 10 s send limit; friend requests only after finished match; one friendship per pair
-- [x] C6/C7: others see only public profile/stat fields; forfeits excluded from weekly/country lists; country stored per match; only real country codes
-- [x] E5–E8: Fia bot walk-out choice, edge-case tests, translated 404 page, real unknown-key check (204 tests)
-- [x] Auto-played idle turns are announced after the fact: away player sees "Tiden gick ut – draget gjordes åt dig", others see "…servern spelade åt {name}"; 40 languages, 225 tests, real two-session match checked at 30 s (not tried on a phone)
-- [x] Invite links now open `/join?code=…`: browsers get the download page, app users open the match directly; match codes expire after 6 hours (221 tests passed; live published-site behaviour needs a publish, phones not tested)
-- [ ] App Store and Google Play links for the download page — blocked until the store listings exist (Simon to supply)
-- [x] Footprints: player-coloured prints behind a walking piece, strongest next to the piece and fading behind, gone when it lands; die keeps the mover's colour until the piece arrives (236 tests; not tried on a phone)
-- [x] Fia centre: chequered disc removed (star rosette, trophy, arrows kept)
-- [x] "Månadens flitigaste" (calendar month, finished matches only, givers-up excluded), 40 languages
-- [x] Statistics page per calendar year ("Statistik 2026"), resets 1 January (256+ tests)
-- [x] Online robustness like Yatzy: 8 s limit + one safe retry, tap-to-reconnect, live connection rebuilt on return, hourly cleanup of stale matches (tests pass; not tried in a live match or on a phone)
+# Roadmap: Nya onlineregler (spec 2026-11-04) — KLAR
+
+## Implementerat och verifierat
+- [x] Privat match: endast värden startar, minst 2 människor, ingen AI-ifyllnad, ingen autostart vid full lobby
+- [x] Väninbjudan: accepterad inbjudan startar matchen direkt (separat flöde bevarat)
+- [x] Privata matcher: ingen server-AI/autodrag, ingen auto-uppgivning — pausas och återupptas (test: 2 h och 14 dagar)
+- [x] Väntrum: platsen tas bara bort vid uttryckligt "Lämna" (verifierat i koden)
+- [x] Snabbspel: 6 s färskhet i matchningen (var 10 s), hård timeout på alla nätverksanrop i sökningen
+- [x] Snabbspel: AI-övertagande efter 60 s (var 30 s), även vid ansluten men inaktiv spelare; ingen auto-uppgivning
+- [x] Notiser: "Datorn spelar för [namn]" + "[namn] är tillbaka" (40 språk)
+- [x] Uppgivning under de två första omgångarna → permanent AI-plats om annan människa finns kvar; AI ger aldrig statistik
+- [x] Rensning: privat spelande 14 dagar, snabbspel 24 h/10 min, väntande lobby 6 h — verifierat mot databasen
+- [x] Schemalagda jobb verifierade: minutjobb (AI-övertagande) + timjobb (rensning), båda aktiva
+- [x] 298 tester + typkontroll + bygg grönt
+
+## Kvar att verifiera på riktiga telefoner
+- [ ] Två enheter: privat match pausad i timmar och återupptagen med samma ställning
+- [ ] Två enheter: snabbspel med AI-övertagande, återkomst och tidig uppgivning
+- [ ] Push vid "din tur" i pausad privat match

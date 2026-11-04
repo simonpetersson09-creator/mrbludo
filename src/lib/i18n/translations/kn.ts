@@ -65,6 +65,7 @@ export const kn: Record<TranslationKey, string> = {
   turnTimeOut: "ಸಮಯ ಮುಗಿದಿದೆ – ಸರ್ವರ್ ಚಾಲನೆ ಮಾಡುತ್ತದೆ",
   autoPlayedMine: "ಸಮಯ ಮುಗಿಯಿತು – ಚಾಲು ನಿಮಗಾಗಿ ಆಡಲಾಯಿತು",
   autoPlayedOther: "ಸಮಯ ಮುಗಿಯಿತು – ಸರ್ವರ್ {name} ಗಾಗಿ ಆಡಿತು",
+  playerBack: "{name} ಹಿಂದಿರುಗಿದ್ದಾರೆ",
   forfeitTitle: "ಪಂದ್ಯದಲ್ಲಿ ಹಾರು ಬಿಡುವಿರಾ?",
   leaveMatchConfirm: "ಪಂದ್ಯದಿಂದ ಹೊರಬರುವುದೇ? ಇದು ಉಳಿಸಲಾಗಿದೆ, ನಂತರ ಮುಂದುವರಿಸಬಹುದು.",
   forfeitBodyLocal: "ಪಂದ್ಯ ಮುಗಿಯುತ್ತದೆ ಮತ್ತು ಸೋಲಾಗಿ ಎಣಿಕೆಯಾಗುತ್ತದೆ. ರದ್ದುಮಾಡಲಾಗುವುದಿಲ್ಲ.",

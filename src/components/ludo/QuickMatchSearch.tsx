@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Dices, Users } from "lucide-react";
 import { ensurePlayerSession } from "@/lib/auth/player";
+import { withDeadline } from "@/lib/online/deadline";
 import { leaveMatch, quickFinalize, quickMatch, quickStatus } from "@/lib/online/online.functions";
 import { useTranslation } from "@/lib/i18n";
 import { setQuickSearchActive } from "@/lib/ads/waiting-room";
@@ -52,15 +53,15 @@ export function QuickMatchSearch({ players, variant, onMatch, onNoMatch, onCance
       if (cancelled) return;
       try {
         const id = matchRef.current!;
-        const s = await quickStatus({ data: { matchId: id } });
+        const s = await withDeadline(quickStatus({ data: { matchId: id } }));
         if (cancelled) return;
         setCount(s.count);
         if (s.status === "playing") return matched(id, s.others);
         if (s.status !== "waiting") return local();
         if (Date.now() - startedAt >= SEARCH_MS) {
-          const r = await quickFinalize({ data: { matchId: id } });
+          const r = await withDeadline(quickFinalize({ data: { matchId: id } }));
           if (r.status === "started") {
-            const after = await quickStatus({ data: { matchId: id } });
+            const after = await withDeadline(quickStatus({ data: { matchId: id } }));
             return matched(id, after.others);
           }
           matchRef.current = null;
@@ -74,7 +75,7 @@ export function QuickMatchSearch({ players, variant, onMatch, onNoMatch, onCance
       if (typeof navigator !== "undefined" && !navigator.onLine) return local();
       try {
         await ensurePlayerSession();
-        const r = await quickMatch({ data: { maxPlayers: players, variant } });
+        const r = await withDeadline(quickMatch({ data: { maxPlayers: players, variant } }));
         if (cancelled) { void leaveMatch({ data: { matchId: r.id } }).catch(() => {}); return; }
         matchRef.current = r.id;
         void poll();

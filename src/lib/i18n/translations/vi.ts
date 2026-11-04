@@ -65,6 +65,7 @@ export const vi: Record<TranslationKey, string> = {
   turnTimeOut: "Hết giờ – máy chủ tự đi",
   autoPlayedMine: "Hết giờ – nước đi đã được chơi hộ bạn",
   autoPlayedOther: "Hết giờ – máy chủ đã chơi thay {name}",
+  playerBack: "{name} đã quay lại",
   forfeitTitle: "Đầu hàng trận này?",
   leaveMatchConfirm: "Rời trận đấu? Trận được lưu lại và bạn có thể tiếp tục sau.",
   forfeitBodyLocal: "Trận đấu kết thúc và tính là thua. Không thể hoàn tác.",

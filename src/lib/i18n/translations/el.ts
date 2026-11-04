@@ -59,6 +59,7 @@ export const el: Record<TranslationKey, string> = {
   turnTimeOut: "Ο χρόνος έληξε – ο διακομιστής κάνει την κίνηση",
   autoPlayedMine: "Ο χρόνος τελείωσε – η κίνηση παίχτηκε για εσάς",
   autoPlayedOther: "Ο χρόνος τελείωσε – ο διακομιστής έπαιξε για {name}",
+  playerBack: "Ο/Η {name} επέστρεψε",
   forfeitTitle: "Θέλεις να παραιτηθείς;",
   leaveMatchConfirm: "Έξοδος από τον αγώνα; Αποθηκεύεται και μπορείς να συνεχίσεις αργότερα.",
   forfeitBodyLocal: "Το παιχνίδι θα τελειώσει και θα μετρήσει ως ήττα. Δεν μπορείς να το αναιρέσεις.",

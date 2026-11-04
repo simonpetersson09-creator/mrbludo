@@ -65,6 +65,7 @@ export const uk: Record<TranslationKey, string> = {
   turnTimeOut: "Час вийшов – сервер робить хід",
   autoPlayedMine: "Час вийшов – хід було зроблено за вас",
   autoPlayedOther: "Час вийшов – сервер зіграв за {name}",
+  playerBack: "{name} повернувся",
   forfeitTitle: "Здатися в матчі?",
   leaveMatchConfirm: "Вийти з матчу? Його збережено, і ви зможете продовжити пізніше.",
   forfeitBodyLocal: "Матч завершиться і зарахується як поразка. Це не можна скасувати.",

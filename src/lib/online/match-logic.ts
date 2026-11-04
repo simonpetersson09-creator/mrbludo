@@ -8,10 +8,8 @@ import { applyMove, canWalkOut, applyRoll, createGame, forfeit, goalOf, isVarian
 import { chooseBotAction } from "@/lib/ludo/ai";
 
 export const SEAT_COLORS: Record<number, Color[]> = { 2: [0, 2], 3: [0, 1, 2], 4: [0, 1, 2, 3] };
-/** Seconds a player has for one step (roll or move) before the server plays for them. */
-export const TURN_SECONDS = 30;
-/** Seconds without a heartbeat before a player counts as dropped and is forfeited on their turn. */
-export const DROP_SECONDS = 90;
+/** Seconds a quick-play player has for one step (roll or move) before the server's computer plays it. Private matches never auto-play. */
+export const TURN_SECONDS = 60;
 /** Yatzy's invite rules: a shared match code stops working 6 hours after the match was made. */
 export const CODE_TTL_MS = 6 * 3600_000;
 /** True once a match code is older than its lifetime (or its creation time is unusable). */
@@ -52,13 +50,25 @@ export function seatOf(state: GameState, userId: string): number {
 
 /** Marks a step the server played for a player who was away, so the app can say so afterwards. */
 export interface AutoMark { seat: number; at: number }
-export type MarkedState = GameState & { auto?: AutoMark };
+export type MarkedState = GameState & { auto?: AutoMark; back?: AutoMark };
 
-/** A step the player took themselves is never "played for you": drop an old mark. */
-export function unmark(state: GameState): GameState {
-  if ((state as MarkedState).auto === undefined) return state;
-  const { auto: _auto, ...rest } = state as MarkedState;
-  return rest as GameState;
+/**
+ * A step the player took themselves is never "played for you". The mark belongs to the marked
+ * seat: it survives other players' actions, and when the marked player acts again it becomes a
+ * "back" mark so the app can say they returned. A back mark is dropped when its player acts on.
+ */
+export function markReturn(state: GameState, seat: number): GameState {
+  const m = state as MarkedState;
+  if (m.auto === undefined && m.back === undefined) return state;
+  if (m.auto && m.auto.seat === seat) {
+    const { auto: _auto, back: _back, ...rest } = m;
+    return { ...rest, back: { seat, at: Date.now() } } as GameState;
+  }
+  if (m.back && m.back.seat === seat) {
+    const { back: _back, ...rest } = m;
+    return rest as GameState;
+  }
+  return state;
 }
 
 /** Apply one player action. `roll` is the server-generated die value. */
@@ -66,17 +76,17 @@ export function performAction(state: GameState, userId: string, action: Action, 
   const seat = seatOf(state, userId);
   if (seat < 0) throw new MatchError("not_member");
   if (state.phase === "finished") throw new MatchError("finished");
-  if (action.kind === "forfeit") return unmark(forfeit(state, seat));
+  if (action.kind === "forfeit") return markReturn(forfeit(state, seat), seat);
   if (state.players[seat].forfeited) throw new MatchError("not_member");
   if (state.current !== seat) throw new MatchError("not_your_turn");
   if (action.kind === "roll") {
     if (state.phase !== "roll") throw new MatchError("bad_phase");
-    return unmark(applyRoll(state, roll()));
+    return markReturn(applyRoll(state, roll()), seat);
   }
   if (state.phase !== "move") throw new MatchError("bad_phase");
   if (!legalMoves(state).includes(action.piece)) throw new MatchError("illegal");
   if (action.walkOut && !canWalkOut(state, action.piece)) throw new MatchError("illegal");
-  return unmark(applyMove(state, action.piece, !!action.walkOut));
+  return markReturn(applyMove(state, action.piece, !!action.walkOut), seat);
 }
 
 /** Server auto-step for an idle/absent current player (roll, or best legal move). */
@@ -88,6 +98,40 @@ export function autoStep(state: GameState, roll: () => number): GameState {
     : (() => { const a = chooseBotAction(state); return applyMove(state, a.piece, a.walkOut); })();
   // Computer seats need no notice; only a human who was away is told the server moved for them.
   return state.players[seat]?.isBot ? next : ({ ...next, auto: { seat, at: Date.now() } } as MarkedState);
+}
+
+/**
+ * What the server clock does with a match whose current player has been idle for `idleSeconds`.
+ * Private matches never auto-play or auto-forfeit: they simply wait until the player returns.
+ * Quick play: computers move after BOT_SECONDS, an idle human's step is played after TURN_SECONDS
+ * (even while still connected), and a temporary disconnect is never treated as giving up.
+ */
+export function tickDecision(state: GameState, isPrivate: boolean, idleSeconds: number): "none" | "auto" {
+  if (state.phase === "finished" || isPrivate) return "none";
+  const cur = state.players[state.current];
+  if (!cur || cur.forfeited) return "none";
+  return idleSeconds >= (cur.isBot ? BOT_SECONDS : TURN_SECONDS) ? "auto" : "none";
+}
+
+/** True while the match is still in its first two rounds (everyone's first two turns). */
+export function earlyRounds(state: GameState): boolean {
+  return state.turnCount < 2 * state.players.length;
+}
+
+/**
+ * Quick play, early give-up: the seat becomes a permanent server-played computer. The player's
+ * id and name leave the state, so no later capture/goal/result can ever be counted for them.
+ */
+export function replaceWithBot(state: GameState, seat: number): GameState {
+  const p = state.players[seat];
+  if (!p || p.isBot || state.phase === "finished") return state;
+  // A takeover name that differs from the leaver's, so nobody mistakes the computer for them.
+  const name = randomBotNames(4).find((n) => n !== p.name) ?? randomBotNames(1)[0];
+  const players = state.players.map((pl, i) => (i === seat ? { ...pl, id: `bot:takeover:${seat}`, name, isBot: true } : pl));
+  const next = { ...state, players } as MarkedState;
+  delete next.auto;
+  delete next.back;
+  return next as GameState;
 }
 
 export interface StatDelta { played: number; wins: number; captures: number; pieces_home: number; forfeits: number }

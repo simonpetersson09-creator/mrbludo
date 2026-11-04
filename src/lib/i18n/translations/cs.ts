@@ -59,6 +59,7 @@ export const cs: Record<TranslationKey, string> = {
   turnTimeOut: "Čas vypršel – tah provede server",
   autoPlayedMine: "Čas vypršel – tah byl zahrán za vás",
   autoPlayedOther: "Čas vypršel – server zahrál za {name}",
+  playerBack: "{name} je zpět",
   forfeitTitle: "Vzdát hru?",
   leaveMatchConfirm: "Opustit zápas? Uloží se a můžeš pokračovat později.",
   forfeitBodyLocal: "Hra skončí a započítá se jako prohra. Nelze to vzít zpět.",

@@ -67,6 +67,7 @@ export const sv = {
   turnTimeOut: "Tiden är ute – servern spelar draget",
   autoPlayedMine: "Tiden gick ut – draget gjordes åt dig",
   autoPlayedOther: "Tiden gick ut – servern spelade åt {name}",
+  playerBack: "{name} är tillbaka",
   forfeitTitle: "Ge upp matchen?",
   leaveMatchConfirm: "Lämna matchen? Den sparas och du kan fortsätta senare.",
   forfeitBodyLocal: "Matchen avslutas och räknas som en förlust. Det går inte att ångra.",

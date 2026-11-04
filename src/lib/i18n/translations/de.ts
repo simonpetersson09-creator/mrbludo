@@ -65,6 +65,7 @@ export const de: Record<TranslationKey, string> = {
   turnTimeOut: "Zeit um – der Server spielt den Zug",
   autoPlayedMine: "Die Zeit ist um – der Zug wurde für dich gespielt",
   autoPlayedOther: "Die Zeit ist um – der Server spielte für {name}",
+  playerBack: "{name} ist zurück",
   forfeitTitle: "Spiel aufgeben?",
   leaveMatchConfirm: "Match verlassen? Es wird gespeichert und du kannst später weiterspielen.",
   forfeitBodyLocal: "Das Spiel endet und zählt als Niederlage. Das kann nicht rückgängig gemacht werden.",

@@ -65,6 +65,7 @@ export const mr: Record<TranslationKey, string> = {
   turnTimeOut: "वेळ संपली – सर्व्हर चाल चालेल",
   autoPlayedMine: "वेळ संपला – चाल तुमच्यासाठी खेळली",
   autoPlayedOther: "वेळ संपला – सर्व्हरने {name} साठी खेळले",
+  playerBack: "{name} परत आले",
   forfeitTitle: "सामन्यात हार मानायची?",
   leaveMatchConfirm: "सामना सोडायचा? तो जतन केला जातो आणि तुम्ही नंतर पुढे खेळू शकता.",
   forfeitBodyLocal: "सामना संपेल आणि हार मोजली जाईल. हे मागे घेता येणार नाही.",

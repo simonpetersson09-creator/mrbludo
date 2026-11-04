@@ -73,6 +73,7 @@ function OnlineMatchPage() {
   const animatedVersion = useRef(-1);
   const rollStart = useRef(0);
   const autoShown = useRef(0);
+  const backShown = useRef(0);
 
   // Coalesced like Yatzy: a burst of realtime events while a read is running causes exactly one more read.
   const loading = useRef<Promise<void> | null>(null);
@@ -163,6 +164,13 @@ function OnlineMatchPage() {
         toast.info(t(mine ? "autoPlayedMine" : "autoPlayedOther", { name: who.name }));
       }
     }
+    // Quick play: a player who acts again after the computer played for them is back.
+    const back = (state as MarkedState).back;
+    if (back && back.at !== backShown.current) {
+      backShown.current = back.at;
+      const who = state.players[back.seat];
+      if (who && Date.now() - back.at < 90_000 && who.id !== userId) toast.info(t("playerBack", { name: who.name }));
+    }
     // Like Yatzy: only my own actions vibrate (opponents/bots don't buzz my phone).
     const mineEv = !!ev && "player" in ev && state.players[ev.player]?.id === userId;
     if (ev?.kind === "moved" && mineEv) void ((ev.captured.length || ev.reachedGoal) ? playSuccessHaptic() : playLightHaptic());
@@ -241,7 +249,7 @@ function OnlineMatchPage() {
       </div>
 
       <div className="text-center" aria-live="polite">
-        <p className="h-4 text-xs text-muted-foreground">{offline ? <button type="button" className="underline underline-offset-2" onClick={reconnect}>{t("reconnecting")} · {t("tryAgain")}</button> : (state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
+        <p className="h-4 text-xs text-muted-foreground">{offline ? <button type="button" className="underline underline-offset-2" onClick={reconnect}>{t("reconnecting")} · {t("tryAgain")}</button> : (!match.is_private && state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
       </div>
 
       <div className="game-bottom-controls game-bottom-controls-chat">

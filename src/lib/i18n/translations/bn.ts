@@ -65,6 +65,7 @@ export const bn: Record<TranslationKey, string> = {
   turnTimeOut: "সময় শেষ – সার্ভার চাল দেবে",
   autoPlayedMine: "সময় শেষ – আপনার জন্য চাল চালানো হয়েছে",
   autoPlayedOther: "সময় শেষ – সার্ভার {name}-এর জন্য খেলেছে",
+  playerBack: "{name} ফিরে এসেছে",
   forfeitTitle: "ম্যাচে হার মানবেন?",
   leaveMatchConfirm: "ম্যাচ ছেড়ে যাবেন? এটি সংরক্ষিত থাকবে এবং পরে আবার খেলতে পারবেন।",
   forfeitBodyLocal: "ম্যাচ শেষ হবে এবং হার হিসেবে গণ্য হবে। এটি ফেরানো যাবে না।",

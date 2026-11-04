@@ -62,10 +62,16 @@ describe("online match logic", () => {
     s.current = 2; s.phase = "roll";
     expect((autoStep(s, fixed(3)) as MarkedState).auto).toBeUndefined();
   });
-  it("the player's own action clears the notice", () => {
+  it("the marked player's own action turns the notice into a back notice; others keep it", () => {
     const marked = autoStep(startState(seats), fixed(3));
-    const own = performAction(marked, "B", { kind: "roll" }, fixed(4)) as MarkedState;
+    // Another player acting does not clear seat 0's mark.
+    const other = performAction(marked, "B", { kind: "roll" }, fixed(4)) as MarkedState;
+    expect(other.auto?.seat).toBe(0);
+    // When the marked player acts again, the mark becomes "back".
+    marked.current = 0; marked.phase = "roll";
+    const own = performAction(marked, "A", { kind: "roll" }, fixed(4)) as MarkedState;
     expect(own.auto).toBeUndefined();
+    expect(own.back?.seat).toBe(0);
   });
   it("a following computer step keeps the pending notice alive", () => {
     const marked = autoStep(startState(seats, 3), fixed(3)) as MarkedState;

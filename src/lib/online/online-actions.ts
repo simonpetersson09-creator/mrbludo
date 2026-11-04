@@ -1,7 +1,7 @@
 import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput } from "./online-inputs";
 import type { GameState } from "@/lib/ludo/engine";
 import {
-  BOT_SECONDS, CODE_TTL_MS, DROP_SECONDS, MatchError, TURN_SECONDS, autoStep, codeExpired, makeCode, performAction, secureRoll, startState, statDeltas,
+  BOT_SECONDS, CODE_TTL_MS, MatchError, autoStep, codeExpired, earlyRounds, makeCode, performAction, replaceWithBot, secureRoll, seatOf, startState, statDeltas, tickDecision,
   type Action,
 } from "./match-logic";
 
@@ -175,12 +175,12 @@ export const joinByCodeAction = async ({ data, context }: { data: ReturnType<typ
       throw new Error("err:invite_expired");
     }
     if (!(await seatUser(db, m.id, m.max_players, context.userId))) throw new Error("err:match_full");
-    await maybeAutostart(db, m.id);
+    // Private code lobby: nothing starts by itself — only the host's start button does.
     return { id: m.id };
   };
 
-/** Quick play: drop seats whose searcher stopped polling (reload/closed app) so nobody is matched with a ghost. */
-const QUICK_STALE_MS = 10_000;
+/** Quick play: only searches active within the last 6 seconds count; older seats are dropped as ghosts. */
+const QUICK_STALE_MS = 6_000;
 async function pruneQuickSeats(db: Admin, matchId: string) {
   const cutoff = new Date(Date.now() - QUICK_STALE_MS).toISOString();
   await db.from("match_players").delete().eq("match_id", matchId).lt("last_seen", cutoff);
@@ -272,8 +272,8 @@ export const startMatchAction = async ({ data, context }: { data: ReturnType<typ
     if (m.status !== "waiting") return { ok: true };
     const { data: seats } = await db.from("match_players").select("user_id, seat, display_name").eq("match_id", m.id);
     if ((seats?.length ?? 0) < 2) throw new Error("err:min_players");
-    // Empty seats of the chosen size are filled with server-played computers (as in quick play).
-    await doStart(db, m.id, m.version, seats ?? [], m.max_players, m.variant);
+    // Private matches are humans only: exactly the seated players, never computer seats.
+    await doStart(db, m.id, m.version, seats ?? [], undefined, m.variant);
     return { ok: true };
   };
 
@@ -291,8 +291,18 @@ export const leaveMatchAction = async ({ data, context }: { data: ReturnType<typ
     if (m.status === "playing") {
       const prev = m.state as unknown as GameState;
       try {
-        const next = performAction(prev, context.userId, { kind: "forfeit" }, secureRoll);
+        const seat = seatOf(prev, context.userId);
+        if (seat < 0) throw new MatchError("not_member");
+        // Quick play, first two rounds, another human still in: the seat becomes a permanent
+        // computer instead of a forfeit, so the match can be played out fairly. Everything
+        // else (private matches, later rounds) follows the normal forfeit rules.
+        const humansLeft = prev.players.filter((p) => !p.isBot && p.id !== context.userId && !p.forfeited).length;
+        const next = !m.is_private && earlyRounds(prev) && humansLeft >= 1
+          ? replaceWithBot(prev, seat)
+          : performAction(prev, context.userId, { kind: "forfeit" }, secureRoll);
         await commit(db, m.id, m.version, prev, next);
+        // The leaver's seat is closed either way: no more pushes, and "everyone gone" cleanup can see it.
+        await db.from("match_players").update({ left_at: new Date().toISOString() }).eq("match_id", m.id).eq("user_id", context.userId);
       } catch (e) { fail(e); }
     }
     return { ok: true };
@@ -321,36 +331,27 @@ export const heartbeatAction = async ({ data, context }: { data: ReturnType<type
     return { ok: true };
   };
 
-type MatchRow = { id: string; status: string; version: number; state: unknown; turn_started_at: string | null };
+type MatchRow = { id: string; status: string; version: number; state: unknown; turn_started_at: string | null; is_private: boolean };
 /**
- * Server-side turn clock: computers move after BOT_SECONDS; an idle human's step is played after
- * TURN_SECONDS (forfeit once dropped for DROP_SECONDS). Runs from any heartbeat — including the idle
- * player's own — and from the scheduled maintenance tick, so no opponent needs to be connected.
+ * Server-side turn clock (quick play only): computers move after BOT_SECONDS; an idle human's step
+ * is played after TURN_SECONDS — never a forfeit, a temporary disconnect just lets the computer
+ * play until the player returns. Private matches are never touched: they pause and wait.
+ * Runs from any heartbeat and from the scheduled maintenance tick, so no opponent needs to be connected.
  */
 export async function tickMatch(db: Admin, m: MatchRow, now = Date.now()): Promise<boolean> {
   if (m.status !== "playing" || !m.turn_started_at) return false;
   const state = m.state as GameState;
-  const cur = state.players[state.current];
-  if (!cur) return false;
   const idle = (now - new Date(m.turn_started_at).getTime()) / 1000;
-  let next: GameState;
-  if (cur.isBot) {
-    if (idle < BOT_SECONDS) return false;
-    next = autoStep(state, secureRoll);
-  } else {
-    if (idle < TURN_SECONDS) return false;
-    const { data: seat } = await db.from("match_players").select("last_seen").eq("match_id", m.id).eq("user_id", cur.id).maybeSingle();
-    const dropped = !seat || (now - new Date(seat.last_seen).getTime()) / 1000 > DROP_SECONDS;
-    next = dropped ? performAction(state, cur.id, { kind: "forfeit" }, secureRoll) : autoStep(state, secureRoll);
-  }
+  if (tickDecision(state, m.is_private, idle) !== "auto") return false;
+  const next = autoStep(state, secureRoll);
   try { await commit(db, m.id, m.version, state, next); return true; } catch { return false; /* someone advanced it first */ }
 }
 
-/** Scheduled job: close dead matches, then advance idle turns in every running match. */
+/** Scheduled job: close dead matches, then advance idle turns in every running quick match. */
 export async function runMaintenance() {
   const db = await admin();
   const { data: cleaned } = await db.rpc("cleanup_stale_matches");
-  const { data: rows } = await db.from("matches").select("id, status, version, state, turn_started_at").eq("status", "playing")
+  const { data: rows } = await db.from("matches").select("id, status, version, state, turn_started_at, is_private").eq("status", "playing")
     .lt("turn_started_at", new Date(Date.now() - BOT_SECONDS * 1000).toISOString()).limit(200);
   let advanced = 0;
   for (const m of rows ?? []) if (await tickMatch(db, m)) advanced++;
@@ -456,10 +457,12 @@ export const respondInviteAction = async ({ data, context }: { data: ReturnType<
     }
     await db.from("match_invites").update({ status: data.accept ? "accepted" : "declined" }).eq("id", inv.id);
     if (!data.accept) return { matchId: null };
-    const { data: m } = await db.from("matches").select("id, status, max_players").eq("id", inv.match_id).single();
+    const { data: m } = await db.from("matches").select("*").eq("id", inv.match_id).single();
     if (!m || m.status !== "waiting") throw new Error("err:already_started");
     if (!(await seatUser(db, m.id, m.max_players, context.userId))) throw new Error("err:match_full");
-    await maybeAutostart(db, m.id);
+    // An accepted friend invite starts the match at once — no start button, no computer seats.
+    const { data: seats } = await db.from("match_players").select("user_id, seat, display_name").eq("match_id", m.id);
+    if ((seats?.length ?? 0) >= 2) await doStart(db, m.id, m.version, seats ?? [], undefined, m.variant);
     return { matchId: m.id };
   };
 

@@ -65,6 +65,7 @@ export const no: Record<TranslationKey, string> = {
   turnTimeOut: "Tiden er ute – serveren spiller trekket",
   autoPlayedMine: "Tiden er ute – trekket ble spilt for deg",
   autoPlayedOther: "Tiden er ute – serveren spilte for {name}",
+  playerBack: "{name} er tilbake",
   forfeitTitle: "Gi opp kampen?",
   leaveMatchConfirm: "Forlate kampen? Den lagres, og du kan fortsette senere.",
   forfeitBodyLocal: "Kampen avsluttes og teller som et tap. Det kan ikke angres.",

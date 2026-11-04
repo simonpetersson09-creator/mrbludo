@@ -65,6 +65,7 @@ export const th: Record<TranslationKey, string> = {
   turnTimeOut: "หมดเวลา – เซิร์ฟเวอร์เดินแทน",
   autoPlayedMine: "หมดเวลาแล้ว – ตานี้ถูกเล่นแทนคุณ",
   autoPlayedOther: "หมดเวลาแล้ว – เซิร์ฟเวอร์เล่นแทน {name}",
+  playerBack: "{name} กลับมาแล้ว",
   forfeitTitle: "ยอมแพ้แมตช์นี้?",
   leaveMatchConfirm: "ออกจากเกมไหม? เกมจะถูกบันทึกไว้และเล่นต่อได้ภายหลัง",
   forfeitBodyLocal: "แมตช์จะจบและนับเป็นความพ่ายแพ้ ยกเลิกไม่ได้",

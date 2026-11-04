@@ -65,6 +65,7 @@ export const id: Record<TranslationKey, string> = {
   turnTimeOut: "Waktu habis – server memainkan langkah",
   autoPlayedMine: "Waktu habis – langkah dimainkan untukmu",
   autoPlayedOther: "Waktu habis – server bermain untuk {name}",
+  playerBack: "{name} kembali",
   forfeitTitle: "Menyerah dalam pertandingan?",
   leaveMatchConfirm: "Keluar dari pertandingan? Pertandingan disimpan dan bisa dilanjutkan nanti.",
   forfeitBodyLocal: "Pertandingan berakhir dan dihitung sebagai kekalahan. Tidak bisa dibatalkan.",
