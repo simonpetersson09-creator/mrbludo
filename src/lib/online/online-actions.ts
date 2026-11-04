@@ -588,9 +588,11 @@ export const respondInviteAction = async ({ data, context }: { data: ReturnType<
   };
 
 export const getLeaderboardAction = async ({ data, context }: { data: ReturnType<typeof getLeaderboardInput>; context: OnlineContext }) => {
-    const { data: rows } = await context.supabase.from("player_stats").select("user_id, played, wins, captures, pieces_home, forfeits").gt("played", 0).order(data.sort, { ascending: false }).order("played").limit(50);
+    // Public leaderboard columns only; tables are owner-scoped, so read with the server client after auth.
+    const db = await admin();
+    const { data: rows } = await db.from("player_stats").select("user_id, played, wins, captures, pieces_home, forfeits").gt("played", 0).order(data.sort, { ascending: false }).order("played").limit(50);
     const ids = (rows ?? []).map((r) => r.user_id);
-    const { data: profs } = ids.length ? await context.supabase.from("profiles").select("id, display_name, avatar, country").in("id", ids) : { data: [] };
+    const { data: profs } = ids.length ? await db.from("profiles").select("id, display_name, avatar, country").in("id", ids) : { data: [] };
     const byId = new Map((profs ?? []).map((p) => [p.id, p]));
     return (rows ?? []).map((r) => ({ ...r, profile: byId.get(r.user_id) ?? null }));
   };
