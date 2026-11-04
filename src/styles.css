@@ -441,3 +441,22 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display
 .dest-dot { animation: dest-dot 1.4s ease-in-out infinite; }
 @keyframes dest-dot { 0%,100% { transform: scale(1); } 50% { transform: scale(.7); } }
 @media (prefers-reduced-motion: reduce) { .dest-glow, .dest-spin, .dest-dot { animation: none; } }
+
+/* Yatzy's first-play "start here" speech bubble above Snabbspel. */
+.home-quick-hint {
+  position: absolute; right: 6px; bottom: calc(100% + 6px); z-index: 5; max-width: 104px;
+  pointer-events: none; padding: 5px 8px; text-align: center; border-radius: 11px 11px 3px 11px;
+  border: 1px solid color-mix(in oklab, var(--primary) 80%, transparent);
+  background: var(--card); color: var(--foreground); font-size: 10.5px; font-weight: 700; line-height: 1.2;
+  box-shadow: 0 3px 10px color-mix(in oklab, var(--background) 60%, transparent);
+  animation: home-hint-in 0.4s ease-out 1.2s both;
+}
+.home-quick-hint::after {
+  content: ""; position: absolute; bottom: -5px; left: 13px; width: 9px; height: 9px; transform: rotate(45deg);
+  border-right: 1px solid color-mix(in oklab, var(--primary) 80%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--primary) 80%, transparent); background: var(--card);
+}
+.home-quick-glow { animation: home-quick-glow 1.8s ease-in-out infinite; }
+@keyframes home-quick-glow { 0%, 100% { box-shadow: 0 0 0 0 transparent; } 50% { box-shadow: 0 0 22px 4px color-mix(in oklab, var(--primary) 65%, transparent); } }
+@keyframes home-hint-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .home-quick-glow, .home-quick-hint { animation: none; } }

@@ -315,7 +315,7 @@ export const fi: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Hyväksytty",
   inviteStatusDeclined: "Hylätty",
   inviteStatusExpired: "Vanhentunut",
-  firstPlayHint: "Aloita tästä ↓",
+  firstPlayHint: "Aloita tästä – pelaa heti!",
   adPrivacyChange: "Muuta mainosvalintoja",
   adChoiceStorage: "Tallennus laitteelle",
   adChoiceProfile: "Personoidut mainokset",

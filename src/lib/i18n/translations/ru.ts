@@ -332,7 +332,7 @@ export const ru: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Принято",
   inviteStatusDeclined: "Отклонено",
   inviteStatusExpired: "Истекло",
-  firstPlayHint: "Начните здесь ↓",
+  firstPlayHint: "Начни здесь – играй сейчас!",
   adPrivacyChange: "Изменить настройки рекламы",
   adChoiceStorage: "Хранение на устройстве",
   adChoiceProfile: "Персонализированная реклама",

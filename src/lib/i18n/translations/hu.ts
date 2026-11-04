@@ -315,7 +315,7 @@ export const hu: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Elfogadva",
   inviteStatusDeclined: "Elutasítva",
   inviteStatusExpired: "Lejárt",
-  firstPlayHint: "Kezdd itt ↓",
+  firstPlayHint: "Kezdd itt – játssz most!",
   adPrivacyChange: "Hirdetési beállítások módosítása",
   adChoiceStorage: "Tárolás az eszközön",
   adChoiceProfile: "Személyre szabott hirdetések",

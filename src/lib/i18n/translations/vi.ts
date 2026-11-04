@@ -332,7 +332,7 @@ export const vi: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Đã chấp nhận",
   inviteStatusDeclined: "Đã từ chối",
   inviteStatusExpired: "Đã hết hạn",
-  firstPlayHint: "Bắt đầu tại đây ↓",
+  firstPlayHint: "Bắt đầu tại đây – chơi ngay!",
   adPrivacyChange: "Thay đổi lựa chọn quảng cáo",
   adChoiceStorage: "Lưu trên thiết bị",
   adChoiceProfile: "Quảng cáo cá nhân hóa",

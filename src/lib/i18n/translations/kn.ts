@@ -332,7 +332,7 @@ export const kn: Record<TranslationKey, string> = {
   inviteStatusAccepted: "ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
   inviteStatusDeclined: "ನಿರಾಕರಿಸಲಾಗಿದೆ",
   inviteStatusExpired: "ಅವಧಿ ಮುಗಿದಿದೆ",
-  firstPlayHint: "ಇಲ್ಲಿಂದ ಪ್ರಾರಂಭಿಸಿ ↓",
+  firstPlayHint: "ಇಲ್ಲಿ ಪ್ರಾರಂಭಿಸಿ – ಈಗಲೇ ಆಡಿ!",
   adPrivacyChange: "ಜಾಹೀರಾತು ಆಯ್ಕೆಗಳನ್ನು ಬದಲಿಸಿ",
   adChoiceStorage: "ಸಾಧನದಲ್ಲಿ ಸಂಗ್ರಹ",
   adChoiceProfile: "ವೈಯಕ್ತೀಕರಿಸಿದ ಜಾಹೀರಾತುಗಳು",

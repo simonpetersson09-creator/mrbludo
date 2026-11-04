@@ -345,7 +345,7 @@ export const sv = {
   inviteStatusAccepted: "Accepterad",
   inviteStatusDeclined: "Nej tack",
   inviteStatusExpired: "Gått ut",
-  firstPlayHint: "Börja här ↓",
+  firstPlayHint: "Börja här – spela direkt!",
   adPrivacyChange: "Ändra annonsval",
   adChoiceStorage: "Spara på enheten",
   adChoiceProfile: "Anpassade annonser",

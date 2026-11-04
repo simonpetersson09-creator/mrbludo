@@ -332,7 +332,7 @@ export const gu: Record<TranslationKey, string> = {
   inviteStatusAccepted: "સ્વીકાર્યું",
   inviteStatusDeclined: "નકાર્યું",
   inviteStatusExpired: "સમાપ્ત",
-  firstPlayHint: "અહીંથી શરૂ કરો ↓",
+  firstPlayHint: "અહીંથી શરૂ કરો – હમણાં રમો!",
   adPrivacyChange: "જાહેરાત પસંદગીઓ બદલો",
   adChoiceStorage: "ઉપકરણ પર સંગ્રહ",
   adChoiceProfile: "વ્યક્તિગત જાહેરાતો",

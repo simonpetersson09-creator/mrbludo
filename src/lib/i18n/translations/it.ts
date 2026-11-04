@@ -315,7 +315,7 @@ export const it: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Accettato",
   inviteStatusDeclined: "Rifiutato",
   inviteStatusExpired: "Scaduto",
-  firstPlayHint: "Inizia qui ↓",
+  firstPlayHint: "Inizia qui – gioca subito!",
   adPrivacyChange: "Modifica scelte pubblicitarie",
   adChoiceStorage: "Archiviazione sul dispositivo",
   adChoiceProfile: "Annunci personalizzati",

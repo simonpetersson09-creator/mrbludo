@@ -315,7 +315,7 @@ export const cs: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Přijato",
   inviteStatusDeclined: "Odmítnuto",
   inviteStatusExpired: "Vypršelo",
-  firstPlayHint: "Začni zde ↓",
+  firstPlayHint: "Začni tady – hraj hned!",
   adPrivacyChange: "Změnit volby reklam",
   adChoiceStorage: "Ukládání v zařízení",
   adChoiceProfile: "Personalizované reklamy",

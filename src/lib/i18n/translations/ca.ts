@@ -315,7 +315,7 @@ export const ca: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Acceptada",
   inviteStatusDeclined: "Rebutjada",
   inviteStatusExpired: "Caducada",
-  firstPlayHint: "Comença aquí ↓",
+  firstPlayHint: "Comença aquí – juga ara!",
   adPrivacyChange: "Canvia les opcions d'anuncis",
   adChoiceStorage: "Desar al dispositiu",
   adChoiceProfile: "Anuncis personalitzats",

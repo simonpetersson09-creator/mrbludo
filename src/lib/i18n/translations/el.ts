@@ -315,7 +315,7 @@ export const el: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Αποδεκτή",
   inviteStatusDeclined: "Απορρίφθηκε",
   inviteStatusExpired: "Έληξε",
-  firstPlayHint: "Ξεκίνα εδώ ↓",
+  firstPlayHint: "Ξεκίνα εδώ – παίξε τώρα!",
   adPrivacyChange: "Αλλαγή επιλογών διαφημίσεων",
   adChoiceStorage: "Αποθήκευση στη συσκευή",
   adChoiceProfile: "Εξατομικευμένες διαφημίσεις",

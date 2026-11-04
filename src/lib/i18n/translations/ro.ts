@@ -332,7 +332,7 @@ export const ro: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Acceptată",
   inviteStatusDeclined: "Refuzată",
   inviteStatusExpired: "Expirată",
-  firstPlayHint: "Începe aici ↓",
+  firstPlayHint: "Începe aici – joacă acum!",
   adPrivacyChange: "Schimbă opțiunile de reclame",
   adChoiceStorage: "Stocare pe dispozitiv",
   adChoiceProfile: "Reclame personalizate",

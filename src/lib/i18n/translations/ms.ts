@@ -332,7 +332,7 @@ export const ms: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Diterima",
   inviteStatusDeclined: "Ditolak",
   inviteStatusExpired: "Tamat tempoh",
-  firstPlayHint: "Mula di sini ↓",
+  firstPlayHint: "Mula di sini – main sekarang!",
   adPrivacyChange: "Tukar pilihan iklan",
   adChoiceStorage: "Simpan pada peranti",
   adChoiceProfile: "Iklan diperibadikan",

@@ -332,7 +332,7 @@ export const pa: Record<TranslationKey, string> = {
   inviteStatusAccepted: "ਸਵੀਕਾਰ",
   inviteStatusDeclined: "ਇਨਕਾਰ",
   inviteStatusExpired: "ਮਿਆਦ ਖ਼ਤਮ",
-  firstPlayHint: "ਇੱਥੋਂ ਸ਼ੁਰੂ ਕਰੋ ↓",
+  firstPlayHint: "ਇੱਥੋਂ ਸ਼ੁਰੂ ਕਰੋ – ਹੁਣੇ ਖੇਡੋ!",
   adPrivacyChange: "ਇਸ਼ਤਿਹਾਰ ਚੋਣਾਂ ਬਦਲੋ",
   adChoiceStorage: "ਡਿਵਾਈਸ 'ਤੇ ਸਟੋਰ ਕਰਨਾ",
   adChoiceProfile: "ਨਿੱਜੀ ਇਸ਼ਤਿਹਾਰ",

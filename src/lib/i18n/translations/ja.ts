@@ -332,7 +332,7 @@ export const ja: Record<TranslationKey, string> = {
   inviteStatusAccepted: "承諾",
   inviteStatusDeclined: "辞退",
   inviteStatusExpired: "期限切れ",
-  firstPlayHint: "ここから ↓",
+  firstPlayHint: "ここから – すぐに遊ぼう！",
   adPrivacyChange: "広告の設定を変更",
   adChoiceStorage: "端末への保存",
   adChoiceProfile: "パーソナライズ広告",

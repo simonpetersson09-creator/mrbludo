@@ -332,7 +332,7 @@ export const hi: Record<TranslationKey, string> = {
   inviteStatusAccepted: "स्वीकार",
   inviteStatusDeclined: "अस्वीकार",
   inviteStatusExpired: "समाप्त",
-  firstPlayHint: "यहाँ से शुरू करें ↓",
+  firstPlayHint: "यहाँ से शुरू करें – अभी खेलें!",
   adPrivacyChange: "विज्ञापन विकल्प बदलें",
   adChoiceStorage: "डिवाइस पर सहेजना",
   adChoiceProfile: "वैयक्तिकृत विज्ञापन",

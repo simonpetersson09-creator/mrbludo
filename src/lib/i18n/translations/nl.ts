@@ -315,7 +315,7 @@ export const nl: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Geaccepteerd",
   inviteStatusDeclined: "Afgewezen",
   inviteStatusExpired: "Verlopen",
-  firstPlayHint: "Begin hier ↓",
+  firstPlayHint: "Begin hier – speel direct!",
   adPrivacyChange: "Advertentiekeuzes wijzigen",
   adChoiceStorage: "Opslaan op apparaat",
   adChoiceProfile: "Gepersonaliseerde advertenties",

@@ -332,7 +332,7 @@ export const te: Record<TranslationKey, string> = {
   inviteStatusAccepted: "అంగీకరించారు",
   inviteStatusDeclined: "తిరస్కరించారు",
   inviteStatusExpired: "గడువు ముగిసింది",
-  firstPlayHint: "ఇక్కడ ప్రారంభించండి ↓",
+  firstPlayHint: "ఇక్కడ ప్రారంభించండి – ఇప్పుడే ఆడండి!",
   adPrivacyChange: "ప్రకటన ఎంపికలను మార్చండి",
   adChoiceStorage: "పరికరంలో నిల్వ",
   adChoiceProfile: "వ్యక్తిగత ప్రకటనలు",

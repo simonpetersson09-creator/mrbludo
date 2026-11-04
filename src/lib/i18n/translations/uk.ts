@@ -332,7 +332,7 @@ export const uk: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Прийнято",
   inviteStatusDeclined: "Відхилено",
   inviteStatusExpired: "Минуло",
-  firstPlayHint: "Почніть тут ↓",
+  firstPlayHint: "Почни тут – грай зараз!",
   adPrivacyChange: "Змінити налаштування реклами",
   adChoiceStorage: "Зберігання на пристрої",
   adChoiceProfile: "Персоналізована реклама",

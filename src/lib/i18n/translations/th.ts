@@ -332,7 +332,7 @@ export const th: Record<TranslationKey, string> = {
   inviteStatusAccepted: "ตอบรับแล้ว",
   inviteStatusDeclined: "ปฏิเสธแล้ว",
   inviteStatusExpired: "หมดอายุแล้ว",
-  firstPlayHint: "เริ่มที่นี่ ↓",
+  firstPlayHint: "เริ่มที่นี่ – เล่นเลย!",
   adPrivacyChange: "เปลี่ยนตัวเลือกโฆษณา",
   adChoiceStorage: "จัดเก็บบนอุปกรณ์",
   adChoiceProfile: "โฆษณาที่ปรับให้เหมาะกับคุณ",

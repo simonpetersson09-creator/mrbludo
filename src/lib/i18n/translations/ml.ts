@@ -332,7 +332,7 @@ export const ml: Record<TranslationKey, string> = {
   inviteStatusAccepted: "സ്വീകരിച്ചു",
   inviteStatusDeclined: "നിരസിച്ചു",
   inviteStatusExpired: "കാലഹരണപ്പെട്ടു",
-  firstPlayHint: "ഇവിടെ തുടങ്ങൂ ↓",
+  firstPlayHint: "ഇവിടെ തുടങ്ങൂ – ഇപ്പോൾ കളിക്കൂ!",
   adPrivacyChange: "പരസ്യ ഓപ്ഷനുകൾ മാറ്റുക",
   adChoiceStorage: "ഉപകരണത്തിൽ സംഭരണം",
   adChoiceProfile: "വ്യക്തിഗത പരസ്യങ്ങൾ",

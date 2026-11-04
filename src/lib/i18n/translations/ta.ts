@@ -332,7 +332,7 @@ export const ta: Record<TranslationKey, string> = {
   inviteStatusAccepted: "ஏற்கப்பட்டது",
   inviteStatusDeclined: "மறுக்கப்பட்டது",
   inviteStatusExpired: "காலாவதியானது",
-  firstPlayHint: "இங்கே தொடங்குங்கள் ↓",
+  firstPlayHint: "இங்கே தொடங்குங்கள் – இப்போதே விளையாடுங்கள்!",
   adPrivacyChange: "விளம்பரத் தேர்வுகளை மாற்று",
   adChoiceStorage: "சாதனத்தில் சேமித்தல்",
   adChoiceProfile: "தனிப்பயன் விளம்பரங்கள்",

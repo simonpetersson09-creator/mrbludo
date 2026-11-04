@@ -332,7 +332,7 @@ export const or: Record<TranslationKey, string> = {
   inviteStatusAccepted: "ଗ୍ରହଣ କରାଗଲା",
   inviteStatusDeclined: "ପ୍ରତ୍ୟାଖ୍ୟାନ",
   inviteStatusExpired: "ମିଆଦ ଶେଷ",
-  firstPlayHint: "ଏଠାରୁ ଆରମ୍ଭ କରନ୍ତୁ ↓",
+  firstPlayHint: "ଏଠାରୁ ଆରମ୍ଭ କରନ୍ତୁ – ଏବେ ଖେଳନ୍ତୁ!",
   adPrivacyChange: "ବିଜ୍ଞାପନ ପସନ୍ଦ ବଦଳାନ୍ତୁ",
   adChoiceStorage: "ଡିଭାଇସରେ ସଂରକ୍ଷଣ",
   adChoiceProfile: "ବ୍ୟକ୍ତିଗତ ବିଜ୍ଞାପନ",

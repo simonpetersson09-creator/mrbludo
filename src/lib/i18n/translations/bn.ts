@@ -332,7 +332,7 @@ export const bn: Record<TranslationKey, string> = {
   inviteStatusAccepted: "গৃহীত",
   inviteStatusDeclined: "প্রত্যাখ্যাত",
   inviteStatusExpired: "মেয়াদোত্তীর্ণ",
-  firstPlayHint: "এখান থেকে শুরু করুন ↓",
+  firstPlayHint: "এখান থেকে শুরু – এখনই খেলুন!",
   adPrivacyChange: "বিজ্ঞাপন পছন্দ বদলান",
   adChoiceStorage: "ডিভাইসে সংরক্ষণ",
   adChoiceProfile: "ব্যক্তিগতকৃত বিজ্ঞাপন",

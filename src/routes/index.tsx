@@ -114,7 +114,7 @@ function HomePage() {
       </div>
       <div className="w-full mt-8 sm:mt-10">
       {resume && (
-        <div className="home-stack">
+        <div className="home-stack relative">
           <Link to="/play" className={`home-match-card font-display ${resume.myTurn ? "home-match-card-turn" : "home-match-card-waiting"}`}>
             <span className={`home-card-chip${resume.myTurn ? " home-card-chip-light" : ""}`}><Play /></span>
             <span className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
@@ -130,8 +130,10 @@ function HomePage() {
       </div>
       <div className="w-full">
       <div className="home-stack">
-        {firstHint && <p role="note" className="-mb-1 text-center text-sm font-semibold text-gold">{t("firstPlayHint")}</p>}
-        <button className={`home-action font-display${firstHint ? " animate-pulse" : ""}`} aria-expanded={showQuick} onClick={() => { doneFirstHint(); setShowQuick((v) => !v); }}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
+                <div className="relative">
+        {firstHint && <div className="home-quick-hint" role="note">{t("firstPlayHint")}</div>}
+        <button className={`home-action w-full font-display${firstHint ? " home-quick-glow" : ""}`} aria-expanded={showQuick} onClick={() => { doneFirstHint(); setShowQuick((v) => !v); }}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
+        </div>
         {showQuick && (
           <div className="space-y-3 overflow-hidden rounded-2xl border border-primary/30 bg-card/80 p-3">
             <div className="flex items-start gap-2">

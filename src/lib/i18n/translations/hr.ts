@@ -315,7 +315,7 @@ export const hr: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Prihvaćeno",
   inviteStatusDeclined: "Odbijeno",
   inviteStatusExpired: "Isteklo",
-  firstPlayHint: "Počni ovdje ↓",
+  firstPlayHint: "Počni ovdje – igraj odmah!",
   adPrivacyChange: "Promijeni izbore oglasa",
   adChoiceStorage: "Spremanje na uređaju",
   adChoiceProfile: "Personalizirani oglasi",

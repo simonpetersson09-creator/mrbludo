@@ -332,7 +332,7 @@ export const no: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Godtatt",
   inviteStatusDeclined: "Avslått",
   inviteStatusExpired: "Utløpt",
-  firstPlayHint: "Start her ↓",
+  firstPlayHint: "Start her – spill nå!",
   adPrivacyChange: "Endre annonsevalg",
   adChoiceStorage: "Lagre på enheten",
   adChoiceProfile: "Tilpassede annonser",
