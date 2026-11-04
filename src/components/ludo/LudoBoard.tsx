@@ -305,6 +305,20 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
       <polygon points="7.12,9 7.88,9 7.5,8.74" fill={BOARD_FILL[3]} />
       </>}
 
+      {/* Bend squares: the two track squares at each corner stretch to meet, so the track runs continuously around the bend. Same 52 squares, same piece positions — presentation only. */}
+      {!fia && (
+        <g pointerEvents="none">
+          <rect x="5" y="6" width="1.5" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+          <rect x="6" y="5" width="1" height="1.5" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+          <rect x="8" y="5" width="1" height="1.5" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+          <rect x="8.5" y="6" width="1.5" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+          <rect x="8.5" y="8" width="1.5" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+          <rect x="8" y="8.5" width="1" height="1.5" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+          <rect x="6" y="8.5" width="1" height="1.5" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+          <rect x="5" y="8" width="1.5" height="1" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
+        </g>
+      )}
+
       </g>
 
       <g className="move-destinations">
