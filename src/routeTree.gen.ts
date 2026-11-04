@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CenterPreviewRouteImport } from './routes/center-preview'
 import { Route as JoinRouteImport } from './routes/join'
 import { Route as PlayRouteImport } from './routes/play'
 import { Route as RulesRouteImport } from './routes/rules'
@@ -44,6 +45,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CenterPreviewRoute = CenterPreviewRouteImport.update({
+  id: '/center-preview',
+  path: '/center-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JoinRoute = JoinRouteImport.update({
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
+  '/center-preview': typeof CenterPreviewRoute
   '/join': typeof JoinRoute
   '/play': typeof PlayRoute
   '/rules': typeof RulesRoute
@@ -137,6 +144,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
+  '/center-preview': typeof CenterPreviewRoute
   '/join': typeof JoinRoute
   '/play': typeof PlayRoute
   '/rules': typeof RulesRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
+  '/center-preview': typeof CenterPreviewRoute
   '/join': typeof JoinRoute
   '/play': typeof PlayRoute
   '/rules': typeof RulesRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-login'
     | '/auth'
+    | '/center-preview'
     | '/join'
     | '/play'
     | '/rules'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-login'
     | '/auth'
+    | '/center-preview'
     | '/join'
     | '/play'
     | '/rules'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/admin-login'
     | '/auth'
+    | '/center-preview'
     | '/join'
     | '/play'
     | '/rules'
@@ -234,6 +246,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
   AuthRoute: typeof AuthRoute
+  CenterPreviewRoute: typeof CenterPreviewRoute
   JoinRoute: typeof JoinRoute
   PlayRoute: typeof PlayRoute
   RulesRoute: typeof RulesRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/center-preview': {
+      id: '/center-preview'
+      path: '/center-preview'
+      fullPath: '/center-preview'
+      preLoaderRoute: typeof CenterPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/join': {
@@ -393,6 +413,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
   AuthRoute: AuthRoute,
+  CenterPreviewRoute: CenterPreviewRoute,
   JoinRoute: JoinRoute,
   PlayRoute: PlayRoute,
   RulesRoute: RulesRoute,
