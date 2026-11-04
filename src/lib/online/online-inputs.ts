@@ -9,13 +9,20 @@ export const updateProfileInput = (d: { display_name: string; avatar: string; co
   };
 const variantInput = (v: unknown): Variant => (isVariant(v) ? v : "classic");
 export const createMatchInput = (d: { isPrivate: boolean; maxPlayers: number; variant?: Variant }) => ({ isPrivate: !!d.isPrivate, maxPlayers: Math.min(4, Math.max(2, Math.round(Number(d.maxPlayers) || 4))), variant: variantInput(d.variant) });
-export const joinByCodeInput = (d: { code: string }) => ({ code: String(d.code ?? "").trim().toUpperCase().slice(0, 8) });
+/** Match codes are exactly six characters from makeCode's alphabet; anything else is not a code. */
+export const MATCH_CODE_RE = /^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{6}$/;
+export const joinByCodeInput = (d: { code: string }) => {
+  const code = String(d?.code ?? "").trim().toUpperCase();
+  if (!MATCH_CODE_RE.test(code)) throw new Error("err:no_match_code");
+  return { code };
+};
 export const quickMatchInput = (d: { maxPlayers: number; variant?: Variant }) => ({ maxPlayers: Math.min(4, Math.max(2, Math.round(Number(d.maxPlayers) || 2))), variant: variantInput(d.variant) });
 export const startMatchInput = (d: { matchId: string }) => ({ matchId: String(d.matchId) });
 export const leaveMatchInput = (d: { matchId: string }) => ({ matchId: String(d.matchId) });
 export const actInput = (d: { matchId: string; version: number; action: Action }) => {
     const a = d.action;
-    if (!a || !["roll", "move", "forfeit"].includes(a.kind)) throw new Error("err:bad_action");
+    // Giving up goes only through leaveMatch, which applies the quick-play computer-takeover rule.
+    if (!a || !["roll", "move"].includes(a.kind)) throw new Error("err:bad_action");
     const action: Action = a.kind === "move" ? { kind: "move", piece: Math.trunc(Number(a.piece)), ...(a.walkOut === true ? { walkOut: true } : {}) } : { kind: a.kind };
     return { matchId: String(d.matchId), version: Math.trunc(Number(d.version)), action };
   };

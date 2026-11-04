@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { authenticateCronRequest } from "@/integrations/supabase/cron-auth";
 
 /**
  * Scheduled every minute: closes dead matches and plays idle turns by the normal server rules.
- * Public but harmless: it takes no input, applies only server-side rules and returns counts only.
+ * Only the managed scheduler may call it: its bearer secret is checked before anything runs.
  */
 export const Route = createFileRoute("/api/public/maintenance")({ server: { handlers: {
-  POST: async () => {
+  POST: async ({ request }) => {
+    const authFailure = await authenticateCronRequest(request);
+    if (authFailure) return authFailure;
     const { runMaintenance } = await import("@/lib/online/online-actions");
     try {
       const r = await runMaintenance();

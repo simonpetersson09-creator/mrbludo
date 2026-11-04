@@ -85,6 +85,13 @@
       "when": 1793800730188,
       "tag": "0011_split_cleanup_private_vs_quick",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1793802572379,
+      "tag": "0012_nogo_fixes_rate_limits_cleanup_profile_columns",
+      "breakpoints": true
     }
   ]
 }

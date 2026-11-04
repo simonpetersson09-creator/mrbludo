@@ -50,25 +50,32 @@ export function seatOf(state: GameState, userId: string): number {
 
 /** Marks a step the server played for a player who was away, so the app can say so afterwards. */
 export interface AutoMark { seat: number; at: number }
-export type MarkedState = GameState & { auto?: AutoMark; back?: AutoMark };
+/** `away` lists quick-play seats the computer has taken over until their player acts again. */
+export type MarkedState = GameState & { auto?: AutoMark; back?: AutoMark; away?: number[] };
 
 /**
- * A step the player took themselves is never "played for you". The mark belongs to the marked
- * seat: it survives other players' actions, and when the marked player acts again it becomes a
- * "back" mark so the app can say they returned. A back mark is dropped when its player acts on.
+ * A step the player took themselves is never "played for you". When a taken-over player acts again
+ * they get control back and a "back" mark (kept until another return replaces it, so a fast
+ * follow-up move cannot hide it). Other players' actions leave every mark untouched.
  */
 export function markReturn(state: GameState, seat: number): GameState {
   const m = state as MarkedState;
-  if (m.auto === undefined && m.back === undefined) return state;
-  if (m.auto && m.auto.seat === seat) {
-    const { auto: _auto, back: _back, ...rest } = m;
-    return { ...rest, back: { seat, at: Date.now() } } as GameState;
-  }
-  if (m.back && m.back.seat === seat) {
-    const { back: _back, ...rest } = m;
-    return rest as GameState;
-  }
-  return state;
+  const wasAway = !!m.away?.includes(seat) || m.auto?.seat === seat;
+  if (!wasAway) return state;
+  const { auto, away, ...rest } = m;
+  const out = { ...rest, back: { seat, at: Date.now() } } as MarkedState;
+  const left = (away ?? []).filter((s) => s !== seat);
+  if (left.length) out.away = left;
+  if (auto && auto.seat !== seat) out.auto = auto;
+  return out as GameState;
+}
+/** Giving up is not a return: the seat's takeover marks simply disappear. */
+function dropMarks(state: GameState, seat: number): GameState {
+  const m = { ...(state as MarkedState) };
+  if (m.auto?.seat === seat) delete m.auto;
+  if (m.back?.seat === seat) delete m.back;
+  if (m.away) { const left = m.away.filter((s) => s !== seat); if (left.length) m.away = left; else delete m.away; }
+  return m as GameState;
 }
 
 /** Apply one player action. `roll` is the server-generated die value. */
@@ -76,7 +83,7 @@ export function performAction(state: GameState, userId: string, action: Action, 
   const seat = seatOf(state, userId);
   if (seat < 0) throw new MatchError("not_member");
   if (state.phase === "finished") throw new MatchError("finished");
-  if (action.kind === "forfeit") return markReturn(forfeit(state, seat), seat);
+  if (action.kind === "forfeit") return dropMarks(forfeit(state, seat), seat);
   if (state.players[seat].forfeited) throw new MatchError("not_member");
   if (state.current !== seat) throw new MatchError("not_your_turn");
   if (action.kind === "roll") {
@@ -96,9 +103,18 @@ export function autoStep(state: GameState, roll: () => number): GameState {
   const next = state.phase === "roll"
     ? applyRoll(state, roll())
     : (() => { const a = chooseBotAction(state); return applyMove(state, a.piece, a.walkOut); })();
-  // Computer seats need no notice; only a human who was away is told the server moved for them.
-  return state.players[seat]?.isBot ? next : ({ ...next, auto: { seat, at: Date.now() } } as MarkedState);
+  // Computer seats need no notice. A human's seat is taken over: the computer keeps playing it
+  // (without a new long wait) until the player acts again; the notice is raised once per takeover.
+  if (state.players[seat]?.isBot) return next;
+  const m = state as MarkedState;
+  const away = m.away?.includes(seat) ? m.away : [...(m.away ?? []), seat];
+  const auto = m.auto?.seat === seat && m.away?.includes(seat) ? m.auto : { seat, at: Date.now() };
+  return { ...next, away, auto } as MarkedState;
 }
+
+/** Seconds a taken-over seat waits per step, so a returning player can tap in on their own turn. */
+export const AWAY_SECONDS = 3;
+export const isAway = (state: GameState, seat: number) => !!(state as MarkedState).away?.includes(seat);
 
 /**
  * What the server clock does with a match whose current player has been idle for `idleSeconds`.
@@ -110,7 +126,7 @@ export function tickDecision(state: GameState, isPrivate: boolean, idleSeconds: 
   if (state.phase === "finished" || isPrivate) return "none";
   const cur = state.players[state.current];
   if (!cur || cur.forfeited) return "none";
-  return idleSeconds >= (cur.isBot ? BOT_SECONDS : TURN_SECONDS) ? "auto" : "none";
+  return idleSeconds >= (cur.isBot ? BOT_SECONDS : isAway(state, state.current) ? AWAY_SECONDS : TURN_SECONDS) ? "auto" : "none";
 }
 
 /** True while the match is still in its first two rounds (everyone's first two turns). */
@@ -132,6 +148,18 @@ export function replaceWithBot(state: GameState, seat: number): GameState {
   delete next.auto;
   delete next.back;
   return next as GameState;
+}
+
+/**
+ * One rule for every way of giving up online (leave button, act endpoint, native API):
+ * quick play in the first two rounds with another human still in → permanent computer seat;
+ * otherwise a normal forfeit.
+ */
+export function giveUpState(state: GameState, userId: string, isPrivate: boolean): GameState {
+  const seat = seatOf(state, userId);
+  if (seat < 0) throw new MatchError("not_member");
+  const humansLeft = state.players.filter((p) => !p.isBot && p.id !== userId && !p.forfeited).length;
+  return !isPrivate && earlyRounds(state) && humansLeft >= 1 ? replaceWithBot(state, seat) : performAction(state, userId, { kind: "forfeit" }, () => 1);
 }
 
 export interface StatDelta { played: number; wins: number; captures: number; pieces_home: number; forfeits: number }

@@ -10,13 +10,14 @@ import { MatchInfoBar } from "@/components/ludo/MatchInfoBar";
 import { LudoDie } from "@/components/ludo/LudoDie";
 import { useDieColor } from "@/components/ludo/useDieColor";
 import type { DiceValue } from "@/components/dice-engine/types";
-import { applyMove, canWalkOut, applyRoll, forfeit, legalMoves, rollDie, absSquare, variantOf, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
+import { applyMove, canWalkOut, applyRoll, legalMoves, rollDie, absSquare, variantOf, COLOR_KEYS, type Color, type GameState } from "@/lib/ludo/engine";
 import { chooseBotAction } from "@/lib/ludo/ai";
 import { BOT_ROLL_MS, botWaitMs } from "@/lib/ludo/bot-pacing";
 import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic } from "@/lib/native/haptics";
 import { pieceCenter } from "@/lib/ludo/board";
 import { AppOpenGameGate } from "@/components/AppOpenGameGate";
 import { usePostMatchExit } from "@/lib/ads/usePostMatchExit";
+import { eventKey, localGiveUp, piecesInGoal } from "@/lib/ludo/local-result";
 import { clearGame, loadGame, loadSettings, loadStats, saveGame, saveStats } from "@/lib/ludo/storage";
 import { RollLabel } from "@/components/ludo/RollLabel";
 import { ExtraRollBanner } from "@/components/ludo/ExtraRollBanner";
@@ -58,12 +59,14 @@ function PlayPage() {
   }, []);
   const busy = useRef(false);
   const statsDone = useRef(false);
+  // The last event already counted in statistics (set from a resumed save so it is not counted again).
+  const countedEvent = useRef("");
   const settings = useMemo(() => loadSettings(), []);
 
   useEffect(() => {
     const g = loadGame();
     if (!g) navigate({ to: "/setup" });
-    else setState(g);
+    else { countedEvent.current = eventKey(g); setState(g); }
   }, [navigate]);
 
   useEffect(() => { if (state && state.phase !== "finished") saveGame(state); }, [state]);
@@ -142,6 +145,9 @@ function PlayPage() {
   // Track captures / goals for the device owner
   useEffect(() => {
     const ev = state?.lastEvent;
+    const key = eventKey(state);
+    if (!key || key === countedEvent.current) return;
+    countedEvent.current = key;
     if (!ev || ev.kind !== "moved" || ev.player !== 0 || state!.players[0].isBot) return;
     if (ev.captured.length || ev.reachedGoal) {
       const st = loadStats();
@@ -204,13 +210,8 @@ function PlayPage() {
             <AlertDialogCancel>{t("keepPlaying")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                let s = state;
-                // Forfeit every human on this device; bots keep playing only if 2+ remain.
-                s.players.forEach((p, i) => { if (!p.isBot) s = forfeit(s, i); });
-                if (s.phase !== "finished") {
-                  const left = s.players.findIndex((p) => !p.forfeited);
-                  s = { ...s, phase: "finished", winner: left, ranking: null };
-                }
+                // Every human on this device gives up; the computer furthest ahead wins.
+                const s = localGiveUp(state);
                 setState(s);
               }}
             >
@@ -252,7 +253,7 @@ function ResultOverlay({ state, onAgain, onHome }: { state: GameState; onAgain: 
                 <span className="w-5 font-bold text-gold">{place + 1}.</span>
                 <span className="h-3 w-3 rounded-full" style={{ background: COLOR_VAR[p.color] }} />
                 <span className="flex-1 truncate">{p.name}</span>
-                <span className="text-xs text-muted-foreground">{p.forfeited ? t("gaveUp") : t("inGoal", { n: state.pieces[seat].filter((x) => x === 56).length })}</span>
+                <span className="text-xs text-muted-foreground">{p.forfeited ? t("gaveUp") : t("inGoal", { n: piecesInGoal(state, seat) })}</span>
               </li>
             );
           })}

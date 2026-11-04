@@ -1,4 +1,5 @@
 import type { GameState, Variant } from "./engine";
+import { cleanCount, isValidSave } from "./local-result";
 
 /** All Ludo keys live in their own namespace; never shared with Yatzy. */
 const NS = "mrb-ludo:v1:";
@@ -31,9 +32,13 @@ export const loadGame = (): GameState | null => {
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(GAME);
-    const g = raw ? (JSON.parse(raw) as GameState) : null;
-    return g && g.version === 1 && g.phase !== "finished" ? g : null;
-  } catch { return null; }
+    if (!raw) return null;
+    const g: unknown = JSON.parse(raw);
+    if (isValidSave(g)) return g;
+    // A damaged or altered save is removed instead of crashing the home or game screen.
+    clearGame();
+    return null;
+  } catch { clearGame(); return null; }
 };
 export const saveGame = (g: GameState) => write(GAME, g);
 export const clearGame = () => { try { localStorage.removeItem(GAME); } catch { /* noop */ } };
@@ -41,8 +46,14 @@ export const clearGame = () => { try { localStorage.removeItem(GAME); } catch { 
 export const loadSettings = () => read(SETTINGS, DEFAULT_SETTINGS);
 export const saveSettings = (s: Settings) => write(SETTINGS, s);
 /** Statistics are per calendar year: a saved row from an earlier year starts over at zero (lifetime count kept for ad/rating timing). */
-export function statsForYear(saved: Partial<Stats>, year: number): Stats {
-  const lifetimePlayed = saved.lifetimePlayed ?? saved.played ?? 0;
+export function statsForYear(raw: Partial<Stats>, year: number): Stats {
+  // Stored numbers are cleaned first: no negative, fractional or non-number counts.
+  const saved: Partial<Stats> = { ...raw };
+  for (const k of ["played", "wins", "captures", "piecesHome", "forfeits"] as const) saved[k] = cleanCount(raw[k]);
+  saved.wins = Math.min(saved.wins ?? 0, saved.played ?? 0);
+  saved.forfeits = Math.min(saved.forfeits ?? 0, saved.played ?? 0);
+  if (raw.year !== undefined && !Number.isInteger(raw.year)) delete saved.year;
+  const lifetimePlayed = Math.max(cleanCount(raw.lifetimePlayed ?? raw.played), saved.played ?? 0);
   if ((saved.year ?? year) === year) return { ...DEFAULT_STATS, ...saved, year, lifetimePlayed };
   return { ...DEFAULT_STATS, year, lifetimePlayed };
 }

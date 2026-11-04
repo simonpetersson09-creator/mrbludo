@@ -327,6 +327,24 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_hits: {
+        Row: {
+          hits: number
+          key: string
+          window_start: string
+        }
+        Insert: {
+          hits?: number
+          key: string
+          window_start?: string
+        }
+        Update: {
+          hits?: number
+          key?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -403,6 +421,14 @@ export type Database = {
       is_match_member: {
         Args: { _match: string; _user: string }
         Returns: boolean
+      }
+      rate_hit: {
+        Args: { _key: string; _max: number; _window_seconds: number }
+        Returns: boolean
+      }
+      rate_peek: {
+        Args: { _key: string; _window_seconds: number }
+        Returns: number
       }
       scrub_player: { Args: { _uid: string }; Returns: undefined }
       start_match: {

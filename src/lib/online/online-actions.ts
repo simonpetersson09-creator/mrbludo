@@ -1,7 +1,7 @@
 import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput } from "./online-inputs";
 import type { GameState } from "@/lib/ludo/engine";
 import {
-  BOT_SECONDS, CODE_TTL_MS, MatchError, autoStep, codeExpired, earlyRounds, makeCode, performAction, replaceWithBot, secureRoll, seatOf, startState, statDeltas, tickDecision,
+  BOT_SECONDS, CODE_TTL_MS, MatchError, autoStep, codeExpired, makeCode, giveUpState, performAction, secureRoll, startState, statDeltas, tickDecision,
   type Action,
 } from "./match-logic";
 
@@ -114,10 +114,10 @@ async function isMember(db: Admin, matchId: string, userId: string) {
 /** Yatzy's invite rules: invites live 6 hours; invites and friend requests are spaced at least 10 seconds apart. */
 export const INVITE_TTL_MS = CODE_TTL_MS;
 export const SEND_COOLDOWN_MS = 10_000;
-async function rateLimit(db: Admin, table: "friendships" | "match_invites", col: "requester" | "from_user", userId: string) {
-  const since = new Date(Date.now() - SEND_COOLDOWN_MS).toISOString();
-  const { count } = await db.from(table).select("id", { count: "exact", head: true }).eq(col as never, userId as never).gte("created_at", since);
-  if ((count ?? 0) > 0) throw new Error("err:rate_limited");
+async function rateLimit(db: Admin, table: "friendships" | "match_invites", _col: "requester" | "from_user", userId: string) {
+  // Atomic counter in the database; a database error blocks the send instead of letting it through.
+  const { data: ok, error } = await db.rpc("rate_hit", { _key: `${table}:${userId}`, _max: 1, _window_seconds: SEND_COOLDOWN_MS / 1000 });
+  if (error || ok !== true) throw new Error("err:rate_limited");
 }
 
 function fail(e: unknown): never {
@@ -291,15 +291,7 @@ export const leaveMatchAction = async ({ data, context }: { data: ReturnType<typ
     if (m.status === "playing") {
       const prev = m.state as unknown as GameState;
       try {
-        const seat = seatOf(prev, context.userId);
-        if (seat < 0) throw new MatchError("not_member");
-        // Quick play, first two rounds, another human still in: the seat becomes a permanent
-        // computer instead of a forfeit, so the match can be played out fairly. Everything
-        // else (private matches, later rounds) follows the normal forfeit rules.
-        const humansLeft = prev.players.filter((p) => !p.isBot && p.id !== context.userId && !p.forfeited).length;
-        const next = !m.is_private && earlyRounds(prev) && humansLeft >= 1
-          ? replaceWithBot(prev, seat)
-          : performAction(prev, context.userId, { kind: "forfeit" }, secureRoll);
+        const next = giveUpState(prev, context.userId, m.is_private);
         await commit(db, m.id, m.version, prev, next);
         // The leaver's seat is closed either way: no more pushes, and "everyone gone" cleanup can see it.
         await db.from("match_players").update({ left_at: new Date().toISOString() }).eq("match_id", m.id).eq("user_id", context.userId);
@@ -351,8 +343,8 @@ export async function tickMatch(db: Admin, m: MatchRow, now = Date.now()): Promi
 export async function runMaintenance() {
   const db = await admin();
   const { data: cleaned } = await db.rpc("cleanup_stale_matches");
-  const { data: rows } = await db.from("matches").select("id, status, version, state, turn_started_at, is_private").eq("status", "playing")
-    .lt("turn_started_at", new Date(Date.now() - BOT_SECONDS * 1000).toISOString()).limit(200);
+  const { data: rows } = await db.from("matches").select("id, status, version, state, turn_started_at, is_private").eq("status", "playing").eq("is_private", false)
+    .order("turn_started_at", { ascending: true }).lt("turn_started_at", new Date(Date.now() - BOT_SECONDS * 1000).toISOString()).limit(200);
   let advanced = 0;
   for (const m of rows ?? []) if (await tickMatch(db, m)) advanced++;
   return { cleaned, advanced };
@@ -409,14 +401,20 @@ export const respondFriendAction = async ({ data, context }: { data: ReturnType<
     const { data: f } = await db.from("friendships").select("*").eq("id", data.id).single();
     if (!f || (f.addressee !== context.userId && f.requester !== context.userId)) throw new Error("err:missing");
     if (data.accept && f.addressee === context.userId) await db.from("friendships").update({ status: "accepted" }).eq("id", f.id);
-    else await db.from("friendships").delete().eq("id", f.id);
+    else {
+      await db.from("friendships").delete().eq("id", f.id);
+      // No friendship, no invites: pending invites between the two are withdrawn.
+      await db.from("match_invites").delete().eq("status", "pending")
+        .or(`and(from_user.eq.${f.requester},to_user.eq.${f.addressee}),and(from_user.eq.${f.addressee},to_user.eq.${f.requester})`);
+    }
     return { ok: true };
   };
 export const listFriendsAction = async ({ context }: { context: OnlineContext }) => {
   const { supabase, userId } = context;
   const { data: rows } = await supabase.from("friendships").select("*").or(`requester.eq.${userId},addressee.eq.${userId}`);
   const ids = [...new Set((rows ?? []).map((r) => (r.requester === userId ? r.addressee : r.requester)))];
-  const { data: profs } = ids.length ? await supabase.from("profiles").select("id, display_name, avatar, country, last_seen").in("id", ids) : { data: [] };
+  // last_seen is not readable by other players directly; it is shown only to friends, read here on the server.
+  const { data: profs } = ids.length ? await (await admin()).from("profiles").select("id, display_name, avatar, country, last_seen").in("id", ids) : { data: [] };
   const byId = new Map((profs ?? []).map((p) => [p.id, p]));
   const { data: invites } = await supabase.from("match_invites").select("id, match_id, from_user, created_at").eq("to_user", userId).eq("status", "pending").gte("created_at", new Date(Date.now() - INVITE_TTL_MS).toISOString()).order("created_at", { ascending: false }).limit(10);
   return {
@@ -435,6 +433,8 @@ export const inviteFriendAction = async ({ data, context }: { data: ReturnType<t
     if (!f) throw new Error("err:not_friends");
     const { data: me } = await db.from("match_players").select("seat").eq("match_id", data.matchId).eq("user_id", context.userId).maybeSingle();
     if (!me) throw new Error("err:not_in_match");
+    const { data: target } = await db.from("matches").select("status").eq("id", data.matchId).maybeSingle();
+    if (target?.status !== "waiting") throw new Error("err:already_started");
     await rateLimit(db, "match_invites", "from_user", context.userId);
     // One live invite per friend and match: a repeat replaces the old one.
     await db.from("match_invites").delete().eq("match_id", data.matchId).eq("to_user", data.userId).eq("status", "pending");
@@ -455,11 +455,19 @@ export const respondInviteAction = async ({ data, context }: { data: ReturnType<
       await db.from("match_invites").update({ status: "expired" }).eq("id", inv.id);
       throw new Error("err:missing");
     }
-    await db.from("match_invites").update({ status: data.accept ? "accepted" : "declined" }).eq("id", inv.id);
-    if (!data.accept) return { matchId: null };
+    if (!data.accept) {
+      await db.from("match_invites").update({ status: "declined" }).eq("id", inv.id);
+      return { matchId: null };
+    }
+    const { data: still } = await db.from("friendships").select("id").eq("status", "accepted")
+      .or(`and(requester.eq.${inv.from_user},addressee.eq.${context.userId}),and(requester.eq.${context.userId},addressee.eq.${inv.from_user})`).maybeSingle();
     const { data: m } = await db.from("matches").select("*").eq("id", inv.match_id).single();
-    if (!m || m.status !== "waiting") throw new Error("err:already_started");
+    if (!still || !m || m.status !== "waiting") {
+      await db.from("match_invites").update({ status: "expired" }).eq("id", inv.id);
+      throw new Error(!still ? "err:not_friends" : "err:already_started");
+    }
     if (!(await seatUser(db, m.id, m.max_players, context.userId))) throw new Error("err:match_full");
+    await db.from("match_invites").update({ status: "accepted" }).eq("id", inv.id);
     // An accepted friend invite starts the match at once — no start button, no computer seats.
     const { data: seats } = await db.from("match_players").select("user_id, seat, display_name").eq("match_id", m.id);
     if ((seats?.length ?? 0) >= 2) await doStart(db, m.id, m.version, seats ?? [], undefined, m.variant);
@@ -558,7 +566,23 @@ export const setAvatarAction = async ({ data, context }: { data: ReturnType<type
 
 /** Pictures for the players a screen is about to show, so list reads stay light. */
 export const getAvatarsAction = async ({ data, context }: { data: ReturnType<typeof getAvatarsInput>; context: OnlineContext }) => {
-    const { data: rows } = await context.supabase.from("profiles").select("id, avatar_image").in("id", data.userIds);
+    const db = await admin();
+    const me = context.userId;
+    // Pictures are shown only to yourself, friends and players you have shared an online match with.
+    const [{ data: fr }, { data: myMatches }] = await Promise.all([
+      db.from("friendships").select("requester, addressee").or(`requester.eq.${me},addressee.eq.${me}`),
+      db.from("match_players").select("match_id").eq("user_id", me).order("joined_at", { ascending: false }).limit(200),
+    ]);
+    const allowed = new Set<string>([me]);
+    for (const f of fr ?? []) allowed.add(f.requester === me ? f.addressee : f.requester);
+    const want = data.userIds.filter((id) => !allowed.has(id));
+    const matchIds = (myMatches ?? []).map((r) => r.match_id);
+    if (want.length && matchIds.length) {
+      const { data: shared } = await db.from("match_players").select("user_id").in("match_id", matchIds).in("user_id", want);
+      for (const r of shared ?? []) allowed.add(r.user_id);
+    }
+    const ids = data.userIds.filter((id) => allowed.has(id));
+    const { data: rows } = ids.length ? await db.from("profiles").select("id, avatar_image").in("id", ids) : { data: [] };
     const out: Record<string, string | null> = {};
     for (const r of rows ?? []) out[r.id] = r.avatar_image;
     return out;
@@ -614,18 +638,33 @@ export async function pinMatches(input: string, expected: string) {
   let diff = 0; for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
   return diff === 0;
 }
+export const PIN_LIMITS = { perUser: 5, perIp: 10, windowSeconds: 15 * 60, global: 300, globalWindowSeconds: 3600 };
+async function callerIp(): Promise<string | null> {
+  try {
+    const { getRequestHeader } = await import("@tanstack/react-start/server");
+    const raw = getRequestHeader("cf-connecting-ip") ?? getRequestHeader("x-forwarded-for")?.split(",")[0];
+    const ip = raw?.trim();
+    return ip && /^[0-9a-fA-F:.]{3,45}$/.test(ip) ? ip : null;
+  } catch { return null; }
+}
 /** Owner-only admin access: the right PIN (server secret ADMIN_PIN) makes the caller's own player identity an admin. Failed tries are limited per player and in total. */
 export const adminPinLoginAction = async ({ data, context }: { data: { pin: string }; context: OnlineContext }) => {
   const expected = process.env['ADMIN_PIN'];
   if (!expected) throw new Error("err:forbidden");
   const db = await admin();
-  const since = new Date(Date.now() - 15 * 60_000).toISOString();
-  const [{ count: mine }, { count: all }] = await Promise.all([
-    db.from("app_events").select("id", { count: "exact", head: true }).eq("kind", "admin_pin_fail").eq("user_id", context.userId).gte("created_at", since),
-    db.from("app_events").select("id", { count: "exact", head: true }).eq("kind", "admin_pin_fail").gte("created_at", since),
-  ]);
-  if ((mine ?? 0) >= 5 || (all ?? 0) >= 30) throw new Error("err:rate_limited");
+  const ip = await callerIp();
+  // Atomic counters that survive deleting player data (keyed by network address as well as identity).
+  // A global ceiling exists only against mass attacks; it is high enough that ordinary noise cannot lock the owner out.
+  const keys = [
+    { key: `pin:user:${context.userId}`, max: PIN_LIMITS.perUser, win: PIN_LIMITS.windowSeconds },
+    ...(ip ? [{ key: `pin:ip:${ip}`, max: PIN_LIMITS.perIp, win: PIN_LIMITS.windowSeconds }] : []),
+    { key: "pin:all", max: PIN_LIMITS.global, win: PIN_LIMITS.globalWindowSeconds },
+  ];
+  const peeks = await Promise.all(keys.map((k) => db.rpc("rate_peek", { _key: k.key, _window_seconds: k.win })));
+  if (peeks.some((r) => r.error)) throw new Error("err:rate_limited");
+  if (peeks.some((r, i) => (r.data ?? 0) >= keys[i].max)) throw new Error("err:rate_limited");
   if (!(await pinMatches(data.pin, expected))) {
+    await Promise.all(keys.map((k) => db.rpc("rate_hit", { _key: k.key, _max: k.max, _window_seconds: k.win })));
     await logEventRow(db, { user_id: context.userId, kind: "admin_pin_fail" });
     throw new Error("err:forbidden");
   }
