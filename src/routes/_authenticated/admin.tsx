@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { adminOverview } from "@/lib/online/online.functions";
+import { adminOverview, adminTestPush } from "@/lib/online/online.functions";
 import { useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -47,6 +47,7 @@ function AdminPage() {
             <Stat l={t("adminRetD7")} v={d.retention.d7} />
             <Stat l={t("adminRetD30")} v={d.retention.d30} />
           </div>
+          <PushTest />
           <h2 className="mt-5 font-display text-lg font-bold">{t("last30Days")}</h2>
           <p className="text-xs text-muted-foreground">{t("appDevicesNote")}</p>
           <table className="mt-2 w-full text-xs">
@@ -66,5 +67,29 @@ function AdminPage() {
         </>)}
       </div>
     </main>
+  );
+}
+
+/** Admin-only: sends a test notification to this admin's own registered iPhone(s). */
+function PushTest() {
+  const { t } = useTranslation();
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const send = async () => {
+    setBusy(true); setMsg(null);
+    try {
+      const r = await adminTestPush();
+      if (!r.configured) setMsg(t("adminPushOff"));
+      else if (!r.devices) setMsg(t("adminPushNone"));
+      else setMsg([t("adminPushSent", { sent: r.sent, devices: r.devices }), ...(r.reasons.length ? [t("adminPushFailed", { reason: r.reasons.join(", ") })] : [])].join(" "));
+    } catch { setMsg(t("noAdmin")); }
+    setBusy(false);
+  };
+  return (
+    <section className="mt-5">
+      <h2 className="font-display text-lg font-bold">{t("adminPushTitle")}</h2>
+      <button type="button" className="home-action mt-2" disabled={busy} onClick={send}>{t("adminPushSend")}</button>
+      {msg && <p className="mt-2 text-xs text-muted-foreground">{msg}</p>}
+    </section>
   );
 }

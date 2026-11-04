@@ -40,6 +40,8 @@ function OnlineLobby() {
   const [resumeId, setResumeId] = useState<string | null>(null);
   const autoJoined = useRef(false);
 
+  // Online play is where notifications matter: ask for permission here, never at launch.
+  useEffect(() => { void import("@/lib/native/push").then((m) => m.askPushPermission()); }, []);
   useEffect(() => {
     setMe(loadProfileSnapshot()); setResumeId(lastOnlineMatch());
     getMe().then(m => { setMe(m); saveProfileSnapshot(m); }).catch(() => {});

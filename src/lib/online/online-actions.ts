@@ -9,6 +9,22 @@ import {
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
 type Admin = Awaited<ReturnType<typeof admin>>;
 
+// ---------- Push notifications (iOS, visible alerts only) ----------
+type PushJob = import("@/lib/push/push-server").NotifyJob;
+async function push(db: Admin, job: PushJob) {
+  try { const { notify } = await import("@/lib/push/push-server"); await notify(db, job); }
+  catch (e) { console.error("push skipped", job.kind, e instanceof Error ? e.message : "unknown"); }
+}
+/** Notifies only players who are not looking at the match right now. */
+async function pushIfAway(db: Admin, matchId: string, userIds: string[], job: (uid: string) => PushJob) {
+  const humans = userIds.filter((u) => !u.startsWith("bot:"));
+  if (!humans.length) return;
+  const { isWatching } = await import("@/lib/push/policy");
+  const { data } = await db.from("match_players").select("user_id, last_seen, left_at").eq("match_id", matchId).in("user_id", humans);
+  const now = Date.now();
+  await Promise.all((data ?? []).filter((r) => !r.left_at && !isWatching(r.last_seen, now)).map((r) => push(db, job(r.user_id))));
+}
+
 async function logEventRow(db: Admin, row: { user_id?: string | null; kind: string; detail?: unknown; device_id?: string | null; platform?: string | null }) {
   await db.from("app_events").insert({ ...row, detail: (row.detail ?? null) as never });
 }
@@ -50,7 +66,11 @@ async function doStart(db: Admin, matchId: string, version: number, seats: { use
   const { data } = await db.from("matches")
     .update({ status: "playing", state: state as never, version: version + 1, turn_started_at: new Date().toISOString(), updated_at: new Date().toISOString() })
     .eq("id", matchId).eq("version", version).eq("status", "waiting").select("id");
-  if (data?.length) await logEventRow(db, { kind: "match_started", detail: { match_id: matchId, players: seats.length } });
+  if (data?.length) {
+    await logEventRow(db, { kind: "match_started", detail: { match_id: matchId, players: seats.length } });
+    const { pushKey } = await import("@/lib/push/policy");
+    await pushIfAway(db, matchId, seats.map((s) => s.user_id), (uid) => ({ kind: "ready", userId: uid, key: pushKey.ready(matchId, uid), path: `/online/${matchId}`, collapseId: `m:${matchId}` }));
+  }
 }
 
 /** Optimistic-concurrency write: fails with `conflict` if someone else changed the match first. */
@@ -74,6 +94,9 @@ async function commit(db: Admin, matchId: string, version: number, prev: GameSta
   if (next.lastEvent?.kind === "forfeit" && next.lastEvent !== prev.lastEvent)
     await logEventRow(db, { user_id: next.players[next.lastEvent.player].id, kind: "forfeit", detail: { match_id: matchId } });
   if (finished) await logEventRow(db, { kind: "match_finished", detail: { match_id: matchId, winner: next.winner == null ? null : next.players[next.winner]?.id, turns: next.turnCount } });
+  const { turnRecipient, pushKey } = await import("@/lib/push/policy");
+  const turnOf = turnRecipient(prev, next);
+  if (turnOf) await pushIfAway(db, matchId, [turnOf], (uid) => ({ kind: "turn", userId: uid, key: pushKey.turn(matchId, next.turnCount, uid), path: `/online/${matchId}`, collapseId: `m:${matchId}` }));
 }
 
 /** Only seated players may poll or drive a match (heartbeat, quick-play status). */
@@ -324,7 +347,12 @@ export const sendFriendRequestAction = async ({ data, context }: { data: ReturnT
         await db.from("friendships").update({ status: "accepted" }).eq("id", existing.id);
       return { ok: true, already: true };
     }
-    const { error: insErr } = await db.from("friendships").insert({ requester: context.userId, addressee: data.userId });
+    const { data: created, error: insErr } = await db.from("friendships").insert({ requester: context.userId, addressee: data.userId }).select("id").single();
+    if (!insErr && created) {
+      const { pushKey } = await import("@/lib/push/policy");
+      const me = await myProfile(db, context.userId);
+      await push(db, { kind: "friend", userId: data.userId, key: pushKey.friend(created.id), path: "/friends", name: me.display_name });
+    }
     if (insErr) {
       // A crossing request won the race (unique pair index): accept theirs instead of creating a second one.
       await db.from("friendships").update({ status: "accepted" }).eq("requester", data.userId).eq("addressee", context.userId).eq("status", "pending");
@@ -381,7 +409,12 @@ export const inviteFriendAction = async ({ data, context }: { data: ReturnType<t
     await rateLimit(db, "match_invites", "from_user", context.userId);
     // One live invite per friend and match: a repeat replaces the old one.
     await db.from("match_invites").delete().eq("match_id", data.matchId).eq("to_user", data.userId).eq("status", "pending");
-    await db.from("match_invites").insert({ match_id: data.matchId, from_user: context.userId, to_user: data.userId });
+    const { data: inv } = await db.from("match_invites").insert({ match_id: data.matchId, from_user: context.userId, to_user: data.userId }).select("id").single();
+    if (inv) {
+      const { pushKey } = await import("@/lib/push/policy");
+      const me = await myProfile(db, context.userId);
+      await push(db, { kind: "invite", userId: data.userId, key: pushKey.invite(inv.id), path: "/online", name: me.display_name });
+    }
     return { ok: true };
   };
 
@@ -516,6 +549,8 @@ export const deletePlayerDataAction = async ({ context }: { data?: unknown; cont
       db.from("friendships").delete().or(`requester.eq.${uid},addressee.eq.${uid}`),
       db.from("match_invites").delete().or(`from_user.eq.${uid},to_user.eq.${uid}`),
       db.from("app_events").delete().eq("user_id", uid),
+      db.from("push_tokens").delete().eq("user_id", uid),
+      db.from("push_sent").delete().eq("user_id", uid),
     ]);
     if (results.some((r) => r.error)) throw new Error("err:delete_failed");
     const { error } = await db.auth.admin.deleteUser(uid); // removes profile and roles too
@@ -560,4 +595,35 @@ export const adminPinLoginAction = async ({ data, context }: { data: { pin: stri
     if (error) throw new Error("err:forbidden");
   }
   return { ok: true };
+};
+
+/** Saves this phone's push address for the caller. A token always belongs to the latest player who registered it. */
+export const registerPushTokenAction = async ({ data, context }: { data: { token: string; locale: string }; context: OnlineContext }) => {
+  const db = await admin();
+  const { defaultEnv } = await import("@/lib/push/push-server");
+  const { data: existing } = await db.from("push_tokens").select("environment").eq("token", data.token).maybeSingle();
+  const { error } = await db.from("push_tokens").upsert({
+    token: data.token, user_id: context.userId, platform: "ios", locale: data.locale,
+    environment: existing?.environment ?? defaultEnv(), updated_at: new Date().toISOString(),
+  });
+  if (error) throw new Error("err:bad_action");
+  return { ok: true };
+};
+
+/** Removes the push address, only if it belongs to the caller. */
+export const unregisterPushTokenAction = async ({ data, context }: { data: { token: string }; context: OnlineContext }) => {
+  const db = await admin();
+  await db.from("push_tokens").delete().eq("token", data.token).eq("user_id", context.userId);
+  return { ok: true };
+};
+
+/** Admin only: a test notification to the caller's own devices, with Apple's answer summarised. */
+export const adminTestPushAction = async ({ context }: { context: OnlineContext }) => {
+  const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+  if (!isAdmin) throw new Error("err:forbidden");
+  const db = await admin();
+  const { notify } = await import("@/lib/push/push-server");
+  const r = await notify(db, { kind: "test", userId: context.userId, path: "/online" });
+  if (!r) return { configured: false, devices: 0, sent: 0, removed: 0, failed: 0, reasons: [] as string[] };
+  return { configured: true, devices: r.devices, sent: r.sent, removed: r.removed, failed: r.failed, reasons: r.reasons.slice(0, 5) };
 };

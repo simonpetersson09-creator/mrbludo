@@ -101,3 +101,9 @@ export function errorMessage(e: unknown, translate: (key: TranslationKey) => str
   }
   return raw && !raw.startsWith("err:") ? raw : translate("genericError");
 }
+
+/** Server-side translation for a stored language code (push notifications); unknown codes use English. */
+export const isLanguageCode = (v: string): v is Language => Object.prototype.hasOwnProperty.call(DICTS, v);
+export function translateFor(lang: string, key: TranslationKey, params?: Record<string, string | number>): string {
+  return format(lookup(isLanguageCode(lang) ? lang : "en", key), params);
+}

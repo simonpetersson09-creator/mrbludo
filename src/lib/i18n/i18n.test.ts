@@ -75,6 +75,7 @@ describe("i18n usage in source", () => {
     };
     walk(join(SRC_DIR, "routes"));
     walk(join(SRC_DIR, "components"));
+    walk(join(SRC_DIR, "lib", "push")); // notification texts are chosen on the server
     return used;
   }
 

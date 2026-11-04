@@ -67,3 +67,8 @@ export const adminPinInput = (d: { pin: string }) => {
   if (!/^\d{4,12}$/.test(pin)) throw new Error("err:forbidden");
   return { pin };
 };
+
+import { pushTokenInput } from "@/lib/push/policy";
+import { isLanguageCode } from "@/lib/i18n";
+export const registerPushInput = (d: { token: string; locale?: string }) => pushTokenInput(d, isLanguageCode);
+export const unregisterPushInput = (d: { token: string }) => ({ token: pushTokenInput(d, isLanguageCode).token });

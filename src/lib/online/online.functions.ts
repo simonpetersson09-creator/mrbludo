@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput, deleteDataInput, adminPinInput } from "./online-inputs";
+import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput, deleteDataInput, adminPinInput, registerPushInput, unregisterPushInput } from "./online-inputs";
 
 export const getMe = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { getMeAction } = await import("./online-actions");
@@ -130,4 +130,19 @@ export const getStatsBoards = createServerFn({ method: "POST" }).middleware([req
 export const adminPinLogin = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(adminPinInput).handler(async ({ data, context }) => {
   const { adminPinLoginAction } = await import("./online-actions");
   return adminPinLoginAction({ data, context });
+});
+
+export const registerPushToken = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(registerPushInput).handler(async ({ data, context }) => {
+  const { registerPushTokenAction } = await import("./online-actions");
+  return registerPushTokenAction({ data, context });
+});
+
+export const unregisterPushToken = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(unregisterPushInput).handler(async ({ data, context }) => {
+  const { unregisterPushTokenAction } = await import("./online-actions");
+  return unregisterPushTokenAction({ data, context });
+});
+
+export const adminTestPush = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  const { adminTestPushAction } = await import("./online-actions");
+  return adminTestPushAction({ context });
 });

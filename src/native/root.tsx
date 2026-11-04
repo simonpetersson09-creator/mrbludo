@@ -26,6 +26,9 @@ function NativeRoot() {
     };
     connect();
     startNativeRuntime(() => { void router.navigate({ to: "/" }); }).then(fn => { if (stopped) fn(); else cleanup = fn; }).catch(() => nativeDiagnostic("runtime", "failed"));
+    let pushCleanup: (() => void) | undefined;
+    import("@/lib/native/push").then(({ startPush }) => startPush((path) => { void router.navigate({ href: path }); }))
+      .then((fn) => { if (stopped) fn(); else pushCleanup = fn; }).catch(() => {});
     window.addEventListener("online", connect);
     window.addEventListener(RESUME_EVENT, connect);
     const { data } = supabase.auth.onAuthStateChange(event => {
@@ -33,7 +36,7 @@ function NativeRoot() {
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });
-    return () => { stopped = true; cleanup?.(); viewportCleanup(); data.subscription.unsubscribe(); window.removeEventListener("online", connect); window.removeEventListener(RESUME_EVENT, connect); };
+    return () => { stopped = true; cleanup?.(); pushCleanup?.(); viewportCleanup(); data.subscription.unsubscribe(); window.removeEventListener("online", connect); window.removeEventListener(RESUME_EVENT, connect); };
   }, [router, queryClient]);
   return <QueryClientProvider client={queryClient}><HeadContent /><AndroidBackButton /><NativeDeepLinks /><Outlet /><Toaster position="top-center" /></QueryClientProvider>;
 }

@@ -40,3 +40,6 @@ export const getAvatars = (args: Parameters<typeof Web.getAvatars>[0]) => invoke
 export const deletePlayerData = (args?: Parameters<typeof Web.deletePlayerData>[0]) => invoke<Awaited<ReturnType<typeof Web.deletePlayerData>>>("deletePlayerData", args?.data ?? {});
 
 export const getPlayerCard = (args: Parameters<typeof Web.getPlayerCard>[0]) => invoke<Awaited<ReturnType<typeof Web.getPlayerCard>>>("getPlayerCard", args.data);
+export const registerPushToken = (args: Parameters<typeof Web.registerPushToken>[0]) => invoke<Awaited<ReturnType<typeof Web.registerPushToken>>>("registerPushToken", args.data);
+export const unregisterPushToken = (args: Parameters<typeof Web.unregisterPushToken>[0]) => invoke<Awaited<ReturnType<typeof Web.unregisterPushToken>>>("unregisterPushToken", args.data);
+export const adminTestPush = () => invoke<Awaited<ReturnType<typeof Web.adminTestPush>>>("adminTestPush");

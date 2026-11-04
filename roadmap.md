@@ -24,13 +24,14 @@
 - [x] Tempo: two levels (normal, fast)
 - [x] Info.plist proposals (suggestion only)
 - [x] Friend list layout vs Yatzy
-- [~] Pre-release check — 138 tests + browser screens done; live two-device online run, push not built
+- [~] Pre-release check — 138 tests + browser screens done; live two-device online run, push built, not phone-tested
 - [x] App talks directly to server (native) — packaged app uses https://mrbludo.lovable.app through Ludo's own boundary (src/lib/native/origin.ts)
 - [x] Launch audit C1–C4: heartbeat/quick-status membership check, account deletion uses "playing", atomic stats increment, one quick-play search per player (194 tests; not live two-device tested)
 - [x] Rating prompt (Yatzy schedule 5/15/35, app only), error + ad events in admin logs, translated error page, 4-pieces-on-start Fia test (209 tests; not tried on a phone)
 ## Waiting on Simon
 - [ ] AdMob: publisher ID (pub-…) for app-ads.txt, Android app ID + ad units
-- [ ] Apple push key (APNs) as server secret; enable Push + Associated Domains for Ludo app ID
+- [x] iOS push built (turn, ready, invite, friend, admin test); APNs key verified with Apple
+- [ ] Push on physical iPhone (Xcode build + TestFlight) — needs your Mac/iPhone and a publish; Push capability on the Ludo App ID in Apple Developer
 - [ ] Firebase project for Android notifications (google-services.json)
 - [ ] Android signing key fingerprint (app links)
 - [ ] Privacy policy: approve text + company/support details

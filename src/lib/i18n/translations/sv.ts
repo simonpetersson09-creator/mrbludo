@@ -304,6 +304,17 @@ export const sv = {
   webOnlyBody: "Ladda ner appen gratis och spela med vänner.",
   copyCode: "Kopiera kod",
   errInviteExpired: "Inbjudan har gått ut – be vännen skicka en ny",
+  pushTurn: "Det är din tur att slå!",
+  pushReady: "Matchen har börjat – kom och spela!",
+  pushInvite: "{name} bjuder in dig till en match.",
+  pushFriend: "{name} vill bli din vän.",
+  pushTest: "Testnotis – pushnotiser fungerar.",
+  adminPushTitle: "Pushnotiser",
+  adminPushSend: "Skicka testnotis till min enhet",
+  adminPushSent: "Skickad till {sent} av {devices} enheter.",
+  adminPushNone: "Ingen registrerad enhet – tillåt notiser i iPhone-appen.",
+  adminPushOff: "Pushnotiser är inte konfigurerade på servern.",
+  adminPushFailed: "Apple svarade med fel: {reason}",
 };
 
 export type TranslationKey = keyof typeof sv;

@@ -9,6 +9,7 @@ export const isPlayerStorageKey = (key: string) => key.startsWith(NS) && !KEEP.h
 
 /** Erase the player on the server first, then everything this device keeps about them. */
 export async function deletePlayerData(): Promise<void> {
+  try { await (await import("@/lib/native/push")).forgetPushToken(); } catch { /* server erase removes it too */ }
   await deleteOnServer({ data: {} });
   try { await supabase.auth.signOut({ scope: "local" }); } catch { /* the identity is already gone server-side */ }
   for (const storage of [localStorage, sessionStorage]) {

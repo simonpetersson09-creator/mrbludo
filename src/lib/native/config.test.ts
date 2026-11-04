@@ -28,13 +28,13 @@ describe("approved native configuration", () => {
       expect(tags.map(mapTagToLanguage).sort()).toEqual(expected);
     }
   });
-  it("prepares APNs environments without requesting push or background modes", () => {
+  it("uses Xcode-build (development) and TestFlight/App Store (production) APNs environments without background modes", () => {
     const project = read("ios/App/App.xcodeproj/project.pbxproj");
     expect(project.match(/CODE_SIGN_ENTITLEMENTS = App\/App.entitlements;/g)).toHaveLength(2);
     expect(project).toContain("MRB_APNS_ENVIRONMENT = development;");
     expect(project).toContain("MRB_APNS_ENVIRONMENT = production;");
     expect(read("ios/App/App/App.entitlements")).toContain("$(MRB_APNS_ENVIRONMENT)");
     expect(read("ios/App/App/Info.plist")).not.toContain("UIBackgroundModes");
-    expect(read("src/lib/native/services.ts")).toContain("enabled: false");
+    expect(read("src/lib/native/services.ts")).toContain("registerOnLaunch: false");
   });
 });

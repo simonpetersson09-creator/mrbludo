@@ -64,6 +64,13 @@
       "when": 1793784047378,
       "tag": "0008_monthly_most_active",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793795313076,
+      "tag": "0009_migration",
+      "breakpoints": true
     }
   ]
 }

@@ -33,6 +33,8 @@ export function QuickMatchSearch({ players, variant, onMatch, onNoMatch, onCance
   const cb = useRef({ onMatch, onNoMatch });
   cb.current = { onMatch, onNoMatch };
 
+  // Online play is where notifications matter: ask for permission here, never at launch.
+  useEffect(() => { void import("@/lib/native/push").then((m) => m.askPushPermission()); }, []);
   useEffect(() => { setQuickSearchActive(true); return () => setQuickSearchActive(false); }, []);
 
   useEffect(() => {

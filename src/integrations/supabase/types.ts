@@ -264,6 +264,54 @@ export type Database = {
         }
         Relationships: []
       }
+      push_sent: {
+        Row: {
+          created_at: string
+          key: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          key: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      push_tokens: {
+        Row: {
+          created_at: string
+          environment: string
+          locale: string
+          platform: string
+          token: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          environment?: string
+          locale?: string
+          platform?: string
+          token: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          environment?: string
+          locale?: string
+          platform?: string
+          token?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       quick_search_locks: {
         Row: {
           locked_at: string

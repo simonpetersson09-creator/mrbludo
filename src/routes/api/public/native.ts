@@ -58,6 +58,9 @@ export const Route = createFileRoute("/api/public/native")({ server: { handlers:
         case "logEvent": return reply(await actions.logEventAction({ data: inputs.logEventInput(body.data as Parameters<typeof inputs.logEventInput>[0]), context }));
         case "adminOverview": return reply(await actions.adminOverviewAction({ context }));
         case "adminPinLogin": return reply(await actions.adminPinLoginAction({ data: inputs.adminPinInput(body.data as Parameters<typeof inputs.adminPinInput>[0]), context }));
+        case "registerPushToken": return reply(await actions.registerPushTokenAction({ data: inputs.registerPushInput(body.data as Parameters<typeof inputs.registerPushInput>[0]), context }));
+        case "unregisterPushToken": return reply(await actions.unregisterPushTokenAction({ data: inputs.unregisterPushInput(body.data as Parameters<typeof inputs.unregisterPushInput>[0]), context }));
+        case "adminTestPush": return reply(await actions.adminTestPushAction({ context }));
         default: return reply({ error: "err:bad_action" }, 400);
       }
     } catch (error) {

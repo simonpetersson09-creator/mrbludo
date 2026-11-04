@@ -7,6 +7,6 @@ const config: CapacitorConfig = {
   webDir: "dist-native",
   ios: { contentInset: "never" },
   android: { allowMixedContent: false },
-  plugins: { StatusBar: { style: "DARK" } },
+  plugins: { StatusBar: { style: "DARK" }, PushNotifications: { presentationOptions: ["alert", "sound"] } },
 };
 export default config;
