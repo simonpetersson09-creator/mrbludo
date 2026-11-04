@@ -25,6 +25,7 @@ import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenti
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedOnlineIndexRouteImport } from './routes/_authenticated/online.index'
 import { Route as AuthenticatedOnlineMatchIdRouteImport } from './routes/_authenticated/online.$matchId'
+import { Route as ApiPublicMaintenanceRouteImport } from './routes/api/public/maintenance'
 import { Route as ApiPublicNativeRouteImport } from './routes/api/public/native'
 
 const IndexRoute = IndexRouteImport.update({
@@ -109,6 +110,11 @@ const AuthenticatedOnlineMatchIdRoute =
     path: '/online/$matchId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicMaintenanceRoute = ApiPublicMaintenanceRouteImport.update({
+  id: '/api/public/maintenance',
+  path: '/api/public/maintenance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicNativeRoute = ApiPublicNativeRouteImport.update({
   id: '/api/public/native',
   path: '/api/public/native',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/online/$matchId': typeof AuthenticatedOnlineMatchIdRoute
+  '/api/public/maintenance': typeof ApiPublicMaintenanceRoute
   '/api/public/native': typeof ApiPublicNativeRoute
   '/online/': typeof AuthenticatedOnlineIndexRoute
 }
@@ -148,6 +155,7 @@ export interface FileRoutesByTo {
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/online/$matchId': typeof AuthenticatedOnlineMatchIdRoute
+  '/api/public/maintenance': typeof ApiPublicMaintenanceRoute
   '/api/public/native': typeof ApiPublicNativeRoute
   '/online': typeof AuthenticatedOnlineIndexRoute
 }
@@ -168,6 +176,7 @@ export interface FileRoutesById {
   '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/online/$matchId': typeof AuthenticatedOnlineMatchIdRoute
+  '/api/public/maintenance': typeof ApiPublicMaintenanceRoute
   '/api/public/native': typeof ApiPublicNativeRoute
   '/_authenticated/online/': typeof AuthenticatedOnlineIndexRoute
 }
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/profile'
     | '/online/$matchId'
+    | '/api/public/maintenance'
     | '/api/public/native'
     | '/online/'
   fileRoutesByTo: FileRoutesByTo
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/profile'
     | '/online/$matchId'
+    | '/api/public/maintenance'
     | '/api/public/native'
     | '/online'
   id:
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/_authenticated/leaderboard'
     | '/_authenticated/profile'
     | '/_authenticated/online/$matchId'
+    | '/api/public/maintenance'
     | '/api/public/native'
     | '/_authenticated/online/'
   fileRoutesById: FileRoutesById
@@ -240,6 +252,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   SetupRoute: typeof SetupRoute
   StatsRoute: typeof StatsRoute
+  ApiPublicMaintenanceRoute: typeof ApiPublicMaintenanceRoute
   ApiPublicNativeRoute: typeof ApiPublicNativeRoute
 }
 
@@ -357,6 +370,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnlineMatchIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/maintenance': {
+      id: '/api/public/maintenance'
+      path: '/api/public/maintenance'
+      fullPath: '/api/public/maintenance'
+      preLoaderRoute: typeof ApiPublicMaintenanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/native': {
       id: '/api/public/native'
       path: '/api/public/native'
@@ -399,6 +419,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   SetupRoute: SetupRoute,
   StatsRoute: StatsRoute,
+  ApiPublicMaintenanceRoute: ApiPublicMaintenanceRoute,
   ApiPublicNativeRoute: ApiPublicNativeRoute,
 }
 export const routeTree = rootRouteImport

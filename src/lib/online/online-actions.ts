@@ -62,14 +62,26 @@ async function maybeAutostart(db: Admin, matchId: string) {
 }
 
 async function doStart(db: Admin, matchId: string, version: number, seats: { user_id: string; seat: number; display_name: string }[], total?: number, variant?: string) {
-  const state = startState(seats, total, variant === "fia" ? "fia" : "classic");
-  const { data } = await db.from("matches")
-    .update({ status: "playing", state: state as never, version: version + 1, turn_started_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-    .eq("id", matchId).eq("version", version).eq("status", "waiting").select("id");
-  if (data?.length) {
-    await logEventRow(db, { kind: "match_started", detail: { match_id: matchId, players: seats.length } });
-    const { pushKey } = await import("@/lib/push/policy");
-    await pushIfAway(db, matchId, seats.map((s) => s.user_id), (uid) => ({ kind: "ready", userId: uid, key: pushKey.ready(matchId, uid), path: `/online/${matchId}`, collapseId: `m:${matchId}` }));
+  // The database starts the match only if the seats are exactly these at that instant; otherwise re-read and retry.
+  for (let attempt = 0; attempt < 4; attempt++) {
+    if (seats.length < 1) return;
+    const state = startState(seats, total, variant === "fia" ? "fia" : "classic");
+    const { data: res, error } = await db.rpc("start_match", { _id: matchId, _version: version, _state: state as never, _user_ids: seats.map((s) => s.user_id) });
+    if (error) throw error;
+    if (res === "ok") {
+      await logEventRow(db, { kind: "match_started", detail: { match_id: matchId, players: seats.length } });
+      const { pushKey } = await import("@/lib/push/policy");
+      await pushIfAway(db, matchId, seats.map((s) => s.user_id), (uid) => ({ kind: "ready", userId: uid, key: pushKey.ready(matchId, uid), path: `/online/${matchId}`, collapseId: `m:${matchId}` }));
+      return;
+    }
+    if (res !== "changed") return;
+    const [{ data: m }, { data: fresh }] = await Promise.all([
+      db.from("matches").select("version, status").eq("id", matchId).single(),
+      db.from("match_players").select("user_id, seat, display_name").eq("match_id", matchId),
+    ]);
+    if (!m || m.status !== "waiting") return;
+    version = m.version; seats = fresh ?? [];
+    if (total == null && seats.length < 2) return;
   }
 }
 
@@ -77,20 +89,14 @@ async function doStart(db: Admin, matchId: string, version: number, seats: { use
 async function commit(db: Admin, matchId: string, version: number, prev: GameState, next: GameState) {
   const finished = next.phase === "finished";
   const now = new Date().toISOString();
-  const { data, error } = await db.from("matches").update({
-    state: next as never, version: version + 1, updated_at: now, turn_started_at: now,
-    ...(finished ? { status: "finished", finished_at: now, verified: next.players.length >= 2 } : {}),
-  }).eq("id", matchId).eq("version", version).eq("status", "playing").select("id");
+  // Match state and every stat increment are written in one database transaction: all or nothing.
+  const { data: ok, error } = await db.rpc("commit_match", {
+    _id: matchId, _version: version, _state: next as never, _finished: finished,
+    _verified: next.players.length >= 2, _deltas: statDeltas(prev, next) as never,
+  });
   if (error) throw error;
-  if (!data?.length) throw new MatchError("conflict");
-  const deltas = statDeltas(prev, next);
-  // One atomic increment per player in the database, so concurrent matches never overwrite each other.
-  for (const [uid, d] of Object.entries(deltas)) {
-    const { error: statErr } = await db.rpc("add_player_stats", {
-      _uid: uid, _played: d.played, _wins: d.wins, _captures: d.captures, _pieces_home: d.pieces_home, _forfeits: d.forfeits,
-    });
-    if (statErr) console.error("add_player_stats failed", uid, statErr.message);
-  }
+  if (!ok) throw new MatchError("conflict");
+  void now;
   if (next.lastEvent?.kind === "forfeit" && next.lastEvent !== prev.lastEvent)
     await logEventRow(db, { user_id: next.players[next.lastEvent.player].id, kind: "forfeit", detail: { match_id: matchId } });
   if (finished) await logEventRow(db, { kind: "match_finished", detail: { match_id: matchId, winner: next.winner == null ? null : next.players[next.winner]?.id, turns: next.turnCount } });
@@ -311,23 +317,45 @@ export const heartbeatAction = async ({ data, context }: { data: ReturnType<type
     if (!(await isMember(db, data.matchId, context.userId))) throw new Error("err:not_in_match");
     await db.from("match_players").update({ last_seen: new Date(now).toISOString() }).eq("match_id", data.matchId).eq("user_id", context.userId);
     const { data: m } = await db.from("matches").select("*").eq("id", data.matchId).single();
-    if (!m || m.status !== "playing" || !m.turn_started_at) return { ok: true };
-    const state = m.state as unknown as GameState;
-    const cur = state.players[state.current];
-    if (cur.id === context.userId) return { ok: true };
-    const idle = (now - new Date(m.turn_started_at).getTime()) / 1000;
-    if (cur.isBot) {
-      if (idle < BOT_SECONDS) return { ok: true };
-      try { await commit(db, m.id, m.version, state, autoStep(state, secureRoll)); } catch { /* another client advanced it first */ }
-      return { ok: true };
-    }
-    if (idle < TURN_SECONDS) return { ok: true };
-    const { data: seat } = await db.from("match_players").select("last_seen").eq("match_id", m.id).eq("user_id", cur.id).single();
-    const dropped = !seat || (now - new Date(seat.last_seen).getTime()) / 1000 > DROP_SECONDS;
-    const next = dropped ? performAction(state, cur.id, { kind: "forfeit" }, secureRoll) : autoStep(state, secureRoll);
-    try { await commit(db, m.id, m.version, state, next); } catch { /* another client advanced it first */ }
+    if (m) await tickMatch(db, m, now);
     return { ok: true };
   };
+
+type MatchRow = { id: string; status: string; version: number; state: unknown; turn_started_at: string | null };
+/**
+ * Server-side turn clock: computers move after BOT_SECONDS; an idle human's step is played after
+ * TURN_SECONDS (forfeit once dropped for DROP_SECONDS). Runs from any heartbeat — including the idle
+ * player's own — and from the scheduled maintenance tick, so no opponent needs to be connected.
+ */
+export async function tickMatch(db: Admin, m: MatchRow, now = Date.now()): Promise<boolean> {
+  if (m.status !== "playing" || !m.turn_started_at) return false;
+  const state = m.state as GameState;
+  const cur = state.players[state.current];
+  if (!cur) return false;
+  const idle = (now - new Date(m.turn_started_at).getTime()) / 1000;
+  let next: GameState;
+  if (cur.isBot) {
+    if (idle < BOT_SECONDS) return false;
+    next = autoStep(state, secureRoll);
+  } else {
+    if (idle < TURN_SECONDS) return false;
+    const { data: seat } = await db.from("match_players").select("last_seen").eq("match_id", m.id).eq("user_id", cur.id).maybeSingle();
+    const dropped = !seat || (now - new Date(seat.last_seen).getTime()) / 1000 > DROP_SECONDS;
+    next = dropped ? performAction(state, cur.id, { kind: "forfeit" }, secureRoll) : autoStep(state, secureRoll);
+  }
+  try { await commit(db, m.id, m.version, state, next); return true; } catch { return false; /* someone advanced it first */ }
+}
+
+/** Scheduled job: close dead matches, then advance idle turns in every running match. */
+export async function runMaintenance() {
+  const db = await admin();
+  const { data: cleaned } = await db.rpc("cleanup_stale_matches");
+  const { data: rows } = await db.from("matches").select("id, status, version, state, turn_started_at").eq("status", "playing")
+    .lt("turn_started_at", new Date(Date.now() - BOT_SECONDS * 1000).toISOString()).limit(200);
+  let advanced = 0;
+  for (const m of rows ?? []) if (await tickMatch(db, m)) advanced++;
+  return { cleaned, advanced };
+}
 
 export const sendFriendRequestAction = async ({ data, context }: { data: ReturnType<typeof sendFriendRequestInput>; context: OnlineContext }) => {
     const db = await admin();
@@ -537,14 +565,23 @@ export const getAvatarsAction = async ({ data, context }: { data: ReturnType<typ
 export const deletePlayerDataAction = async ({ context }: { data?: unknown; context: OnlineContext }) => {
     const db = await admin();
     const uid = context.userId;
+    // Running matches: forfeit first, so the board goes on without this player.
     const { data: seats } = await db.from("match_players").select("match_id, matches(status)").eq("user_id", uid);
     const active = (seats ?? []).filter((r) => (r.matches as { status?: string } | null)?.status === "playing").map((r) => r.match_id);
-    // In a running match the seat stays (the board needs it) but loses the name and is treated as left.
-    if (active.length) await db.from("match_players").update({ display_name: "—", avatar: "🎲", left_at: new Date().toISOString() }).eq("user_id", uid).in("match_id", active);
-    let seatDelete = db.from("match_players").delete().eq("user_id", uid);
-    if (active.length) seatDelete = seatDelete.not("match_id", "in", `(${active.join(",")})`);
+    for (const id of active) {
+      for (let i = 0; i < 3; i++) {
+        const { data: m } = await db.from("matches").select("version, status, state").eq("id", id).single();
+        if (!m || m.status !== "playing") break;
+        const prev = m.state as unknown as GameState;
+        const p = prev.players.find((x) => x.id === uid);
+        if (!p || p.forfeited) break;
+        try { await commit(db, id, m.version, prev, performAction(prev, uid, { kind: "forfeit" }, secureRoll)); break; } catch { /* retry on conflict */ }
+      }
+    }
+    // Every saved match (seats, board state, host, event log) loses the id and name for good.
+    const { error: scrubErr } = await db.rpc("scrub_player", { _uid: uid });
+    if (scrubErr) throw new Error("err:delete_failed");
     const results = await Promise.all([
-      seatDelete,
       db.from("player_stats").delete().eq("user_id", uid),
       db.from("friendships").delete().or(`requester.eq.${uid},addressee.eq.${uid}`),
       db.from("match_invites").delete().or(`from_user.eq.${uid},to_user.eq.${uid}`),

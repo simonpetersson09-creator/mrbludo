@@ -73,3 +73,15 @@ describe("online match logic", () => {
     expect((autoStep(marked, fixed(3)) as MarkedState).auto?.seat).toBe(0);
   });
 });
+
+import { statDeltas as _sd } from "./match-logic";
+describe("stats when a computer wins online", () => {
+  it("still counts the match as played for every human", () => {
+    const prev = { phase: "move", players: [{ id: "u1", isBot: false }, { id: "bot:1", isBot: true }], lastEvent: null } as never;
+    const next = { phase: "finished", winner: 1, players: [{ id: "u1", isBot: false, forfeited: false }, { id: "bot:1", isBot: true }],
+      lastEvent: { kind: "moved", player: 1, captured: [], reachedGoal: true } } as never;
+    const d = _sd(prev, next);
+    expect(d["u1"]).toMatchObject({ played: 1, wins: 0 });
+    expect(d["bot:1"]).toBeUndefined();
+  });
+});

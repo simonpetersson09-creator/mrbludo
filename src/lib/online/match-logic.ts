@@ -100,9 +100,11 @@ export function statDeltas(prev: GameState, next: GameState): Record<string, Sta
   const ev = next.lastEvent;
   if (ev && ev !== prev.lastEvent && ev.kind === "moved") {
     const id = next.players[ev.player].id;
-    if (next.players[ev.player].isBot) return out;
-    if (ev.captured.length) get(id).captures += ev.captured.length;
-    if (ev.reachedGoal) get(id).pieces_home += 1;
+    // A computer's move gives no capture/goal stats, but the match result below still counts for the humans.
+    if (!next.players[ev.player].isBot) {
+      if (ev.captured.length) get(id).captures += ev.captured.length;
+      if (ev.reachedGoal) get(id).pieces_home += 1;
+    }
   }
   if (prev.phase !== "finished" && next.phase === "finished") {
     next.players.forEach((p, i) => {

@@ -157,6 +157,8 @@ function reportAd(kind: 'appOpen' | 'optional' | 'postMatch' | 'banner' | 'inter
 
 const PREPARE_TIMEOUT_MS = 10_000;
 const SHOW_TIMEOUT_MS = 8_000;
+/** Longest the app ever waits for an ad to report it closed before moving on. */
+const MAX_AD_WAIT_MS = 90_000;
 
 async function loadModule(): Promise<AdMobModule> {
   if (!modulePromise) modulePromise = import('@capacitor-community/admob');
@@ -612,7 +614,10 @@ async function showInterstitial(kind: 'optional' | 'postMatch', context?: { matc
     } else {
       await withTimeout(mod.AdMob.showInterstitial(), SHOW_TIMEOUT_MS, 'show');
     }
+    // Safety net: if the SDK never reports dismissal, the app must not wait forever.
+    const giveUp = setTimeout(() => { lastShowError = 'dismiss_timeout'; settle('failed'); }, MAX_AD_WAIT_MS);
     const result = await closed;
+    clearTimeout(giveUp);
     opportunity(result === 'shown' ? 'shown' : 'failed', result === 'shown' ? undefined : 'sdk_show_failed');
     // Dismissed/FailedToShow owns cache consumption. Do not clear a replacement
     // load that the global dismissal listener may already have completed.
@@ -1072,6 +1077,9 @@ export async function showAppOpenAd(canShow: () => boolean = () => true, source:
       if (reasonOf(err) !== 'show_timeout') throw err;
       // Slow to confirm: the ad may still be on screen — wait for the real outcome.
       release = false;
+      // Safety net: never keep the game screen locked if native never answers.
+      const giveUp = setTimeout(() => { setAppOpenPresentationPending(false); appOpenShowing = false; }, MAX_AD_WAIT_MS);
+      void showP.finally(() => clearTimeout(giveUp));
       showP.then(
         () => { outcome('shown'); reportAd('appOpen', 'shown_late', startedAt); },
         (e) => { outcome('failed', 'sdk_show_failed'); reportAd('appOpen', 'failed', startedAt, reasonOf(e)); },

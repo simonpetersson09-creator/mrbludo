@@ -71,6 +71,13 @@
       "when": 1793795313076,
       "tag": "0009_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793798132082,
+      "tag": "0010_online_integrity_and_cleanup",
+      "breakpoints": true
     }
   ]
 }

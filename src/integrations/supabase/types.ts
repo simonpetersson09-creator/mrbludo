@@ -361,6 +361,18 @@ export type Database = {
         }
         Returns: undefined
       }
+      cleanup_stale_matches: { Args: never; Returns: Json }
+      commit_match: {
+        Args: {
+          _deltas: Json
+          _finished: boolean
+          _id: string
+          _state: Json
+          _verified: boolean
+          _version: number
+        }
+        Returns: boolean
+      }
       get_my_ranks: { Args: never; Returns: Json }
       get_top_countries: {
         Args: { _limit?: number }
@@ -391,6 +403,16 @@ export type Database = {
       is_match_member: {
         Args: { _match: string; _user: string }
         Returns: boolean
+      }
+      scrub_player: { Args: { _uid: string }; Returns: undefined }
+      start_match: {
+        Args: {
+          _id: string
+          _state: Json
+          _user_ids: string[]
+          _version: number
+        }
+        Returns: string
       }
     }
     Enums: {
