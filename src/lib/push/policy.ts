@@ -20,7 +20,31 @@ export const pushKey = {
   ready: (matchId: string, uid: string) => `ready:${matchId}:${uid}`,
   invite: (inviteId: string) => `invite:${inviteId}`,
   friend: (friendshipId: string) => `friend:${friendshipId}`,
+  joined: (matchId: string, uid: string) => `joined:${matchId}:${uid}`,
+  gaveUp: (matchId: string, leaver: string, to: string) => `gaveup:${matchId}:${leaver}:${to}`,
+  /** At most one reminder per player and match in each 6-hour window. */
+  remind: (matchId: string, uid: string, nowMs: number) => `remind:${matchId}:${uid}:${Math.floor(nowMs / REMIND_EVERY_MS)}`,
+  weekly: (uid: string, nowMs: number) => `weekly:${uid}:${new Date(nowMs).toISOString().slice(0, 10)}`,
 };
+
+/** A paused friend match reminds the player whose turn it is after 30 minutes, then every 6 hours at most. */
+export const REMIND_AFTER_MS = 30 * 60_000;
+export const REMIND_EVERY_MS = 6 * 3_600_000;
+
+/** The human who should get a "your turn is waiting" reminder, or null. */
+export function remindRecipient(state: GameState, turnStartedIso: string | null, nowMs: number): string | null {
+  if (state.phase === "finished" || !turnStartedIso) return null;
+  if (nowMs - new Date(turnStartedIso).getTime() < REMIND_AFTER_MS) return null;
+  const p = state.players[state.current];
+  if (!p || p.isBot || p.forfeited || p.id.startsWith("bot:")) return null;
+  return p.id;
+}
+
+/** Humans still in the match who should hear that `leaver` gave up (none if the seat went to a computer). */
+export function gaveUpRecipients(next: GameState, leaver: string): string[] {
+  if (!next.players.find((p) => p.id === leaver)?.forfeited) return [];
+  return next.players.filter((p) => p.id !== leaver && !p.isBot && !p.forfeited && !p.id.startsWith("bot:")).map((p) => p.id);
+}
 
 /** Where a tapped notification may lead. Anything else opens the home screen. */
 export function safePushPath(raw: unknown): string | null {

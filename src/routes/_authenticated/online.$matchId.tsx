@@ -23,7 +23,7 @@ import { RollLabel } from "@/components/ludo/RollLabel";
 import { ExtraRollBanner } from "@/components/ludo/ExtraRollBanner";
 import { QuickChat } from "@/components/ludo/QuickChat";
 import { pieceCenter } from "@/lib/ludo/board";
-import { act, getPlayerCard, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, startMatch } from "@/lib/online/online.functions";
+import { act, getPlayerCard, heartbeat, inviteFriend, leaveMatch, listFriends, sendFriendRequest, sentInvites, startMatch } from "@/lib/online/online.functions";
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { flag } from "@/lib/online/profile-options";
@@ -416,7 +416,11 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
   const pics = useAvatarImages([...seats.map((s) => s.user_id), ...friends.map((f) => f.user.id)]);
   useEffect(() => { listFriends().then((r) => setFriends(r.friends.filter((f) => f.status === "accepted"))).catch(() => {}); }, []);
   const start = () => startMatch({ data: { matchId: match.id } }).catch((e) => toast.error(errorMessage(e, t)));
-  const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => toast.success(t("inviteSent"))).catch((e) => toast.error(errorMessage(e, t)));
+  const [sent, setSent] = useState<Awaited<ReturnType<typeof sentInvites>>["invites"]>([]);
+  const loadSent = useCallback(() => { sentInvites({ data: { matchId: match.id } }).then((r) => setSent(r.invites)).catch(() => {}); }, [match.id]);
+  // Yatzy's sent-invite cards: refresh when someone sits down and every 8 s while waiting.
+  useEffect(() => { loadSent(); const id = window.setInterval(loadSent, 8000); return () => window.clearInterval(id); }, [loadSent, seats.length]);
+  const invite = (uid: string) => inviteFriend({ data: { matchId: match.id, userId: uid } }).then(() => { toast.success(t("inviteSent")); loadSent(); }).catch((e) => toast.error(errorMessage(e, t)));
   // Like Yatzy's "Dela inbjudan": the phone's share sheet (Messenger, WhatsApp …), or copy when sharing is unavailable.
   const share = async () => {
     const url = `${PUBLISHED_LUDO_ORIGIN}/join?code=${match.code}`;
@@ -469,6 +473,17 @@ function WaitingRoom({ match, seats, userId, onLeave }: { match: MatchRow; seats
         {isHost ? (
           <button className="home-action home-action-success mt-4" disabled={seats.length < 2} onClick={start}><Play size={16} /> {t("startNow", { n: seats.length })}</button>
         ) : <p className="mt-4 text-center text-sm text-muted-foreground">{t("hostStarts")}</p>}
+        {sent.length > 0 && <>
+          <h2 className="mt-4 text-sm font-semibold">{t("sentInvites")}</h2>
+          {sent.map((i) => (
+            <div key={i.id} className="mt-[7px] flex items-center gap-2 rounded-[10px] border bg-card px-3 py-2 text-sm">
+              <PlayerAvatar emoji={i.avatar} image={pics[i.userId]} className="h-6 w-6 text-base" /><span className="flex-1 truncate">{i.name}</span>
+              <span className={`text-xs font-semibold ${i.status === "accepted" ? "text-gold" : "text-muted-foreground"}`}>
+                {t(i.status === "accepted" ? "inviteStatusAccepted" : i.status === "declined" ? "inviteStatusDeclined" : i.status === "expired" ? "inviteStatusExpired" : "inviteStatusPending")}
+              </span>
+            </div>
+          ))}
+        </>}
         {friends.length > 0 && <>
           <h2 className="mt-4 text-sm font-semibold">{t("inviteFriends")}</h2>
           {friends.filter((f) => !seats.some((s) => s.user_id === f.user.id)).map((f) => (

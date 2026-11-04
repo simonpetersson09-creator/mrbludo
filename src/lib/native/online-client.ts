@@ -43,3 +43,6 @@ export const getPlayerCard = (args: Parameters<typeof Web.getPlayerCard>[0]) => 
 export const registerPushToken = (args: Parameters<typeof Web.registerPushToken>[0]) => invoke<Awaited<ReturnType<typeof Web.registerPushToken>>>("registerPushToken", args.data);
 export const unregisterPushToken = (args: Parameters<typeof Web.unregisterPushToken>[0]) => invoke<Awaited<ReturnType<typeof Web.unregisterPushToken>>>("unregisterPushToken", args.data);
 export const adminTestPush = () => invoke<Awaited<ReturnType<typeof Web.adminTestPush>>>("adminTestPush");
+export const lobbyNotices = () => invoke<Awaited<ReturnType<typeof Web.lobbyNotices>>>("lobbyNotices");
+export const sentInvites = (args: Parameters<typeof Web.sentInvites>[0]) => invoke<Awaited<ReturnType<typeof Web.sentInvites>>>("sentInvites", args.data);
+export const setReminders = (args: Parameters<typeof Web.setReminders>[0]) => invoke<Awaited<ReturnType<typeof Web.setReminders>>>("setReminders", args.data);

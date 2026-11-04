@@ -164,7 +164,7 @@ export const createMatchAction = async ({ data, context }: { data: ReturnType<ty
 
 export const joinByCodeAction = async ({ data, context }: { data: ReturnType<typeof joinByCodeInput>; context: OnlineContext }) => {
     const db = await admin();
-    const { data: m } = await db.from("matches").select("id, status, max_players, created_at").eq("code", data.code).maybeSingle();
+    const { data: m } = await db.from("matches").select("id, status, max_players, created_at, host_id").eq("code", data.code).maybeSingle();
     if (!m) throw new Error("err:no_match_code");
     const { data: mine } = await db.from("match_players").select("seat").eq("match_id", m.id).eq("user_id", context.userId).maybeSingle();
     if (mine) return { id: m.id };
@@ -175,6 +175,11 @@ export const joinByCodeAction = async ({ data, context }: { data: ReturnType<typ
       throw new Error("err:invite_expired");
     }
     if (!(await seatUser(db, m.id, m.max_players, context.userId))) throw new Error("err:match_full");
+    if (m.host_id && m.host_id !== context.userId) {
+      const { pushKey } = await import("@/lib/push/policy");
+      const me = await myProfile(db, context.userId);
+      await pushIfAway(db, m.id, [m.host_id], (uid) => ({ kind: "joined", userId: uid, key: pushKey.joined(m.id, context.userId), path: `/online/${m.id}`, name: me.display_name, collapseId: `m:${m.id}` }));
+    }
     // Private code lobby: nothing starts by itself — only the host's start button does.
     return { id: m.id };
   };
@@ -295,6 +300,12 @@ export const leaveMatchAction = async ({ data, context }: { data: ReturnType<typ
         await commit(db, m.id, m.version, prev, next);
         // The leaver's seat is closed either way: no more pushes, and "everyone gone" cleanup can see it.
         await db.from("match_players").update({ left_at: new Date().toISOString() }).eq("match_id", m.id).eq("user_id", context.userId);
+        const { gaveUpRecipients, pushKey } = await import("@/lib/push/policy");
+        const to = gaveUpRecipients(next, context.userId);
+        if (to.length) {
+          const me = await myProfile(db, context.userId);
+          await pushIfAway(db, m.id, to, (uid) => ({ kind: "gaveup", userId: uid, key: pushKey.gaveUp(m.id, context.userId, uid), path: `/online/${m.id}`, name: me.display_name, collapseId: `m:${m.id}` }));
+        }
       } catch (e) { fail(e); }
     }
     return { ok: true };
@@ -347,8 +358,69 @@ export async function runMaintenance() {
     .order("turn_started_at", { ascending: true }).lt("turn_started_at", new Date(Date.now() - BOT_SECONDS * 1000).toISOString()).limit(200);
   let advanced = 0;
   for (const m of rows ?? []) if (await tickMatch(db, m)) advanced++;
-  return { cleaned, advanced };
+  const reminded = await sendTurnReminders(db).catch(() => 0);
+  const weekly = await sendWeeklyReminders(db).catch(() => 0);
+  return { cleaned, advanced, reminded, weekly };
 }
+
+/** Paused friend matches: the player whose turn it is hears about it after 30 min, at most every 6 h. */
+async function sendTurnReminders(db: Admin, now = Date.now()) {
+  const { REMIND_AFTER_MS, remindRecipient, pushKey } = await import("@/lib/push/policy");
+  const { data: rows } = await db.from("matches").select("id, state, turn_started_at").eq("status", "playing").eq("is_private", true)
+    .lt("turn_started_at", new Date(now - REMIND_AFTER_MS).toISOString()).order("turn_started_at", { ascending: true }).limit(200);
+  let n = 0;
+  for (const m of rows ?? []) {
+    const uid = remindRecipient(m.state as unknown as GameState, m.turn_started_at, now);
+    if (!uid) continue;
+    await pushIfAway(db, m.id, [uid], (u) => ({ kind: "remind", userId: u, key: pushKey.remind(m.id, u, now), path: `/online/${m.id}`, collapseId: `m:${m.id}` }));
+    n++;
+  }
+  return n;
+}
+
+/** Once a week, at the weekday and hour the player was last active, unless they turned it off or played recently. */
+async function sendWeeklyReminders(db: Admin, now = Date.now()) {
+  if (new Date(now).getUTCMinutes() > 5) return 0;
+  const { pushKey } = await import("@/lib/push/policy");
+  const { data } = await db.rpc("weekly_reminder_targets", { _limit: 300 });
+  const ids = ((data ?? []) as { user_id: string }[]).map((r) => r.user_id);
+  for (const uid of ids) await push(db, { kind: "weekly", userId: uid, key: pushKey.weekly(uid, now), path: "/" });
+  return ids.length;
+}
+
+/** Waiting rooms the caller hosts and who is seated there now (in-app "a friend joined" notice). */
+export const lobbyNoticesAction = async ({ context }: { context: OnlineContext }) => {
+  const db = await admin();
+  const { data: rooms } = await db.from("matches").select("id").eq("status", "waiting").eq("host_id", context.userId).eq("is_private", true).limit(5);
+  const ids = (rooms ?? []).map((r) => r.id);
+  if (!ids.length) return { rooms: 0, joins: [] as { matchId: string; userId: string; name: string }[] };
+  const { data: seats } = await db.from("match_players").select("match_id, user_id, display_name").in("match_id", ids).neq("user_id", context.userId);
+  return { rooms: ids.length, joins: (seats ?? []).map((s) => ({ matchId: s.match_id, userId: s.user_id, name: s.display_name })) };
+};
+
+/** Invites the caller sent for one waiting room, with each friend's answer. */
+export const sentInvitesAction = async ({ data, context }: { data: { matchId: string }; context: OnlineContext }) => {
+  const db = await admin();
+  if (!(await isMember(db, data.matchId, context.userId))) throw new Error("err:not_in_match");
+  const { data: inv } = await db.from("match_invites").select("id, to_user, status, created_at").eq("match_id", data.matchId).eq("from_user", context.userId).order("created_at", { ascending: false }).limit(20);
+  const to = [...new Set((inv ?? []).map((i) => i.to_user))];
+  const { data: names } = to.length ? await db.from("profiles").select("id, display_name, avatar").in("id", to) : { data: [] };
+  const byId = new Map((names ?? []).map((n) => [n.id, n]));
+  const seen = new Set<string>();
+  const invites = (inv ?? []).filter((i) => !seen.has(i.to_user) && seen.add(i.to_user)).map((i) => {
+    const expired = i.status === "pending" && Date.now() - new Date(i.created_at).getTime() > INVITE_TTL_MS;
+    return { id: i.id, userId: i.to_user, name: byId.get(i.to_user)?.display_name ?? "", avatar: byId.get(i.to_user)?.avatar ?? "🙂",
+      status: (expired ? "expired" : i.status) as "pending" | "accepted" | "declined" | "expired" };
+  });
+  return { invites };
+};
+
+/** The three notification switches from Settings, applied to every device of the caller. */
+export const setRemindersAction = async ({ data, context }: { data: { turns: boolean; nudges: boolean; weekly: boolean }; context: OnlineContext }) => {
+  const db = await admin();
+  await db.from("push_tokens").update({ turns: data.turns, nudges: data.nudges, reminders: data.weekly }).eq("user_id", context.userId);
+  return { ok: true };
+};
 
 export const sendFriendRequestAction = async ({ data, context }: { data: ReturnType<typeof sendFriendRequestInput>; context: OnlineContext }) => {
     const db = await admin();

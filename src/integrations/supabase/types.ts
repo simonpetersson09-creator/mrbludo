@@ -287,8 +287,11 @@ export type Database = {
           created_at: string
           environment: string
           locale: string
+          nudges: boolean
           platform: string
+          reminders: boolean
           token: string
+          turns: boolean
           updated_at: string
           user_id: string
         }
@@ -296,8 +299,11 @@ export type Database = {
           created_at?: string
           environment?: string
           locale?: string
+          nudges?: boolean
           platform?: string
+          reminders?: boolean
           token: string
+          turns?: boolean
           updated_at?: string
           user_id: string
         }
@@ -305,8 +311,11 @@ export type Database = {
           created_at?: string
           environment?: string
           locale?: string
+          nudges?: boolean
           platform?: string
+          reminders?: boolean
           token?: string
+          turns?: boolean
           updated_at?: string
           user_id?: string
         }
@@ -439,6 +448,12 @@ export type Database = {
           _version: number
         }
         Returns: string
+      }
+      weekly_reminder_targets: {
+        Args: { _limit?: number }
+        Returns: {
+          user_id: string
+        }[]
       }
     }
     Enums: {

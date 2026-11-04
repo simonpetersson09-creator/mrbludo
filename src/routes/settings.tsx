@@ -67,6 +67,7 @@ function SettingsPage() {
     const next = { ...notifs, [key]: value };
     setNotifs(next);
     saveNotificationPrefs(next);
+    void import("@/lib/native/push").then((m) => m.syncPushPrefs());
   };
   const doResetStats = () => {
     if (!confirm(t("resetStatsConfirm"))) return;
@@ -236,7 +237,6 @@ function SettingsPage() {
         {notifs && (
           <Section title={t("notifications")}>
             <NotificationsOffRow />
-            <p className="px-2 text-xs text-muted-foreground">{t("notifInactive")}</p>
             <Card>
               <ToggleRow icon={<Bell className="h-4 w-4 shrink-0 text-primary" />} label={t("notifTurnLabel")} description={t("notifTurnDesc")} value={notifs.turnNotifications} onChange={(v) => updateNotif("turnNotifications", v)} />
               <div className="border-t border-border/40" />

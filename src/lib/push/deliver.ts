@@ -3,7 +3,7 @@ import { otherEnv, sendApns, type ApnsCreds, type ApnsEnv, type PushMessage } fr
 export interface PushDevice { token: string; environment: ApnsEnv; locale: string }
 /** Storage the sender needs; the server uses the database, tests use memory. */
 export interface PushStore {
-  tokensFor(userId: string): Promise<PushDevice[]>;
+  tokensFor(userId: string, pref?: "turns" | "nudges" | "reminders"): Promise<PushDevice[]>;
   /** Records the event key; false when it was already sent (duplicate). */
   claim(key: string, userId: string): Promise<boolean>;
   remove(token: string): Promise<void>;
@@ -13,10 +13,10 @@ export interface DeliverResult { devices: number; sent: number; removed: number;
 
 export async function deliver(
   store: PushStore, fetchFn: typeof fetch, creds: ApnsCreds,
-  job: { userId: string; key?: string | undefined; message: (locale: string) => PushMessage },
+  job: { userId: string; key?: string | undefined; pref?: "turns" | "nudges" | "reminders" | undefined; message: (locale: string) => PushMessage },
 ): Promise<DeliverResult> {
   const r: DeliverResult = { devices: 0, sent: 0, removed: 0, failed: 0, duplicate: false, reasons: [] };
-  const devices = await store.tokensFor(job.userId);
+  const devices = await store.tokensFor(job.userId, job.pref);
   r.devices = devices.length;
   if (!devices.length) return r;
   if (job.key && !(await store.claim(job.key, job.userId))) { r.duplicate = true; return r; }

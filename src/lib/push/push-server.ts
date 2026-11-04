@@ -10,8 +10,10 @@ const DEDUPE_KEEP_MS = 3 * 86_400_000;
 
 export function dbStore(db: Db): PushStore {
   return {
-    async tokensFor(userId) {
-      const { data } = await db.from("push_tokens").select("token, environment, locale").eq("user_id", userId).limit(10);
+    async tokensFor(userId, pref) {
+      let q = db.from("push_tokens").select("token, environment, locale").eq("user_id", userId);
+      if (pref) q = q.eq(pref, true);
+      const { data } = await q.limit(10);
       return (data ?? []).map((d) => ({ token: d.token, environment: normalizeEnv(d.environment), locale: d.locale }));
     },
     async claim(key, userId) {
@@ -24,8 +26,14 @@ export function dbStore(db: Db): PushStore {
   };
 }
 
-export type PushKind = "turn" | "ready" | "invite" | "friend" | "test";
-const BODY: Record<PushKind, TranslationKey> = { turn: "pushTurn", ready: "pushReady", invite: "pushInvite", friend: "pushFriend", test: "pushTest" };
+export type PushKind = "turn" | "ready" | "invite" | "friend" | "test" | "remind" | "joined" | "gaveup" | "weekly";
+const BODY: Record<PushKind, TranslationKey> = {
+  turn: "pushTurn", ready: "pushReady", invite: "pushInvite", friend: "pushFriend", test: "pushTest",
+  remind: "pushRemind", joined: "pushJoined", gaveup: "pushGaveUp", weekly: "pushWeekly",
+};
+
+/** The device switch (Settings) that must be on for each kind; others always go out. */
+const PREF: Partial<Record<PushKind, "turns" | "nudges" | "reminders">> = { turn: "turns", remind: "nudges", weekly: "reminders" };
 
 export interface NotifyJob { kind: PushKind; userId: string; key?: string; path: string; name?: string; collapseId?: string }
 
@@ -34,7 +42,7 @@ export async function notify(db: Db, job: NotifyJob, fetchFn: typeof fetch = fet
   const creds = readApnsCreds(process.env);
   if (!creds) return null;
   const run = deliver(dbStore(db), fetchFn, creds, {
-    userId: job.userId, key: job.key,
+    userId: job.userId, key: job.key, pref: PREF[job.kind],
     message: (locale) => ({ title: "Mr. B Ludo", body: translateFor(locale, BODY[job.kind], { name: job.name ?? "" }), path: job.path, collapseId: job.collapseId }),
   });
   if (job.kind === "test") return run;

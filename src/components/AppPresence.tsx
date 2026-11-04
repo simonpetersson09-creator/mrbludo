@@ -5,6 +5,7 @@ import { listFriends, logEvent, respondFriend } from "@/lib/online/online.functi
 import { deviceId, platform } from "@/lib/online/telemetry";
 import { RESUME_EVENT } from "@/lib/native/runtime";
 import { errorMessage, t as translate } from "@/lib/i18n";
+import { AppNotices } from "@/components/AppNotices";
 
 const SEEN_KEY = "mrb-ludo:v1:seen-friend-requests";
 const readSeen = (): string[] => { try { return JSON.parse(localStorage.getItem(SEEN_KEY) ?? "[]"); } catch { return []; } };
@@ -67,5 +68,5 @@ export function AppPresence({ enabled = true }: { enabled?: boolean }) {
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [enabled]);
-  return null;
+  return <AppNotices enabled={enabled} />;
 }

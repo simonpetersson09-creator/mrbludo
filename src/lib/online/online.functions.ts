@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput, deleteDataInput, adminPinInput, registerPushInput, unregisterPushInput } from "./online-inputs";
+import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput, deleteDataInput, adminPinInput, registerPushInput, unregisterPushInput, setRemindersInput } from "./online-inputs";
 
 export const getMe = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { getMeAction } = await import("./online-actions");
@@ -145,4 +145,19 @@ export const unregisterPushToken = createServerFn({ method: "POST" }).middleware
 export const adminTestPush = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { adminTestPushAction } = await import("./online-actions");
   return adminTestPushAction({ context });
+});
+
+export const lobbyNotices = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  const { lobbyNoticesAction } = await import("./online-actions");
+  return lobbyNoticesAction({ context });
+});
+
+export const sentInvites = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(startMatchInput).handler(async ({ data, context }) => {
+  const { sentInvitesAction } = await import("./online-actions");
+  return sentInvitesAction({ data, context });
+});
+
+export const setReminders = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(setRemindersInput).handler(async ({ data, context }) => {
+  const { setRemindersAction } = await import("./online-actions");
+  return setRemindersAction({ data, context });
 });

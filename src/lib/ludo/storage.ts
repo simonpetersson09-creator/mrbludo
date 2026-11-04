@@ -61,10 +61,10 @@ export const loadStats = (now = new Date()) => statsForYear(read<Partial<Stats>>
 export const saveStats = (s: Stats) => write(STATS, s);
 export const resetStats = () => { const s = loadStats(); write(STATS, { ...DEFAULT_STATS, year: s.year, lifetimePlayed: s.lifetimePlayed }); };
 
-// Notification choices (Yatzy's three toggles). Saved now; no push is sent until push is approved.
+// Notification choices (Yatzy's three toggles), mirrored to the server for this phone's push address.
 export interface NotificationPrefs { turnNotifications: boolean; reminderNotifications: boolean; playReminders: boolean }
 const NOTIFS = NS + "notifications";
-const DEFAULT_NOTIFS: NotificationPrefs = { turnNotifications: true, reminderNotifications: true, playReminders: false };
+const DEFAULT_NOTIFS: NotificationPrefs = { turnNotifications: true, reminderNotifications: true, playReminders: true };
 export const loadNotificationPrefs = () => read(NOTIFS, DEFAULT_NOTIFS);
 export const saveNotificationPrefs = (p: NotificationPrefs) => write(NOTIFS, p);
 
