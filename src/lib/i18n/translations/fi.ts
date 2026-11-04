@@ -36,6 +36,7 @@ export const fi: Record<TranslationKey, string> = {
   colorYellow: "Keltainen",
   colorBlue: "Sininen",
   roll: "Heitä",
+  nameThrowing: "{name} heittää",
   home: "Koti",
   notFoundTitle: "Sivua ei löydy",
   notFoundBody: "Etsimääsi sivua ei ole tai se on siirretty.",

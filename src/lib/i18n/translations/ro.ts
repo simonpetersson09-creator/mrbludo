@@ -40,6 +40,8 @@ export const ro: Record<TranslationKey, string> = {
   colorBlue: "Albastru",
 
   roll: "Aruncă",
+
+  nameThrowing: "{name} aruncă",
   home: "Acasă",
   notFoundTitle: "Pagina nu a fost găsită",
   notFoundBody: "Pagina căutată nu există sau a fost mutată.",

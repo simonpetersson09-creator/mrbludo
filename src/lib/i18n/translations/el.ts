@@ -36,6 +36,7 @@ export const el: Record<TranslationKey, string> = {
   colorYellow: "Κίτρινο",
   colorBlue: "Μπλε",
   roll: "Ρίξε",
+  nameThrowing: "{name} ρίχνει",
   home: "Αρχική",
   notFoundTitle: "Η σελίδα δεν βρέθηκε",
   notFoundBody: "Η σελίδα που ψάχνεις δεν υπάρχει ή έχει μετακινηθεί.",

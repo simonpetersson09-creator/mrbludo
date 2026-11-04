@@ -40,6 +40,8 @@ export const vi: Record<TranslationKey, string> = {
   colorBlue: "Xanh dương",
 
   roll: "Tung",
+
+  nameThrowing: "{name} đang gieo",
   home: "Trang chủ",
   notFoundTitle: "Không tìm thấy trang",
   notFoundBody: "Trang bạn tìm không tồn tại hoặc đã được chuyển.",

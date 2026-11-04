@@ -40,6 +40,8 @@ export const pt: Record<TranslationKey, string> = {
   colorBlue: "Azul",
 
   roll: "Lançar",
+
+  nameThrowing: "{name} lança",
   home: "Início",
   notFoundTitle: "Página não encontrada",
   notFoundBody: "A página que procuras não existe ou foi movida.",

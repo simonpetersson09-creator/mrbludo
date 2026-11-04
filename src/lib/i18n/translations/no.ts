@@ -40,6 +40,8 @@ export const no: Record<TranslationKey, string> = {
   colorBlue: "Blå",
 
   roll: "Kast",
+
+  nameThrowing: "{name} kaster",
   home: "Hjem",
   notFoundTitle: "Siden finnes ikke",
   notFoundBody: "Siden du leter etter finnes ikke eller er flyttet.",

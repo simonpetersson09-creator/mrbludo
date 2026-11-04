@@ -40,6 +40,8 @@ export const tr: Record<TranslationKey, string> = {
   colorBlue: "Mavi",
 
   roll: "At",
+
+  nameThrowing: "{name} atıyor",
   home: "Ana sayfa",
   notFoundTitle: "Sayfa bulunamadı",
   notFoundBody: "Aradığın sayfa yok veya taşınmış.",

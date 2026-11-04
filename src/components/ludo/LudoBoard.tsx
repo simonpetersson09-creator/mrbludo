@@ -246,7 +246,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
             <circle cx={nx} cy={ny} r={half} fill="var(--board-ink)" fillOpacity="0.16" />
             <circle cx={nx} cy={ny + 0.06} r={half} fill={BOARD_FILL[c]} />
             <circle cx={nx} cy={ny + 0.06} r={half} fill={`url(#${boardId}-plate)`} stroke="var(--board-mark)" strokeOpacity="0.55" strokeWidth="0.06" />
-            {isTurn && <circle cx={nx} cy={ny + 0.06} r={half + 0.02} fill="none" stroke="var(--board-mark)" strokeWidth="0.11" strokeLinecap="round" strokeDasharray="0.9 0.45" className="yard-turn-ring" style={{ transformOrigin: `${nx}px ${ny + 0.06}px` }} />}
+            {isTurn && <circle cx={nx} cy={ny + 0.06} r={half + 0.1} fill="none" stroke="var(--board-mark)" strokeOpacity="0.4" strokeWidth="0.05" strokeLinecap="round" strokeDasharray="0.22 0.72" className="yard-turn-ring" style={{ transformOrigin: `${nx}px ${ny + 0.06}px` }} />}
             {[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([dx, dy], i) => (
               <g key={i}>
                 <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill={BOARD_FILL[c]} />

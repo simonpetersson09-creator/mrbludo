@@ -40,6 +40,8 @@ export const hi: Record<TranslationKey, string> = {
   colorBlue: "नीला",
 
   roll: "फेंकें",
+
+  nameThrowing: "{name} फेंक रहे हैं",
   home: "होम",
   notFoundTitle: "पेज नहीं मिला",
   notFoundBody: "आप जो पेज ढूंढ रहे हैं वह मौजूद नहीं है या हटा दिया गया है।",

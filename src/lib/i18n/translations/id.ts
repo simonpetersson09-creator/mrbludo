@@ -40,6 +40,8 @@ export const id: Record<TranslationKey, string> = {
   colorBlue: "Biru",
 
   roll: "Kocok",
+
+  nameThrowing: "{name} melempar",
   home: "Beranda",
   notFoundTitle: "Halaman tidak ditemukan",
   notFoundBody: "Halaman yang kamu cari tidak ada atau telah dipindahkan.",

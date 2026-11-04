@@ -36,6 +36,7 @@ export const nl: Record<TranslationKey, string> = {
   colorYellow: "Geel",
   colorBlue: "Blauw",
   roll: "Gooien",
+  nameThrowing: "{name} gooit",
   home: "Home",
   notFoundTitle: "Pagina niet gevonden",
   notFoundBody: "De pagina die je zoekt bestaat niet of is verplaatst.",

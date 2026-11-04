@@ -40,6 +40,8 @@ export const pa: Record<TranslationKey, string> = {
   colorBlue: "ਨੀਲਾ",
 
   roll: "ਸੁੱਟੋ",
+
+  nameThrowing: "{name} ਸੁੱਟ ਰਿਹਾ ਹੈ",
   home: "ਹੋਮ",
   notFoundTitle: "ਪੰਨਾ ਨਹੀਂ ਮਿਲਿਆ",
   notFoundBody: "ਤੁਸੀਂ ਜੋ ਪੰਨਾ ਲੱਭ ਰਹੇ ਹੋ ਉਹ ਮੌਜੂਦ ਨਹੀਂ ਜਾਂ ਹਟਾਇਆ ਗਿਆ ਹੈ।",

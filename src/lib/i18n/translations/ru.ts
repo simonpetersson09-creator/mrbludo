@@ -40,6 +40,8 @@ export const ru: Record<TranslationKey, string> = {
   colorBlue: "Синий",
 
   roll: "Бросить",
+
+  nameThrowing: "{name} бросает",
   home: "Домой",
   notFoundTitle: "Страница не найдена",
   notFoundBody: "Страница, которую вы ищете, не существует или перемещена.",

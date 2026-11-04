@@ -330,6 +330,14 @@
 }
 .game-roll-btn:active { transform: scale(.94); }
 .game-roll-btn:disabled { text-shadow: none; background: var(--control-surface); color: var(--control-muted); border-color: var(--board-line); box-shadow: inset 0 0 0 4px var(--control-surface), inset 0 0 0 5px var(--board-line); }
+/* Opponent's turn: keep the player's colour, but read as locked. */
+.game-roll-btn.game-roll-btn-locked:disabled {
+  text-shadow: none;
+  background: linear-gradient(145deg, color-mix(in oklch, var(--rc) 55%, var(--board-mark)), color-mix(in oklch, var(--rc) 85%, var(--board-mark)));
+  color: color-mix(in oklch, var(--board-ink) 82%, var(--rc));
+  border-color: color-mix(in oklch, var(--rc) 45%, var(--board-mark));
+  box-shadow: inset 0 0 0 4px color-mix(in oklch, var(--rc) 78%, var(--board-mark)), inset 0 0 0 5px color-mix(in oklch, var(--rc) 45%, var(--board-mark)), var(--control-shadow);
+}
 .kasta-pulse { animation: kasta-pulse-shadow 2.4s ease-in-out infinite; }
 @keyframes kasta-pulse-shadow {
   0%, 100% { outline: 1px solid color-mix(in oklch, var(--rc, var(--board-gold)) 20%, transparent); outline-offset: 3px; }
@@ -406,6 +414,6 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display
 }
 @media (prefers-reduced-motion: reduce) { .goal-burst { display: none; } }
 
-.yard-turn-ring { animation: yard-ring-spin 7s linear infinite; transform-box: view-box; }
+.yard-turn-ring { animation: yard-ring-spin 14s linear infinite; transform-box: view-box; }
 @keyframes yard-ring-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .yard-turn-ring { animation: none; } }

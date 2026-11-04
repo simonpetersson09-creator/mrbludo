@@ -40,6 +40,8 @@ export const ms: Record<TranslationKey, string> = {
   colorBlue: "Biru",
 
   roll: "Lontar",
+
+  nameThrowing: "{name} membuang",
   home: "Laman",
   notFoundTitle: "Halaman tidak ditemui",
   notFoundBody: "Halaman yang anda cari tidak wujud atau telah dialihkan.",

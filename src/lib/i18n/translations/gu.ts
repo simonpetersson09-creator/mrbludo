@@ -40,6 +40,8 @@ export const gu: Record<TranslationKey, string> = {
   colorBlue: "વાદળી",
 
   roll: "ફેંકો",
+
+  nameThrowing: "{name} ફેંકે છે",
   home: "હોમ",
   notFoundTitle: "પેજ મળ્યું નથી",
   notFoundBody: "તમે શોધો છો તે પેજ અસ્તિત્વમાં નથી અથવા ખસેડાયું છે.",

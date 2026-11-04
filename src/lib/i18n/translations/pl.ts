@@ -36,6 +36,7 @@ export const pl: Record<TranslationKey, string> = {
   colorYellow: "Żółty",
   colorBlue: "Niebieski",
   roll: "Rzuć",
+  nameThrowing: "{name} rzuca",
   home: "Strona główna",
   notFoundTitle: "Nie znaleziono strony",
   notFoundBody: "Strona, której szukasz, nie istnieje lub została przeniesiona.",

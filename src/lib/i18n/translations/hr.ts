@@ -36,6 +36,7 @@ export const hr: Record<TranslationKey, string> = {
   colorYellow: "Žuta",
   colorBlue: "Plava",
   roll: "Baci",
+  nameThrowing: "{name} baca",
   home: "Početna",
   notFoundTitle: "Stranica nije pronađena",
   notFoundBody: "Stranica koju tražiš ne postoji ili je premještena.",

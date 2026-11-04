@@ -40,6 +40,8 @@ export const or: Record<TranslationKey, string> = {
   colorBlue: "ନୀଳ",
 
   roll: "ଫିଙ୍ଗନ୍ତୁ",
+
+  nameThrowing: "{name} ଫିଙ୍ଗୁଛନ୍ତି",
   home: "ହୋମ୍",
   notFoundTitle: "ପୃଷ୍ଠା ମିଳିଲା ନାହିଁ",
   notFoundBody: "ଆପଣ ଖୋଜୁଥିବା ପୃଷ୍ଠା ନାହିଁ କିମ୍ବା ସ୍ଥାନାନ୍ତରିତ ହୋଇଛି।",

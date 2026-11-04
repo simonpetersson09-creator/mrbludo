@@ -40,6 +40,8 @@ export const de: Record<TranslationKey, string> = {
   colorBlue: "Blau",
 
   roll: "Würfeln",
+
+  nameThrowing: "{name} würfelt",
   home: "Startseite",
   notFoundTitle: "Seite nicht gefunden",
   notFoundBody: "Die gesuchte Seite existiert nicht oder wurde verschoben.",

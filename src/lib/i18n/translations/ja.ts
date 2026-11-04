@@ -40,6 +40,8 @@ export const ja: Record<TranslationKey, string> = {
   colorBlue: "青",
 
   roll: "振る",
+
+  nameThrowing: "{name}が振っています",
   home: "ホーム",
   notFoundTitle: "ページが見つかりません",
   notFoundBody: "お探しのページは存在しないか、移動しました。",

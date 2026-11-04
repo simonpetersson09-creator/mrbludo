@@ -40,6 +40,8 @@ export const kn: Record<TranslationKey, string> = {
   colorBlue: "ನೀಲಿ",
 
   roll: "ಎಸೆ",
+
+  nameThrowing: "{name} ಎಸೆಯುತ್ತಿದ್ದಾರೆ",
   home: "ಮುಖಪುಟ",
   notFoundTitle: "ಪುಟ ಕಂಡುಬಂದಿಲ್ಲ",
   notFoundBody: "ನೀವು ಹುಡುಕುತ್ತಿರುವ ಪುಟ ಇಲ್ಲ ಅಥವಾ ಸ್ಥಳಾಂತರಿಸಲಾಗಿದೆ.",

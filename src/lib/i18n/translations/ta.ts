@@ -40,6 +40,8 @@ export const ta: Record<TranslationKey, string> = {
   colorBlue: "நீலம்",
 
   roll: "உருட்டு",
+
+  nameThrowing: "{name} வீசுகிறார்",
   home: "முகப்பு",
   notFoundTitle: "பக்கம் கிடைக்கவில்லை",
   notFoundBody: "நீங்கள் தேடும் பக்கம் இல்லை அல்லது நகர்த்தப்பட்டது.",

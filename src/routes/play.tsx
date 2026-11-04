@@ -182,7 +182,7 @@ function PlayPage() {
           <LudoDie value={face} rolling={rolling} onTap={doRoll} disabled={!canRoll} pipColor={dieColor} />
         </div>
         <div className="game-command-area">
-          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} style={dieColor ? ({ ["--roll-c" as string]: dieColor } as React.CSSProperties) : undefined} onClick={doRoll} disabled={!canRoll}>
+          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}${!humanTurn && state.phase !== "finished" ? " game-roll-btn-locked" : ""}`} style={dieColor ? ({ ["--roll-c" as string]: dieColor } as React.CSSProperties) : undefined} onClick={doRoll} disabled={!canRoll}>
             <RollLabel state={state} canRoll={canRoll} myTurn={humanTurn} />
           </button>
           <div className="flex items-center justify-center gap-2">

@@ -40,6 +40,8 @@ export const da: Record<TranslationKey, string> = {
   colorBlue: "Blå",
 
   roll: "Kast",
+
+  nameThrowing: "{name} slår",
   home: "Hjem",
   notFoundTitle: "Siden findes ikke",
   notFoundBody: "Siden, du leder efter, findes ikke eller er flyttet.",

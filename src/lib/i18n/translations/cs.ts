@@ -36,6 +36,7 @@ export const cs: Record<TranslationKey, string> = {
   colorYellow: "Žlutá",
   colorBlue: "Modrá",
   roll: "Hodit",
+  nameThrowing: "{name} hází",
   home: "Domů",
   notFoundTitle: "Stránka nenalezena",
   notFoundBody: "Hledaná stránka neexistuje nebo byla přesunuta.",

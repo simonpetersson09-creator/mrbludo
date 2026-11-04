@@ -40,6 +40,8 @@ export const te: Record<TranslationKey, string> = {
   colorBlue: "నీలం",
 
   roll: "వేయి",
+
+  nameThrowing: "{name} వేస్తున్రారు",
   home: "హోమ్",
   notFoundTitle: "పేజీ కనుగొనబడలేదు",
   notFoundBody: "మీరు వెతుకుతున్న పేజీ లేదు లేదా తరలించబడింది.",

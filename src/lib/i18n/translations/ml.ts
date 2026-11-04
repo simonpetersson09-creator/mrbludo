@@ -40,6 +40,8 @@ export const ml: Record<TranslationKey, string> = {
   colorBlue: "നീല",
 
   roll: "എറിയൂ",
+
+  nameThrowing: "{name} എറിയുകയാണ്",
   home: "ഹോം",
   notFoundTitle: "പേജ് കണ്ടെത്തിയില്ല",
   notFoundBody: "നിങ്ങൾ തിരയുന്ന പേജ് നിലവിലില്ല അല്ലെങ്കിൽ മാറ്റിയിരിക്കുന്നു.",

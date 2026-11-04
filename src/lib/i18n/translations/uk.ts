@@ -40,6 +40,8 @@ export const uk: Record<TranslationKey, string> = {
   colorBlue: "Синій",
 
   roll: "Кинути",
+
+  nameThrowing: "{name} кидає",
   home: "Додому",
   notFoundTitle: "Сторінку не знайдено",
   notFoundBody: "Сторінка, яку ви шукаєте, не існує або переміщена.",

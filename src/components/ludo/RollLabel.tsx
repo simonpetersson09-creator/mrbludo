@@ -1,20 +1,16 @@
+import { Lock } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import type { GameState } from "@/lib/ludo/engine";
-const COLOR_VAR = ["var(--ludo-red)", "var(--ludo-green)", "var(--ludo-yellow)", "var(--ludo-blue)"];
 
-/** Yatzy-style Kasta label: "Din tur" + Kasta on your turn, otherwise whose turn with a pulsing color dot. */
+/** Yatzy-style Kasta label: "Din tur" + Kasta on your turn, otherwise a lock and who is throwing. */
 export function RollLabel({ state, canRoll, myTurn }: { state: GameState; canRoll: boolean; myTurn: boolean }) {
   const { t } = useTranslation();
   const cur = state.players[state.current];
   if (!myTurn && cur && state.phase !== "finished") {
-    const color = COLOR_VAR[cur.color];
     return (
-      <span className="pointer-events-none flex flex-col items-center gap-1 px-1 leading-none">
-        <span className="max-w-[72px] truncate text-[10px] font-medium opacity-80">{cur.name}</span>
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style={{ backgroundColor: color }} />
-          <span className="relative inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
-        </span>
+      <span className="pointer-events-none flex flex-col items-center gap-1.5 px-1 leading-none">
+        <Lock className="h-3.5 w-3.5 opacity-80" strokeWidth={2.2} aria-hidden />
+        <span className="max-w-[72px] truncate text-[9px] font-semibold opacity-95">{t("nameThrowing", { name: cur.name })}</span>
       </span>
     );
   }

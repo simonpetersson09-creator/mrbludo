@@ -40,6 +40,8 @@ export const mr: Record<TranslationKey, string> = {
   colorBlue: "निळा",
 
   roll: "फेका",
+
+  nameThrowing: "{name} फेकत आहै",
   home: "मुख्यपृष्ठ",
   notFoundTitle: "पृष्ठ सापडले नाही",
   notFoundBody: "तुम्ही शोधत असलेले पृष्ठ अस्तित्वात नाही किंवा हलवले आहे.",
