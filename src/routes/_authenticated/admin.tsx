@@ -61,6 +61,8 @@ function AdminPage() {
             </tbody>
           </table>
           <h2 className="mt-5 font-display text-lg font-bold">{t("techErrors")}</h2>
+          {d.healthAlerts.map((a, i) => <pre key={"a" + i} className="mt-1 overflow-x-auto rounded border border-destructive bg-surface p-2 text-[10px] text-destructive">⚠ {a.at} slow:{a.slow} failed:{a.failed} [{a.ops.join(", ")}]</pre>)}
+          {d.slowOps.map((e, i) => <pre key={"s" + i} className="mt-1 overflow-x-auto rounded bg-surface p-2 text-[10px]">⏱ {e.at} {JSON.stringify(e.detail)}</pre>)}
           {d.errors.length === 0 && <p className="text-sm text-muted-foreground">{t("noErrors")}</p>}
           {d.errors.map((e, i) => <pre key={i} className="mt-1 overflow-x-auto rounded bg-surface p-2 text-[10px]">{e.at} [{e.platform}] {JSON.stringify(e.detail)}</pre>)}
           <h2 className="mt-5 font-display text-lg font-bold">{t("adEvents")}</h2>

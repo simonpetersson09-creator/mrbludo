@@ -6,6 +6,7 @@ import {
 } from "./match-logic";
 
 // The service-role client is only loaded inside handlers, after the caller is authenticated.
+import { healthAlerts } from "./server-timing";
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
 type Admin = Awaited<ReturnType<typeof admin>>;
 
@@ -114,10 +115,14 @@ async function isMember(db: Admin, matchId: string, userId: string) {
 /** Yatzy's invite rules: invites live 6 hours; invites and friend requests are spaced at least 10 seconds apart. */
 export const INVITE_TTL_MS = CODE_TTL_MS;
 export const SEND_COOLDOWN_MS = 10_000;
-async function rateLimit(db: Admin, table: "friendships" | "match_invites", _col: "requester" | "from_user", userId: string) {
-  // Atomic counter in the database; a database error blocks the send instead of letting it through.
+/** Yatzy's recipient guard: one player receives at most one invite/request per kind every 20 seconds. */
+export const RECIPIENT_COOLDOWN_MS = 20_000;
+async function rateLimit(db: Admin, table: "friendships" | "match_invites", _col: "requester" | "from_user", userId: string, recipient: string) {
+  // Atomic counters in the database; a database error blocks the send instead of letting it through.
   const { data: ok, error } = await db.rpc("rate_hit", { _key: `${table}:${userId}`, _max: 1, _window_seconds: SEND_COOLDOWN_MS / 1000 });
   if (error || ok !== true) throw new Error("err:rate_limited");
+  const { data: ok2, error: e2 } = await db.rpc("rate_hit", { _key: `${table}:to:${recipient}`, _max: 1, _window_seconds: RECIPIENT_COOLDOWN_MS / 1000 });
+  if (e2 || ok2 !== true) throw new Error("err:rate_limited");
 }
 
 function fail(e: unknown): never {
@@ -431,7 +436,7 @@ export const sendFriendRequestAction = async ({ data, context }: { data: ReturnT
     const { data: shared } = await db.from("matches").select("status").eq("id", data.matchId).maybeSingle();
     // Allowed from the seat card during play and from the result screen afterwards; never from a waiting room.
     if (shared?.status !== "finished" && shared?.status !== "playing") throw new Error("err:not_in_match");
-    await rateLimit(db, "friendships", "requester", context.userId);
+    await rateLimit(db, "friendships", "requester", context.userId, data.userId);
     const { data: existing } = await db.from("friendships").select("*")
       .or(`and(requester.eq.${context.userId},addressee.eq.${data.userId}),and(requester.eq.${data.userId},addressee.eq.${context.userId})`).maybeSingle();
     if (existing) {
@@ -543,7 +548,7 @@ export const inviteFriendAction = async ({ data, context }: { data: ReturnType<t
     if (!me) throw new Error("err:not_in_match");
     const { data: target } = await db.from("matches").select("status").eq("id", data.matchId).maybeSingle();
     if (target?.status !== "waiting") throw new Error("err:already_started");
-    await rateLimit(db, "match_invites", "from_user", context.userId);
+    await rateLimit(db, "match_invites", "from_user", context.userId, data.userId);
     // One live invite per friend and match: a repeat replaces the old one.
     await db.from("match_invites").delete().eq("match_id", data.matchId).eq("to_user", data.userId).eq("status", "pending");
     const { data: inv } = await db.from("match_invites").insert({ match_id: data.matchId, from_user: context.userId, to_user: data.userId }).select("id").single();
@@ -647,6 +652,9 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
     },
     retention: { d1: retention(1), d7: retention(7), d30: retention(30) },
     days,
+    healthAlerts: healthAlerts(ev.filter((e) => e.kind === "server_timing" && now - new Date(e.created_at).getTime() < 7 * day)
+      .map((e) => { const x = (e.detail ?? {}) as { op?: string; ms?: number; ok?: boolean }; return { at: e.created_at, op: String(x.op ?? "?"), ms: Number(x.ms) || 0, ok: x.ok !== false }; })).slice(0, 20),
+    slowOps: ev.filter((e) => e.kind === "server_timing").slice(0, 30).map((e) => ({ at: e.created_at, detail: e.detail })),
     errors: ev.filter((e) => e.kind === "error").slice(0, 30).map((e) => ({ at: e.created_at, platform: e.platform, detail: e.detail })),
     ads: ev.filter((e) => e.kind === "ad").slice(0, 40).map((e) => ({ at: e.created_at, platform: e.platform, detail: e.detail })),
   };

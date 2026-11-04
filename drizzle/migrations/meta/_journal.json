@@ -113,6 +113,13 @@
       "when": 1793810615365,
       "tag": "0015_push_preferences",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1793816314869,
+      "tag": "0016_event_retention_and_device_index",
+      "breakpoints": true
     }
   ]
 }
