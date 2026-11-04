@@ -75,3 +75,30 @@ export const loadVariant = (): Variant => {
   try { return localStorage.getItem(VARIANT) === "fia" ? "fia" : "classic"; } catch { return "classic"; }
 };
 export const saveVariant = (v: Variant) => { try { localStorage.setItem(VARIANT, v); } catch { /* noop */ } };
+
+// Online matches also count in the yearly statistics; each match id is counted once per device.
+const ONLINE_COUNTED = NS + "online-counted";
+/** Pure: adds a finished online match to the stats for the given seat. */
+export function addOnlineResult(st: Stats, state: GameState, seat: number, piecesHome: number): Stats {
+  const p = state.players[seat];
+  return {
+    ...st,
+    played: st.played + 1,
+    lifetimePlayed: (st.lifetimePlayed ?? 0) + 1,
+    wins: st.wins + (state.winner === seat ? 1 : 0),
+    forfeits: st.forfeits + (p?.forfeited ? 1 : 0),
+    piecesHome: st.piecesHome + piecesHome,
+  };
+}
+export function recordOnlineFinish(matchId: string, state: GameState, seat: number, piecesHome: number) {
+  if (seat < 0) return;
+  const done = read<string[]>(ONLINE_COUNTED, []);
+  const list = Array.isArray(done) ? done : [];
+  if (list.includes(matchId)) return;
+  saveStats(addOnlineResult(loadStats(), state, seat, piecesHome));
+  write(ONLINE_COUNTED, [...list, matchId].slice(-200));
+}
+export function recordOnlineCaptures(n: number) {
+  if (n <= 0) return;
+  const st = loadStats(); st.captures += n; saveStats(st);
+}

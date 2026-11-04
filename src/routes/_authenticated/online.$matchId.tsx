@@ -35,6 +35,7 @@ import { errorMessage, useTranslation } from "@/lib/i18n";
 import { AppOpenGameGate } from "@/components/AppOpenGameGate";
 import { usePostMatchExit } from "@/lib/ads/usePostMatchExit";
 import { markOnlineMatchFinished } from "@/lib/ads/local-stats";
+import { recordOnlineCaptures, recordOnlineFinish } from "@/lib/ludo/storage";
 
 export const Route = createFileRoute("/_authenticated/online/$matchId")({
   head: () => ({
@@ -182,6 +183,22 @@ function OnlineMatchPage() {
     rollStart.current = 0;
     return () => window.clearTimeout(timer);
   }, [match?.version]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Online matches count in the same yearly statistics as local games (home + statistics pages).
+  const capKey = useRef<string | null>(null);
+  useEffect(() => {
+    if (!state || !userId) return;
+    const mine = state.players.findIndex((p) => p.id === userId);
+    if (mine < 0) return;
+    const ev = state.lastEvent;
+    const key = ev ? `${state.turnCount}:${JSON.stringify(ev)}` : null;
+    if (capKey.current === null) capKey.current = key; // never count events that happened before this screen opened
+    else if (key && key !== capKey.current) {
+      capKey.current = key;
+      if (ev?.kind === "moved" && ev.player === mine) recordOnlineCaptures(ev.captured.length);
+    }
+    if (state.phase === "finished") recordOnlineFinish(matchId, state, mine, state.pieces[mine].filter((x) => x === goalOf(variantOf(state))).length);
+  }, [state, userId, matchId]);
 
   // Haptics for turn handover and win (same events as Yatzy's TurnTransition / success pulse).
   const prevTurn = useRef(-1);
