@@ -1,5 +1,5 @@
-import { WALK_OUT_TARGET, canWalkOut, targetOf, variantOf, type GameState } from "./engine";
-import { pieceCenter } from "./board";
+import { PATHS, WALK_OUT_TARGET, canWalkOut, targetOf, variantOf, type GameState } from "./engine";
+import { goalSpot, pieceCenter } from "./board";
 
 /** Presentation only: use the engine's exact targets without applying a move. */
 export function movePreviews(state: GameState, legal: number[]) {
@@ -9,7 +9,8 @@ export function movePreviews(state: GameState, legal: number[]) {
   const variant = variantOf(state);
   const out: { x: number; y: number; color: typeof player.color; piece: number; walkOut: boolean }[] = [];
   const add = (piece: number, target: number, walkOut: boolean) => {
-    const [x, y] = pieceCenter(player.color, target, piece, variant);
+    // Goal: one marker straight on the colour's own side of the center, not on a single piece slot.
+    const [x, y] = target === PATHS[variant].goal ? goalSpot(player.color, 1.5, variant) : pieceCenter(player.color, target, piece, variant);
     const key = `${x},${y}`;
     if (seen.has(key)) return;
     seen.add(key);

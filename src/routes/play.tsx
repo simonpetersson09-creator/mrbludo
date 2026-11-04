@@ -72,6 +72,7 @@ function PlayPage() {
   // The die keeps the colour of the player who just moved until their piece has finished walking.
   const dieColor = useDieColor(me ? COLOR_VAR[me.color] : "", state);
   const legal = state && state.phase === "move" ? legalMoves(state) : [];
+  const handover = !!me && dieColor !== COLOR_VAR[me.color];
   const humanTurn = !!me && !me.isBot && state!.phase !== "finished";
 
   const doRoll = useCallback(() => {
@@ -157,7 +158,7 @@ function PlayPage() {
     : null;
   void absSquare;
 
-  const canRoll = humanTurn && state.phase === "roll" && !rolling;
+  const canRoll = humanTurn && state.phase === "roll" && !rolling && !handover;
 
   const seatInfo = state.players.map((p) => ({ name: p.name, kind: p.isBot ? "bot" as const : "human" as const, image: p.isBot ? null : ownAvatar, flag: p.isBot ? undefined : ownFlag }));
   // "Din tur" only reads clearly when this device has exactly one human; otherwise the card names the player.
@@ -183,7 +184,7 @@ function PlayPage() {
         </div>
         <div className="game-command-area">
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}${!canRoll ? " game-roll-btn-locked" : ""}`} style={dieColor ? ({ ["--roll-c" as string]: dieColor } as React.CSSProperties) : undefined} onClick={doRoll} disabled={!canRoll}>
-            <RollLabel state={state} canRoll={canRoll} myTurn={humanTurn} />
+            <RollLabel state={state} canRoll={canRoll} myTurn={humanTurn} handover={handover} />
           </button>
           <div className="flex items-center justify-center gap-2">
             <button className="game-nav-btn" onClick={() => navigate({ to: "/" })}>{t("home")}</button>

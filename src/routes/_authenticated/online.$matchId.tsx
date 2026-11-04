@@ -196,7 +196,8 @@ function OnlineMatchPage() {
   const mySeat = state.players.findIndex((p) => p.id === userId);
   const myTurn = state.current === mySeat && state.phase !== "finished" && !state.players[mySeat]?.forfeited;
   const legal = myTurn && state.phase === "move" && !rolling ? legalMoves(state) : [];
-  const canRoll = myTurn && state.phase === "roll" && !rolling && !pending && !offline;
+  const handover = dieColor !== (COLOR_VAR[state.players[state.current]?.color ?? 0] ?? "");
+  const canRoll = myTurn && state.phase === "roll" && !rolling && !pending && !offline && !handover;
   const ev = state.lastEvent;
   const captureAt = ev?.kind === "moved" && ev.captured.length ? (pieceCenter(state.players[ev.player].color, ev.to, ev.piece, variantOf(state)) as [number, number]) : null;
   const seatOf = (id: string) => seats.find((s) => s.user_id === id);
@@ -228,7 +229,7 @@ function OnlineMatchPage() {
         <div className="game-command-area">
           <QuickChat matchId={matchId} myName={mySeat >= 0 ? state.players[mySeat].name : ""} myColor={mySeat >= 0 ? state.players[mySeat].color : null} />
           <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}${!canRoll ? " game-roll-btn-locked" : ""}`} style={dieColor ? ({ ["--roll-c" as string]: dieColor } as React.CSSProperties) : undefined} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
-            <RollLabel state={state} canRoll={canRoll} myTurn={myTurn} />
+            <RollLabel state={state} canRoll={canRoll} myTurn={myTurn} handover={handover} />
           </button>
           <div className="flex items-center justify-center gap-2">
             <button className="game-nav-btn" onClick={() => navigate({ to: "/online" })}>{t("home")}</button>

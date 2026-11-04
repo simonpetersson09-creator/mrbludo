@@ -12,6 +12,10 @@ describe("online match logic", () => {
   it("rejects a roll from the player whose turn it is not", () => {
     expect(() => performAction(startState(seats), "B", { kind: "roll" }, fixed(6))).toThrow(MatchError);
   });
+  it("an opponent can never move a piece on someone else's turn", () => {
+    const s = performAction(startState(seats), "A", { kind: "roll" }, fixed(6));
+    expect(() => performAction(s, "B", { kind: "move", piece: 0 }, fixed(1))).toThrow("not_your_turn");
+  });
   it("rejects a non-member", () => {
     expect(() => performAction(startState(seats), "X", { kind: "roll" }, fixed(6))).toThrow("not_member");
   });

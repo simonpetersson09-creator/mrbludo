@@ -3,9 +3,11 @@ import { useTranslation } from "@/lib/i18n";
 import type { GameState } from "@/lib/ludo/engine";
 
 /** Yatzy-style Kasta label: "Din tur" + Kasta on your turn, otherwise a lock and who is throwing. */
-export function RollLabel({ state, canRoll, myTurn }: { state: GameState; canRoll: boolean; myTurn: boolean }) {
+export function RollLabel({ state, canRoll, myTurn, handover = false }: { state: GameState; canRoll: boolean; myTurn: boolean; handover?: boolean }) {
   const { t } = useTranslation();
   const cur = state.players[state.current];
+  // The previous move is still walking: show a neutral Kasta until the turn visibly goes over.
+  if (handover) return <span className="pointer-events-none px-1 text-center leading-tight">{t("roll")}</span>;
   if (!myTurn && cur && state.phase !== "finished") {
     return (
       <span className="pointer-events-none flex flex-col items-center gap-1.5 px-1 leading-none">
