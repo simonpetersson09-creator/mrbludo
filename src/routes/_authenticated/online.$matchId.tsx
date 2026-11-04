@@ -1,3 +1,4 @@
+import { sendOnce, withDeadline } from "@/lib/online/deadline";
 import type React from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -73,7 +74,15 @@ function OnlineMatchPage() {
   const rollStart = useRef(0);
   const autoShown = useRef(0);
 
-  const load = useCallback(async () => {
+  // Coalesced like Yatzy: a burst of realtime events while a read is running causes exactly one more read.
+  const loading = useRef<Promise<void> | null>(null);
+  const again = useRef(false);
+  const load = useCallback(async (): Promise<void> => {
+    if (loading.current) { again.current = true; return loading.current; }
+    loading.current = (async () => { do { again.current = false; await loadNow(); } while (again.current); })().finally(() => { loading.current = null; });
+    return loading.current;
+  }, [matchId]); // eslint-disable-line react-hooks/exhaustive-deps
+  const loadNow = useCallback(async () => {
     const [{ data: m, error }, { data: s }] = await Promise.all([
       supabase.from("matches").select("*").eq("id", matchId).maybeSingle(),
       supabase.from("match_players").select("user_id, seat, display_name, avatar, country, last_seen").eq("match_id", matchId).order("seat"),
@@ -86,29 +95,39 @@ function OnlineMatchPage() {
     setSeats((s ?? []) as SeatRow[]);
   }, [matchId]);
 
-  // Initial load + realtime + reconnection.
+  // Realtime channel: rebuilt from scratch whenever the app returns, the network comes back or the player taps reconnect (Yatzy).
+  const [channelGen, setChannelGen] = useState(0);
+  const reconnect = useCallback(() => {
+    setChannelGen((g) => g + 1);
+    withDeadline(heartbeat({ data: { matchId } })).then(() => { setOffline(false); return load(); }).catch(() => setOffline(true));
+  }, [matchId, load]);
+  useEffect(() => {
+    const ch = supabase.channel(`match-${matchId}-${channelGen}-${Math.random().toString(36).slice(2)}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "matches", filter: `id=eq.${matchId}` }, () => { void load(); })
+      .on("postgres_changes", { event: "*", schema: "public", table: "match_players", filter: `match_id=eq.${matchId}` }, () => { void load(); })
+      .subscribe((status) => { if (status === "SUBSCRIBED") void load(); if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setOffline(true); });
+    return () => { void supabase.removeChannel(ch); };
+  }, [matchId, channelGen, load]);
+
+  // Initial load + reconnection on resume/online.
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id ?? null));
     rememberOnlineMatch(matchId);
-    load();
-    const ch = supabase.channel(`match-${matchId}-${Math.random().toString(36).slice(2)}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "matches", filter: `id=eq.${matchId}` }, load)
-      .on("postgres_changes", { event: "*", schema: "public", table: "match_players", filter: `match_id=eq.${matchId}` }, load)
-      .subscribe((status) => { if (status === "SUBSCRIBED") load(); if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setOffline(true); });
-    const onBack = () => { if (document.visibilityState !== "hidden") { heartbeat({ data: { matchId } }).then(load).catch(() => setOffline(true)); } };
+    void load();
+    const onBack = () => { if (document.visibilityState !== "hidden") reconnect(); };
     const onOffline = () => setOffline(true);
     window.addEventListener(RESUME_EVENT, onBack);
     window.addEventListener("offline", onOffline);
     window.addEventListener("online", onBack);
     document.addEventListener("visibilitychange", onBack);
-    return () => { window.removeEventListener(RESUME_EVENT, onBack); window.removeEventListener("offline", onOffline); supabase.removeChannel(ch); window.removeEventListener("online", onBack); document.removeEventListener("visibilitychange", onBack); };
-  }, [matchId, load]);
+    return () => { window.removeEventListener(RESUME_EVENT, onBack); window.removeEventListener("offline", onOffline); window.removeEventListener("online", onBack); document.removeEventListener("visibilitychange", onBack); };
+  }, [matchId, load, reconnect]);
 
   // Heartbeat: keeps my seat alive and lets the server advance idle turns. Also a polling fallback.
   useEffect(() => {
     const t = window.setInterval(() => {
       if (document.visibilityState === "hidden" || !navigator.onLine) return;
-      heartbeat({ data: { matchId } }).then(() => { setOffline(false); load(); }).catch(() => setOffline(true));
+      withDeadline(heartbeat({ data: { matchId } })).then(() => { setOffline(false); return load(); }).catch(() => setOffline(true));
     }, 5000);
     heartbeat({ data: { matchId } }).catch(() => {});
     return () => window.clearInterval(t);
@@ -178,12 +197,15 @@ function OnlineMatchPage() {
     setPending(true);
     if (action.kind === "roll") { rollStart.current = Date.now(); setRolling(true); void playLightHaptic(); }
     try {
-      const r = await act({ data: { matchId, version: match.version, action } });
+      const version = match.version;
+      const r = await sendOnce(() => act({ data: { matchId, version, action } }));
+      if (!r) { setRolling(false); await load(); }
       if (r) setMatch((m) => (m && m.version < r.version ? { ...m, version: r.version, state: r.state, status: r.state.phase === "finished" ? "finished" : m.status } : m));
     } catch (e) {
       setRolling(false);
-      toast.error(errorMessage(e, t));
-      load();
+      if (e instanceof Error && e.message === "err:timeout") setOffline(true);
+      else toast.error(errorMessage(e, t));
+      void load();
     } finally { setPending(false); }
   }, [match, matchId, pending, offline, load, t]);
 
@@ -219,7 +241,7 @@ function OnlineMatchPage() {
       </div>
 
       <div className="text-center" aria-live="polite">
-        <p className="h-4 text-xs text-muted-foreground">{offline ? t("reconnecting") : (state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
+        <p className="h-4 text-xs text-muted-foreground">{offline ? <button type="button" className="underline underline-offset-2" onClick={reconnect}>{t("reconnecting")} · {t("tryAgain")}</button> : (state.phase !== "finished" ? <TurnClock since={match.turn_started_at} /> : "")}</p>
       </div>
 
       <div className="game-bottom-controls game-bottom-controls-chat">

@@ -45,4 +45,4 @@
 - [x] Fia centre: chequered disc removed (star rosette, trophy, arrows kept)
 - [x] "Månadens flitigaste" (calendar month, finished matches only, givers-up excluded), 40 languages
 - [x] Statistics page per calendar year ("Statistik 2026"), resets 1 January (256+ tests)
-- [ ] Online robustness vs Yatzy — review done, items to decide
+- [x] Online robustness like Yatzy: 8 s limit + one safe retry, tap-to-reconnect, live connection rebuilt on return, hourly cleanup of stale matches (tests pass; not tried in a live match or on a phone)
