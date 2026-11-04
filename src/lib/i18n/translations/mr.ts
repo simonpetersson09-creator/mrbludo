@@ -42,6 +42,8 @@ export const mr: Record<TranslationKey, string> = {
   roll: "फेका",
 
   nameThrowing: "{name} फेकत आहै",
+
+  choosePlacement: "चाल निवडा",
   home: "मुख्यपृष्ठ",
   notFoundTitle: "पृष्ठ सापडले नाही",
   notFoundBody: "तुम्ही शोधत असलेले पृष्ठ अस्तित्वात नाही किंवा हलवले आहे.",

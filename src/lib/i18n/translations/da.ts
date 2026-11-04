@@ -42,6 +42,8 @@ export const da: Record<TranslationKey, string> = {
   roll: "Kast",
 
   nameThrowing: "{name} slår",
+
+  choosePlacement: "Vælg placering",
   home: "Hjem",
   notFoundTitle: "Siden findes ikke",
   notFoundBody: "Siden, du leder efter, findes ikke eller er flyttet.",

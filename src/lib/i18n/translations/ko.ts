@@ -42,6 +42,8 @@ export const ko: Record<TranslationKey, string> = {
   roll: "굴리기",
 
   nameThrowing: "{name}이(가) 굴리는 중",
+
+  choosePlacement: "이동 선택",
   home: "홈",
   notFoundTitle: "페이지를 찾을 수 없습니다",
   notFoundBody: "찾는 페이지가 없거나 이동되었습니다.",

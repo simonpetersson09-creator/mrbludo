@@ -42,6 +42,8 @@ export const tr: Record<TranslationKey, string> = {
   roll: "At",
 
   nameThrowing: "{name} atıyor",
+
+  choosePlacement: "Hamle seç",
   home: "Ana sayfa",
   notFoundTitle: "Sayfa bulunamadı",
   notFoundBody: "Aradığın sayfa yok veya taşınmış.",

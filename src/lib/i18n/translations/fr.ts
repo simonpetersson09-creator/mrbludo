@@ -42,6 +42,8 @@ export const fr: Record<TranslationKey, string> = {
   roll: "Lancer",
 
   nameThrowing: "{name} lance",
+
+  choosePlacement: "Choisis un coup",
   home: "Accueil",
   notFoundTitle: "Page introuvable",
   notFoundBody: "La page que tu cherches n'existe pas ou a été déplacée.",

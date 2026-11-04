@@ -42,6 +42,8 @@ export const ja: Record<TranslationKey, string> = {
   roll: "振る",
 
   nameThrowing: "{name}が振っています",
+
+  choosePlacement: "移動先を選択",
   home: "ホーム",
   notFoundTitle: "ページが見つかりません",
   notFoundBody: "お探しのページは存在しないか、移動しました。",

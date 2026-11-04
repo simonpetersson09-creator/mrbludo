@@ -42,6 +42,8 @@ export const id: Record<TranslationKey, string> = {
   roll: "Kocok",
 
   nameThrowing: "{name} melempar",
+
+  choosePlacement: "Pilih langkah",
   home: "Beranda",
   notFoundTitle: "Halaman tidak ditemukan",
   notFoundBody: "Halaman yang kamu cari tidak ada atau telah dipindahkan.",

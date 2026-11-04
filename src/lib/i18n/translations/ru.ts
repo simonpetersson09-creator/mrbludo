@@ -42,6 +42,8 @@ export const ru: Record<TranslationKey, string> = {
   roll: "Бросить",
 
   nameThrowing: "{name} бросает",
+
+  choosePlacement: "Выберите ход",
   home: "Домой",
   notFoundTitle: "Страница не найдена",
   notFoundBody: "Страница, которую вы ищете, не существует или перемещена.",

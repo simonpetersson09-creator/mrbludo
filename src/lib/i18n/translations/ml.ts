@@ -42,6 +42,8 @@ export const ml: Record<TranslationKey, string> = {
   roll: "എറിയൂ",
 
   nameThrowing: "{name} എറിയുകയാണ്",
+
+  choosePlacement: "നീക്കം തിരഞ്ഞെടുക്കുക",
   home: "ഹോം",
   notFoundTitle: "പേജ് കണ്ടെത്തിയില്ല",
   notFoundBody: "നിങ്ങൾ തിരയുന്ന പേജ് നിലവിലില്ല അല്ലെങ്കിൽ മാറ്റിയിരിക്കുന്നു.",

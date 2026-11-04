@@ -37,6 +37,7 @@ export const el: Record<TranslationKey, string> = {
   colorBlue: "Μπλε",
   roll: "Ρίξε",
   nameThrowing: "{name} ρίχνει",
+  choosePlacement: "Διάλεξε κίνηση",
   home: "Αρχική",
   notFoundTitle: "Η σελίδα δεν βρέθηκε",
   notFoundBody: "Η σελίδα που ψάχνεις δεν υπάρχει ή έχει μετακινηθεί.",

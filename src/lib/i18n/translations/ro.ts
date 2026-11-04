@@ -42,6 +42,8 @@ export const ro: Record<TranslationKey, string> = {
   roll: "Aruncă",
 
   nameThrowing: "{name} aruncă",
+
+  choosePlacement: "Alege mutarea",
   home: "Acasă",
   notFoundTitle: "Pagina nu a fost găsită",
   notFoundBody: "Pagina căutată nu există sau a fost mutată.",

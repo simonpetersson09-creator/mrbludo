@@ -42,6 +42,8 @@ export const pa: Record<TranslationKey, string> = {
   roll: "ਸੁੱਟੋ",
 
   nameThrowing: "{name} ਸੁੱਟ ਰਿਹਾ ਹੈ",
+
+  choosePlacement: "ਚਾਲ ਚੁਣੋ",
   home: "ਹੋਮ",
   notFoundTitle: "ਪੰਨਾ ਨਹੀਂ ਮਿਲਿਆ",
   notFoundBody: "ਤੁਸੀਂ ਜੋ ਪੰਨਾ ਲੱਭ ਰਹੇ ਹੋ ਉਹ ਮੌਜੂਦ ਨਹੀਂ ਜਾਂ ਹਟਾਇਆ ਗਿਆ ਹੈ।",

@@ -42,6 +42,8 @@ export const or: Record<TranslationKey, string> = {
   roll: "ଫିଙ୍ଗନ୍ତୁ",
 
   nameThrowing: "{name} ଫିଙ୍ଗୁଛନ୍ତି",
+
+  choosePlacement: "ଚାଲ ବାଛନ୍ତୁ",
   home: "ହୋମ୍",
   notFoundTitle: "ପୃଷ୍ଠା ମିଳିଲା ନାହିଁ",
   notFoundBody: "ଆପଣ ଖୋଜୁଥିବା ପୃଷ୍ଠା ନାହିଁ କିମ୍ବା ସ୍ଥାନାନ୍ତରିତ ହୋଇଛି।",

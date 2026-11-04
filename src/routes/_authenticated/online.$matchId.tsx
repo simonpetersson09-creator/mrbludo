@@ -227,7 +227,7 @@ function OnlineMatchPage() {
         </div>
         <div className="game-command-area">
           <QuickChat matchId={matchId} myName={mySeat >= 0 ? state.players[mySeat].name : ""} myColor={mySeat >= 0 ? state.players[mySeat].color : null} />
-          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}${!myTurn && state.phase !== "finished" ? " game-roll-btn-locked" : ""}`} style={dieColor ? ({ ["--roll-c" as string]: dieColor } as React.CSSProperties) : undefined} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
+          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}${!canRoll ? " game-roll-btn-locked" : ""}`} style={dieColor ? ({ ["--roll-c" as string]: dieColor } as React.CSSProperties) : undefined} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
             <RollLabel state={state} canRoll={canRoll} myTurn={myTurn} />
           </button>
           <div className="flex items-center justify-center gap-2">

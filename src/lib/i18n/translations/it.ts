@@ -37,6 +37,7 @@ export const it: Record<TranslationKey, string> = {
   colorBlue: "Blu",
   roll: "Lancia",
   nameThrowing: "{name} tira",
+  choosePlacement: "Scegli mossa",
   home: "Home",
   notFoundTitle: "Pagina non trovata",
   notFoundBody: "La pagina che cerchi non esiste o è stata spostata.",

@@ -42,6 +42,8 @@ export const uk: Record<TranslationKey, string> = {
   roll: "Кинути",
 
   nameThrowing: "{name} кидає",
+
+  choosePlacement: "Оберіть хід",
   home: "Додому",
   notFoundTitle: "Сторінку не знайдено",
   notFoundBody: "Сторінка, яку ви шукаєте, не існує або переміщена.",

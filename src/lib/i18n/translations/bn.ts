@@ -42,6 +42,8 @@ export const bn: Record<TranslationKey, string> = {
   roll: "ছুঁড়ুন",
 
   nameThrowing: "{name} ছুড়ছেন",
+
+  choosePlacement: "চাল বেছে নিন",
   home: "হোম",
   notFoundTitle: "পৃষ্ঠা পাওয়া যায়নি",
   notFoundBody: "আপনি যে পৃষ্ঠাটি খুঁজছেন তা নেই বা সরানো হয়েছে।",

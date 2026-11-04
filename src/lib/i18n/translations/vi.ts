@@ -42,6 +42,8 @@ export const vi: Record<TranslationKey, string> = {
   roll: "Tung",
 
   nameThrowing: "{name} đang gieo",
+
+  choosePlacement: "Chọn nước đi",
   home: "Trang chủ",
   notFoundTitle: "Không tìm thấy trang",
   notFoundBody: "Trang bạn tìm không tồn tại hoặc đã được chuyển.",

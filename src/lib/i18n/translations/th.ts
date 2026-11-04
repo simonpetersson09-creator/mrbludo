@@ -42,6 +42,8 @@ export const th: Record<TranslationKey, string> = {
   roll: "ทอย",
 
   nameThrowing: "{name} กำลังทอย",
+
+  choosePlacement: "เลือกการเดิน",
   home: "หน้าแรก",
   notFoundTitle: "ไม่พบหน้า",
   notFoundBody: "ไม่มีหน้าที่คุณค้นหาหรือถูกย้ายแล้ว",

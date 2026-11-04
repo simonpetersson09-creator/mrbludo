@@ -85,11 +85,11 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         // A print fades once the piece is about three squares ahead of it, so the trail is always
         // strongest right behind the piece and thins out behind it; the last prints fade out just
         // after the piece lands.
-        const total = walk + 260;
+        const total = walk + 1400;
         const appear = (i + 0.5) * STEP_MS;
         const shown = Math.min(appear + 60, total - 2);
-        const fadeStart = Math.max(shown + 40, Math.min(appear + 3 * STEP_MS, total - 200));
-        const gone = Math.max(fadeStart + 1, Math.min(fadeStart + 320, total));
+        const fadeStart = Math.max(shown + 40, Math.min(appear + 6 * STEP_MS, total - 200));
+        const gone = Math.max(fadeStart + 1, Math.min(fadeStart + 700, total));
         const a = g.animate([
           { opacity: 0, offset: 0 },
           { opacity: 0, offset: appear / total },
@@ -268,8 +268,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
               const dx = c + cell / 2 - yx, dy = r + cell / 2 - yy;
               const deg = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 0 : 180) : (dy > 0 ? 90 : -90);
               const s = cell;
-              return <g transform={`translate(${c + s / 2} ${r + s / 2}) rotate(${deg}) scale(${s})`}>
-                <path d="M -0.26,-0.07 L 0.02,-0.07 L 0.02,-0.17 L 0.26,0 L 0.02,0.17 L 0.02,0.07 L -0.26,0.07 Z" fill={BOARD_FILL[startColor]} stroke="var(--board-mark-line)" strokeWidth="0.02" strokeLinejoin="round" />
+              return <g transform={`translate(${c + s / 2} ${r + s / 2}) rotate(${deg}) scale(${s}) translate(-0.5 0)`}>
+                <path d="M -0.17,-0.045 L 0.02,-0.045 L 0.02,-0.11 L 0.17,0 L 0.02,0.11 L 0.02,0.045 L -0.17,0.045 Z" fill={BOARD_FILL[startColor]} stroke="var(--board-mark-line)" strokeWidth="0.02" strokeLinejoin="round" />
               </g>;
             })()}
           </g>
@@ -335,9 +335,10 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
             aria-label={t("movePieceAria", { color: t(COLOR_NAME_KEYS[color]), n: piece + 1 })}
             onClick={() => onPick(piece, walkOut)}
             onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onPick(piece, walkOut); } }}>
-            <circle cx={x} cy={y} r="0.39" fill={FILL[color]} fillOpacity="0.18" stroke="var(--board-mark)" strokeWidth="0.12" />
-            <circle cx={x} cy={y} r="0.39" fill="none" stroke={FILL[color]} strokeWidth="0.055" />
-            <circle cx={x} cy={y} r="0.1" fill={FILL[color]} />
+            <circle cx={x} cy={y} r="0.42" fill={FILL[color]} className="dest-glow" style={{ transformOrigin: `${x}px ${y}px` }} />
+            <circle cx={x} cy={y} r="0.36" fill="var(--board-mark)" fillOpacity="0.9" stroke={FILL[color]} strokeWidth="0.07" />
+            <circle cx={x} cy={y} r="0.36" fill="none" stroke={FILL[color]} strokeWidth="0.05" strokeDasharray="0.28 0.19" strokeLinecap="round" className="dest-spin" style={{ transformOrigin: `${x}px ${y}px` }} />
+            <circle cx={x} cy={y} r="0.13" fill={FILL[color]} className="dest-dot" style={{ transformOrigin: `${x}px ${y}px` }} />
             <circle cx={x} cy={y} r="0.55" fill="transparent" />
           </g>
         ))}

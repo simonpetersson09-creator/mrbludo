@@ -45,6 +45,7 @@ export const sv = {
   // Spelskärm
   roll: "Kasta",
   nameThrowing: "{name} kastar",
+  choosePlacement: "Välj placering",
   home: "Hem",
   notFoundTitle: "Sidan finns inte",
   notFoundBody: "Sidan du letar efter finns inte eller har flyttats.",

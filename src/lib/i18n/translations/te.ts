@@ -42,6 +42,8 @@ export const te: Record<TranslationKey, string> = {
   roll: "వేయి",
 
   nameThrowing: "{name} వేస్తున్రారు",
+
+  choosePlacement: "కదలికను ఎంచుకోండి",
   home: "హోమ్",
   notFoundTitle: "పేజీ కనుగొనబడలేదు",
   notFoundBody: "మీరు వెతుకుతున్న పేజీ లేదు లేదా తరలించబడింది.",

@@ -37,6 +37,7 @@ export const ptBR: Record<TranslationKey, string> = {
   colorBlue: "Azul",
   roll: "Rolar",
   nameThrowing: "{name} joga",
+  choosePlacement: "Escolha a jogada",
   home: "Início",
   notFoundTitle: "Página não encontrada",
   notFoundBody: "A página que você procura não existe ou foi movida.",

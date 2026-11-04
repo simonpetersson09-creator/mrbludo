@@ -37,6 +37,7 @@ export const hu: Record<TranslationKey, string> = {
   colorBlue: "Kék",
   roll: "Dobás",
   nameThrowing: "{name} dob",
+  choosePlacement: "Válassz lépést",
   home: "Főoldal",
   notFoundTitle: "Az oldal nem található",
   notFoundBody: "A keresett oldal nem létezik vagy áthelyezték.",

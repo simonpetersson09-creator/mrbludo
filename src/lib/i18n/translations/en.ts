@@ -42,6 +42,8 @@ export const en: Record<TranslationKey, string> = {
   roll: "Roll",
 
   nameThrowing: "{name} is rolling",
+
+  choosePlacement: "Choose a move",
   home: "Home",
   notFoundTitle: "Page not found",
   notFoundBody: "The page you're looking for doesn't exist or has been moved.",

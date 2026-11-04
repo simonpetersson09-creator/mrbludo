@@ -42,6 +42,8 @@ export const de: Record<TranslationKey, string> = {
   roll: "Würfeln",
 
   nameThrowing: "{name} würfelt",
+
+  choosePlacement: "Zug wählen",
   home: "Startseite",
   notFoundTitle: "Seite nicht gefunden",
   notFoundBody: "Die gesuchte Seite existiert nicht oder wurde verschoben.",

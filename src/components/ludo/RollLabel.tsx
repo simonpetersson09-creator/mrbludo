@@ -14,6 +14,9 @@ export function RollLabel({ state, canRoll, myTurn }: { state: GameState; canRol
       </span>
     );
   }
+  if (myTurn && state.phase === "move") {
+    return <span className="pointer-events-none max-w-[76px] px-1 text-center text-[11px] leading-tight">{t("choosePlacement")}</span>;
+  }
   return (
     <span className="pointer-events-none px-1 text-center leading-tight">
       {canRoll && <span className="mb-1 block text-[9px] font-medium leading-tight">{t("yourTurnLabel")}</span>}

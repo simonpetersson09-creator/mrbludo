@@ -42,6 +42,8 @@ export const gu: Record<TranslationKey, string> = {
   roll: "ફેંકો",
 
   nameThrowing: "{name} ફેંકે છે",
+
+  choosePlacement: "ચાલ પસંદ કરો",
   home: "હોમ",
   notFoundTitle: "પેજ મળ્યું નથી",
   notFoundBody: "તમે શોધો છો તે પેજ અસ્તિત્વમાં નથી અથવા ખસેડાયું છે.",
