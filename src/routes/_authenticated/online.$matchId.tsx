@@ -1,3 +1,4 @@
+import type React from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, Copy, Play, Share2, UserPlus, WifiOff } from "lucide-react";
@@ -226,7 +227,7 @@ function OnlineMatchPage() {
         </div>
         <div className="game-command-area">
           <QuickChat matchId={matchId} myName={mySeat >= 0 ? state.players[mySeat].name : ""} myColor={mySeat >= 0 ? state.players[mySeat].color : null} />
-          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
+          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} style={dieColor ? ({ ["--roll-c" as string]: dieColor } as React.CSSProperties) : undefined} onClick={() => send({ kind: "roll" })} disabled={!canRoll}>
             <RollLabel state={state} canRoll={canRoll} myTurn={myTurn} />
           </button>
           <div className="flex items-center justify-center gap-2">

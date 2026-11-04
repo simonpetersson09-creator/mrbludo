@@ -1,3 +1,4 @@
+import type React from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -181,7 +182,7 @@ function PlayPage() {
           <LudoDie value={face} rolling={rolling} onTap={doRoll} disabled={!canRoll} pipColor={dieColor} />
         </div>
         <div className="game-command-area">
-          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} onClick={doRoll} disabled={!canRoll}>
+          <button className={`game-roll-btn font-display${canRoll ? " kasta-pulse" : ""}`} style={dieColor ? ({ ["--roll-c" as string]: dieColor } as React.CSSProperties) : undefined} onClick={doRoll} disabled={!canRoll}>
             <RollLabel state={state} canRoll={canRoll} myTurn={humanTurn} />
           </button>
           <div className="flex items-center justify-center gap-2">

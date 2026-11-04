@@ -322,16 +322,18 @@
 .game-roll-btn {
   width: 88px; height: 88px; border-radius: 9999px; font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0;
   display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(145deg, var(--board-gold-light), var(--board-gold)); color: var(--board-ink); border: 1px solid var(--board-gold-light);
-  box-shadow: inset 0 0 0 4px var(--board-gold), inset 0 0 0 5px var(--board-gold-light), var(--control-shadow);
+  --rc: var(--roll-c, var(--board-gold));
+  background: linear-gradient(145deg, color-mix(in oklch, var(--rc) 70%, var(--board-mark)), var(--rc)); color: var(--board-mark); text-shadow: 0 1px 1px color-mix(in oklch, var(--board-ink) 45%, transparent);
+  border: 1px solid color-mix(in oklch, var(--rc) 60%, var(--board-mark));
+  box-shadow: inset 0 0 0 4px var(--rc), inset 0 0 0 5px color-mix(in oklch, var(--rc) 55%, var(--board-mark)), var(--control-shadow);
   transition: background-color .2s, transform .1s; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
 }
 .game-roll-btn:active { transform: scale(.94); }
-.game-roll-btn:disabled { background: var(--control-surface); color: var(--control-muted); border-color: var(--board-line); box-shadow: inset 0 0 0 4px var(--control-surface), inset 0 0 0 5px var(--board-line); }
+.game-roll-btn:disabled { text-shadow: none; background: var(--control-surface); color: var(--control-muted); border-color: var(--board-line); box-shadow: inset 0 0 0 4px var(--control-surface), inset 0 0 0 5px var(--board-line); }
 .kasta-pulse { animation: kasta-pulse-shadow 2.4s ease-in-out infinite; }
 @keyframes kasta-pulse-shadow {
-  0%, 100% { outline: 1px solid color-mix(in oklch, var(--board-gold) 20%, transparent); outline-offset: 3px; }
-  50% { outline: 1px solid color-mix(in oklch, var(--board-gold) 65%, transparent); outline-offset: 3px; }
+  0%, 100% { outline: 1px solid color-mix(in oklch, var(--rc, var(--board-gold)) 20%, transparent); outline-offset: 3px; }
+  50% { outline: 1px solid color-mix(in oklch, var(--rc, var(--board-gold)) 65%, transparent); outline-offset: 3px; }
 }
 .game-nav-btn {
   display: inline-flex; align-items: center; justify-content: center; padding: 0 8px; min-width: 3.2rem; min-height: 32px;
@@ -403,3 +405,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display
   100% { opacity: 0; transform: translateY(calc(var(--far) * -1.1)) scale(.3) rotate(220deg); }
 }
 @media (prefers-reduced-motion: reduce) { .goal-burst { display: none; } }
+
+.yard-turn-ring { animation: yard-ring-spin 7s linear infinite; transform-box: view-box; }
+@keyframes yard-ring-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .yard-turn-ring { animation: none; } }

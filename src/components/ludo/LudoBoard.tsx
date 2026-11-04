@@ -246,6 +246,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
             <circle cx={nx} cy={ny} r={half} fill="var(--board-ink)" fillOpacity="0.16" />
             <circle cx={nx} cy={ny + 0.06} r={half} fill={BOARD_FILL[c]} />
             <circle cx={nx} cy={ny + 0.06} r={half} fill={`url(#${boardId}-plate)`} stroke="var(--board-mark)" strokeOpacity="0.55" strokeWidth="0.06" />
+            {isTurn && <circle cx={nx} cy={ny + 0.06} r={half + 0.02} fill="none" stroke="var(--board-mark)" strokeWidth="0.11" strokeLinecap="round" strokeDasharray="0.9 0.45" className="yard-turn-ring" style={{ transformOrigin: `${nx}px ${ny + 0.06}px` }} />}
             {[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([dx, dy], i) => (
               <g key={i}>
                 <circle cx={nx + dx * YARD_SPOT_GAP} cy={ny + dy * YARD_SPOT_GAP} r="0.6" fill={BOARD_FILL[c]} />
@@ -262,10 +263,15 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         return (
           <g key={i}>
             <rect x={c} y={r} width={cell} height={cell} fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
-            {startColor != null && <>
-              <circle cx={c + cell / 2} cy={r + cell / 2} r="0.42" fill={BOARD_FILL[startColor]} fillOpacity="0.24" stroke={BOARD_FILL[startColor]} strokeWidth="0.08" />
-              <use href={`#${boardId}-safe`} x={c + cell / 2} y={r + cell / 2} fill={BOARD_FILL[startColor]} stroke="var(--board-mark-line)" strokeWidth="0.02" strokeLinejoin="round" />
-            </>}
+            {startColor != null && (() => {
+              const [yx, yy] = yardNestCenter(startColor, variant);
+              const dx = c + cell / 2 - yx, dy = r + cell / 2 - yy;
+              const deg = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 0 : 180) : (dy > 0 ? 90 : -90);
+              const s = cell;
+              return <g transform={`translate(${c + s / 2} ${r + s / 2}) rotate(${deg}) scale(${s})`}>
+                <path d="M -0.26,-0.07 L 0.02,-0.07 L 0.02,-0.17 L 0.26,0 L 0.02,0.17 L 0.02,0.07 L -0.26,0.07 Z" fill={BOARD_FILL[startColor]} stroke="var(--board-mark-line)" strokeWidth="0.02" strokeLinejoin="round" />
+              </g>;
+            })()}
           </g>
         );
       })}
@@ -296,13 +302,17 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         <Trophy x={7.5 - 0.1 * cell} y={7.5 - 0.1 * cell} width={0.2 * cell} height={0.2 * cell} color="var(--board-gold-ink)" strokeWidth={2.4} />
       </> : <>
       <rect x="6" y="6" width="3" height="3" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
-      <circle cx="7.5" cy="7.5" r="1.22" fill={`url(#${boardId}-checker)`} stroke="var(--board-ink)" strokeWidth="0.05" />
-      <circle cx="7.5" cy="7.5" r="0.86" fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.08" />
+      <circle cx="7.5" cy="7.5" r="1.22" fill="var(--board-mark)" stroke="var(--board-gold)" strokeWidth="0.06" />
+      {([[0, 180], [1, 270], [2, 0], [3, 90]] as [Color, number][]).map(([col, mid]) => {
+        const rr = 1.04, a0 = ((mid - 42) * Math.PI) / 180, a1 = ((mid + 42) * Math.PI) / 180;
+        return <path key={col} d={`M ${7.5 + rr * Math.cos(a0)},${7.5 + rr * Math.sin(a0)} A ${rr},${rr} 0 0 1 ${7.5 + rr * Math.cos(a1)},${7.5 + rr * Math.sin(a1)}`} fill="none" stroke={BOARD_FILL[col]} strokeWidth="0.22" strokeLinecap="round" />;
+      })}
+      <circle cx="7.5" cy="7.5" r="0.86" fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.07" />
+      <circle cx="7.5" cy="7.5" r="0.72" fill="none" stroke="var(--board-gold-ink)" strokeOpacity="0.3" strokeWidth="0.025" />
       <Trophy x={7.21} y={7.21} width={0.58} height={0.58} color="var(--board-gold-ink)" strokeWidth={2.2} />
-      <polygon points="6,7.12 6,7.88 6.26,7.5" fill={BOARD_FILL[0]} />
-      <polygon points="7.12,6 7.88,6 7.5,6.26" fill={BOARD_FILL[1]} />
-      <polygon points="9,7.12 9,7.88 8.74,7.5" fill={BOARD_FILL[2]} />
-      <polygon points="7.12,9 7.88,9 7.5,8.74" fill={BOARD_FILL[3]} />
+      {([0, 90, 180, 270] as const).map((deg, i) => (
+        <path key={deg} transform={`rotate(${deg} 7.5 7.5)`} d="M 5.98,7.27 Q 5.98,7.21 6.04,7.24 L 6.22,7.45 Q 6.27,7.5 6.22,7.55 L 6.04,7.76 Q 5.98,7.79 5.98,7.73 Z" fill={BOARD_FILL[([0, 1, 2, 3] as Color[])[i]]} stroke="var(--board-mark)" strokeWidth="0.03" strokeLinejoin="round" />
+      ))}
       </>}
 
       {/* Bend squares: the two track squares at each corner curve around the bend, meet on the diagonal and stop exactly at the center circle's edge. Same 52 squares, same piece positions — presentation only. */}
@@ -310,8 +320,8 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
         <g pointerEvents="none">
           {[0, 90, 180, 270].map((deg) => (
             <g key={deg} transform={`rotate(${deg} 7.5 7.5)`}>
-              <path d="M5,6 L6,6 L6.637,6.637 A1.22,1.22 0 0 0 6.387,7 L5,7 Z" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" strokeLinejoin="round" />
-              <path d="M6,5 L7,5 L7,6.387 A1.22,1.22 0 0 0 6.637,6.637 L6,6 Z" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" strokeLinejoin="round" />
+              <path d="M5,6 L5.4,6 A0.6,0.6 0 0 0 5.824,5.824 L6.637,6.637 A1.22,1.22 0 0 0 6.387,7 L5,7 Z" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" strokeLinejoin="round" />
+              <path d="M6,5 L7,5 L7,6.387 A1.22,1.22 0 0 0 6.637,6.637 L5.824,5.824 A0.6,0.6 0 0 0 6,5.4 Z" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" strokeLinejoin="round" />
             </g>
           ))}
         </g>
