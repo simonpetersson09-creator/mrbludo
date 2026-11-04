@@ -332,4 +332,13 @@ export const bn: Record<TranslationKey, string> = {
   inviteStatusAccepted: "গৃহীত",
   inviteStatusDeclined: "প্রত্যাখ্যাত",
   inviteStatusExpired: "মেয়াদোত্তীর্ণ",
+  firstPlayHint: "এখান থেকে শুরু করুন ↓",
+  adPrivacyChange: "বিজ্ঞাপন পছন্দ বদলান",
+  adChoiceStorage: "ডিভাইসে সংরক্ষণ",
+  adChoiceProfile: "ব্যক্তিগতকৃত বিজ্ঞাপন",
+  adChoiceUseProfile: "বিজ্ঞাপন প্রোফাইল ব্যবহার",
+  adChoiceAllowed: "অনুমোদিত",
+  adChoiceDenied: "প্রত্যাখ্যাত",
+  adChoiceUnknown: "অজানা",
+  adPrivacyFailed: "এখন বিজ্ঞাপন পছন্দ খোলা যায়নি",
 };

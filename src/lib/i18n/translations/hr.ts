@@ -315,4 +315,13 @@ export const hr: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Prihvaćeno",
   inviteStatusDeclined: "Odbijeno",
   inviteStatusExpired: "Isteklo",
+  firstPlayHint: "Počni ovdje ↓",
+  adPrivacyChange: "Promijeni izbore oglasa",
+  adChoiceStorage: "Spremanje na uređaju",
+  adChoiceProfile: "Personalizirani oglasi",
+  adChoiceUseProfile: "Korištenje oglasnog profila",
+  adChoiceAllowed: "Dopušteno",
+  adChoiceDenied: "Odbijeno",
+  adChoiceUnknown: "Nepoznato",
+  adPrivacyFailed: "Izbori oglasa trenutno se ne mogu otvoriti",
 };

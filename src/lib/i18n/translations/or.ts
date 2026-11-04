@@ -332,4 +332,13 @@ export const or: Record<TranslationKey, string> = {
   inviteStatusAccepted: "ଗ୍ରହଣ କରାଗଲା",
   inviteStatusDeclined: "ପ୍ରତ୍ୟାଖ୍ୟାନ",
   inviteStatusExpired: "ମିଆଦ ଶେଷ",
+  firstPlayHint: "ଏଠାରୁ ଆରମ୍ଭ କରନ୍ତୁ ↓",
+  adPrivacyChange: "ବିଜ୍ଞାପନ ପସନ୍ଦ ବଦଳାନ୍ତୁ",
+  adChoiceStorage: "ଡିଭାଇସରେ ସଂରକ୍ଷଣ",
+  adChoiceProfile: "ବ୍ୟକ୍ତିଗତ ବିଜ୍ଞାପନ",
+  adChoiceUseProfile: "ବିଜ୍ଞାପନ ପ୍ରୋଫାଇଲ୍ ବ୍ୟବହାର",
+  adChoiceAllowed: "ଅନୁମତି",
+  adChoiceDenied: "ପ୍ରତ୍ୟାଖ୍ୟାତ",
+  adChoiceUnknown: "ଅଜଣା",
+  adPrivacyFailed: "ବର୍ତ୍ତମାନ ବିଜ୍ଞାପନ ପସନ୍ଦ ଖୋଲିପାରିଲା ନାହିଁ",
 };

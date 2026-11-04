@@ -332,4 +332,13 @@ export const tr: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Kabul edildi",
   inviteStatusDeclined: "Reddedildi",
   inviteStatusExpired: "Süresi doldu",
+  firstPlayHint: "Buradan başla ↓",
+  adPrivacyChange: "Reklam tercihlerini değiştir",
+  adChoiceStorage: "Cihazda saklama",
+  adChoiceProfile: "Kişiselleştirilmiş reklamlar",
+  adChoiceUseProfile: "Reklam profilini kullanma",
+  adChoiceAllowed: "İzin verildi",
+  adChoiceDenied: "Reddedildi",
+  adChoiceUnknown: "Bilinmiyor",
+  adPrivacyFailed: "Reklam tercihleri şu anda açılamadı",
 };

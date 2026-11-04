@@ -332,4 +332,13 @@ export const en: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Accepted",
   inviteStatusDeclined: "Declined",
   inviteStatusExpired: "Expired",
+  firstPlayHint: "Start here ↓",
+  adPrivacyChange: "Change ad choices",
+  adChoiceStorage: "Store on device",
+  adChoiceProfile: "Personalised ads",
+  adChoiceUseProfile: "Use ad profile",
+  adChoiceAllowed: "Allowed",
+  adChoiceDenied: "Denied",
+  adChoiceUnknown: "Unknown",
+  adPrivacyFailed: "Couldn't open ad choices right now",
 };

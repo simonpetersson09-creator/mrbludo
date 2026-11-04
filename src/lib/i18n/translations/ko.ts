@@ -332,4 +332,13 @@ export const ko: Record<TranslationKey, string> = {
   inviteStatusAccepted: "수락됨",
   inviteStatusDeclined: "거절됨",
   inviteStatusExpired: "만료됨",
+  firstPlayHint: "여기서 시작 ↓",
+  adPrivacyChange: "광고 선택 변경",
+  adChoiceStorage: "기기에 저장",
+  adChoiceProfile: "맞춤형 광고",
+  adChoiceUseProfile: "광고 프로필 사용",
+  adChoiceAllowed: "허용됨",
+  adChoiceDenied: "거부됨",
+  adChoiceUnknown: "알 수 없음",
+  adPrivacyFailed: "지금은 광고 선택을 열 수 없습니다",
 };

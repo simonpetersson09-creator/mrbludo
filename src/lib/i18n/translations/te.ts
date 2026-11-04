@@ -332,4 +332,13 @@ export const te: Record<TranslationKey, string> = {
   inviteStatusAccepted: "అంగీకరించారు",
   inviteStatusDeclined: "తిరస్కరించారు",
   inviteStatusExpired: "గడువు ముగిసింది",
+  firstPlayHint: "ఇక్కడ ప్రారంభించండి ↓",
+  adPrivacyChange: "ప్రకటన ఎంపికలను మార్చండి",
+  adChoiceStorage: "పరికరంలో నిల్వ",
+  adChoiceProfile: "వ్యక్తిగత ప్రకటనలు",
+  adChoiceUseProfile: "ప్రకటన ప్రొఫైల్ ఉపయోగం",
+  adChoiceAllowed: "అనుమతించబడింది",
+  adChoiceDenied: "తిరస్కరించబడింది",
+  adChoiceUnknown: "తెలియదు",
+  adPrivacyFailed: "ఇప్పుడు ప్రకటన ఎంపికలను తెరవలేకపోయాం",
 };

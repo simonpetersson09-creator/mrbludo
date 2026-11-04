@@ -332,4 +332,13 @@ export const no: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Godtatt",
   inviteStatusDeclined: "Avslått",
   inviteStatusExpired: "Utløpt",
+  firstPlayHint: "Start her ↓",
+  adPrivacyChange: "Endre annonsevalg",
+  adChoiceStorage: "Lagre på enheten",
+  adChoiceProfile: "Tilpassede annonser",
+  adChoiceUseProfile: "Bruke annonseprofil",
+  adChoiceAllowed: "Tillatt",
+  adChoiceDenied: "Avslått",
+  adChoiceUnknown: "Ukjent",
+  adPrivacyFailed: "Kunne ikke åpne annonsevalg akkurat nå",
 };

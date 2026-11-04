@@ -332,4 +332,13 @@ export const uk: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Прийнято",
   inviteStatusDeclined: "Відхилено",
   inviteStatusExpired: "Минуло",
+  firstPlayHint: "Почніть тут ↓",
+  adPrivacyChange: "Змінити налаштування реклами",
+  adChoiceStorage: "Зберігання на пристрої",
+  adChoiceProfile: "Персоналізована реклама",
+  adChoiceUseProfile: "Використання рекламного профілю",
+  adChoiceAllowed: "Дозволено",
+  adChoiceDenied: "Відхилено",
+  adChoiceUnknown: "Невідомо",
+  adPrivacyFailed: "Зараз не вдалося відкрити налаштування реклами",
 };

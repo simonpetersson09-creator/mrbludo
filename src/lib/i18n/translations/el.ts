@@ -315,4 +315,13 @@ export const el: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Αποδεκτή",
   inviteStatusDeclined: "Απορρίφθηκε",
   inviteStatusExpired: "Έληξε",
+  firstPlayHint: "Ξεκίνα εδώ ↓",
+  adPrivacyChange: "Αλλαγή επιλογών διαφημίσεων",
+  adChoiceStorage: "Αποθήκευση στη συσκευή",
+  adChoiceProfile: "Εξατομικευμένες διαφημίσεις",
+  adChoiceUseProfile: "Χρήση διαφημιστικού προφίλ",
+  adChoiceAllowed: "Επιτρέπεται",
+  adChoiceDenied: "Απορρίφθηκε",
+  adChoiceUnknown: "Άγνωστο",
+  adPrivacyFailed: "Δεν ήταν δυνατό να ανοίξουν οι επιλογές διαφημίσεων τώρα",
 };

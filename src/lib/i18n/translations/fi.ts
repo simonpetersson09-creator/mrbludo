@@ -315,4 +315,13 @@ export const fi: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Hyväksytty",
   inviteStatusDeclined: "Hylätty",
   inviteStatusExpired: "Vanhentunut",
+  firstPlayHint: "Aloita tästä ↓",
+  adPrivacyChange: "Muuta mainosvalintoja",
+  adChoiceStorage: "Tallennus laitteelle",
+  adChoiceProfile: "Personoidut mainokset",
+  adChoiceUseProfile: "Mainosprofiilin käyttö",
+  adChoiceAllowed: "Sallittu",
+  adChoiceDenied: "Estetty",
+  adChoiceUnknown: "Tuntematon",
+  adPrivacyFailed: "Mainosvalintoja ei voitu avata juuri nyt",
 };

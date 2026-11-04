@@ -332,4 +332,13 @@ export const mr: Record<TranslationKey, string> = {
   inviteStatusAccepted: "स्वीकारले",
   inviteStatusDeclined: "नाकारले",
   inviteStatusExpired: "कालबाह्य",
+  firstPlayHint: "येथून सुरू करा ↓",
+  adPrivacyChange: "जाहिरात पर्याय बदला",
+  adChoiceStorage: "डिव्हाइसवर साठवणे",
+  adChoiceProfile: "वैयक्तिकृत जाहिराती",
+  adChoiceUseProfile: "जाहिरात प्रोफाइल वापरणे",
+  adChoiceAllowed: "परवानगी",
+  adChoiceDenied: "नाकारले",
+  adChoiceUnknown: "अज्ञात",
+  adPrivacyFailed: "आत्ता जाहिरात पर्याय उघडता आले नाहीत",
 };

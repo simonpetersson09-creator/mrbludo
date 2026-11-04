@@ -332,4 +332,13 @@ export const ro: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Acceptată",
   inviteStatusDeclined: "Refuzată",
   inviteStatusExpired: "Expirată",
+  firstPlayHint: "Începe aici ↓",
+  adPrivacyChange: "Schimbă opțiunile de reclame",
+  adChoiceStorage: "Stocare pe dispozitiv",
+  adChoiceProfile: "Reclame personalizate",
+  adChoiceUseProfile: "Folosire profil publicitar",
+  adChoiceAllowed: "Permis",
+  adChoiceDenied: "Refuzat",
+  adChoiceUnknown: "Necunoscut",
+  adPrivacyFailed: "Opțiunile de reclame nu au putut fi deschise acum",
 };

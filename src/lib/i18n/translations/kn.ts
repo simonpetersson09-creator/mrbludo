@@ -332,4 +332,13 @@ export const kn: Record<TranslationKey, string> = {
   inviteStatusAccepted: "ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
   inviteStatusDeclined: "ನಿರಾಕರಿಸಲಾಗಿದೆ",
   inviteStatusExpired: "ಅವಧಿ ಮುಗಿದಿದೆ",
+  firstPlayHint: "ಇಲ್ಲಿಂದ ಪ್ರಾರಂಭಿಸಿ ↓",
+  adPrivacyChange: "ಜಾಹೀರಾತು ಆಯ್ಕೆಗಳನ್ನು ಬದಲಿಸಿ",
+  adChoiceStorage: "ಸಾಧನದಲ್ಲಿ ಸಂಗ್ರಹ",
+  adChoiceProfile: "ವೈಯಕ್ತೀಕರಿಸಿದ ಜಾಹೀರಾತುಗಳು",
+  adChoiceUseProfile: "ಜಾಹೀರಾತು ಪ್ರೊಫೈಲ್ ಬಳಕೆ",
+  adChoiceAllowed: "ಅನುಮತಿಸಲಾಗಿದೆ",
+  adChoiceDenied: "ನಿರಾಕರಿಸಲಾಗಿದೆ",
+  adChoiceUnknown: "ಅಜ್ಞಾತ",
+  adPrivacyFailed: "ಈಗ ಜಾಹೀರಾತು ಆಯ್ಕೆಗಳನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ",
 };

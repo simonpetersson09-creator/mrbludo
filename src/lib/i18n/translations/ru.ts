@@ -332,4 +332,13 @@ export const ru: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Принято",
   inviteStatusDeclined: "Отклонено",
   inviteStatusExpired: "Истекло",
+  firstPlayHint: "Начните здесь ↓",
+  adPrivacyChange: "Изменить настройки рекламы",
+  adChoiceStorage: "Хранение на устройстве",
+  adChoiceProfile: "Персонализированная реклама",
+  adChoiceUseProfile: "Использование рекламного профиля",
+  adChoiceAllowed: "Разрешено",
+  adChoiceDenied: "Отклонено",
+  adChoiceUnknown: "Неизвестно",
+  adPrivacyFailed: "Сейчас не удалось открыть настройки рекламы",
 };

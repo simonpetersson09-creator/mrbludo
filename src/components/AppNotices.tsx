@@ -7,6 +7,7 @@ import { RESUME_EVENT } from "@/lib/native/runtime";
 import { PUSH_ASK_EVENT } from "@/lib/native/push";
 import { t as translate, useTranslation } from "@/lib/i18n";
 import { passedBy, type BoardMemory } from "@/lib/online/board-notice";
+import { releasePrompt, whenPromptFree } from "@/lib/home-prompt";
 
 const JOIN_SEEN = "mrb-ludo:v1:seen-lobby-joins";
 const BOARD_KEY = "mrb-ludo:v1:monthly-board";
@@ -23,9 +24,10 @@ export function AppNotices({ enabled }: { enabled: boolean }) {
   const [ask, setAsk] = useState<((yes: boolean) => void) | null>(null);
 
   useEffect(() => {
-    const onAsk = (e: Event) => { const answer = (e as CustomEvent<(yes: boolean) => void>).detail; setAsk(() => answer); };
+    let cancel: (() => void) | null = null;
+    const onAsk = (e: Event) => { const answer = (e as CustomEvent<(yes: boolean) => void>).detail; cancel?.(); cancel = whenPromptFree("push", () => setAsk(() => answer)); };
     window.addEventListener(PUSH_ASK_EVENT, onAsk);
-    return () => window.removeEventListener(PUSH_ASK_EVENT, onAsk);
+    return () => { cancel?.(); window.removeEventListener(PUSH_ASK_EVENT, onAsk); };
   }, []);
 
   useEffect(() => {
@@ -73,7 +75,7 @@ export function AppNotices({ enabled }: { enabled: boolean }) {
   }, [enabled, router]);
 
   if (!ask) return null;
-  const answer = (yes: boolean) => { ask(yes); setAsk(null); };
+  const answer = (yes: boolean) => { ask(yes); setAsk(null); releasePrompt("push"); };
   return (
     <div className="fixed inset-0 z-[80] flex items-end justify-center bg-background/70 p-4 sm:items-center" role="dialog" aria-modal="true" aria-labelledby="push-ask-title">
       <div className="w-full max-w-sm rounded-2xl border border-gold/40 bg-card p-5 text-center shadow-xl">

@@ -256,6 +256,7 @@ function SettingsPage() {
             </button>
             {adsOpen && <p className="border-t border-border/40 px-3 py-3 text-sm text-muted-foreground">{t("adsOffInfo")}</p>}
           </Card>
+          <AdChoices />
         </Section>
 
         <Card>
@@ -274,5 +275,39 @@ function SettingsPage() {
         <DeletePlayerDataDialog open={deleteOpen} onClose={() => setDeleteOpen(false)} />
       </div>
     </main>
+  );
+}
+
+/** Yatzy's ad-privacy controls: shows the saved choices and reopens Google's consent form (app with ads only). */
+function AdChoices() {
+  const { t } = useTranslation();
+  const [choices, setChoices] = useState<import("@/lib/ads/ad-consent").AdConsentChoices | null>(null);
+  const [busy, setBusy] = useState(false);
+  const read = async () => { const m = await import("@/lib/ads/admob"); if (m.isAdMobAvailable()) setChoices(await m.getAdConsentChoices()); };
+  useEffect(() => { void read().catch(() => {}); }, []);
+  if (!choices) return null;
+  const change = async () => {
+    setBusy(true);
+    try {
+      const m = await import("@/lib/ads/admob");
+      if (!(await m.showAdPrivacyOptions())) toast.error(t("adPrivacyFailed"));
+      await read();
+    } catch { toast.error(t("adPrivacyFailed")); } finally { setBusy(false); }
+  };
+  const label = { allowed: t("adChoiceAllowed"), denied: t("adChoiceDenied"), unknown: t("adChoiceUnknown") } as const;
+  const rows = [["adChoiceStorage", choices.storage], ["adChoiceProfile", choices.adProfile], ["adChoiceUseProfile", choices.useAdProfile]] as const;
+  return (
+    <Card>
+      <dl className="space-y-1 px-3 py-3 text-xs" aria-live="polite">
+        {rows.map(([k, v]) => (
+          <div key={k} className="flex justify-between gap-3"><dt className="text-muted-foreground">{t(k)}</dt><dd className="font-semibold">{label[v]}</dd></div>
+        ))}
+      </dl>
+      <button type="button" disabled={busy} className={`${rowCls} border-t border-border/40 disabled:opacity-60`} onClick={() => { void change(); }}>
+        <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
+        <span className="flex-1 text-sm font-medium">{t("adPrivacyChange")}</span>
+        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+      </button>
+    </Card>
   );
 }

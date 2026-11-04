@@ -332,4 +332,13 @@ export const vi: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Đã chấp nhận",
   inviteStatusDeclined: "Đã từ chối",
   inviteStatusExpired: "Đã hết hạn",
+  firstPlayHint: "Bắt đầu tại đây ↓",
+  adPrivacyChange: "Thay đổi lựa chọn quảng cáo",
+  adChoiceStorage: "Lưu trên thiết bị",
+  adChoiceProfile: "Quảng cáo cá nhân hóa",
+  adChoiceUseProfile: "Dùng hồ sơ quảng cáo",
+  adChoiceAllowed: "Cho phép",
+  adChoiceDenied: "Từ chối",
+  adChoiceUnknown: "Không rõ",
+  adPrivacyFailed: "Hiện không mở được lựa chọn quảng cáo",
 };

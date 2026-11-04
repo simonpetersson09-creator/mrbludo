@@ -332,4 +332,13 @@ export const gu: Record<TranslationKey, string> = {
   inviteStatusAccepted: "સ્વીકાર્યું",
   inviteStatusDeclined: "નકાર્યું",
   inviteStatusExpired: "સમાપ્ત",
+  firstPlayHint: "અહીંથી શરૂ કરો ↓",
+  adPrivacyChange: "જાહેરાત પસંદગીઓ બદલો",
+  adChoiceStorage: "ઉપકરણ પર સંગ્રહ",
+  adChoiceProfile: "વ્યક્તિગત જાહેરાતો",
+  adChoiceUseProfile: "જાહેરાત પ્રોફાઇલનો ઉપયોગ",
+  adChoiceAllowed: "મંજૂર",
+  adChoiceDenied: "નકાર્યું",
+  adChoiceUnknown: "અજાણ્યું",
+  adPrivacyFailed: "હમણાં જાહેરાત પસંદગીઓ ખોલી શકાઈ નહીં",
 };

@@ -332,4 +332,13 @@ export const ml: Record<TranslationKey, string> = {
   inviteStatusAccepted: "സ്വീകരിച്ചു",
   inviteStatusDeclined: "നിരസിച്ചു",
   inviteStatusExpired: "കാലഹരണപ്പെട്ടു",
+  firstPlayHint: "ഇവിടെ തുടങ്ങൂ ↓",
+  adPrivacyChange: "പരസ്യ ഓപ്ഷനുകൾ മാറ്റുക",
+  adChoiceStorage: "ഉപകരണത്തിൽ സംഭരണം",
+  adChoiceProfile: "വ്യക്തിഗത പരസ്യങ്ങൾ",
+  adChoiceUseProfile: "പരസ്യ പ്രൊഫൈൽ ഉപയോഗം",
+  adChoiceAllowed: "അനുവദിച്ചു",
+  adChoiceDenied: "നിരസിച്ചു",
+  adChoiceUnknown: "അജ്ഞാതം",
+  adPrivacyFailed: "ഇപ്പോൾ പരസ്യ ഓപ്ഷനുകൾ തുറക്കാനായില്ല",
 };

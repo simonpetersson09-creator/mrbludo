@@ -345,6 +345,15 @@ export const sv = {
   inviteStatusAccepted: "Accepterad",
   inviteStatusDeclined: "Nej tack",
   inviteStatusExpired: "Gått ut",
+  firstPlayHint: "Börja här ↓",
+  adPrivacyChange: "Ändra annonsval",
+  adChoiceStorage: "Spara på enheten",
+  adChoiceProfile: "Anpassade annonser",
+  adChoiceUseProfile: "Använda annonsprofil",
+  adChoiceAllowed: "Tillåtet",
+  adChoiceDenied: "Nekat",
+  adChoiceUnknown: "Okänt",
+  adPrivacyFailed: "Det gick inte att öppna annonsvalen just nu",
 };
 
 export type TranslationKey = keyof typeof sv;

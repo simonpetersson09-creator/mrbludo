@@ -332,4 +332,13 @@ export const hi: Record<TranslationKey, string> = {
   inviteStatusAccepted: "स्वीकार",
   inviteStatusDeclined: "अस्वीकार",
   inviteStatusExpired: "समाप्त",
+  firstPlayHint: "यहाँ से शुरू करें ↓",
+  adPrivacyChange: "विज्ञापन विकल्प बदलें",
+  adChoiceStorage: "डिवाइस पर सहेजना",
+  adChoiceProfile: "वैयक्तिकृत विज्ञापन",
+  adChoiceUseProfile: "विज्ञापन प्रोफ़ाइल का उपयोग",
+  adChoiceAllowed: "अनुमति है",
+  adChoiceDenied: "अस्वीकृत",
+  adChoiceUnknown: "अज्ञात",
+  adPrivacyFailed: "अभी विज्ञापन विकल्प नहीं खुल सके",
 };

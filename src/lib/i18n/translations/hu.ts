@@ -315,4 +315,13 @@ export const hu: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Elfogadva",
   inviteStatusDeclined: "Elutasítva",
   inviteStatusExpired: "Lejárt",
+  firstPlayHint: "Kezdd itt ↓",
+  adPrivacyChange: "Hirdetési beállítások módosítása",
+  adChoiceStorage: "Tárolás az eszközön",
+  adChoiceProfile: "Személyre szabott hirdetések",
+  adChoiceUseProfile: "Hirdetési profil használata",
+  adChoiceAllowed: "Engedélyezve",
+  adChoiceDenied: "Elutasítva",
+  adChoiceUnknown: "Ismeretlen",
+  adPrivacyFailed: "A hirdetési beállítások most nem nyithatók meg",
 };

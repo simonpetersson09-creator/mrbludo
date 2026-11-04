@@ -315,4 +315,13 @@ export const ca: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Acceptada",
   inviteStatusDeclined: "Rebutjada",
   inviteStatusExpired: "Caducada",
+  firstPlayHint: "Comença aquí ↓",
+  adPrivacyChange: "Canvia les opcions d'anuncis",
+  adChoiceStorage: "Desar al dispositiu",
+  adChoiceProfile: "Anuncis personalitzats",
+  adChoiceUseProfile: "Utilitzar el perfil publicitari",
+  adChoiceAllowed: "Permès",
+  adChoiceDenied: "Denegat",
+  adChoiceUnknown: "Desconegut",
+  adPrivacyFailed: "No s'han pogut obrir les opcions d'anuncis ara",
 };

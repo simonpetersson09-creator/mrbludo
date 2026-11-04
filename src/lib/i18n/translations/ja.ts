@@ -332,4 +332,13 @@ export const ja: Record<TranslationKey, string> = {
   inviteStatusAccepted: "承諾",
   inviteStatusDeclined: "辞退",
   inviteStatusExpired: "期限切れ",
+  firstPlayHint: "ここから ↓",
+  adPrivacyChange: "広告の設定を変更",
+  adChoiceStorage: "端末への保存",
+  adChoiceProfile: "パーソナライズ広告",
+  adChoiceUseProfile: "広告プロフィールの使用",
+  adChoiceAllowed: "許可",
+  adChoiceDenied: "拒否",
+  adChoiceUnknown: "不明",
+  adPrivacyFailed: "今は広告の設定を開けませんでした",
 };

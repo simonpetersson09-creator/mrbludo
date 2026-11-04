@@ -315,4 +315,13 @@ export const sk: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Prijaté",
   inviteStatusDeclined: "Odmietnuté",
   inviteStatusExpired: "Vypršalo",
+  firstPlayHint: "Začni tu ↓",
+  adPrivacyChange: "Zmeniť voľby reklám",
+  adChoiceStorage: "Ukladanie v zariadení",
+  adChoiceProfile: "Personalizované reklamy",
+  adChoiceUseProfile: "Použitie reklamného profilu",
+  adChoiceAllowed: "Povolené",
+  adChoiceDenied: "Zamietnuté",
+  adChoiceUnknown: "Neznáme",
+  adPrivacyFailed: "Voľby reklám sa teraz nedajú otvoriť",
 };

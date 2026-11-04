@@ -332,4 +332,13 @@ export const th: Record<TranslationKey, string> = {
   inviteStatusAccepted: "ตอบรับแล้ว",
   inviteStatusDeclined: "ปฏิเสธแล้ว",
   inviteStatusExpired: "หมดอายุแล้ว",
+  firstPlayHint: "เริ่มที่นี่ ↓",
+  adPrivacyChange: "เปลี่ยนตัวเลือกโฆษณา",
+  adChoiceStorage: "จัดเก็บบนอุปกรณ์",
+  adChoiceProfile: "โฆษณาที่ปรับให้เหมาะกับคุณ",
+  adChoiceUseProfile: "ใช้โปรไฟล์โฆษณา",
+  adChoiceAllowed: "อนุญาต",
+  adChoiceDenied: "ปฏิเสธ",
+  adChoiceUnknown: "ไม่ทราบ",
+  adPrivacyFailed: "ไม่สามารถเปิดตัวเลือกโฆษณาได้ในขณะนี้",
 };

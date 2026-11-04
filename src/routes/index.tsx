@@ -16,6 +16,9 @@ import { getRankedGames } from "@/lib/ads/local-stats";
 import { trackEvent } from "@/lib/ads/analytics";
 import { completeRatePrompt, requestAppReview, shouldShowRatePrompt, snoozeRatePrompt } from "@/lib/rate-app";
 import { RateAppPrompt } from "@/components/ludo/RateAppPrompt";
+import { claimPrompt, releasePrompt } from "@/lib/home-prompt";
+
+const FIRST_PLAY_KEY = "mrb-ludo:v1:first-play-hint-done";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -45,11 +48,18 @@ function HomePage() {
   const [showRate, setShowRate] = useState(false);
   useEffect(() => {
     if (!Capacitor.isNativePlatform() || !shouldShowRatePrompt(getRankedGames())) return;
-    const timer = setTimeout(() => setShowRate(true), 700);
-    return () => clearTimeout(timer);
+    // Only when no other question is on screen; otherwise it waits for the next visit.
+    const timer = setTimeout(() => { if (claimPrompt("rate")) setShowRate(true); }, 700);
+    return () => { clearTimeout(timer); releasePrompt("rate"); };
   }, []);
-  const rateNow = () => { setShowRate(false); completeRatePrompt(); trackEvent("rate_prompt_accepted"); void requestAppReview(); };
-  const rateLater = () => { setShowRate(false); snoozeRatePrompt(getRankedGames()); trackEvent("rate_prompt_later"); };
+  // Yatzy's "start here" hint before the very first finished game.
+  const [firstHint, setFirstHint] = useState(false);
+  useEffect(() => {
+    try { if (getRankedGames() === 0 && !localStorage.getItem(FIRST_PLAY_KEY)) setFirstHint(true); } catch { /* storage off */ }
+  }, []);
+  const doneFirstHint = () => { if (!firstHint) return; setFirstHint(false); try { localStorage.setItem(FIRST_PLAY_KEY, "1"); } catch { /* storage off */ } };
+  const rateNow = () => { setShowRate(false); releasePrompt("rate"); completeRatePrompt(); trackEvent("rate_prompt_accepted"); void requestAppReview(); };
+  const rateLater = () => { setShowRate(false); releasePrompt("rate"); snoozeRatePrompt(getRankedGames()); trackEvent("rate_prompt_later"); };
 
   useEffect(() => {
     const g = loadGame();
@@ -120,7 +130,8 @@ function HomePage() {
       </div>
       <div className="w-full">
       <div className="home-stack">
-        <button className="home-action font-display" aria-expanded={showQuick} onClick={() => setShowQuick((v) => !v)}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
+        {firstHint && <p role="note" className="-mb-1 text-center text-sm font-semibold text-gold">{t("firstPlayHint")}</p>}
+        <button className={`home-action font-display${firstHint ? " animate-pulse" : ""}`} aria-expanded={showQuick} onClick={() => { doneFirstHint(); setShowQuick((v) => !v); }}><span aria-hidden="true" className="home-action-icon">🎲</span><span>{t("quickMatchBot")}</span></button>
         {showQuick && (
           <div className="space-y-3 overflow-hidden rounded-2xl border border-primary/30 bg-card/80 p-3">
             <div className="flex items-start gap-2">

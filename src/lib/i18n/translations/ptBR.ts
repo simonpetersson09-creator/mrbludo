@@ -315,4 +315,13 @@ export const ptBR: Record<TranslationKey, string> = {
   inviteStatusAccepted: "Aceito",
   inviteStatusDeclined: "Recusado",
   inviteStatusExpired: "Expirado",
+  firstPlayHint: "Comece aqui ↓",
+  adPrivacyChange: "Alterar escolhas de anúncios",
+  adChoiceStorage: "Salvar no dispositivo",
+  adChoiceProfile: "Anúncios personalizados",
+  adChoiceUseProfile: "Usar perfil de anúncios",
+  adChoiceAllowed: "Permitido",
+  adChoiceDenied: "Negado",
+  adChoiceUnknown: "Desconhecido",
+  adPrivacyFailed: "Não foi possível abrir as escolhas de anúncios agora",
 };

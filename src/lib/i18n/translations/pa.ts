@@ -332,4 +332,13 @@ export const pa: Record<TranslationKey, string> = {
   inviteStatusAccepted: "ਸਵੀਕਾਰ",
   inviteStatusDeclined: "ਇਨਕਾਰ",
   inviteStatusExpired: "ਮਿਆਦ ਖ਼ਤਮ",
+  firstPlayHint: "ਇੱਥੋਂ ਸ਼ੁਰੂ ਕਰੋ ↓",
+  adPrivacyChange: "ਇਸ਼ਤਿਹਾਰ ਚੋਣਾਂ ਬਦਲੋ",
+  adChoiceStorage: "ਡਿਵਾਈਸ 'ਤੇ ਸਟੋਰ ਕਰਨਾ",
+  adChoiceProfile: "ਨਿੱਜੀ ਇਸ਼ਤਿਹਾਰ",
+  adChoiceUseProfile: "ਇਸ਼ਤਿਹਾਰ ਪ੍ਰੋਫਾਈਲ ਵਰਤਣਾ",
+  adChoiceAllowed: "ਇਜਾਜ਼ਤ",
+  adChoiceDenied: "ਇਨਕਾਰ",
+  adChoiceUnknown: "ਅਣਜਾਣ",
+  adPrivacyFailed: "ਹੁਣੇ ਇਸ਼ਤਿਹਾਰ ਚੋਣਾਂ ਨਹੀਂ ਖੁੱਲ੍ਹ ਸਕੀਆਂ",
 };
