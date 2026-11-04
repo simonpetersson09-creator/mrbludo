@@ -196,7 +196,6 @@ export const pl: Record<TranslationKey, string> = {
   errNotYourTurn: "To nie twoja tura",
   errBadPhase: "Niewłaściwy etap tury",
   errIllegal: "Nieprawidłowy ruch",
-  homeStatsTitle: "Twoje statystyki – cały okres",
   statGamesShort: "Rozegrane",
   statKnockedOut: "Zbite",
   countryRankLabel: "Twoje miejsce",

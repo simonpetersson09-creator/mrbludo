@@ -196,7 +196,6 @@ export const sk: Record<TranslationKey, string> = {
   errNotYourTurn: "Nie si na ťahu",
   errBadPhase: "Nesprávna fáza ťahu",
   errIllegal: "Neplatný ťah",
-  homeStatsTitle: "Tvoje čísla – za celý čas",
   statGamesShort: "Odohrané",
   statKnockedOut: "Vyhodené",
   countryRankLabel: "Tvoje poradie",

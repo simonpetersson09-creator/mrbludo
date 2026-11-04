@@ -213,7 +213,6 @@ export const ta: Record<TranslationKey, string> = {
   errNotYourTurn: "இது உன் சுற்று அல்ல",
   errBadPhase: "சுற்றின் தவறான கட்டம்",
   errIllegal: "தவறான நகர்வு",
-  homeStatsTitle: "உங்கள் புள்ளிவிவரங்கள் – இதுவரை",
   statGamesShort: "ஆடியவை",
   statKnockedOut: "வெட்டியவை",
   countryRankLabel: "உங்கள் தரம்",

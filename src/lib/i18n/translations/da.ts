@@ -213,7 +213,6 @@ export const da: Record<TranslationKey, string> = {
   errNotYourTurn: "Det er ikke din tur",
   errBadPhase: "Forkert trin i turen",
   errIllegal: "Ugyldigt træk",
-  homeStatsTitle: "Dine tal – alle tider",
   statGamesShort: "Spillede",
   statKnockedOut: "Slået ud",
   countryRankLabel: "Din placering",

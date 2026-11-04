@@ -213,7 +213,6 @@ export const mr: Record<TranslationKey, string> = {
   errNotYourTurn: "तुमची फेरी नाही",
   errBadPhase: "फेरीतील चुकीची पायरी",
   errIllegal: "अवैध चाल",
-  homeStatsTitle: "तुझे आकडे – आजवरचे",
   statGamesShort: "खेळलेले",
   statKnockedOut: "मारलेल्या",
   countryRankLabel: "तुझा क्रमांक",

@@ -13,6 +13,7 @@ import { CHUNK_RELOAD_KEY, clearChunkReloadTries, isStaleChunkError, isStaleNoti
 import { useEffect, useState, type ReactNode } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { AndroidBackButton } from "@/components/AndroidBackButton";
+import { SwipeBack } from "@/components/SwipeBack";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/lib/auth/client";
 import { ensurePlayerSession } from "@/lib/auth/player";
@@ -187,6 +188,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <AndroidBackButton />
+      <SwipeBack />
       <Outlet />
       {stale && (
         <div role="alert" className="fixed inset-x-0 top-0 z-50 flex items-center justify-center gap-3 bg-card/95 px-4 py-2 text-xs text-card-foreground shadow-md">

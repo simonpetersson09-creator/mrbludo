@@ -213,7 +213,6 @@ export const bn: Record<TranslationKey, string> = {
   errNotYourTurn: "আপনার পালা নয়",
   errBadPhase: "পালার ভুল ধাপ",
   errIllegal: "অবৈধ চাল",
-  homeStatsTitle: "তোমার পরিসংখ্যান – শুরু থেকে এ পর্যন্ত",
   statGamesShort: "খেলেছ",
   statKnockedOut: "কাটা",
   countryRankLabel: "তোমার র‍্যাঙ্ক",

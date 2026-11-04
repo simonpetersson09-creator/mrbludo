@@ -196,7 +196,6 @@ export const ptBR: Record<TranslationKey, string> = {
   errNotYourTurn: "Não é sua vez",
   errBadPhase: "Etapa incorreta da vez",
   errIllegal: "Jogada inválida",
-  homeStatsTitle: "Seus números – desde o início",
   statGamesShort: "Partidas",
   statKnockedOut: "Capturadas",
   countryRankLabel: "Sua posição",

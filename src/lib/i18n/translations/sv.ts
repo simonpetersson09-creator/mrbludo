@@ -226,7 +226,6 @@ export const sv = {
   errNotYourTurn: "Det är inte din tur",
   errBadPhase: "Fel steg i turen",
   errIllegal: "Ogiltigt drag",
-  homeStatsTitle: "Dina siffror – all time",
   statGamesShort: "Spelade",
   statKnockedOut: "Utslagna",
   countryRankLabel: "Din placering",

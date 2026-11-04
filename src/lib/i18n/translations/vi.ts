@@ -213,7 +213,6 @@ export const vi: Record<TranslationKey, string> = {
   errNotYourTurn: "Chưa đến lượt bạn",
   errBadPhase: "Sai bước trong lượt",
   errIllegal: "Nước đi không hợp lệ",
-  homeStatsTitle: "Thống kê của bạn – từ trước đến nay",
   statGamesShort: "Đã chơi",
   statKnockedOut: "Hạ gục",
   countryRankLabel: "Hạng của bạn",

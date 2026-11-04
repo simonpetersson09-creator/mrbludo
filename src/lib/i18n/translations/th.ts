@@ -213,7 +213,6 @@ export const th: Record<TranslationKey, string> = {
   errNotYourTurn: "ยังไม่ถึงเทิร์นของคุณ",
   errBadPhase: "ขั้นตอนเทิร์นไม่ถูกต้อง",
   errIllegal: "การเดินไม่ถูกต้อง",
-  homeStatsTitle: "สถิติของคุณ – ตั้งแต่เริ่มเล่น",
   statGamesShort: "เล่นแล้ว",
   statKnockedOut: "น็อกเอาต์",
   countryRankLabel: "อันดับคุณ",

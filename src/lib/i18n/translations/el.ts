@@ -196,7 +196,6 @@ export const el: Record<TranslationKey, string> = {
   errNotYourTurn: "Δεν είναι η σειρά σου",
   errBadPhase: "Λάθος στάδιο της σειράς",
   errIllegal: "Μη έγκυρη κίνηση",
-  homeStatsTitle: "Τα στατιστικά σου – συνολικά",
   statGamesShort: "Παιχνίδια",
   statKnockedOut: "Αποκλεισμένα",
   countryRankLabel: "Η θέση σου",

@@ -196,7 +196,6 @@ export const nl: Record<TranslationKey, string> = {
   errNotYourTurn: "Je bent niet aan de beurt",
   errBadPhase: "Verkeerde fase van de beurt",
   errIllegal: "Ongeldige zet",
-  homeStatsTitle: "Jouw cijfers – sinds het begin",
   statGamesShort: "Gespeeld",
   statKnockedOut: "Geslagen",
   countryRankLabel: "Jouw rang",

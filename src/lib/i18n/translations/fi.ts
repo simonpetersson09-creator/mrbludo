@@ -196,7 +196,6 @@ export const fi: Record<TranslationKey, string> = {
   errNotYourTurn: "Ei ole sinun vuorosi",
   errBadPhase: "Väärä vuoron vaihe",
   errIllegal: "Virheellinen siirto",
-  homeStatsTitle: "Omat tilastosi – koko ajalta",
   statGamesShort: "Pelatut",
   statKnockedOut: "Syödyt",
   countryRankLabel: "Sijoituksesi",

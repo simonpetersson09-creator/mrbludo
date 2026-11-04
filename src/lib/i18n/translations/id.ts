@@ -213,7 +213,6 @@ export const id: Record<TranslationKey, string> = {
   errNotYourTurn: "Bukan giliranmu",
   errBadPhase: "Langkah giliran salah",
   errIllegal: "Langkah tidak valid",
-  homeStatsTitle: "Statistikmu – sepanjang waktu",
   statGamesShort: "Dimainkan",
   statKnockedOut: "Dimakan",
   countryRankLabel: "Peringkatmu",

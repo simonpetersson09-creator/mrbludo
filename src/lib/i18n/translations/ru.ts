@@ -213,7 +213,6 @@ export const ru: Record<TranslationKey, string> = {
   errNotYourTurn: "Сейчас не твой ход",
   errBadPhase: "Неверный шаг в ходе",
   errIllegal: "Недопустимый ход",
-  homeStatsTitle: "Твои показатели — за всё время",
   statGamesShort: "Сыграно",
   statKnockedOut: "Сбито",
   countryRankLabel: "Твоё место",

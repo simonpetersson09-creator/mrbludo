@@ -196,7 +196,6 @@ export const it: Record<TranslationKey, string> = {
   errNotYourTurn: "Non è il tuo turno",
   errBadPhase: "Fase del turno errata",
   errIllegal: "Mossa non valida",
-  homeStatsTitle: "I tuoi numeri – da sempre",
   statGamesShort: "Giocate",
   statKnockedOut: "Mangiate",
   countryRankLabel: "Il tuo rank",
