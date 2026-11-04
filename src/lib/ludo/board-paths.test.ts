@@ -42,7 +42,7 @@ describe("each color's full path", () => {
       const cells: [number, number][] = [];
       for (let p = 0; p <= GOAL - 1; p++) {
         const [x, y] = pieceCenter(c, p, 0);
-        cells.push([x - 0.5, y - 0.5]);
+        cells.push([Math.round(x - 0.5), Math.round(y - 0.5)]);
       }
       // Track part: starts at own start square and covers 51 distinct squares in track order.
       for (let p = 0; p <= LAST_TRACK; p++) expect(absSquare(c, p)).toBe((c * 13 + p) % 52);
@@ -55,6 +55,10 @@ describe("each color's full path", () => {
       for (let i = 0; i + 1 < cells.length; i++) expect(adjacent(cells[i], cells[i + 1])).toBe(true);
     });
   }
+  it("pieces on stretched Classic bend squares sit nearer the center", () => {
+    // Red progress 4 is square (5,6), the bend square before the corner.
+    expect(pieceCenter(0, 4, 0)).toEqual([5.71, 6.5]);
+  });
 });
 
 describe("from yard to goal", () => {

@@ -101,7 +101,14 @@ export function pieceCenter(color: Color, progress: number, piece: number, varia
   if (progress === path.goal) return goalSpot(color, piece, variant);
   if (progress <= path.lastTrack) {
     const [c, r] = trackOf(variant)[(startSquare(color, variant) + progress) % path.trackLen];
-    return [c + cellSizeOf(variant) / 2, r + cellSizeOf(variant) / 2];
+    const x = c + cellSizeOf(variant) / 2, y = r + cellSizeOf(variant) / 2;
+    if (variant !== "fia") {
+      // Classic bend squares are drawn stretched toward the center; sit pieces on the drawn shape's middle.
+      const dx = x - 7.5, dy = y - 7.5, BEND_SHIFT = 0.21;
+      if (Math.abs(dx) === 2 && Math.abs(dy) === 1) return [x - Math.sign(dx) * BEND_SHIFT, y];
+      if (Math.abs(dx) === 1 && Math.abs(dy) === 2) return [x, y - Math.sign(dy) * BEND_SHIFT];
+    }
+    return [x, y];
   }
   const [c, r] = homeColumnOf(variant)[color][progress - path.lastTrack - 1];
   return [c + cellSizeOf(variant) / 2, r + cellSizeOf(variant) / 2];
