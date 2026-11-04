@@ -141,18 +141,22 @@ function OnlineLobby() {
                 <p className="text-[11px] leading-snug text-muted-foreground">{t("lobbyJoinHint")}</p>
               </div>
             </div>
-            <div className="flex gap-1.5">
-              <input aria-label={t("matchCode")} value={code} maxLength={6} placeholder="ABC123" autoCapitalize="characters"
-                onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
-                className="min-w-0 flex-1 rounded-lg border border-border/50 bg-secondary px-3 py-1.5 text-center font-display text-base font-bold uppercase tracking-[0.25em] text-foreground outline-none transition-all placeholder:text-muted-foreground/40 focus:border-gold/60 focus:ring-1 focus:ring-gold/40" />
-              <button type="button" disabled={busy} onClick={() => setScannerOpen(true)}
-                className="flex flex-col items-center justify-center gap-0.5 rounded-lg border border-border/50 bg-secondary px-2.5 py-1.5 text-foreground transition active:scale-95 disabled:opacity-50">
-                <ScanLine className="h-4 w-4 text-gold" />
-                <span className="text-[10px] font-semibold text-muted-foreground">{t("lobbyScanShort")}</span>
-              </button>
+            <div>
+              <label htmlFor="join-code" className="mb-1 block text-[11px] font-semibold text-foreground">{t("matchCode")}</label>
+              <div className="flex gap-1.5">
+                <input id="join-code" aria-label={t("matchCode")} value={code} maxLength={6} placeholder="ABC123" autoCapitalize="characters"
+                  onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
+                  className="min-w-0 flex-1 rounded-xl border-2 border-gold/50 bg-background px-3 py-2.5 text-center font-display text-lg font-bold uppercase tracking-[0.3em] text-foreground outline-none transition-all placeholder:text-muted-foreground/50 focus:border-gold focus:ring-2 focus:ring-gold/40" />
+                <button type="button" disabled={busy} onClick={() => setScannerOpen(true)}
+                  className="flex flex-col items-center justify-center gap-0.5 rounded-xl border-2 border-gold/50 bg-background px-3 py-2 text-foreground transition active:scale-95 disabled:opacity-50">
+                  <ScanLine className="h-5 w-5 text-gold" />
+                  <span className="text-[10px] font-semibold text-muted-foreground">{t("lobbyScanShort")}</span>
+                </button>
+              </div>
             </div>
             <button type="submit" disabled={busy || code.length !== 6}
-              className="min-h-11 w-full rounded-xl bg-gold px-3 font-display text-sm font-bold text-background shadow-lg transition active:scale-[0.97] disabled:opacity-50">
+              className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-gold px-3 font-display text-sm font-bold text-background shadow-lg transition active:scale-[0.97] disabled:bg-secondary disabled:text-muted-foreground disabled:shadow-none">
+              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <KeyRound className="h-4 w-4" />}
               {t("join")}
             </button>
           </form>
