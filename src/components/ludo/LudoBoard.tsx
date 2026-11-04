@@ -34,12 +34,10 @@ interface Props {
   onPick: (piece: number, walkOut?: boolean) => void;
   captureAt?: [number, number] | null;
   seats?: (SeatInfo | undefined)[];
-  /** Preview-only: alternative Classic center renderings. Default "current". */
-  centerStyle?: "current" | "hub" | "quarters";
 }
 
 
-function LudoBoardImpl({ state, legal, onPick, captureAt, seats, centerStyle = "current" }: Props) {
+function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
   const { t } = useTranslation();
   const boardId = useId().replace(/:/g, "");
   const previousState = useRef(state);
@@ -296,26 +294,6 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats, centerStyle = "
         <polygon points={Array.from({ length: 16 }, (_, i) => { const a = (i * Math.PI) / 8 - Math.PI / 2; const r = (i % 2 ? 0.17 : 0.31) * cell; return `${7.5 + Math.cos(a) * r},${7.5 + Math.sin(a) * r}`; }).join(" ")} fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.035" strokeLinejoin="round" />
         <circle cx="7.5" cy="7.5" r={0.15 * cell} fill={`url(#${boardId}-gold)`} stroke="var(--board-gold-ink)" strokeOpacity="0.5" strokeWidth="0.025" />
         <Trophy x={7.5 - 0.1 * cell} y={7.5 - 0.1 * cell} width={0.2 * cell} height={0.2 * cell} color="var(--board-gold-ink)" strokeWidth={2.4} />
-      </> : centerStyle === "hub" ? <>
-      {/* Traditional hub: the four lanes meet in colored triangles at the center point. */}
-      <rect x="6" y="6" width="3" height="3" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
-      <polygon points="6,6 6,9 7.5,7.5" fill={BOARD_FILL[0]} />
-      <polygon points="6,6 9,6 7.5,7.5" fill={BOARD_FILL[1]} />
-      <polygon points="9,6 9,9 7.5,7.5" fill={BOARD_FILL[2]} />
-      <polygon points="6,9 9,9 7.5,7.5" fill={BOARD_FILL[3]} />
-      <rect x="6" y="6" width="3" height="3" fill="none" stroke="var(--board-grid)" strokeWidth="0.026" />
-      <circle cx="7.5" cy="7.5" r="0.62" fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.06" />
-      <Trophy x={7.31} y={7.31} width={0.38} height={0.38} color="var(--board-gold-ink)" strokeWidth={2.2} />
-      </> : centerStyle === "quarters" ? <>
-      {/* Quartered hub: four colored squares meet in the middle like a pinwheel. */}
-      <rect x="6" y="6" width="3" height="3" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
-      <rect x="6" y="6" width="1.5" height="1.5" fill={BOARD_FILL[0]} />
-      <rect x="7.5" y="6" width="1.5" height="1.5" fill={BOARD_FILL[1]} />
-      <rect x="7.5" y="7.5" width="1.5" height="1.5" fill={BOARD_FILL[2]} />
-      <rect x="6" y="7.5" width="1.5" height="1.5" fill={BOARD_FILL[3]} />
-      <rect x="6" y="6" width="3" height="3" fill="none" stroke="var(--board-grid)" strokeWidth="0.026" />
-      <circle cx="7.5" cy="7.5" r="0.5" fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.05" />
-      <Trophy x={7.35} y={7.35} width={0.3} height={0.3} color="var(--board-gold-ink)" strokeWidth={2.2} />
       </> : <>
       <rect x="6" y="6" width="3" height="3" fill="var(--board)" stroke="var(--board-grid)" strokeWidth="0.026" />
       <circle cx="7.5" cy="7.5" r="1.22" fill={`url(#${boardId}-checker)`} stroke="var(--board-ink)" strokeWidth="0.05" />
