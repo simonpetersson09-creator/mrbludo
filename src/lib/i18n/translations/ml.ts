@@ -110,8 +110,7 @@ export const ml: Record<TranslationKey, string> = {
   continueGoogle: "Google ഉപയോഗിച്ച് തുടരൂ",
   orEmail: "അല്ലെങ്കിൽ ഇമെയിൽ വഴി",
   playerName: "കളിക്കാരന്റെ പേര്",
-  email: "ഇമെയിൽ",
-  password: "പാസ്‌വേർഡ്",
+  pinCode: "PIN",
   noAccount: "അക്കൗണ്ടില്ലേ? ഉണ്ടാക്കൂ",
   haveAccount: "അക്കൗണ്ടുണ്ടോ? ലോഗിൻ ചെയ്യൂ",
   checkEmail: "നിന്റെ ഇമെയിൽ പരിശോധിച്ച് അക്കൗണ്ട് സ്ഥിരീകരിക്കൂ",
@@ -123,7 +122,6 @@ export const ml: Record<TranslationKey, string> = {
   friends: "സുഹൃത്തുക്കൾ",
   profile: "പ്രൊഫൈൽ",
   admin: "അഡ്മിൻ",
-  signOut: "ലോഗ് ഔട്ട്",
 
   waitingRoom: "കാത്തിരിപ്പ് മുറി",
   privateMatch: "സ്വകാര്യ മത്സരം",

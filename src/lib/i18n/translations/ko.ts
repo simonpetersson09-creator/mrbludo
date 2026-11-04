@@ -110,8 +110,7 @@ export const ko: Record<TranslationKey, string> = {
   continueGoogle: "Google로 계속",
   orEmail: "또는 이메일로",
   playerName: "플레이어 이름",
-  email: "이메일",
-  password: "비밀번호",
+  pinCode: "PIN",
   noAccount: "계정이 없나요? 만들기",
   haveAccount: "계정이 있나요? 로그인",
   checkEmail: "이메일을 확인하고 계정을 인증하세요",
@@ -123,7 +122,6 @@ export const ko: Record<TranslationKey, string> = {
   friends: "친구",
   profile: "프로필",
   admin: "관리",
-  signOut: "로그아웃",
 
   waitingRoom: "대기실",
   privateMatch: "비공개 경기",

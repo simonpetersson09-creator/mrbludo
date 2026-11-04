@@ -110,8 +110,7 @@ export const en: Record<TranslationKey, string> = {
   continueGoogle: "Continue with Google",
   orEmail: "or with email",
   playerName: "Player name",
-  email: "Email",
-  password: "Password",
+  pinCode: "PIN",
   noAccount: "No account? Create one",
   haveAccount: "Have an account? Sign in",
   checkEmail: "Check your email and confirm your account",
@@ -123,7 +122,6 @@ export const en: Record<TranslationKey, string> = {
   friends: "Friends",
   profile: "Profile",
   admin: "Admin",
-  signOut: "Sign out",
 
   waitingRoom: "Waiting room",
   privateMatch: "Private match",

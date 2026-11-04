@@ -110,8 +110,7 @@ export const or: Record<TranslationKey, string> = {
   continueGoogle: "Google ସହ ଜାରି ରଖନ୍ତୁ",
   orEmail: "କିମ୍ବା ଇମେଲ୍ ଦ୍ୱାରା",
   playerName: "ଖେଳାଳିଙ୍କ ନାମ",
-  email: "ଇମେଲ୍",
-  password: "ପାସୱାର୍ଡ",
+  pinCode: "PIN",
   noAccount: "ଆକାଉଣ୍ଟ ନାହିଁ? ତିଆରି କରନ୍ତୁ",
   haveAccount: "ଆକାଉଣ୍ଟ ଅଛି? ଲଗ୍ ଇନ୍ କରନ୍ତୁ",
   checkEmail: "ତୁମର ଇମେଲ୍ ଦେଖ ଏବଂ ଆକାଉଣ୍ଟ ନିଶ୍ଚିତ କର",
@@ -123,7 +122,6 @@ export const or: Record<TranslationKey, string> = {
   friends: "ବନ୍ଧୁ",
   profile: "ପ୍ରୋଫାଇଲ୍",
   admin: "ଆଡମିନ୍",
-  signOut: "ଲଗ୍ ଆଉଟ୍",
 
   waitingRoom: "ଅପେକ୍ଷା କକ୍ଷ",
   privateMatch: "ବ୍ୟକ୍ତିଗତ ମ୍ୟାଚ୍",

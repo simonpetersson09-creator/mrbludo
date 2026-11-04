@@ -110,8 +110,7 @@ export const kn: Record<TranslationKey, string> = {
   continueGoogle: "Google ನೊಂದಿಗೆ ಮುಂದುವರಿಸಿ",
   orEmail: "ಅಥವಾ ಇಮೇಲ್ ಮೂಲಕ",
   playerName: "ಆಟಗಾರರ ಹೆಸರು",
-  email: "ಇಮೇಲ್",
-  password: "ಪಾಸ್‌ವರ್ಡ್",
+  pinCode: "PIN",
   noAccount: "ಖಾತೆ ಇಲ್ಲವೇ? ರಚಿಸಿ",
   haveAccount: "ಖಾತೆ ಇದೆಯೇ? ಲಾಗ್ ಇನ್ ಮಾಡಿ",
   checkEmail: "ನಿಮ್ಮ ಇಮೇಲ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಖಾತೆ ದೃಢೀಕರಿಸಿ",
@@ -123,7 +122,6 @@ export const kn: Record<TranslationKey, string> = {
   friends: "ಸ್ನೇಹಿತರು",
   profile: "ಪ್ರೊಫೈಲ್",
   admin: "ಅಡ್ಮಿನ್",
-  signOut: "ಲಾಗ್ ಔಟ್",
 
   waitingRoom: "ಕಾಯುವ ಕೊಠಡಿ",
   privateMatch: "ಖಾಸಗಿ ಪಂದ್ಯ",

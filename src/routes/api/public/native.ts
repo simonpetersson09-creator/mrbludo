@@ -57,6 +57,7 @@ export const Route = createFileRoute("/api/public/native")({ server: { handlers:
         case "getLeaderboard": return reply(await actions.getLeaderboardAction({ data: inputs.getLeaderboardInput(body.data as Parameters<typeof inputs.getLeaderboardInput>[0]), context }));
         case "logEvent": return reply(await actions.logEventAction({ data: inputs.logEventInput(body.data as Parameters<typeof inputs.logEventInput>[0]), context }));
         case "adminOverview": return reply(await actions.adminOverviewAction({ context }));
+        case "adminPinLogin": return reply(await actions.adminPinLoginAction({ data: inputs.adminPinInput(body.data as Parameters<typeof inputs.adminPinInput>[0]), context }));
         default: return reply({ error: "err:bad_action" }, 400);
       }
     } catch (error) {

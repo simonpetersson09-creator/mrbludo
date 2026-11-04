@@ -110,8 +110,7 @@ export const th: Record<TranslationKey, string> = {
   continueGoogle: "ดำเนินการต่อด้วย Google",
   orEmail: "หรือด้วยอีเมล",
   playerName: "ชื่อผู้เล่น",
-  email: "อีเมล",
-  password: "รหัสผ่าน",
+  pinCode: "PIN",
   noAccount: "ยังไม่มีบัญชี? สร้างเลย",
   haveAccount: "มีบัญชีแล้ว? เข้าสู่ระบบ",
   checkEmail: "ตรวจสอบอีเมลและยืนยันบัญชีของคุณ",
@@ -123,7 +122,6 @@ export const th: Record<TranslationKey, string> = {
   friends: "เพื่อน",
   profile: "โปรไฟล์",
   admin: "ผู้ดูแล",
-  signOut: "ออกจากระบบ",
 
   waitingRoom: "ห้องรอ",
   privateMatch: "แมตช์ส่วนตัว",

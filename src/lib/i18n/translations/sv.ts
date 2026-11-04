@@ -116,8 +116,7 @@ export const sv = {
   continueGoogle: "Fortsätt med Google",
   orEmail: "eller med e-post",
   playerName: "Spelarnamn",
-  email: "E-post",
-  password: "Lösenord",
+  pinCode: "PIN",
   noAccount: "Inget konto? Skapa ett",
   haveAccount: "Har du konto? Logga in",
   checkEmail: "Kolla din e-post och bekräfta kontot",
@@ -130,7 +129,6 @@ export const sv = {
   friends: "Vänner",
   profile: "Profil",
   admin: "Admin",
-  signOut: "Logga ut",
 
   // Väntrum
   waitingRoom: "Väntrum",

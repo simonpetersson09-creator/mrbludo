@@ -110,8 +110,7 @@ export const vi: Record<TranslationKey, string> = {
   continueGoogle: "Tiếp tục với Google",
   orEmail: "hoặc bằng email",
   playerName: "Tên người chơi",
-  email: "Email",
-  password: "Mật khẩu",
+  pinCode: "PIN",
   noAccount: "Chưa có tài khoản? Tạo ngay",
   haveAccount: "Đã có tài khoản? Đăng nhập",
   checkEmail: "Kiểm tra email và xác nhận tài khoản",
@@ -123,7 +122,6 @@ export const vi: Record<TranslationKey, string> = {
   friends: "Bạn bè",
   profile: "Hồ sơ",
   admin: "Quản trị",
-  signOut: "Đăng xuất",
 
   waitingRoom: "Phòng chờ",
   privateMatch: "Trận riêng tư",

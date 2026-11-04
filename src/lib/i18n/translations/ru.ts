@@ -110,8 +110,7 @@ export const ru: Record<TranslationKey, string> = {
   continueGoogle: "Продолжить с Google",
   orEmail: "или по e-mail",
   playerName: "Имя игрока",
-  email: "E-mail",
-  password: "Пароль",
+  pinCode: "PIN",
   noAccount: "Нет аккаунта? Создай",
   haveAccount: "Есть аккаунт? Войди",
   checkEmail: "Проверь почту и подтверди аккаунт",
@@ -123,7 +122,6 @@ export const ru: Record<TranslationKey, string> = {
   friends: "Друзья",
   profile: "Профиль",
   admin: "Админ",
-  signOut: "Выйти",
 
   waitingRoom: "Комната ожидания",
   privateMatch: "Приватный матч",

@@ -110,8 +110,7 @@ export const bn: Record<TranslationKey, string> = {
   continueGoogle: "Google দিয়ে চালিয়ে যান",
   orEmail: "অথবা ইমেল দিয়ে",
   playerName: "খেলোয়াড়ের নাম",
-  email: "ইমেল",
-  password: "পাসওয়ার্ড",
+  pinCode: "PIN",
   noAccount: "অ্যাকাউন্ট নেই? তৈরি করুন",
   haveAccount: "অ্যাকাউন্ট আছে? লগ ইন করুন",
   checkEmail: "আপনার ইমেল দেখুন এবং অ্যাকাউন্ট নিশ্চিত করুন",
@@ -123,7 +122,6 @@ export const bn: Record<TranslationKey, string> = {
   friends: "বন্ধু",
   profile: "প্রোফাইল",
   admin: "অ্যাডমিন",
-  signOut: "লগ আউট",
 
   waitingRoom: "অপেক্ষার কক্ষ",
   privateMatch: "ব্যক্তিগত ম্যাচ",

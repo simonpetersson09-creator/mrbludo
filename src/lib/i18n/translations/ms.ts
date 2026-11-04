@@ -110,8 +110,7 @@ export const ms: Record<TranslationKey, string> = {
   continueGoogle: "Teruskan dengan Google",
   orEmail: "atau dengan e-mel",
   playerName: "Nama pemain",
-  email: "E-mel",
-  password: "Kata laluan",
+  pinCode: "PIN",
   noAccount: "Tiada akaun? Cipta satu",
   haveAccount: "Ada akaun? Log masuk",
   checkEmail: "Semak e-mel anda dan sahkan akaun",
@@ -123,7 +122,6 @@ export const ms: Record<TranslationKey, string> = {
   friends: "Rakan",
   profile: "Profil",
   admin: "Pentadbir",
-  signOut: "Log keluar",
 
   waitingRoom: "Bilik menunggu",
   privateMatch: "Perlawanan peribadi",

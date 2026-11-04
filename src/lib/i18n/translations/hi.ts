@@ -110,8 +110,7 @@ export const hi: Record<TranslationKey, string> = {
   continueGoogle: "Google से जारी रखें",
   orEmail: "या ईमेल से",
   playerName: "खिलाड़ी का नाम",
-  email: "ईमेल",
-  password: "पासवर्ड",
+  pinCode: "PIN",
   noAccount: "खाता नहीं? बनाएं",
   haveAccount: "खाता है? लॉग इन करें",
   checkEmail: "अपना ईमेल देखें और खाता पुष्ट करें",
@@ -123,7 +122,6 @@ export const hi: Record<TranslationKey, string> = {
   friends: "दोस्त",
   profile: "प्रोफ़ाइल",
   admin: "एडमिन",
-  signOut: "लॉग आउट",
 
   waitingRoom: "प्रतीक्षा कक्ष",
   privateMatch: "निजी मैच",

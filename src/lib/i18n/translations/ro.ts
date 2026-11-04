@@ -110,8 +110,7 @@ export const ro: Record<TranslationKey, string> = {
   continueGoogle: "Continuă cu Google",
   orEmail: "sau cu e-mail",
   playerName: "Nume de jucător",
-  email: "E-mail",
-  password: "Parolă",
+  pinCode: "PIN",
   noAccount: "Fără cont? Creează unul",
   haveAccount: "Ai cont? Conectează-te",
   checkEmail: "Verifică-ți e-mailul și confirmă contul",
@@ -123,7 +122,6 @@ export const ro: Record<TranslationKey, string> = {
   friends: "Prieteni",
   profile: "Profil",
   admin: "Admin",
-  signOut: "Deconectează-te",
 
   waitingRoom: "Sală de așteptare",
   privateMatch: "Meci privat",

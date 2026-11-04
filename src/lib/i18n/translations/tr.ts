@@ -110,8 +110,7 @@ export const tr: Record<TranslationKey, string> = {
   continueGoogle: "Google ile devam et",
   orEmail: "veya e-posta ile",
   playerName: "Oyuncu adı",
-  email: "E-posta",
-  password: "Şifre",
+  pinCode: "PIN",
   noAccount: "Hesabın yok mu? Oluştur",
   haveAccount: "Hesabın var mı? Giriş yap",
   checkEmail: "E-postanı kontrol et ve hesabı onayla",
@@ -123,7 +122,6 @@ export const tr: Record<TranslationKey, string> = {
   friends: "Arkadaşlar",
   profile: "Profil",
   admin: "Yönetici",
-  signOut: "Çıkış yap",
 
   waitingRoom: "Bekleme odası",
   privateMatch: "Özel maç",

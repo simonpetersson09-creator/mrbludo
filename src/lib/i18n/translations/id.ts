@@ -110,8 +110,7 @@ export const id: Record<TranslationKey, string> = {
   continueGoogle: "Lanjut dengan Google",
   orEmail: "atau dengan email",
   playerName: "Nama pemain",
-  email: "Email",
-  password: "Kata sandi",
+  pinCode: "PIN",
   noAccount: "Belum punya akun? Buat satu",
   haveAccount: "Sudah punya akun? Masuk",
   checkEmail: "Periksa emailmu dan konfirmasi akun",
@@ -123,7 +122,6 @@ export const id: Record<TranslationKey, string> = {
   friends: "Teman",
   profile: "Profil",
   admin: "Admin",
-  signOut: "Keluar",
 
   waitingRoom: "Ruang tunggu",
   privateMatch: "Pertandingan privat",

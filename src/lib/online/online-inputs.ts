@@ -62,3 +62,8 @@ export function isRealCountry(code: string): boolean {
     return !!name && name !== code && name !== "Unknown Region";
   } catch { return false; }
 }
+export const adminPinInput = (d: { pin: string }) => {
+  const pin = String(d?.pin ?? "").trim();
+  if (!/^\d{4,12}$/.test(pin)) throw new Error("err:forbidden");
+  return { pin };
+};

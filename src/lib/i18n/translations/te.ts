@@ -110,8 +110,7 @@ export const te: Record<TranslationKey, string> = {
   continueGoogle: "Googleతో కొనసాగించు",
   orEmail: "లేదా ఇమెయిల్‌తో",
   playerName: "ఆటగాడి పేరు",
-  email: "ఇమెయిల్",
-  password: "పాస్‌వర్డ్",
+  pinCode: "PIN",
   noAccount: "ఖాతా లేదా? సృష్టించు",
   haveAccount: "ఖాతా ఉందా? లాగిన్ అవ్వు",
   checkEmail: "నీ ఇమెయిల్ చూసి ఖాతాను నిర్ధారించు",
@@ -123,7 +122,6 @@ export const te: Record<TranslationKey, string> = {
   friends: "స్నేహితులు",
   profile: "ప్రొఫైల్",
   admin: "అడ్మిన్",
-  signOut: "లాగ్ అవుట్",
 
   waitingRoom: "వేచి ఉండే గది",
   privateMatch: "ప్రైవేట్ మ్యాచ్",

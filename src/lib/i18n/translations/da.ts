@@ -110,8 +110,7 @@ export const da: Record<TranslationKey, string> = {
   continueGoogle: "Fortsæt med Google",
   orEmail: "eller med e-mail",
   playerName: "Spillernavn",
-  email: "E-mail",
-  password: "Adgangskode",
+  pinCode: "PIN",
   noAccount: "Ingen konto? Opret en",
   haveAccount: "Har du en konto? Log ind",
   checkEmail: "Tjek din e-mail og bekræft kontoen",
@@ -123,7 +122,6 @@ export const da: Record<TranslationKey, string> = {
   friends: "Venner",
   profile: "Profil",
   admin: "Admin",
-  signOut: "Log ud",
 
   waitingRoom: "Venterum",
   privateMatch: "Privat kamp",

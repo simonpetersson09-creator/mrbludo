@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput, deleteDataInput } from "./online-inputs";
+import { updateProfileInput, createMatchInput, joinByCodeInput, quickMatchInput, startMatchInput, leaveMatchInput, actInput, heartbeatInput, sendFriendRequestInput, respondFriendInput, inviteFriendInput, respondInviteInput, getLeaderboardInput, logEventInput, setAvatarInput, getAvatarsInput, deleteDataInput, adminPinInput } from "./online-inputs";
 
 export const getMe = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { getMeAction } = await import("./online-actions");
@@ -125,4 +125,9 @@ export const deletePlayerData = createServerFn({ method: "POST" }).middleware([r
 export const getStatsBoards = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { getStatsBoardsAction } = await import("./online-actions");
   return getStatsBoardsAction({ context });
+});
+
+export const adminPinLogin = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(adminPinInput).handler(async ({ data, context }) => {
+  const { adminPinLoginAction } = await import("./online-actions");
+  return adminPinLoginAction({ data, context });
 });

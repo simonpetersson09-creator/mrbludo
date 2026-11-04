@@ -110,8 +110,7 @@ export const gu: Record<TranslationKey, string> = {
   continueGoogle: "Google સાથે ચાલુ રાખો",
   orEmail: "અથવા ઈમેલથી",
   playerName: "ખેલાડીનું નામ",
-  email: "ઈમેલ",
-  password: "પાસવર્ડ",
+  pinCode: "PIN",
   noAccount: "એકાઉન્ટ નથી? બનાવો",
   haveAccount: "એકાઉન્ટ છે? લોગ ઇન કરો",
   checkEmail: "તમારો ઈમેલ તપાસો અને એકાઉન્ટ કન્ફર્મ કરો",
@@ -123,7 +122,6 @@ export const gu: Record<TranslationKey, string> = {
   friends: "મિત્રો",
   profile: "પ્રોફાઇલ",
   admin: "એડમિન",
-  signOut: "લોગ આઉટ",
 
   waitingRoom: "પ્રતીક્ષા ખંડ",
   privateMatch: "ખાનગી મેચ",

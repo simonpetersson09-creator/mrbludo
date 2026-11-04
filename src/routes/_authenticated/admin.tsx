@@ -3,10 +3,6 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { adminOverview } from "@/lib/online/online.functions";
 import { useTranslation } from "@/lib/i18n";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/lib/auth/client";
-import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -25,8 +21,6 @@ export const Route = createFileRoute("/_authenticated/admin")({
 type Data = Awaited<ReturnType<typeof adminOverview>>;
 
 function AdminPage() {
-  const qc = useQueryClient();
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const [d, setD] = useState<Data | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -42,10 +36,6 @@ function AdminPage() {
         {err && <><p className="text-sm text-destructive">{t("noAdmin")}</p><Link to="/admin-login" className="home-action">{t("signIn")}</Link></>}
         {!d && !err && <p className="text-sm text-muted-foreground">{t("loading")}</p>}
         {d && (<>
-          <Button variant="outline" className="mb-3" onClick={async () => {
-            await qc.cancelQueries(); qc.clear(); await supabase.auth.signOut();
-            await navigate({ to: "/admin-login", replace: true });
-          }}>{t("signOut")}</Button>
           <div className="grid grid-cols-3 gap-[7px]">
             <Stat l={t("adminPlayers")} v={d.totals.players} />
             <Stat l={t("adminInMatch")} v={d.totals.activeNow} />

@@ -110,8 +110,7 @@ export const ja: Record<TranslationKey, string> = {
   continueGoogle: "Googleで続ける",
   orEmail: "またはメールで",
   playerName: "プレイヤー名",
-  email: "メール",
-  password: "パスワード",
+  pinCode: "PIN",
   noAccount: "アカウントがない？作成する",
   haveAccount: "アカウントをお持ちですか？ログイン",
   checkEmail: "メールを確認してアカウントを承認してください",
@@ -123,7 +122,6 @@ export const ja: Record<TranslationKey, string> = {
   friends: "フレンド",
   profile: "プロフィール",
   admin: "管理",
-  signOut: "ログアウト",
 
   waitingRoom: "待機室",
   privateMatch: "プライベート対局",

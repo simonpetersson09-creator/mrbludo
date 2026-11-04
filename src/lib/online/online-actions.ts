@@ -531,3 +531,33 @@ export const getStatsBoardsAction = async ({ context }: { context: OnlineContext
     ]);
     return { me: context.userId, weekly: weekly ?? [], countries: countries ?? [] };
   };
+
+async function sha256(s: string) { return new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s))); }
+/** Constant-time comparison of the two hashes, so timing reveals nothing about the PIN. */
+export async function pinMatches(input: string, expected: string) {
+  const [a, b] = await Promise.all([sha256(input), sha256(expected)]);
+  let diff = 0; for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+  return diff === 0;
+}
+/** Owner-only admin access: the right PIN (server secret ADMIN_PIN) makes the caller's own player identity an admin. Failed tries are limited per player and in total. */
+export const adminPinLoginAction = async ({ data, context }: { data: { pin: string }; context: OnlineContext }) => {
+  const expected = process.env['ADMIN_PIN'];
+  if (!expected) throw new Error("err:forbidden");
+  const db = await admin();
+  const since = new Date(Date.now() - 15 * 60_000).toISOString();
+  const [{ count: mine }, { count: all }] = await Promise.all([
+    db.from("app_events").select("id", { count: "exact", head: true }).eq("kind", "admin_pin_fail").eq("user_id", context.userId).gte("created_at", since),
+    db.from("app_events").select("id", { count: "exact", head: true }).eq("kind", "admin_pin_fail").gte("created_at", since),
+  ]);
+  if ((mine ?? 0) >= 5 || (all ?? 0) >= 30) throw new Error("err:rate_limited");
+  if (!(await pinMatches(data.pin, expected))) {
+    await logEventRow(db, { user_id: context.userId, kind: "admin_pin_fail" });
+    throw new Error("err:forbidden");
+  }
+  const { data: has } = await db.from("user_roles").select("id").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+  if (!has) {
+    const { error } = await db.from("user_roles").insert({ user_id: context.userId, role: "admin" });
+    if (error) throw new Error("err:forbidden");
+  }
+  return { ok: true };
+};

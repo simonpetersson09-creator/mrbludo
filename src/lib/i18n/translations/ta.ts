@@ -110,8 +110,7 @@ export const ta: Record<TranslationKey, string> = {
   continueGoogle: "Google உடன் தொடர்",
   orEmail: "அல்லது மின்னஞ்சல் மூலம்",
   playerName: "வீரர் பெயர்",
-  email: "மின்னஞ்சல்",
-  password: "கடவுச்சொல்",
+  pinCode: "PIN",
   noAccount: "கணக்கு இல்லையா? உருவாக்கு",
   haveAccount: "கணக்கு உள்ளதா? உள்நுழை",
   checkEmail: "உன் மின்னஞ்சலைப் பார்த்து கணக்கை உறுதிப்படுத்து",
@@ -123,7 +122,6 @@ export const ta: Record<TranslationKey, string> = {
   friends: "நண்பர்கள்",
   profile: "சுயவிவரம்",
   admin: "நிர்வாகி",
-  signOut: "வெளியேறு",
 
   waitingRoom: "காத்திருப்பு அறை",
   privateMatch: "தனிப்பட்ட போட்டி",
