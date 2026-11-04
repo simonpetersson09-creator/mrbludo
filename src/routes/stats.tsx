@@ -54,7 +54,7 @@ function StatsPage() {
     <main className="app-screen">
       <div className="home-stack">
         <Link to="/" className="mb-2 flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft size={16} /> {t("back")}</Link>
-        <h1 className="brand-title mb-3 text-3xl">{t("statsTitle")}</h1>
+        <h1 className="brand-title mb-3 text-3xl">{t("statsTitle")} {s?.year ?? new Date().getFullYear()}</h1>
         {rows.map(([k, v]) => (
           <div key={k} className="flex h-11 items-center justify-between rounded-[10px] border bg-card px-3 text-sm">
             <span className="text-muted-foreground">{k}</span><span className="font-bold">{v}</span>
@@ -68,7 +68,7 @@ function StatsPage() {
   );
 }
 
-// Ported from Yatzy's StatsPage "Veckans flitigaste" list (without XP prizes, which Ludo does not have).
+// Ported from Yatzy's StatsPage "Månadens flitigaste" list (without XP prizes, which Ludo does not have).
 function WeeklyMostActive({ boards, loading }: { boards: Boards | null; loading: boolean }) {
   const { t, lang } = useTranslation();
   const rows = boards?.weekly ?? [];

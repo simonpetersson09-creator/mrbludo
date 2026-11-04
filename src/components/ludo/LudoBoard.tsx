@@ -296,7 +296,7 @@ function LudoBoardImpl({ state, legal, onPick, captureAt, seats }: Props) {
           return <polygon key={c} points={`${7.5 + ux * r0 - uy * w},${7.5 + uy * r0 + ux * w} ${7.5 + ux * r0 + uy * w},${7.5 + uy * r0 - ux * w} ${7.5 + ux * r1},${7.5 + uy * r1}`} fill={BOARD_FILL[c]} stroke="var(--board-mark-line)" strokeWidth="0.02" strokeLinejoin="round" />;
         })}
         <circle cx="7.5" cy="7.5" r={0.42 * cell} fill="var(--board-ink)" fillOpacity="0.14" />
-        <circle cx="7.5" cy="7.53" r={0.4 * cell} fill={`url(#${boardId}-checker)`} stroke="var(--board-gold)" strokeWidth="0.07" />
+        <circle cx="7.5" cy="7.53" r={0.4 * cell} fill="var(--board-mark)" stroke="var(--board-gold)" strokeWidth="0.07" />
         <polygon points={Array.from({ length: 16 }, (_, i) => { const a = (i * Math.PI) / 8 - Math.PI / 2; const r = (i % 2 ? 0.17 : 0.31) * cell; return `${7.5 + Math.cos(a) * r},${7.5 + Math.sin(a) * r}`; }).join(" ")} fill={`url(#${boardId}-gold)`} stroke="var(--board-mark)" strokeWidth="0.035" strokeLinejoin="round" />
         <circle cx="7.5" cy="7.5" r={0.15 * cell} fill={`url(#${boardId}-gold)`} stroke="var(--board-gold-ink)" strokeOpacity="0.5" strokeWidth="0.025" />
         <Trophy x={7.5 - 0.1 * cell} y={7.5 - 0.1 * cell} width={0.2 * cell} height={0.2 * cell} color="var(--board-gold-ink)" strokeWidth={2.4} />

@@ -133,6 +133,7 @@ function PlayPage() {
     clearGame();
     const st = loadStats();
     st.played++;
+    st.lifetimePlayed = (st.lifetimePlayed ?? 0) + 1;
     if (state.winner === 0) st.wins++;
     if (state.players[0].forfeited) st.forfeits++;
     saveStats(st);

@@ -42,3 +42,7 @@
 - [x] Invite links now open `/join?code=…`: browsers get the download page, app users open the match directly; match codes expire after 6 hours (221 tests passed; live published-site behaviour needs a publish, phones not tested)
 - [ ] App Store and Google Play links for the download page — blocked until the store listings exist (Simon to supply)
 - [x] Footprints: player-coloured prints behind a walking piece, strongest next to the piece and fading behind, gone when it lands; die keeps the mover's colour until the piece arrives (236 tests; not tried on a phone)
+- [x] Fia centre: chequered disc removed (star rosette, trophy, arrows kept)
+- [x] "Månadens flitigaste" (calendar month, finished matches only, givers-up excluded), 40 languages
+- [x] Statistics page per calendar year ("Statistik 2026"), resets 1 January (256+ tests)
+- [ ] Online robustness vs Yatzy — review done, items to decide

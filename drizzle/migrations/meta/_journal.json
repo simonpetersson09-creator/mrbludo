@@ -57,6 +57,13 @@
       "when": 1793726412773,
       "tag": "0007_ranking_excludes_forfeits_and_profile_columns",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793784047378,
+      "tag": "0008_monthly_most_active",
+      "breakpoints": true
     }
   ]
 }

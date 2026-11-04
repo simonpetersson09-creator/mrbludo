@@ -7,7 +7,7 @@ const STATS = NS + "stats";
 const SETTINGS = NS + "settings";
 
 export interface Settings { name: string; botSpeed: "normal" | "fast"; haptics: boolean }
-export interface Stats { played: number; wins: number; captures: number; piecesHome: number; forfeits: number }
+export interface Stats { played: number; wins: number; captures: number; piecesHome: number; forfeits: number; year?: number; lifetimePlayed?: number }
 
 const DEFAULT_SETTINGS: Settings = { name: "Spelare", botSpeed: "normal", haptics: true };
 const DEFAULT_STATS: Stats = { played: 0, wins: 0, captures: 0, piecesHome: 0, forfeits: 0 };
@@ -40,9 +40,15 @@ export const clearGame = () => { try { localStorage.removeItem(GAME); } catch { 
 
 export const loadSettings = () => read(SETTINGS, DEFAULT_SETTINGS);
 export const saveSettings = (s: Settings) => write(SETTINGS, s);
-export const loadStats = () => read(STATS, DEFAULT_STATS);
+/** Statistics are per calendar year: a saved row from an earlier year starts over at zero (lifetime count kept for ad/rating timing). */
+export function statsForYear(saved: Partial<Stats>, year: number): Stats {
+  const lifetimePlayed = saved.lifetimePlayed ?? saved.played ?? 0;
+  if ((saved.year ?? year) === year) return { ...DEFAULT_STATS, ...saved, year, lifetimePlayed };
+  return { ...DEFAULT_STATS, year, lifetimePlayed };
+}
+export const loadStats = (now = new Date()) => statsForYear(read<Partial<Stats>>(STATS, {}), now.getFullYear());
 export const saveStats = (s: Stats) => write(STATS, s);
-export const resetStats = () => write(STATS, DEFAULT_STATS);
+export const resetStats = () => { const s = loadStats(); write(STATS, { ...DEFAULT_STATS, year: s.year, lifetimePlayed: s.lifetimePlayed }); };
 
 // Notification choices (Yatzy's three toggles). Saved now; no push is sent until push is approved.
 export interface NotificationPrefs { turnNotifications: boolean; reminderNotifications: boolean; playReminders: boolean }

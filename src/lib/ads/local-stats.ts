@@ -10,5 +10,5 @@ export function markOnlineMatchFinished(matchId: string): void {
   try { const ids = onlineFinished(); if (!ids.includes(matchId)) localStorage.setItem(ONLINE_DONE_KEY, JSON.stringify([...ids, matchId].slice(-20))); } catch { /* storage off */ }
 }
 export function getRankedGames(): number {
-  try { return loadStats().played + onlineFinished().length; } catch { return 0; }
+  try { return (loadStats().lifetimePlayed ?? 0) + onlineFinished().length; } catch { return 0; }
 }
