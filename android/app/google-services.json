@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "567195477985",
+    "project_id": "mr-b-ludo-push",
+    "storage_bucket": "mr-b-ludo-push.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567195477985:android:0617b92db94ba5729b54a0",
+        "android_client_info": {
+          "package_name": "com.simonpetersson.mrbludo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCodUVwIUbki6pJTvkKbDvSahN5EFGjbvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
