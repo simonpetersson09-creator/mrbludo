@@ -283,7 +283,7 @@ function AdChoices() {
   const { t } = useTranslation();
   const [choices, setChoices] = useState<import("@/lib/ads/ad-consent").AdConsentChoices | null>(null);
   const [busy, setBusy] = useState(false);
-  const read = async () => { const m = await import("@/lib/ads/admob"); if (m.isAdMobAvailable()) setChoices(await m.getAdConsentChoices()); };
+  const read = async () => { const m = await import("@/lib/ads/admob"); if (m.isAdMobAvailable() && (await m.isAdPrivacyOptionsRequired())) setChoices(await m.getAdConsentChoices()); };
   useEffect(() => { void read().catch(() => {}); }, []);
   if (!choices) return null;
   const change = async () => {
