@@ -1,3 +1,4 @@
+import { knownConsentRows } from "@/lib/ads/ad-consent";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, BarChart3, Bell, BellRing, Camera, Check, ChevronRight, Dices, Globe, Gauge, ShieldCheck, Trash2, User, Vibrate } from "lucide-react";
@@ -295,15 +296,16 @@ function AdChoices() {
     } catch { toast.error(t("adPrivacyFailed")); } finally { setBusy(false); }
   };
   const label = { allowed: t("adChoiceAllowed"), denied: t("adChoiceDenied"), unknown: t("adChoiceUnknown") } as const;
-  const rows = [["adChoiceStorage", choices.storage], ["adChoiceProfile", choices.adProfile], ["adChoiceUseProfile", choices.useAdProfile]] as const;
+  const rows = knownConsentRows(choices);
+  const rowLabel = { adChoiceStorage: t("adChoiceStorage"), adChoiceProfile: t("adChoiceProfile"), adChoiceUseProfile: t("adChoiceUseProfile") } as const;
   return (
     <Card>
-      <dl className="space-y-1 px-3 py-3 text-xs" aria-live="polite">
+      {rows.length > 0 && <dl className="space-y-1 px-3 py-3 text-xs" aria-live="polite">
         {rows.map(([k, v]) => (
-          <div key={k} className="flex justify-between gap-3"><dt className="text-muted-foreground">{t(k)}</dt><dd className="font-semibold">{label[v]}</dd></div>
+          <div key={k} className="flex justify-between gap-3"><dt className="text-muted-foreground">{rowLabel[k]}</dt><dd className="font-semibold">{label[v]}</dd></div>
         ))}
-      </dl>
-      <button type="button" disabled={busy} className={`${rowCls} border-t border-border/40 disabled:opacity-60`} onClick={() => { void change(); }}>
+      </dl>}
+      <button type="button" disabled={busy} className={`${rowCls} ${rows.length > 0 ? "border-t" : ""} border-border/40 disabled:opacity-60`} onClick={() => { void change(); }}>
         <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
         <span className="flex-1 text-sm font-medium">{t("adPrivacyChange")}</span>
         <ChevronRight className="h-4 w-4 text-muted-foreground" />

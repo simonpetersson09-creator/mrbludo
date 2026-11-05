@@ -13,3 +13,8 @@ export function readAdConsentChoices(status: unknown, purposeConsents: unknown):
   };
   return { storage: choice(1), adProfile: choice(3), useAdProfile: choice(4) };
 }
+/** Summary rows whose status is reliably known (non-TCF regions such as US states yield none). */
+export function knownConsentRows(c: AdConsentChoices) {
+  return ([["adChoiceStorage", c.storage], ["adChoiceProfile", c.adProfile], ["adChoiceUseProfile", c.useAdProfile]] as const)
+    .filter(([, v]) => v !== 'unknown');
+}

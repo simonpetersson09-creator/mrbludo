@@ -19,3 +19,12 @@ describe('saved UMP purpose choices', () => {
     }
   });
 });
+import { knownConsentRows } from './ad-consent';
+describe('consent summary rows', () => {
+  it('hides all rows when status cannot be determined (e.g. US)', () => {
+    expect(knownConsentRows(readAdConsentChoices(undefined, undefined))).toEqual([]);
+  });
+  it('keeps all three rows for an EU choice', () => {
+    expect(knownConsentRows(readAdConsentChoices('OBTAINED', '11111111111')).map(r => r[0])).toEqual(['adChoiceStorage', 'adChoiceProfile', 'adChoiceUseProfile']);
+  });
+});
