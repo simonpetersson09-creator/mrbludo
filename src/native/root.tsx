@@ -54,5 +54,5 @@ function NativeRoot() {
     });
     return () => { stopped = true; cleanup?.(); pushCleanup?.(); viewportCleanup(); data.subscription.unsubscribe(); window.removeEventListener("online", connect); window.removeEventListener(RESUME_EVENT, connect); window.removeEventListener("error", onError); window.removeEventListener("unhandledrejection", onRejection); };
   }, [router, queryClient]);
-  return <QueryClientProvider client={queryClient}><HeadContent /><AndroidBackButton /><SwipeBack /><NativeDeepLinks /><AppPresence /><Outlet /><Toaster position="top-center" /></QueryClientProvider>;
+  return <QueryClientProvider client={queryClient}><HeadContent /><AndroidBackButton /><SwipeBack /><NativeDeepLinks /><AppPresence /><Outlet /><Toaster position="top-center" duration={6000} className="toaster group mrb-toaster" offset={{ top: "calc(env(safe-area-inset-top, 0px) + 12px)" }} mobileOffset={{ top: "calc(env(safe-area-inset-top, 0px) + 12px)" }} /></QueryClientProvider>;
 }

@@ -97,7 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" },
       { name: "theme-color", content: "#123038" },
       { title: "Mr. B Ludo" },
       { name: "description", content: "Klassiskt Ludo för mobilen." },
@@ -204,7 +204,7 @@ function RootComponent() {
           </button>
         </div>
       )}
-      <Toaster position="top-center" duration={6000} className="toaster group mrb-toaster" />
+      <Toaster position="top-center" duration={6000} offset={{ top: "calc(env(safe-area-inset-top, 0px) + 12px)" }} mobileOffset={{ top: "calc(env(safe-area-inset-top, 0px) + 12px)" }} className="toaster group mrb-toaster" />
     </QueryClientProvider>
   );
 }

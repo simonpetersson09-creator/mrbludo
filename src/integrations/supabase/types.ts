@@ -449,6 +449,7 @@ export type Database = {
         }
         Returns: string
       }
+      unique_default_name: { Args: never; Returns: string }
       weekly_reminder_targets: {
         Args: { _limit?: number }
         Returns: {
