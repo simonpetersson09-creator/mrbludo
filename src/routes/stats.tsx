@@ -7,7 +7,7 @@ import { readPageCache, writePageCache } from "@/lib/page-cache";
 import { flag } from "@/lib/online/profile-options";
 import { useAvatarImages } from "@/lib/ludo/avatar";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
-import { loadStats, type Stats } from "@/lib/ludo/storage";
+import { completedPlayed, loadStats, type Stats } from "@/lib/ludo/storage";
 import { useTranslation } from "@/lib/i18n";
 
 export const Route = createFileRoute("/stats")({
@@ -47,9 +47,9 @@ function StatsPage() {
     return () => { alive = false; };
   }, []);
   const rows: [string, number | string][] = s ? [
-    [t("statPlayed"), s.played],
+    [t("statPlayed"), completedPlayed(s)],
     [t("statWins"), s.wins],
-    [t("statWinrate"), s.played ? `${Math.round((s.wins / s.played) * 100)} %` : "–"],
+    [t("statWinrate"), completedPlayed(s) ? `${Math.round((s.wins / completedPlayed(s)) * 100)} %` : "–"],
     [t("statCaptures"), s.captures],
     [t("statPiecesHome"), s.piecesHome],
   ] : [];

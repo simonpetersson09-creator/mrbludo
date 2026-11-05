@@ -465,12 +465,12 @@ export const getPlayerCardAction = async ({ data, context }: { data: ReturnType<
     const { data: seats } = await db.from("match_players").select("user_id").eq("match_id", data.matchId).in("user_id", [context.userId, data.userId]);
     if ((seats ?? []).length !== 2) throw new Error("err:not_in_match");
     const [{ data: st }, { data: fr }] = await Promise.all([
-      db.from("player_stats").select("played, wins").eq("user_id", data.userId).maybeSingle(),
+      db.from("player_stats").select("played, wins, forfeits").eq("user_id", data.userId).maybeSingle(),
       db.from("friendships").select("status, requester")
         .or(`and(requester.eq.${context.userId},addressee.eq.${data.userId}),and(requester.eq.${data.userId},addressee.eq.${context.userId})`).maybeSingle(),
     ]);
     const friend = !fr ? "none" : fr.status === "accepted" ? "friends" : fr.requester === context.userId ? "sent" : "incoming";
-    return { played: st?.played ?? 0, wins: st?.wins ?? 0, friend: friend as "none" | "friends" | "sent" | "incoming" };
+    return { played: Math.max(0, (st?.played ?? 0) - (st?.forfeits ?? 0)), wins: st?.wins ?? 0, friend: friend as "none" | "friends" | "sent" | "incoming" };
   };
 
 export const respondFriendAction = async ({ data, context }: { data: ReturnType<typeof respondFriendInput>; context: OnlineContext }) => {
@@ -502,12 +502,18 @@ export async function headToHead(db: Admin, userId: string, others: string[]) {
     ]);
     pairs.push(...(p ?? [])); done.push(...(m ?? []));
   }
+  // Matches where either of the two gave up are not completed and never count.
+  const gaveUp = new Map<string, Set<string>>();
   const winnerOf = new Map(done.map((m) => {
-    const st = m.state as { winner?: number | null; players?: { id: string }[] } | null;
+    const st = m.state as { winner?: number | null; players?: { id: string; forfeited?: boolean }[] } | null;
+    if (st?.players?.some((p) => p.id === userId && p.forfeited)) gaveUp.set(m.id, new Set(["*"]));
+    else gaveUp.set(m.id, new Set((st?.players ?? []).filter((p) => p.forfeited).map((p) => p.id)));
     return [m.id, st && st.winner != null ? st.players?.[st.winner]?.id ?? null : null] as const;
   }));
   for (const p of pairs) {
     if (!winnerOf.has(p.match_id)) continue; // not finished
+    const quit = gaveUp.get(p.match_id);
+    if (quit && (quit.has("*") || quit.has(p.user_id))) continue;
     const r = (out[p.user_id] ??= { played: 0, won: 0, lost: 0 });
     r.played++;
     const w = winnerOf.get(p.match_id);
@@ -590,7 +596,11 @@ export const respondInviteAction = async ({ data, context }: { data: ReturnType<
 export const getLeaderboardAction = async ({ data, context }: { data: ReturnType<typeof getLeaderboardInput>; context: OnlineContext }) => {
     // Public leaderboard columns only; tables are owner-scoped, so read with the server client after auth.
     const db = await admin();
-    const { data: rows } = await db.from("player_stats").select("user_id, played, wins, captures, pieces_home, forfeits").gt("played", 0).order(data.sort, { ascending: false }).order("played").limit(50);
+    // "Played" counts completed matches only (give-ups excluded), so rank on that number too.
+    const { data: raw } = await db.from("player_stats").select("user_id, played, wins, captures, pieces_home, forfeits").gt("played", 0).order(data.sort, { ascending: false }).order("played").limit(data.sort === "played" ? 200 : 50);
+    const done = (raw ?? []).map((r) => ({ ...r, played: Math.max(0, r.played - r.forfeits) })).filter((r) => r.played > 0);
+    if (data.sort === "played") done.sort((a, b) => b.played - a.played);
+    const rows = done.slice(0, 50);
     const ids = (rows ?? []).map((r) => r.user_id);
     const { data: profs } = ids.length ? await db.from("profiles").select("id, display_name, avatar, country").in("id", ids) : { data: [] };
     const byId = new Map((profs ?? []).map((p) => [p.id, p]));

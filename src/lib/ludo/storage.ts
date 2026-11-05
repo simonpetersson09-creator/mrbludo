@@ -11,6 +11,8 @@ export interface Settings { name: string; botSpeed: "normal" | "fast"; haptics: 
 export interface Stats { played: number; wins: number; captures: number; piecesHome: number; forfeits: number; year?: number; lifetimePlayed?: number }
 
 const DEFAULT_SETTINGS: Settings = { name: "Spelare", botSpeed: "normal", haptics: true };
+/** "Played" shown to players counts completed matches only: give-ups are excluded. */
+export const completedPlayed = (s: Pick<Stats, "played" | "forfeits">) => Math.max(0, s.played - s.forfeits);
 const DEFAULT_STATS: Stats = { played: 0, wins: 0, captures: 0, piecesHome: 0, forfeits: 0 };
 
 function read<T>(key: string, fallback: T): T {

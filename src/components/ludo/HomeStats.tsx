@@ -3,7 +3,7 @@ import { ChevronDown, Gamepad2, Swords, Trophy } from "lucide-react";
 import { supabase } from "@/lib/auth/client";
 import { getMyRanks } from "@/lib/online/online.functions";
 import { flag } from "@/lib/online/profile-options";
-import { loadStats, type Stats } from "@/lib/ludo/storage";
+import { completedPlayed, loadStats, type Stats } from "@/lib/ludo/storage";
 import { useTranslation } from "@/lib/i18n";
 import { combineHomeStats, type OnlineRanks } from "@/lib/ludo/home-stats";
 
@@ -41,7 +41,7 @@ export function HomeStats() {
 
   // Same yearly numbers as the statistics page; placements still come from the server.
   const ranks = combineHomeStats(local, online);
-  const s = { ...ranks, played: local.played, wins: local.wins, captures: local.captures };
+  const s = { ...ranks, played: completedPlayed(local), wins: local.wins, captures: local.captures };
   const year = local.year ?? new Date().getFullYear();
   const card = "flex flex-col items-center gap-0.5 py-2 sm:py-2.5 px-1.5 rounded-2xl bg-secondary/60 border border-border/50";
   const rankCard = "relative flex flex-col items-center justify-center gap-0.5 overflow-hidden rounded-2xl border border-border/50 bg-secondary/60 px-2 py-2.5";
