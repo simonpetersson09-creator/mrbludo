@@ -80,7 +80,10 @@ export const adminPinInput = (d: { pin: string }) => {
 
 import { pushTokenInput } from "@/lib/push/policy";
 import { isLanguageCode } from "@/lib/i18n";
-export const registerPushInput = (d: { token: string; locale?: string }) => pushTokenInput(d, isLanguageCode);
-export const unregisterPushInput = (d: { token: string }) => ({ token: pushTokenInput(d, isLanguageCode).token });
+export const registerPushInput = (d: { token: string; locale?: string; platform?: "ios" | "android" }) => pushTokenInput(d, isLanguageCode);
+export const unregisterPushInput = (d: { token: string; platform?: "ios" | "android" }) => {
+  const { token, platform } = pushTokenInput(d, isLanguageCode);
+  return { token, platform };
+};
 
 export const setRemindersInput = (d: { turns: boolean; nudges: boolean; weekly: boolean }) => ({ turns: d?.turns !== false, nudges: d?.nudges !== false, weekly: d?.weekly !== false });

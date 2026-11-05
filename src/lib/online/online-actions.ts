@@ -799,12 +799,12 @@ export const adminPinLoginAction = async ({ data, context }: { data: { pin: stri
 };
 
 /** Saves this phone's push address for the caller. A token always belongs to the latest player who registered it. */
-export const registerPushTokenAction = async ({ data, context }: { data: { token: string; locale: string }; context: OnlineContext }) => {
+export const registerPushTokenAction = async ({ data, context }: { data: { token: string; locale: string; platform: "ios" | "android" }; context: OnlineContext }) => {
   const db = await admin();
   const { defaultEnv } = await import("@/lib/push/push-server");
   const { data: existing } = await db.from("push_tokens").select("environment").eq("token", data.token).maybeSingle();
   const { error } = await db.from("push_tokens").upsert({
-    token: data.token, user_id: context.userId, platform: "ios", locale: data.locale,
+    token: data.token, user_id: context.userId, platform: data.platform, locale: data.locale,
     environment: existing?.environment ?? defaultEnv(), updated_at: new Date().toISOString(),
   });
   if (error) throw new Error("err:bad_action");
@@ -812,7 +812,7 @@ export const registerPushTokenAction = async ({ data, context }: { data: { token
 };
 
 /** Removes the push address, only if it belongs to the caller. */
-export const unregisterPushTokenAction = async ({ data, context }: { data: { token: string }; context: OnlineContext }) => {
+export const unregisterPushTokenAction = async ({ data, context }: { data: { token: string; platform?: "ios" | "android" }; context: OnlineContext }) => {
   const db = await admin();
   await db.from("push_tokens").delete().eq("token", data.token).eq("user_id", context.userId);
   return { ok: true };

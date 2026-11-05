@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { apnsHost, apnsPayload, classify, normalizeEnv, providerToken, readApnsCreds, resetProviderTokenCache, sendApns, type ApnsCreds, type ApnsEnv } from "./apns";
 import { deliver, type PushDevice, type PushStore } from "./deliver";
+import { FCM_URL, readFcmCreds } from "./fcm";
 import { isWatching, pushKey, pushTokenInput, safePushPath, turnRecipient } from "./policy";
 import { startState } from "@/lib/online/match-logic";
 import { isLanguageCode, translateFor } from "@/lib/i18n";
@@ -162,7 +163,7 @@ describe("who gets notified", () => {
 
 describe("registration and opening", () => {
   it("accepts only hex device tokens and known languages", () => {
-    expect(pushTokenInput({ token: TOKEN.toUpperCase(), locale: "da" }, isLanguageCode)).toEqual({ token: TOKEN, locale: "da" });
+    expect(pushTokenInput({ token: TOKEN.toUpperCase(), locale: "da" }, isLanguageCode)).toEqual({ token: TOKEN, locale: "da", platform: "ios" });
     expect(pushTokenInput({ token: TOKEN, locale: "xx" }, isLanguageCode).locale).toBe("sv");
     for (const token of ["", "abc", "z".repeat(64), TOKEN + "; drop"]) expect(() => pushTokenInput({ token }, isLanguageCode)).toThrow("err:bad_action");
   });
@@ -188,5 +189,58 @@ describe("security", () => {
     expect(readFileSync("ios/App/App/AppDelegate.swift", "utf8")).toContain("capacitorDidRegisterForRemoteNotifications");
     expect(readFileSync("ios/App/App/Info.plist", "utf8")).not.toContain("UIBackgroundModes");
     expect(readFileSync("ios/App/CapApp-SPM/Package.swift", "utf8")).toContain("node_modules/@capacitor/push-notifications");
+  });
+});
+
+describe("android push (FCM)", () => {
+  const FCM_TOKEN = "fAbC123_-:" + "x".repeat(140);
+  const fcm = { lovableKey: "L", connectionKey: "C" };
+  const msg = () => ({ title: "Mr. B Ludo", body: "Din tur", path: "/online", collapseId: "turn-m" });
+  const store = (devices: PushDevice[]) => {
+    const s: PushStore & { devices: PushDevice[] } = {
+      devices, async tokensFor() { return s.devices; }, async claim() { return true; },
+      async remove(t) { s.devices = s.devices.filter((d) => d.token !== t); }, async setEnv() {},
+    };
+    return s;
+  };
+
+  it("accepts FCM tokens as-is for android and still rejects them as iOS tokens", () => {
+    expect(pushTokenInput({ token: FCM_TOKEN, platform: "android" }, isLanguageCode)).toEqual({ token: FCM_TOKEN, locale: "sv", platform: "android" });
+    expect(() => pushTokenInput({ token: FCM_TOKEN }, isLanguageCode)).toThrow("err:bad_action");
+    expect(() => pushTokenInput({ token: "short", platform: "android" }, isLanguageCode)).toThrow("err:bad_action");
+  });
+
+  it("sends android devices through the gateway with a visible notification and tap path", async () => {
+    const f = vi.fn(async () => new Response("{}", { status: 200 })) as unknown as typeof fetch;
+    const r = await deliver(store([{ token: FCM_TOKEN, environment: "production", locale: "sv", platform: "android" }]), f, null, { userId: "u", message: msg }, fcm);
+    expect(r.sent).toBe(1);
+    const [url, init] = (f as unknown as { mock: { calls: [string, RequestInit][] } }).mock.calls[0]!;
+    expect(url).toBe(FCM_URL);
+    const body = JSON.parse(String(init.body));
+    expect(body.message.token).toBe(FCM_TOKEN);
+    expect(body.message.notification).toEqual({ title: "Mr. B Ludo", body: "Din tur" });
+    expect(body.message.data).toEqual({ path: "/online" });
+    expect(body.message.android.notification.channel_id).toBe("mrb-ludo");
+  });
+
+  it("deletes an unregistered android token", async () => {
+    const s = store([{ token: FCM_TOKEN, environment: "production", locale: "sv", platform: "android" }]);
+    const f = (async () => new Response('{"error":{"status":"NOT_FOUND","details":[{"errorCode":"UNREGISTERED"}]}}', { status: 404 })) as unknown as typeof fetch;
+    expect((await deliver(s, f, null, { userId: "u", message: msg }, fcm)).removed).toBe(1);
+    expect(s.devices).toHaveLength(0);
+  });
+
+  it("routes each platform to its own service and skips one without credentials", async () => {
+    const f = vi.fn(async () => new Response("{}", { status: 200 })) as unknown as typeof fetch;
+    const s = store([{ token: FCM_TOKEN, environment: "production", locale: "sv", platform: "android" }, { token: "a".repeat(64), environment: "production", locale: "sv" }]);
+    const r = await deliver(s, f, null, { userId: "u", message: msg }, fcm);
+    expect(r.devices).toBe(1);
+    expect((f as unknown as { mock: { calls: [string][] } }).mock.calls.every(([u]) => u === FCM_URL)).toBe(true);
+    expect((await deliver(s, f, null, { userId: "u", message: msg }, null)).devices).toBe(0);
+  });
+
+  it("reads Firebase credentials only when both keys exist", () => {
+    expect(readFcmCreds({ LOVABLE_API_KEY: "L", FIREBASE_MESSAGING_API_KEY: "C" })).toEqual(fcm);
+    expect(readFcmCreds({ LOVABLE_API_KEY: "L" })).toBeNull();
   });
 });

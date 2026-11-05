@@ -54,10 +54,13 @@ export function safePushPath(raw: unknown): string | null {
   return null;
 }
 
-/** APNs device tokens are hex (64 today, Apple allows longer). */
-export function pushTokenInput(d: { token: unknown; locale?: unknown }, isLanguage: (v: string) => boolean) {
-  const token = String(d?.token ?? "").trim().toLowerCase();
-  if (!/^[0-9a-f]{64,200}$/.test(token)) throw new Error("err:bad_action");
+/** APNs device tokens are hex (64 today, Apple allows longer); FCM tokens are long URL-safe strings with ':'. */
+export function pushTokenInput(d: { token: unknown; locale?: unknown; platform?: unknown }, isLanguage: (v: string) => boolean) {
+  const platform: "ios" | "android" = d?.platform === "android" ? "android" : "ios";
+  const raw = String(d?.token ?? "").trim();
+  const token = platform === "ios" ? raw.toLowerCase() : raw;
+  const ok = platform === "ios" ? /^[0-9a-f]{64,200}$/.test(token) : /^[A-Za-z0-9_:-]{100,4096}$/.test(token);
+  if (!ok) throw new Error("err:bad_action");
   const locale = typeof d?.locale === "string" && isLanguage(d.locale) ? d.locale : "sv";
-  return { token, locale };
+  return { token, locale, platform };
 }

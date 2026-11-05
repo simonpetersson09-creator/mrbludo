@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { translateFor, type TranslationKey } from "@/lib/i18n";
 import { readApnsCreds, normalizeEnv, type ApnsEnv } from "./apns";
+import { readFcmCreds } from "./fcm";
 import { deliver, type DeliverResult, type PushStore } from "./deliver";
 
 type Db = SupabaseClient<Database>;
@@ -11,10 +12,10 @@ const DEDUPE_KEEP_MS = 3 * 86_400_000;
 export function dbStore(db: Db): PushStore {
   return {
     async tokensFor(userId, pref) {
-      let q = db.from("push_tokens").select("token, environment, locale").eq("user_id", userId);
+      let q = db.from("push_tokens").select("token, environment, locale, platform").eq("user_id", userId);
       if (pref) q = q.eq(pref, true);
       const { data } = await q.limit(10);
-      return (data ?? []).map((d) => ({ token: d.token, environment: normalizeEnv(d.environment), locale: d.locale }));
+      return (data ?? []).map((d) => ({ token: d.token, environment: normalizeEnv(d.environment), locale: d.locale, platform: d.platform === "android" ? "android" as const : "ios" as const }));
     },
     async claim(key, userId) {
       const { error } = await db.from("push_sent").insert({ key, user_id: userId });
@@ -40,11 +41,12 @@ export interface NotifyJob { kind: PushKind; userId: string; key?: string; path:
 /** Sends one event to every device of one player. Never throws and never holds a game action longer than ~3 s. */
 export async function notify(db: Db, job: NotifyJob, fetchFn: typeof fetch = fetch): Promise<DeliverResult | null> {
   const creds = readApnsCreds(process.env);
-  if (!creds) return null;
+  const fcm = readFcmCreds(process.env);
+  if (!creds && !fcm) return null;
   const run = deliver(dbStore(db), fetchFn, creds, {
     userId: job.userId, key: job.key, pref: PREF[job.kind],
     message: (locale) => ({ title: "Mr. B Ludo", body: translateFor(locale, BODY[job.kind], { name: job.name ?? "" }), path: job.path, collapseId: job.collapseId }),
-  });
+  }, fcm);
   if (job.kind === "test") return run;
   try {
     return await Promise.race([run, new Promise<null>((r) => setTimeout(() => r(null), 3000))]);

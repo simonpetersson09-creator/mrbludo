@@ -5,12 +5,19 @@ import { getLanguage, subscribeLanguageChanges } from "@/lib/i18n/language";
 import { safePushPath } from "@/lib/push/policy";
 
 const TOKEN_KEY = "mrb-ludo:v1:push-token";
-const isIos = () => Capacitor.isNativePlatform() && Capacitor.getPlatform() === "ios";
+/** iPhone (APNs) and Android (Firebase Cloud Messaging) use the same plugin and flow. */
+const platform = (): "ios" | "android" | null => {
+  if (!Capacitor.isNativePlatform()) return null;
+  const p = Capacitor.getPlatform();
+  return p === "ios" || p === "android" ? p : null;
+};
+const isIos = () => platform() !== null;
+const ANDROID_CHANNEL = "mrb-ludo";
 const plugin = async () => (await import("@capacitor/push-notifications")).PushNotifications;
 
 async function sendToken(token: string) {
   try { localStorage.setItem(TOKEN_KEY, token); } catch { /* storage full */ }
-  try { await registerPushToken({ data: { token, locale: getLanguage() } }); await syncPushPrefs(); } catch { /* retried on next launch */ }
+  try { await registerPushToken({ data: { token, locale: getLanguage(), platform: platform() ?? "ios" } }); await syncPushPrefs(); } catch { /* retried on next launch */ }
 }
 
 /** Sends this phone's three notification switches (Settings) to the server. */
@@ -27,6 +34,10 @@ export async function syncPushPrefs(): Promise<void> {
 export async function startPush(navigate: (path: string) => void): Promise<() => void> {
   if (!isIos()) return () => {};
   const Push = await plugin();
+  if (platform() === "android") {
+    // Android 8+ shows notifications in a named channel; matches the server's channel_id.
+    try { await Push.createChannel({ id: ANDROID_CHANNEL, name: "Mr. B Ludo", importance: 4, visibility: 1, sound: "default" }); } catch { /* exists */ }
+  }
   const handles = await Promise.all([
     Push.addListener("registration", ({ value }) => { void sendToken(value); }),
     Push.addListener("registrationError", () => { /* no token: nothing to save */ }),
@@ -84,7 +95,7 @@ export async function forgetPushToken(): Promise<void> {
   if (!isIos()) return;
   let token: string | null = null;
   try { token = localStorage.getItem(TOKEN_KEY); localStorage.removeItem(TOKEN_KEY); } catch { /* none */ }
-  if (token) { try { await unregisterPushToken({ data: { token } }); } catch { /* server also deletes on erase */ } }
+  if (token) { try { await unregisterPushToken({ data: { token, platform: platform() ?? "ios" } }); } catch { /* server also deletes on erase */ } }
   try { await (await plugin()).unregister(); } catch { /* unavailable */ }
 }
 
@@ -103,6 +114,6 @@ export async function pushPermission(): Promise<PushPermission> {
 export async function enablePush(): Promise<PushPermission> {
   const now = await pushPermission();
   if (now === "prompt") { await requestPush(); return pushPermission(); }
-  if (now === "denied") { try { window.location.href = "app-settings:"; } catch { /* not available */ } }
+  if (now === "denied" && platform() === "ios") { try { window.location.href = "app-settings:"; } catch { /* not available */ } }
   return now;
 }
