@@ -12,9 +12,16 @@ describe("Mr. B Ludo ad configuration", () => {
       optional: "ca-app-pub-7448540924654868/7239438484",
     });
   });
-  it("keeps Android ad-free until Ludo has its own Android IDs", async () => {
+  it("uses Ludo's own Android IDs", async () => {
     const { ADMOB_IDS } = await import("./admob");
-    expect(ADMOB_IDS.android).toEqual({ appId: null, appOpen: null, optional: null });
+    expect(ADMOB_IDS.android).toEqual({
+      appId: "ca-app-pub-7448540924654868~9915034875",
+      appOpen: "ca-app-pub-7448540924654868/6723116515",
+      optional: "ca-app-pub-7448540924654868/8690804307",
+    });
+  });
+  it("puts Ludo's Android App ID in the manifest", () => {
+    expect(readFileSync("android/app/src/main/AndroidManifest.xml", "utf8")).toContain("ca-app-pub-7448540924654868~9915034875");
   });
   it("has no banner units", async () => {
     const { BANNER_IDS } = await import("./admob");

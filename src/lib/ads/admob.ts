@@ -43,8 +43,11 @@ export const ADMOB_IDS: Record<'ios' | 'android', PlatformAdIds> = {
     appOpen: 'ca-app-pub-7448540924654868/8436795076',
     optional: 'ca-app-pub-7448540924654868/7239438484',
   },
-  // Android stays ad-free until Ludo has its own Android IDs.
-  android: { appId: null, appOpen: null, optional: null },
+  android: {
+    appId: 'ca-app-pub-7448540924654868~9915034875',
+    appOpen: 'ca-app-pub-7448540924654868/6723116515',
+    optional: 'ca-app-pub-7448540924654868/8690804307',
+  },
 };
 
 export const ADMOB_CONFIG = {
