@@ -4,7 +4,8 @@
  * Yatzy keeps the same shape in its own app-links module (read-only reference).
  */
 export const APP_STORE_URL = "";
-export const PLAY_STORE_URL = "";
+export const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.simonpetersson.mrbludo";
 
 export type StoreLink = { store: "apple" | "google"; url: string };
 
