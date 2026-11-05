@@ -15,6 +15,14 @@ describe("anonymous player identity", () => {
     expect((await sessionInitializer(async () => session, create)()).user.id).toBe("anonymous-player-one");
     expect(create).not.toHaveBeenCalled();
   });
+  it("never creates a second player on the same phone when the saved session reads back empty", async () => {
+    const create = vi.fn(async () => session);
+    const ensure = sessionInitializer(async () => null, create);
+    await ensure();
+    await ensure();
+    expect((await ensure()).user.id).toBe("anonymous-player-one");
+    expect(create).toHaveBeenCalledTimes(1);
+  });
   it("does not replace saved identity when secure storage fails", async () => {
     const create = vi.fn(async () => session);
     await expect(sessionInitializer(async () => { throw new Error("store unavailable"); }, create)()).rejects.toThrow("store unavailable");
