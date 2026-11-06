@@ -4,7 +4,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Bot, User } from "lucide-react";
 import { createGame, type Color, type Player } from "@/lib/ludo/engine";
-import { loadSettings, saveGame } from "@/lib/ludo/storage";
+import { loadSettings, startNewGame } from "@/lib/ludo/storage";
 import { useTranslation, type TranslationKey } from "@/lib/i18n";
 
 export const Route = createFileRoute("/setup")({
@@ -47,7 +47,7 @@ function SetupPage() {
       isBot: i === 0 ? false : bots[i],
       name: i > 0 && bots[i] ? botNames[i] : names[i].trim() || t("playerN", { n: i + 1 }),
     }));
-    saveGame(createGame(players, variant));
+    startNewGame(createGame(players, variant));
     navigate({ to: "/play" });
   };
 

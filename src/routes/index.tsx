@@ -4,7 +4,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { BarChart3, Check, Globe, Play, Settings, Users } from "lucide-react";
 import { createGame } from "@/lib/ludo/engine";
-import { loadGame, loadSettings, saveGame } from "@/lib/ludo/storage";
+import { listGames, loadSettings, selectGame, startNewGame } from "@/lib/ludo/storage";
 import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
 import { QuickMatchSearch } from "@/components/ludo/QuickMatchSearch";
 import { HomeStats } from "@/components/ludo/HomeStats";
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const navigate = useNavigate();
   const { t, lang } = useTranslation();
-  const [resume, setResume] = useState<{ myTurn: boolean; names: string } | null>(null);
+  const [resumes, setResumes] = useState<{ id: string; myTurn: boolean; names: string }[]>([]);
   const [showLangs, setShowLangs] = useState(false);
   const langBtnRef = useRef<HTMLButtonElement>(null);
   const langPopRef = useRef<HTMLDivElement>(null);
@@ -62,10 +62,10 @@ function HomePage() {
   const rateLater = () => { setShowRate(false); releasePrompt("rate"); snoozeRatePrompt(getRankedGames()); trackEvent("rate_prompt_later"); };
 
   useEffect(() => {
-    const g = loadGame();
-    if (!g) return;
-    const cur = g.players[g.current];
-    setResume({ myTurn: !!cur && !cur.isBot, names: g.players.filter((p) => p.isBot).map((p) => p.name).join(", ") });
+    setResumes(listGames().map(({ id, game: g }) => {
+      const cur = g.players[g.current];
+      return { id, myTurn: !!cur && !cur.isBot, names: g.players.filter((p) => p.isBot).map((p) => p.name).join(", ") };
+    }));
   }, []);
 
   // Stäng språklistan när man klickar utanför knappen eller listan.
@@ -92,7 +92,7 @@ function HomePage() {
     const colorKey = ["colorRed", "colorGreen", "colorYellow", "colorBlue"] as const;
     const cs = colors[players];
     const botNames = randomBotNames(cs.length);
-    saveGame(createGame(cs.map((c, i) => i === 0
+    startNewGame(createGame(cs.map((c, i) => i === 0
       ? { id: "p0", name, color: c, isBot: false }
       : { id: `p${i}`, name: botNames[i], color: c, isBot: true }), variant));
     navigate({ to: "/play" });
@@ -113,9 +113,10 @@ function HomePage() {
         <p className="brand-tagline">{t("tagline")}</p>
       </div>
       <div className="w-full mt-8 sm:mt-10">
-      {resume && (
+      {resumes.length > 0 && (
         <div className="home-stack relative">
-          <Link to="/play" className={`home-match-card font-display ${resume.myTurn ? "home-match-card-turn" : "home-match-card-waiting"}`}>
+          {resumes.map((resume) => (
+          <Link key={resume.id} to="/play" onClick={() => selectGame(resume.id)} className={`home-match-card font-display ${resume.myTurn ? "home-match-card-turn" : "home-match-card-waiting"}`}>
             <span className={`home-card-chip${resume.myTurn ? " home-card-chip-light" : ""}`}><Play /></span>
             <span className="flex min-w-0 flex-1 flex-col justify-center gap-[3px]">
               <span className="truncate text-[11px] font-bold leading-none">{t("resumeMatch")}</span>
@@ -125,6 +126,7 @@ function HomePage() {
               {resume.myTurn ? t("yourTurnLabel") : t("waitingShort")}
             </span>
           </Link>
+          ))}
         </div>
       )}
       </div>

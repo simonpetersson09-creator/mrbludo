@@ -30,20 +30,68 @@ function write(key: string, v: unknown) {
   try { localStorage.setItem(key, JSON.stringify(v)); } catch { /* storage full/blocked */ }
 }
 
+/** Several unfinished local matches are kept; one of them is the "active" one the game screen plays. */
+const GAMES = NS + "games";
+const ACTIVE = NS + "active-game-id";
+export const MAX_SAVED_GAMES = 10;
+export interface SavedGame { id: string; game: GameState; updatedAt: number }
+
+function readSaves(): SavedGame[] {
+  if (typeof window === "undefined") return [];
+  let list: SavedGame[] = [];
+  try {
+    const raw = localStorage.getItem(GAMES);
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    if (Array.isArray(parsed)) list = parsed.filter((e): e is SavedGame => !!e && typeof e === "object" && typeof (e as SavedGame).id === "string" && isValidSave((e as SavedGame).game) && (e as SavedGame).game.phase !== "finished");
+  } catch { list = []; }
+  // Older app versions kept a single match under one key: move it into the list once.
+  try {
+    const old = localStorage.getItem(GAME);
+    if (old) {
+      localStorage.removeItem(GAME);
+      const g: unknown = JSON.parse(old);
+      if (isValidSave(g) && g.phase !== "finished") {
+        const id = "g" + Date.now().toString(36);
+        list.unshift({ id, game: g, updatedAt: Date.now() });
+        writeSaves(list);
+        if (!localStorage.getItem(ACTIVE)) localStorage.setItem(ACTIVE, id);
+      }
+    }
+  } catch { /* damaged old save is dropped */ }
+  return list;
+}
+function writeSaves(list: SavedGame[]) { write(GAMES, list.slice(0, MAX_SAVED_GAMES)); }
+const activeId = () => { try { return localStorage.getItem(ACTIVE); } catch { return null; } };
+
+/** Unfinished matches, most recently played first. */
+export const listGames = (): SavedGame[] => readSaves().sort((x, y) => y.updatedAt - x.updatedAt);
+export const selectGame = (id: string) => { try { localStorage.setItem(ACTIVE, id); } catch { /* noop */ } };
 export const loadGame = (): GameState | null => {
   if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(GAME);
-    if (!raw) return null;
-    const g: unknown = JSON.parse(raw);
-    if (isValidSave(g)) return g;
-    // A damaged or altered save is removed instead of crashing the home or game screen.
-    clearGame();
-    return null;
-  } catch { clearGame(); return null; }
+  const id = activeId();
+  return readSaves().find((e) => e.id === id)?.game ?? null;
 };
-export const saveGame = (g: GameState) => write(GAME, g);
-export const clearGame = () => { try { localStorage.removeItem(GAME); } catch { /* noop */ } };
+/** Starts a new match without touching the other saved ones. */
+export const startNewGame = (g: GameState) => {
+  const id = "g" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  writeSaves([{ id, game: g, updatedAt: Date.now() }, ...listGames()]);
+  selectGame(id);
+};
+/** Saves progress of the active match. */
+export const saveGame = (g: GameState) => {
+  const id = activeId();
+  const list = readSaves();
+  const i = list.findIndex((e) => e.id === id);
+  if (i < 0 || !id) return startNewGame(g);
+  list[i] = { id, game: g, updatedAt: Date.now() };
+  writeSaves(list.sort((x, y) => y.updatedAt - x.updatedAt));
+};
+/** Removes the active match (finished or given up); the others stay. */
+export const clearGame = () => {
+  const id = activeId();
+  writeSaves(readSaves().filter((e) => e.id !== id));
+  try { localStorage.removeItem(ACTIVE); localStorage.removeItem(GAME); } catch { /* noop */ }
+};
 
 export const loadSettings = () => read(SETTINGS, DEFAULT_SETTINGS);
 export const saveSettings = (s: Settings) => write(SETTINGS, s);
