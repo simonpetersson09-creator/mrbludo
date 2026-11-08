@@ -60,18 +60,6 @@ function AdminPage() {
           </table>
           </details>
           </details>
-          <details className="mt-6 border-t border-border pt-4"><summary className="cursor-pointer font-semibold">{t("techErrors")}</summary>
-          <h2 className="mt-5 font-display text-lg font-bold">{t("techErrors")}</h2>
-          {d.healthAlerts.map((a, i) => <pre key={"a" + i} className="mt-1 overflow-x-auto rounded border border-destructive bg-surface p-2 text-[10px] text-destructive">⚠ {a.at} slow:{a.slow} failed:{a.failed} [{a.ops.join(", ")}]</pre>)}
-          {d.slowOps.map((e, i) => <pre key={"s" + i} className="mt-1 overflow-x-auto rounded bg-surface p-2 text-[10px]">⏱ {e.at} {JSON.stringify(e.detail)}</pre>)}
-          {d.errors.length === 0 && <p className="text-sm text-muted-foreground">{t("noErrors")}</p>}
-          {d.errors.map((e, i) => <pre key={i} className="mt-1 overflow-x-auto rounded bg-surface p-2 text-[10px]">{e.at} [{e.platform}] {JSON.stringify(e.detail)}</pre>)}
-          </details>
-          <details className="mt-6 border-t border-border pt-4"><summary className="cursor-pointer font-semibold">{t("adEvents")}</summary>
-          <h2 className="mt-5 font-display text-lg font-bold">{t("adEvents")}</h2>
-          {d.ads.length === 0 && <p className="text-sm text-muted-foreground">{t("noAdEvents")}</p>}
-          {d.ads.map((e, i) => <pre key={i} className="mt-1 overflow-x-auto rounded bg-surface p-2 text-[10px]">{e.at} [{e.platform}] {JSON.stringify(e.detail)}</pre>)}
-          </details>
         </>)}
       </div>
     </main>

@@ -13,12 +13,13 @@ export default function AdminAdDiagnostics() {
     setLoading(true); setError(""); setCopied(false);
     try {
       const data = await adminAdDiagnostics();
-      setText(data.diagnostics.length ? data.diagnostics.map((row) => JSON.stringify(row)).join("\n") : "Inga iPhone-försök registrerade de senaste 30 dagarna.");
+      setText(data.diagnostics.length ? data.diagnostics.map((row) => JSON.stringify(row)).join("\n") : "Inga iPhone-försök registrerade från 8 november 2026 inom de senaste 30 dagarna.");
     } catch { setError("Diagnostiken kunde inte hämtas. Försök igen."); }
     finally { setLoading(false); }
   }
   return <details className="mt-6 border-t border-border pt-4">
     <summary className="cursor-pointer font-semibold">iPhone – appstartsdiagnostik</summary>
+    <p className="mt-2 text-xs text-muted-foreground">Från 8 november 2026 (UTC), högst de senaste 30 dagarna.</p>
     <div className="my-3 flex flex-wrap gap-2">
       <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading}><RefreshCw />{loading ? "Hämtar…" : "Hämta senaste 30 dagarna"}</Button>
       <Button variant="outline" size="sm" disabled={!text} onClick={() => {

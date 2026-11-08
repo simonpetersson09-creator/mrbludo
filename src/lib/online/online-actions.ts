@@ -9,7 +9,7 @@ import {
 import { healthAlerts } from "./server-timing";
 import { adminPeriodStart, appPlayerIds } from "./admin-period";
 import { withStepTiming } from "./step-timing";
-import { isAppOpenDiagnostic } from "./ad-diagnostics";
+import { appOpenDiagnosticsSince, isAppOpenDiagnostic } from "./ad-diagnostics";
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
 type Admin = Awaited<ReturnType<typeof admin>>;
 
@@ -619,7 +619,7 @@ export const adminAdDiagnosticsAction = async ({ context }: { context: OnlineCon
   const { data: isAdmin, error: roleError } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
   if (roleError || !isAdmin) throw new Error("err:forbidden");
   const db = await admin();
-  const since = new Date(Date.now() - 30 * 86_400_000).toISOString();
+  const since = appOpenDiagnosticsSince(Date.now());
   const diagnostics: { at: string; platform: string | null; detail: Database["public"]["Tables"]["app_events"]["Row"]["detail"] }[] = [];
   // Page all matching diagnostics rather than the overview's last 40 mixed ad events.
   for (let offset = 0; offset < 10000; offset += 500) {
