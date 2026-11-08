@@ -1,0 +1,2 @@
+# Admin presentation
+- Follow the read-only Yatzy table/chart reference while adapting only existing Ludo metrics; unavailable values stay unknown, and leaving admin must not sign out the player identity.

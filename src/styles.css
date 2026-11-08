@@ -13,6 +13,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.admin-screen { min-height: 100%; height: 100dvh; overflow-y: auto; overscroll-behavior: contain; }
+
 /*
  * Mr. B Ludo design system – same identity as Mr. B Yatzy:
  * deep teal table, warm gold accents, Inter + Space Grotesk.
@@ -97,6 +99,16 @@
   --ludo-blue: hsl(210 70% 52%);
   --board: hsl(40 30% 96%);
   --board-line: hsl(195 12% 72%);
+  --admin-chart-devices: var(--primary);
+  --admin-chart-ios: var(--game-info-light);
+  --admin-chart-android: var(--game-success-light);
+  --admin-chart-played: hsl(325 70% 72%);
+  --admin-chart-age: hsl(265 55% 72%);
+  --admin-chart-total: var(--foreground);
+  --admin-chart-cpu: hsl(90 55% 62%);
+  --admin-chart-online: var(--ludo-blue);
+  --admin-chart-forfeits: hsl(18 85% 65%);
+  --admin-chart-issues: var(--destructive);
   /* Muted board inks only; original ludo tokens still paint the pieces. */
   --board-red: oklch(0.59 0.145 20);
   --board-green: oklch(0.61 0.108 160);

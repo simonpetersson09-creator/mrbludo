@@ -1,0 +1,134 @@
+const ADMIN_START_DAY = "1970-01-01";
+
+export interface AdminDayRow {
+  day: string;
+  devices: number | null;
+  ios: number | null;
+  android: number | null;
+  played: number | null;
+  median_app_age_days?: number | null;
+  avg_app_age_days?: number | null;
+  total: number;
+  cpu_finished: number | null;
+  online_finished: number | null;
+  forfeits: number;
+  issues: number;
+  issue_devices?: number;
+  new_players?: number;
+  referral_new_players?: number;
+  returning_played?: number;
+  post_match_shown?: number;
+  post_match_opportunities?: number;
+  incomplete_columns?: string[];
+}
+
+export type AdminColumnKey = keyof AdminDayRow;
+
+export function adminReturningShare(row: AdminDayRow): number | null {
+  if (row.returning_played == null || (row.played ?? 0) <= 0 || adminValueIncomplete(row, "played") || adminValueIncomplete(row, "returning_played")) return null;
+  return row.returning_played / Number(row.played) * 100;
+}
+
+export function adminOnlineOutcomes(row: AdminDayRow): number {
+  return Number(row.online_finished ?? 0) + Number(row.forfeits ?? 0);
+}
+
+export function adminForfeitShare(row: AdminDayRow): number | null {
+  const outcomes = adminOnlineOutcomes(row);
+  return outcomes ? row.forfeits / outcomes * 100 : null;
+}
+
+export function adminValueIncomplete(row: AdminDayRow, key: AdminColumnKey): boolean {
+  return row.incomplete_columns?.includes(key) === true || row[key] == null;
+}
+
+/** The number a column actually shows for a day. */
+export function adminCellValue(row: AdminDayRow, key: AdminColumnKey): number {
+  if (key === "total") return row.total;
+  if (key === "ios") return Number(row.ios ?? 0);
+  if (key === "android") return Number(row.android ?? 0);
+  return Number(row[key] ?? 0);
+}
+
+/** Calendar-day mean ending on the row's Stockholm date; incomplete windows stay unknown. */
+export function adminRollingMean(rows: AdminDayRow[], day: string, key: AdminColumnKey): number | null {
+  const end = Date.parse(`${day}T00:00:00Z`);
+  // The window never reaches before the admin start day; early days average what exists.
+  const start = Math.max(end - 29 * 86_400_000, Math.min(...rows.map((row) => Date.parse(`${row.day}T00:00:00Z`))), Date.parse(`${ADMIN_START_DAY}T00:00:00Z`));
+  if (start > end) return null;
+  const expected = Math.round((end - start) / 86_400_000) + 1;
+  const window = rows.filter((row) => {
+    const time = Date.parse(`${row.day}T00:00:00Z`);
+    return time >= start && time <= end;
+  });
+  if (new Set(window.map((row) => row.day)).size !== expected) return null;
+  if (window.some((row) => adminValueIncomplete(row, key) || ((key === "avg_app_age_days" || key === "returning_played") && row[key] == null))) return null;
+  return window.reduce((sum, row) => sum + adminCellValue(row, key), 0) / expected;
+}
+
+/**
+ * Row index holding the column record (highest number) for each column.
+ * Rows arrive newest day first, so ties go to the most recent day.
+ * Columns with nothing but zero have no record and return -1.
+ */
+export function adminRecordIndexes(rows: AdminDayRow[], keys: AdminColumnKey[]): Partial<Record<AdminColumnKey, number>> {
+  const out: Partial<Record<AdminColumnKey, number>> = {};
+  for (const key of keys) {
+    if (rows.some((row) => adminValueIncomplete(row, key))) { out[key] = -1; continue; }
+    let best = -1;
+    let bestValue = 0;
+    rows.forEach((row, index) => {
+      const value = adminCellValue(row, key);
+      if (value > bestValue) {
+        bestValue = value;
+        best = index;
+      }
+    });
+    out[key] = best;
+  }
+  return out;
+}
+
+/** A record star measured on screen, in the scroll wrapper's content coords. */
+export type StarPoint = {
+  key: AdminColumnKey;
+  day: string;
+  x: number;
+  y: number;
+  /** y of the empty padding band just inside this star's row top border. */
+  lane: number;
+};
+
+/**
+ * Ribbon between record stars, oldest day first. Every vertical run stays inside
+ * the star slot of its column (the only strip of a row that holds no digits) and
+ * every horizontal run stays in the padding band between two rows, so the line
+ * can never cover a number. Runs are strictly axis aligned and each turn is a
+ * quarter-circle fillet, so the ribbon reads as one sweep instead of a zigzag.
+ */
+export function buildRibbon(pts: StarPoint[]): string {
+  if (pts.length < 2) return "";
+  const f = (n: number) => n.toFixed(1);
+  let d = `M ${f(pts[0].x)} ${f(pts[0].y)}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i];
+    const b = pts[i + 1];
+    const lane = a.lane;
+    const dx = b.x - a.x;
+    const dy1 = lane - a.y;
+    const dy2 = b.y - lane;
+    const r = Math.max(0, Math.min(14, Math.abs(dy1) / 2, Math.abs(dx) / 2, Math.abs(dy2) / 2));
+    if (Math.abs(dx) < 1 || r < 3) {
+      d += ` L ${f(a.x)} ${f(lane)} L ${f(b.x)} ${f(lane)} L ${f(b.x)} ${f(b.y)}`;
+      continue;
+    }
+    const sx = Math.sign(dx);
+    d +=
+      ` L ${f(a.x)} ${f(lane - Math.sign(dy1) * r)}` +
+      ` Q ${f(a.x)} ${f(lane)} ${f(a.x + sx * r)} ${f(lane)}` +
+      ` L ${f(b.x - sx * r)} ${f(lane)}` +
+      ` Q ${f(b.x)} ${f(lane)} ${f(b.x)} ${f(lane + Math.sign(dy2) * r)}` +
+      ` L ${f(b.x)} ${f(b.y)}`;
+  }
+  return d;
+}
