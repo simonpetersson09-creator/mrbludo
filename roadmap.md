@@ -1,6 +1,7 @@
 # Roadmap: Nya onlineregler (spec 2026-11-04) — KLAR
 
 ## Adminstatistik och tekniska fel (2026-11-08)
+- [x] Detaljerad, integritetssäker tidsmätning för profil, vänner och snabbspel i befintliga serverloggar; 356 tester och 33 isolerade databastester godkända. Verkliga nya mätvärden kräver publicering och appaktivitet.
 - [x] Nollställ adminstatistik med ny mätstart 2026-11-08 09:43 UTC; spelarresultat och diagnostik bevarade, databasverifierat.
 - [x] Granska adminens tekniska fel: push-pluginets Promise-assimilering och Androids saknade randomUUID; äldre webbfel inte reproducerade. Endast granskat, inte åtgärdat.
 

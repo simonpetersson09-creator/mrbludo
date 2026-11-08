@@ -8,6 +8,7 @@ import {
 // The service-role client is only loaded inside handlers, after the caller is authenticated.
 import { healthAlerts } from "./server-timing";
 import { adminPeriodStart, appPlayerIds } from "./admin-period";
+import { withStepTiming } from "./step-timing";
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
 type Admin = Awaited<ReturnType<typeof admin>>;
 
@@ -137,17 +138,17 @@ function fail(e: unknown): never {
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 export interface OnlineContext { supabase: SupabaseClient<Database>; userId: string }
-export const getMeAction = async ({ context }: { context: OnlineContext }) => {
+export const getMeAction = async ({ context }: { context: OnlineContext }) => withStepTiming("getMe", async (step) => {
   const { supabase, userId } = context;
   const [{ data: profile }, { data: stats }, { data: isAdmin }] = await Promise.all([
     // Own row incl. private columns (friend code, sign-up time): read with the server client after auth.
-    admin().then((db) => db.from("profiles").select("*").eq("id", userId).maybeSingle()),
-    supabase.from("player_stats").select("user_id, played, wins, captures, pieces_home, forfeits").eq("user_id", userId).maybeSingle(),
-    supabase.rpc("has_role", { _user_id: userId, _role: "admin" }),
+    step("profile", () => admin().then((db) => db.from("profiles").select("*").eq("id", userId).maybeSingle())),
+    step("stats", () => supabase.from("player_stats").select("user_id, played, wins, captures, pieces_home, forfeits").eq("user_id", userId).maybeSingle()),
+    step("role", () => supabase.rpc("has_role", { _user_id: userId, _role: "admin" })),
   ]);
-  await supabase.from("profiles").update({ last_seen: new Date().toISOString() }).eq("id", userId);
+  await step("presence", () => supabase.from("profiles").update({ last_seen: new Date().toISOString() }).eq("id", userId));
   return { userId, profile, stats, isAdmin: !!isAdmin };
-};
+});
 
 export const updateProfileAction = async ({ data, context }: { data: ReturnType<typeof updateProfileInput>; context: OnlineContext }) => {
     const { error } = await context.supabase.from("profiles").update(data).eq("id", context.userId);
@@ -201,20 +202,20 @@ async function pruneQuickSeats(db: Admin, matchId: string) {
   return rest ?? [];
 }
 
-export const quickMatchAction = async ({ data, context }: { data: ReturnType<typeof quickMatchInput>; context: OnlineContext }) => {
+export const quickMatchAction = async ({ data, context }: { data: ReturnType<typeof quickMatchInput>; context: OnlineContext }) => withStepTiming("quickMatch", async (step) => {
     const db = await admin();
     // One search at a time per player: a parallel request waits briefly instead of seating the player twice.
     const stale = new Date(Date.now() - 15_000).toISOString();
-    await db.from("quick_search_locks").delete().eq("user_id", context.userId).lt("locked_at", stale);
+    await step("lockCleanup", () => db.from("quick_search_locks").delete().eq("user_id", context.userId).lt("locked_at", stale));
     let locked = false;
     for (let i = 0; i < 20 && !locked; i++) {
-      const { error } = await db.from("quick_search_locks").insert({ user_id: context.userId });
+      const { error } = await step("lockAcquire", () => db.from("quick_search_locks").insert({ user_id: context.userId }));
       if (!error) locked = true; else await new Promise((r) => setTimeout(r, 250));
     }
     if (!locked) throw new Error("err:conflict");
-    try { return await quickMatchInner(db, data, context); }
-    finally { await db.from("quick_search_locks").delete().eq("user_id", context.userId); }
-  };
+    try { return await step("search", () => quickMatchInner(db, data, context)); }
+    finally { await step("lockRelease", () => db.from("quick_search_locks").delete().eq("user_id", context.userId)); }
+  });
 
 async function quickMatchInner(db: Admin, data: ReturnType<typeof quickMatchInput>, context: OnlineContext) {
     // A new search replaces any earlier unfinished search by this player (double tap, reload).
@@ -523,18 +524,18 @@ export async function headToHead(db: Admin, userId: string, others: string[]) {
   return out;
 }
 
-export const listFriendsAction = async ({ context }: { context: OnlineContext }) => {
+export const listFriendsAction = async ({ context }: { context: OnlineContext }) => withStepTiming("listFriends", async (step) => {
   const { supabase, userId } = context;
-  const { data: rows } = await supabase.from("friendships").select("*").or(`requester.eq.${userId},addressee.eq.${userId}`);
+  const { data: rows } = await step("friends", () => supabase.from("friendships").select("*").or(`requester.eq.${userId},addressee.eq.${userId}`));
   const ids = [...new Set((rows ?? []).map((r) => (r.requester === userId ? r.addressee : r.requester)))];
   // last_seen is not readable by other players directly; it is shown only to friends, read here on the server.
   const friendIds = (rows ?? []).filter((r) => r.status === "accepted").map((r) => (r.requester === userId ? r.addressee : r.requester));
   const db = await admin();
   // Profiles, head-to-head and invites are independent: fetch them together instead of one after another.
   const [{ data: profs }, h2h, { data: invites }] = await Promise.all([
-    ids.length ? db.from("profiles").select("id, display_name, avatar, country, last_seen").in("id", ids) : Promise.resolve({ data: [] as { id: string; display_name: string; avatar: string; country: string; last_seen: string | null }[] }),
-    headToHead(db, userId, friendIds).catch(() => ({} as Awaited<ReturnType<typeof headToHead>>)),
-    supabase.from("match_invites").select("id, match_id, from_user, created_at").eq("to_user", userId).eq("status", "pending").gte("created_at", new Date(Date.now() - INVITE_TTL_MS).toISOString()).order("created_at", { ascending: false }).limit(10),
+    ids.length ? step("profiles", () => db.from("profiles").select("id, display_name, avatar, country, last_seen").in("id", ids)) : Promise.resolve({ data: [] as { id: string; display_name: string; avatar: string; country: string; last_seen: string | null }[] }),
+    step("history", () => headToHead(db, userId, friendIds)).catch(() => ({} as Awaited<ReturnType<typeof headToHead>>)),
+    step("invites", () => supabase.from("match_invites").select("id, match_id, from_user, created_at").eq("to_user", userId).eq("status", "pending").gte("created_at", new Date(Date.now() - INVITE_TTL_MS).toISOString()).order("created_at", { ascending: false }).limit(10)),
   ]);
   const byId = new Map((profs ?? []).map((p) => [p.id, p]));
   return {
@@ -544,7 +545,7 @@ export const listFriendsAction = async ({ context }: { context: OnlineContext })
     }),
     invites: (invites ?? []).map((i) => ({ ...i, from: byId.get(i.from_user) ?? null })),
   };
-};
+});
 
 export const inviteFriendAction = async ({ data, context }: { data: ReturnType<typeof inviteFriendInput>; context: OnlineContext }) => {
     const db = await admin();
@@ -672,7 +673,7 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
     },
     retention: { d1: retention(1), d7: retention(7), d30: retention(30) },
     days,
-    healthAlerts: healthAlerts(ev.filter((e) => e.kind === "server_timing" && now - new Date(e.created_at).getTime() < 7 * day)
+    healthAlerts: healthAlerts(ev.filter((e) => e.kind === "server_timing" && !(e.detail && typeof e.detail === "object" && "steps" in e.detail) && now - new Date(e.created_at).getTime() < 7 * day)
       .map((e) => { const x = (e.detail ?? {}) as { op?: string; ms?: number; ok?: boolean }; return { at: e.created_at, op: String(x.op ?? "?"), ms: Number(x.ms) || 0, ok: x.ok !== false }; })).slice(0, 20),
     slowOps: ev.filter((e) => e.kind === "server_timing").slice(0, 30).map((e) => ({ at: e.created_at, detail: e.detail })),
     errors: ev.filter((e) => e.kind === "error").slice(0, 30).map((e) => ({ at: e.created_at, platform: e.platform, detail: e.detail })),
