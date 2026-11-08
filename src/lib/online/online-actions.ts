@@ -7,7 +7,7 @@ import {
 
 // The service-role client is only loaded inside handlers, after the caller is authenticated.
 import { healthAlerts } from "./server-timing";
-import { adminPeriodStart } from "./admin-period";
+import { adminPeriodStart, appPlayerIds } from "./admin-period";
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
 type Admin = Awaited<ReturnType<typeof admin>>;
 
@@ -632,7 +632,9 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
     db.from("match_players").select("user_id, last_seen").gte("last_seen", new Date(Math.max(periodStart, now - 2 * 60_000)).toISOString()),
   ]);
   const ev = events.data ?? [];
-  const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; webDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
+  const appUsers = appPlayerIds(ev, sinceStats);
+  const activeAppUsers = appPlayerIds(ev, new Date(Math.max(periodStart, now - day)).toISOString());
+  const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
   for (let i = 29; i >= 0; i--) {
     const d = new Date(now - i * day).toISOString().slice(0, 10);
     const dayEv = ev.filter((e) => e.created_at.startsWith(d) && e.created_at >= sinceStats);
@@ -647,11 +649,10 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
       finished: dayEv.filter((e) => e.kind === "match_finished").length,
       forfeits: dayEv.filter((e) => e.kind === "forfeit").length,
       appDevices: devs((x) => x === "ios" || x === "android"),
-      webDevices: devs((x) => x === "web"),
     });
   }
   // Keep existing identities/results intact; the player cohort restarts at the reset.
-  const profs = (profiles.data ?? []).filter((p) => !reset || p.created_at >= reset.created_at);
+  const profs = (profiles.data ?? []).filter((p) => appUsers.has(p.id) && (!reset || p.created_at >= reset.created_at));
   const retention = (n: number) => {
     const cohort = profs.filter((p) => now - new Date(p.created_at).getTime() > n * day);
     if (!cohort.length) return null;
@@ -662,8 +663,8 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
   return {
     totals: {
       players: profs.length,
-      activeNow: new Set((liveSeats.data ?? []).map((s) => s.user_id)).size,
-      active24h: profs.filter((p) => now - new Date(p.last_seen).getTime() < day).length,
+      activeNow: new Set((liveSeats.data ?? []).filter((s) => appUsers.has(s.user_id)).map((s) => s.user_id)).size,
+      active24h: activeAppUsers.size,
       playing: m.filter((x) => x.status === "playing").length,
       waiting: m.filter((x) => x.status === "waiting").length,
       finished30: m.filter((x) => x.status === "finished").length,

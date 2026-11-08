@@ -51,12 +51,11 @@ function AdminPage() {
           <Chart title={t("adminChartDevices")} values={d.days.map((r) => r.appDevices)} dates={d.days.map((r) => r.date)} />
           <Chart title={t("adminChartMinutes")} note={t("adminChartMinutesNote")} values={d.days.map((r) => r.avgMinutes ?? 0)} dates={d.days.map((r) => r.date)} extra={d.days.map((r) => r.appSessions)} extraLabel={t("adminSessions")} />
           <h2 className="mt-5 font-display text-lg font-bold">{t("last30Days")}</h2>
-          <p className="text-xs text-muted-foreground">{t("appDevicesNote")}</p>
           <table className="mt-2 w-full text-xs">
-            <thead><tr className="text-left text-muted-foreground"><th>{t("colDate")}</th><th>{t("colAppDevices")}</th><th>{t("colWeb")}</th><th>{t("colStarted")}</th><th>{t("colFinished")}</th><th>{t("colForfeits")}</th></tr></thead>
+            <thead><tr className="text-left text-muted-foreground"><th>{t("colDate")}</th><th>{t("colAppDevices")}</th><th>{t("colStarted")}</th><th>{t("colFinished")}</th><th>{t("colForfeits")}</th></tr></thead>
             <tbody>
               {[...d.days].reverse().map((r) => (
-                <tr key={r.date} className="border-t border-border"><td className="py-1">{r.date}</td><td>{r.appDevices}</td><td className="text-muted-foreground">{r.webDevices}</td><td>{r.started}</td><td>{r.finished}</td><td>{r.forfeits}</td></tr>
+                <tr key={r.date} className="border-t border-border"><td className="py-1">{r.date}</td><td>{r.appDevices}</td><td>{r.started}</td><td>{r.finished}</td><td>{r.forfeits}</td></tr>
               ))}
             </tbody>
           </table>
