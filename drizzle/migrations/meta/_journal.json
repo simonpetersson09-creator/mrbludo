@@ -141,6 +141,13 @@
       "when": 1794142410080,
       "tag": "0019_admin_activity_exclusions",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1794142844901,
+      "tag": "0020_monthly_leaderboard_fresh_start",
+      "breakpoints": true
     }
   ]
 }

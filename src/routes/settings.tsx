@@ -1,4 +1,5 @@
 import { knownConsentRows } from "@/lib/ads/ad-consent";
+import { syncProfileName } from "@/lib/ludo/profile-name";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, BarChart3, Bell, BellRing, Camera, Check, ChevronRight, Dices, Globe, Gauge, ShieldCheck, Trash2, User, Vibrate } from "lucide-react";
@@ -100,9 +101,15 @@ function SettingsPage() {
     setBusy(false);
     toast.success(shared ? t("avatarRemoved") : t("avatarLocalOnly"));
   };
-  useEffect(() => setS(loadSettings()), []);
+  useEffect(() => {
+    setS(loadSettings());
+    let alive = true;
+    void syncProfileName().then(() => { if (alive) setS(loadSettings()); });
+    return () => { alive = false; };
+  }, []);
   if (!s) return <main className="app-screen" />;
   const update = (patch: Partial<Settings>) => { const n = { ...s, ...patch }; setS(n); saveSettings(n); };
+  const finishName = () => { setEditingName(false); void syncProfileName(); };
   const current = LANGUAGES.find((l) => l.code === lang);
 
   return (
@@ -153,10 +160,11 @@ function SettingsPage() {
                 <input
                   autoFocus maxLength={16} value={s.name} aria-label={t("yourName")}
                   onChange={(e) => update({ name: e.target.value })}
-                  onKeyDown={(e) => e.key === "Enter" && setEditingName(false)}
+                  onKeyDown={(e) => e.key === "Enter" && finishName()}
+                  onBlur={finishName}
                   className="flex-1 border-b border-primary/40 bg-transparent py-1 text-sm font-medium transition-colors focus:border-primary focus:outline-none"
                 />
-                <button onClick={() => setEditingName(false)} aria-label="OK" className="rounded-lg bg-primary/15 p-1.5 active:bg-primary/25">
+                <button onClick={finishName} aria-label="OK" className="rounded-lg bg-primary/15 p-1.5 active:bg-primary/25">
                   <Check className="h-4 w-4 text-primary" />
                 </button>
               </div>

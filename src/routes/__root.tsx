@@ -1,4 +1,5 @@
 import { preloadDie } from "@/lib/page-cache";
+import { syncProfileName } from "@/lib/ludo/profile-name";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -172,13 +173,14 @@ function RootComponent() {
     // A plain browser on the published site is a visitor, not a player: no identity, no usage log.
     if (isDownloadOnlyVisitor({ hostname: window.location.hostname, isNative: isNativeWindow(), isDev: import.meta.env.DEV })) return;
     setPlayer(true);
-    const ping = () => logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
+    const ping = () => { void syncProfileName(); return logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {}); };
     // Admin login has its own credentials; ordinary app launch creates a player automatically.
     if (window.location.pathname !== "/admin-login") ensurePlayerSession().then(ping).catch(() => {});
     let dispose: (() => void) | undefined;
     let stopped = false;
     startNativeRuntime(() => { void router.navigate({ to: "/" }); }).then(cleanup => { if (stopped) cleanup(); else dispose = cleanup; }).catch(() => {});
-    const resume = () => { router.invalidate(); queryClient.invalidateQueries(); };
+    const resume = () => { void syncProfileName(); router.invalidate(); queryClient.invalidateQueries(); };
+    window.addEventListener("online", resume);
     window.addEventListener(RESUME_EVENT, resume);
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
@@ -186,7 +188,7 @@ function RootComponent() {
       if (event === "SIGNED_IN") ping();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });
-    return () => { stopped = true; dispose?.(); window.removeEventListener(RESUME_EVENT, resume); data.subscription.unsubscribe(); };
+    return () => { stopped = true; dispose?.(); window.removeEventListener("online", resume); window.removeEventListener(RESUME_EVENT, resume); data.subscription.unsubscribe(); };
   }, [router, queryClient]);
 
   return (

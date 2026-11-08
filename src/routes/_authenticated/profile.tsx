@@ -6,6 +6,7 @@ import { getMe, updateProfile } from "@/lib/online/online.functions";
 import { AVATARS, COUNTRIES, flag } from "@/lib/online/profile-options";
 import { loadProfileSnapshot, saveProfileSnapshot } from "@/lib/online/snapshot";
 import { useOwnAvatar } from "@/lib/ludo/avatar";
+import { rememberProfileName, syncProfileName } from "@/lib/ludo/profile-name";
 import { PlayerAvatar } from "@/components/ludo/PlayerAvatar";
 import { errorMessage, useTranslation } from "@/lib/i18n";
 
@@ -35,10 +36,10 @@ function ProfilePage() {
   useEffect(() => {
     const apply = (m: Me) => { setMe(m); if (m.profile) { setName(m.profile.display_name); setAvatar(m.profile.avatar); setCountry(m.profile.country); } };
     const cached = loadProfileSnapshot(); if (cached) apply(cached);
-    getMe().then(m => { saveProfileSnapshot(m); apply(m); }).catch(() => {});
+    syncProfileName().then(() => getMe()).then(m => { saveProfileSnapshot(m); apply(m); }).catch(() => {});
   }, []);
   const save = async () => {
-    try { await updateProfile({ data: { display_name: name, avatar, country } }); const fresh = await getMe(); saveProfileSnapshot(fresh); setMe(fresh); toast.success(t("profileSaved")); }
+    try { await updateProfile({ data: { display_name: name, avatar, country } }); const fresh = await getMe(); rememberProfileName(fresh.userId, name.trim()); saveProfileSnapshot(fresh); setMe(fresh); toast.success(t("profileSaved")); }
     catch (e) { toast.error(errorMessage(e, t) || t("saveFailed")); }
   };
   const s = me?.stats;

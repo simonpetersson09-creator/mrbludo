@@ -1,6 +1,7 @@
 # Roadmap: Nya onlineregler (spec 2026-11-04) — KLAR
 
 ## Adminstatistik och tekniska fel (2026-11-08)
+- [x] Koppla telefonens valda namn till samma onlineprofil, återförsök offline/start/återkomst; namn läst tillbaka via riktig profil i mobilvy. Månadens flitigaste nollställd med gräns 8 november 13:00:01 UTC utan raderade resultat. 367 enhetstester och 36 isolerade databastester godkända; ett befintligt översättningstest rapporterar fyra oanvända nycklar från tidigare dolda adminloggar. Namnkoppling i installerad app kräver nytt appbygge.
 - [x] Undanta Simons bekräftade iPhone/konto från adminens aktivitetsstatistik, historiskt och framåt; resultat och diagnostik bevarade. 6 enhetstester + isolerat databastest godkända; riktig admin visar 0 aktiva enheter idag. Publicerad admin kräver publicering av ändringen.
 - [x] Datumrader i tabell och diagram börjar vid statistikens nollställning 8 november; inga tomma oktoberrader före mätstart.
 - [x] Dölj tekniska fel och annonshändelser i admin utan att radera loggar; appstartsdiagnostik börjar 8 november 2026 UTC, inom rullande 30 dagar.

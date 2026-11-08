@@ -11,6 +11,7 @@ import { logEvent } from "@/lib/online/online.functions";
 import { deviceId, platform } from "@/lib/online/telemetry";
 import { reportAppError } from "@/lib/online/report";
 import { ensurePlayerSession } from "@/lib/auth/player";
+import { syncProfileName } from "@/lib/ludo/profile-name";
 import { supabase } from "@/lib/auth/client";
 import { startNativeRuntime, RESUME_EVENT } from "@/lib/native/runtime";
 import { installViewportSync } from "@/lib/native/viewport";
@@ -31,6 +32,7 @@ function NativeRoot() {
       nativeDiagnostic("session", "started");
       ensurePlayerSession().then(() => {
         nativeDiagnostic("session", "ready");
+        void syncProfileName();
         // Counts this phone as an app device for today in the admin panel (was missing in the app build).
         void logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
         return router.invalidate();
