@@ -9,6 +9,7 @@ import {
 import { healthAlerts } from "./server-timing";
 import { adminPeriodStart, appPlayerIds } from "./admin-period";
 import { withStepTiming } from "./step-timing";
+import { isAppOpenDiagnostic } from "./ad-diagnostics";
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
 type Admin = Awaited<ReturnType<typeof admin>>;
 
@@ -614,6 +615,24 @@ export const logEventAction = async ({ data, context }: { data: ReturnType<typeo
     await logEventRow(db, { user_id: context.userId, kind: data.kind, device_id: data.deviceId, platform: data.platform, detail: data.detail });
     return { ok: true };
   };
+export const adminAdDiagnosticsAction = async ({ context }: { context: OnlineContext }) => {
+  const { data: isAdmin, error: roleError } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+  if (roleError || !isAdmin) throw new Error("err:forbidden");
+  const db = await admin();
+  const since = new Date(Date.now() - 30 * 86_400_000).toISOString();
+  const diagnostics: { at: string; platform: string | null; detail: Database["public"]["Tables"]["app_events"]["Row"]["detail"] }[] = [];
+  // Page all matching diagnostics rather than the overview's last 40 mixed ad events.
+  for (let offset = 0; offset < 10000; offset += 500) {
+    const { data, error } = await db.from("app_events").select("id, created_at, platform, detail")
+      .eq("kind", "ad").eq("platform", "ios").eq("detail->>name", "ios_app_open_diag")
+      .gte("created_at", since).order("created_at", { ascending: false }).order("id", { ascending: false }).range(offset, offset + 499);
+    if (error) throw new Error("err:missing");
+    diagnostics.push(...(data ?? []).filter(isAppOpenDiagnostic).map((r) => ({ at: r.created_at, platform: r.platform, detail: r.detail })));
+    if ((data?.length ?? 0) < 500) break;
+  }
+  return { diagnostics };
+};
+
 export const adminOverviewAction = async ({ context }: { context: OnlineContext }) => {
   const { data: isAdmin } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
   if (!isAdmin) throw new Error("err:forbidden");

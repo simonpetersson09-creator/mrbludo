@@ -93,6 +93,11 @@ export const adminOverview = createServerFn({ method: "POST" }).middleware([requ
   return timed("adminOverview", () => adminOverviewAction({ context }));
 });
 
+export const adminAdDiagnostics = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  const { adminAdDiagnosticsAction } = await import("./online-actions");
+  return adminAdDiagnosticsAction({ context });
+});
+
 export const getMyRanks = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { getMyRanksAction } = await import("./online-actions");
   return timed("getMyRanks", () => getMyRanksAction({ context }));

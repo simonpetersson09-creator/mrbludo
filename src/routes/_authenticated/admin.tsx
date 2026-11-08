@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
 import { adminOverview, adminTestPush } from "@/lib/online/online.functions";
 import { useTranslation } from "@/lib/i18n";
+import AdminAdDiagnostics from "@/components/AdminAdDiagnostics";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -24,7 +26,13 @@ function AdminPage() {
   const { t } = useTranslation();
   const [d, setD] = useState<Data | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  useEffect(() => { adminOverview().then(setD).catch(() => setErr("noAdmin")); }, []);
+  const [loading, setLoading] = useState(false);
+  const load = async () => {
+    setLoading(true); setErr(null);
+    try { setD(await adminOverview()); } catch { setErr("noAdmin"); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { void load(); }, []);
   const Stat = ({ l, v }: { l: string; v: number | string | null }) => (
     <div className="rounded-[10px] bg-surface py-2 text-center"><p className="text-lg font-bold text-gold">{v ?? "–"}</p><p className="text-xs text-muted-foreground">{l}</p></div>
   );
@@ -32,10 +40,14 @@ function AdminPage() {
     <main className="app-screen">
       <div className="mx-auto w-full max-w-[640px]">
         <Link to="/online" className="mb-2 flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft size={16} /> {t("back")}</Link>
-        <h1 className="brand-title mb-3 text-3xl">{t("adminTitle")}</h1>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+          <h1 className="text-xl font-semibold">{t("adminTitle")}</h1>
+          <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading}><RefreshCw />{loading ? "Uppdaterar…" : "Uppdatera"}</Button>
+        </div>
         {err && <><p className="text-sm text-destructive">{t("noAdmin")}</p><Link to="/admin-login" className="home-action">{t("signIn")}</Link></>}
         {!d && !err && <p className="text-sm text-muted-foreground">{t("loading")}</p>}
         {d && (<>
+          <AdminAdDiagnostics />
           <div className="grid grid-cols-3 gap-[7px]">
             <Stat l={t("adminPlayers")} v={d.totals.players} />
             <Stat l={t("adminInMatch")} v={d.totals.activeNow} />

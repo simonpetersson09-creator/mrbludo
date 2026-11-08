@@ -58,6 +58,7 @@ export const Route = createFileRoute("/api/public/native")({ server: { handlers:
         case "getLeaderboard": return reply(await timed("getLeaderboard", () => actions.getLeaderboardAction({ data: inputs.getLeaderboardInput(body.data as Parameters<typeof inputs.getLeaderboardInput>[0]), context })));
         case "logEvent": return reply(await timed("logEvent", () => actions.logEventAction({ data: inputs.logEventInput(body.data as Parameters<typeof inputs.logEventInput>[0]), context })));
         case "adminOverview": return reply(await timed("adminOverview", () => actions.adminOverviewAction({ context })));
+        case "adminAdDiagnostics": return reply(await actions.adminAdDiagnosticsAction({ context }));
         case "adminPinLogin": return reply(await timed("adminPinLogin", () => actions.adminPinLoginAction({ data: inputs.adminPinInput(body.data as Parameters<typeof inputs.adminPinInput>[0]), context })));
         case "registerPushToken": return reply(await timed("registerPushToken", () => actions.registerPushTokenAction({ data: inputs.registerPushInput(body.data as Parameters<typeof inputs.registerPushInput>[0]), context })));
         case "unregisterPushToken": return reply(await timed("unregisterPushToken", () => actions.unregisterPushTokenAction({ data: inputs.unregisterPushInput(body.data as Parameters<typeof inputs.unregisterPushInput>[0]), context })));
