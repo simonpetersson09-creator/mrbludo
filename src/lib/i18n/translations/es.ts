@@ -54,8 +54,6 @@ export const es: Record<TranslationKey, string> = {
   errorPageTitle: "No se pudo cargar la página",
   errorPageBody: "Algo salió mal por nuestra parte. Inténtalo de nuevo o vuelve al inicio.",
   tryAgain: "Reintentar",
-  adEvents: "Eventos de anuncios",
-  noAdEvents: "No hay eventos de anuncios.",
   forfeit: "Rendirse",
   yourTurn: "Tu turno – tira el dado",
   theirTurn: "Turno de {name}",
@@ -185,8 +183,6 @@ export const es: Record<TranslationKey, string> = {
   colStarted: "Empezadas",
   colFinished: "Terminadas",
   colForfeits: "Abandonos",
-  techErrors: "Errores técnicos",
-  noErrors: "Sin errores reportados.",
 
   errConflict: "La partida cambió al mismo tiempo – inténtalo de nuevo",
   errNameShort: "El nombre debe tener al menos 2 caracteres",

@@ -54,8 +54,6 @@ export const uk: Record<TranslationKey, string> = {
   errorPageTitle: "Не вдалося завантажити сторінку",
   errorPageBody: "У нас щось пішло не так. Спробуй ще раз або повернись на головну.",
   tryAgain: "Спробувати ще",
-  adEvents: "Події реклами",
-  noAdEvents: "Немає подій реклами.",
   forfeit: "Здатися",
   yourTurn: "Твій хід – кинь кубик",
   theirTurn: "Хід гравця {name}",
@@ -185,8 +183,6 @@ export const uk: Record<TranslationKey, string> = {
   colStarted: "Розпочато",
   colFinished: "Завершено",
   colForfeits: "Здалися",
-  techErrors: "Технічні помилки",
-  noErrors: "Помилок не зареєстровано.",
 
   errConflict: "Матч змінився одночасно – спробуй ще раз",
   errNameShort: "Ім'я має містити щонайменше 2 символи",

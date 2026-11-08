@@ -54,8 +54,6 @@ export const pa: Record<TranslationKey, string> = {
   errorPageTitle: "ਪੰਨਾ ਲੋਡ ਨਹੀਂ ਹੋਇਆ",
   errorPageBody: "ਸਾਡੇ ਵੱਲੋਂ ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ ਜਾਂ ਹੋਮ 'ਤੇ ਵਾਪਸ ਜਾਓ।",
   tryAgain: "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
-  adEvents: "ਇਸ਼ਤਿਹਾਰ ਘਟਨਾਵਾਂ",
-  noAdEvents: "ਕੋਈ ਇਸ਼ਤਿਹਾਰ ਘਟਨਾ ਨਹੀਂ।",
   forfeit: "ਹਾਰ ਮਨੋ",
   yourTurn: "ਤੁਹਾਡੀ ਵਾਰੀ – ਪਾਸਾ ਸੁੱਟੋ",
   theirTurn: "{name} ਦੀ ਵਾਰੀ",
@@ -185,8 +183,6 @@ export const pa: Record<TranslationKey, string> = {
   colStarted: "ਸ਼ੁਰੂ",
   colFinished: "ਪੂਰੇ",
   colForfeits: "ਹਾਰ ਮਨੀ",
-  techErrors: "ਤਕਨੀਕੀ ਗਲਤੀਆਂ",
-  noErrors: "ਕੋਈ ਗਲਤੀ ਰਿਪੋਰਟ ਨਹੀਂ ਹੋਈ।",
 
   errConflict: "ਮੈਚ ਇਕੋ ਸਮੇਂ ਬਦਲ ਗਿਆ – ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
   errNameShort: "ਨਾਮ ਘੱਟੋ-ਘੱਟ 2 ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ",

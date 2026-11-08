@@ -54,8 +54,6 @@ export const ms: Record<TranslationKey, string> = {
   errorPageTitle: "Halaman tidak dapat dimuatkan",
   errorPageBody: "Sesuatu tidak kena di pihak kami. Cuba lagi atau kembali ke laman utama.",
   tryAgain: "Cuba lagi",
-  adEvents: "Peristiwa iklan",
-  noAdEvents: "Tiada peristiwa iklan.",
   forfeit: "Serah kalah",
   yourTurn: "Giliran anda – lontar dadu",
   theirTurn: "Giliran {name}",
@@ -185,8 +183,6 @@ export const ms: Record<TranslationKey, string> = {
   colStarted: "Bermula",
   colFinished: "Selesai",
   colForfeits: "Serah kalah",
-  techErrors: "Ralat teknikal",
-  noErrors: "Tiada ralat dilaporkan.",
 
   errConflict: "Perlawanan berubah serentak – cuba lagi",
   errNameShort: "Nama mesti sekurang-kurangnya 2 aksara",

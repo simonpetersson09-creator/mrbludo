@@ -54,8 +54,6 @@ export const hi: Record<TranslationKey, string> = {
   errorPageTitle: "पेज लोड नहीं हुआ",
   errorPageBody: "हमारी तरफ़ से कुछ गड़बड़ हो गई। फिर से कोशिश करें या होम पर लौटें।",
   tryAgain: "फिर से कोशिश करें",
-  adEvents: "विज्ञापन इवेंट",
-  noAdEvents: "कोई विज्ञापन इवेंट नहीं।",
   forfeit: "हार मानें",
   yourTurn: "आपकी बारी – पासा फेंकें",
   theirTurn: "{name} की बारी",
@@ -185,8 +183,6 @@ export const hi: Record<TranslationKey, string> = {
   colStarted: "शुरू",
   colFinished: "पूरे",
   colForfeits: "हार मानी",
-  techErrors: "तकनीकी त्रुटियां",
-  noErrors: "कोई त्रुटि रिपोर्ट नहीं हुई।",
 
   errConflict: "मैच एक साथ बदल गया – फिर कोशिश करें",
   errNameShort: "नाम में कम से कम 2 अक्षर होने चाहिए",

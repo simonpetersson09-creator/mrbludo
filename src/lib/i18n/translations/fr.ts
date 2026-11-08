@@ -54,8 +54,6 @@ export const fr: Record<TranslationKey, string> = {
   errorPageTitle: "La page n'a pas pu se charger",
   errorPageBody: "Un problème est survenu de notre côté. Réessaie ou reviens à l'accueil.",
   tryAgain: "Réessayer",
-  adEvents: "Événements publicitaires",
-  noAdEvents: "Aucun événement publicitaire.",
   forfeit: "Abandonner",
   yourTurn: "À toi – lance le dé",
   theirTurn: "Tour de {name}",
@@ -185,8 +183,6 @@ export const fr: Record<TranslationKey, string> = {
   colStarted: "Commencées",
   colFinished: "Terminées",
   colForfeits: "Abandons",
-  techErrors: "Erreurs techniques",
-  noErrors: "Aucune erreur signalée.",
 
   errConflict: "La partie a changé en même temps – réessaie",
   errNameShort: "Le nom doit contenir au moins 2 caractères",

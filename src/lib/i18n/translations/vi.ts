@@ -54,8 +54,6 @@ export const vi: Record<TranslationKey, string> = {
   errorPageTitle: "Không thể tải trang",
   errorPageBody: "Đã xảy ra lỗi từ phía chúng tôi. Hãy thử lại hoặc quay về trang chủ.",
   tryAgain: "Thử lại",
-  adEvents: "Sự kiện quảng cáo",
-  noAdEvents: "Không có sự kiện quảng cáo.",
   forfeit: "Đầu hàng",
   yourTurn: "Lượt của bạn – tung xúc xắc",
   theirTurn: "Lượt của {name}",
@@ -185,8 +183,6 @@ export const vi: Record<TranslationKey, string> = {
   colStarted: "Bắt đầu",
   colFinished: "Hoàn thành",
   colForfeits: "Đầu hàng",
-  techErrors: "Lỗi kỹ thuật",
-  noErrors: "Không có lỗi nào được báo cáo.",
 
   errConflict: "Trận đấu thay đổi cùng lúc – thử lại",
   errNameShort: "Tên phải có ít nhất 2 ký tự",

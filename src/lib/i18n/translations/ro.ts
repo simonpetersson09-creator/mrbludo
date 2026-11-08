@@ -54,8 +54,6 @@ export const ro: Record<TranslationKey, string> = {
   errorPageTitle: "Pagina nu s-a putut încărca",
   errorPageBody: "Ceva nu a mers bine la noi. Încearcă din nou sau revino la început.",
   tryAgain: "Încearcă din nou",
-  adEvents: "Evenimente publicitare",
-  noAdEvents: "Niciun eveniment publicitar.",
   forfeit: "Renunță",
   yourTurn: "Rândul tău – aruncă zarul",
   theirTurn: "Rândul lui {name}",
@@ -185,8 +183,6 @@ export const ro: Record<TranslationKey, string> = {
   colStarted: "Începute",
   colFinished: "Terminate",
   colForfeits: "Abandonuri",
-  techErrors: "Erori tehnice",
-  noErrors: "Nicio eroare raportată.",
 
   errConflict: "Meciul s-a schimbat simultan – încearcă din nou",
   errNameShort: "Numele trebuie să aibă cel puțin 2 caractere",

@@ -54,8 +54,6 @@ export const mr: Record<TranslationKey, string> = {
   errorPageTitle: "पेज लोड झाले नाही",
   errorPageBody: "आमच्याकडून काहीतरी चूक झाली. पुन्हा प्रयत्न करा किंवा होमवर परत जा.",
   tryAgain: "पुन्हा प्रयत्न करा",
-  adEvents: "जाहिरात इव्हेंट्स",
-  noAdEvents: "कोणतेही जाहिरात इव्हेंट नाहीत.",
   forfeit: "हार माना",
   yourTurn: "तुमची फेरी – पासा फेका",
   theirTurn: "{name} ची फेरी",
@@ -185,8 +183,6 @@ export const mr: Record<TranslationKey, string> = {
   colStarted: "सुरू",
   colFinished: "पूर्ण",
   colForfeits: "हार मानली",
-  techErrors: "तांत्रिक त्रुटी",
-  noErrors: "कोणतीही त्रुटी नोंदवली गेली नाही.",
 
   errConflict: "सामना एकाच वेळी बदलला – पुन्हा प्रयत्न करा",
   errNameShort: "नावात किमान 2 अक्षरे हवीत",

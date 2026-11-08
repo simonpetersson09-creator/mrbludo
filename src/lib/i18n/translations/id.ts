@@ -54,8 +54,6 @@ export const id: Record<TranslationKey, string> = {
   errorPageTitle: "Halaman gagal dimuat",
   errorPageBody: "Terjadi kesalahan di pihak kami. Coba lagi atau kembali ke beranda.",
   tryAgain: "Coba lagi",
-  adEvents: "Peristiwa iklan",
-  noAdEvents: "Tidak ada peristiwa iklan.",
   forfeit: "Menyerah",
   yourTurn: "Giliranmu – kocok dadu",
   theirTurn: "Giliran {name}",
@@ -185,8 +183,6 @@ export const id: Record<TranslationKey, string> = {
   colStarted: "Dimulai",
   colFinished: "Selesai",
   colForfeits: "Menyerah",
-  techErrors: "Kesalahan teknis",
-  noErrors: "Tidak ada kesalahan dilaporkan.",
 
   errConflict: "Pertandingan berubah bersamaan – coba lagi",
   errNameShort: "Nama harus minimal 2 karakter",

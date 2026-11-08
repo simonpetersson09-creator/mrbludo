@@ -54,8 +54,6 @@ export const kn: Record<TranslationKey, string> = {
   errorPageTitle: "ಪುಟ ಲೋಡ್ ಆಗಲಿಲ್ಲ",
   errorPageBody: "ನಮ್ಮ ಕಡೆಯಿಂದ ಏನೋ ತಪ್ಪಾಗಿದೆ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ.",
   tryAgain: "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
-  adEvents: "ಜಾಹೀರಾತು ಘಟನೆಗಳು",
-  noAdEvents: "ಜಾಹೀರಾತು ಘಟನೆಗಳಿಲ್ಲ.",
   forfeit: "ಹಾರು ಬಿಡು",
   yourTurn: "ನಿಮ್ಮ ಸರದಿ – ದಾಳ ಎಸೆಯಿರಿ",
   theirTurn: "{name} ಅವರ ಸರದಿ",
@@ -185,8 +183,6 @@ export const kn: Record<TranslationKey, string> = {
   colStarted: "ಪ್ರಾರಂಭಿಸಿದವು",
   colFinished: "ಮುಗಿದವು",
   colForfeits: "ಹಾರು ಬಿಟ್ಟವು",
-  techErrors: "ತಾಂತ್ರಿಕ ದೋಷಗಳು",
-  noErrors: "ಯಾವುದೇ ದೋಷಗಳು ವರದಿಯಾಗಿಲ್ಲ.",
 
   errConflict: "ಪಂದ್ಯ ಏಕಕಾಲದಲ್ಲಿ ಬದಲಾಯಿತು – ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
   errNameShort: "ಹೆಸರು ಕನಿಷ್ಠ 2 ಅಕ್ಷರಗಳಿರಬೇಕು",

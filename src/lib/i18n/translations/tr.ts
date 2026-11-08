@@ -54,8 +54,6 @@ export const tr: Record<TranslationKey, string> = {
   errorPageTitle: "Sayfa yüklenemedi",
   errorPageBody: "Bizim tarafımızda bir sorun oluştu. Tekrar dene veya ana sayfaya dön.",
   tryAgain: "Tekrar dene",
-  adEvents: "Reklam olayları",
-  noAdEvents: "Reklam olayı yok.",
   forfeit: "Pes et",
   yourTurn: "Sıra sende – zarı at",
   theirTurn: "{name} adlı oyuncunun sırası",
@@ -185,8 +183,6 @@ export const tr: Record<TranslationKey, string> = {
   colStarted: "Başlayan",
   colFinished: "Biten",
   colForfeits: "Pes",
-  techErrors: "Teknik hatalar",
-  noErrors: "Bildirilen hata yok.",
 
   errConflict: "Maç aynı anda değişti – tekrar dene",
   errNameShort: "Ad en az 2 karakter olmalı",

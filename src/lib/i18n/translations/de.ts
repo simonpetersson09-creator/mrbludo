@@ -54,8 +54,6 @@ export const de: Record<TranslationKey, string> = {
   errorPageTitle: "Seite konnte nicht geladen werden",
   errorPageBody: "Bei uns ist etwas schiefgelaufen. Versuche es erneut oder kehre zur Startseite zurück.",
   tryAgain: "Erneut versuchen",
-  adEvents: "Werbeereignisse",
-  noAdEvents: "Keine Werbeereignisse.",
   forfeit: "Aufgeben",
   yourTurn: "Du bist dran – würfle",
   theirTurn: "{name} ist dran",
@@ -185,8 +183,6 @@ export const de: Record<TranslationKey, string> = {
   colStarted: "Gestartet",
   colFinished: "Beendet",
   colForfeits: "Abbrüche",
-  techErrors: "Technische Fehler",
-  noErrors: "Keine gemeldeten Fehler.",
 
   errConflict: "Das Spiel hat sich gleichzeitig geändert – erneut versuchen",
   errNameShort: "Der Name muss mindestens 2 Zeichen haben",

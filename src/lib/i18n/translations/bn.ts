@@ -54,8 +54,6 @@ export const bn: Record<TranslationKey, string> = {
   errorPageTitle: "পেজ লোড হয়নি",
   errorPageBody: "আমাদের দিকে কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন বা হোমে ফিরে যান।",
   tryAgain: "আবার চেষ্টা করুন",
-  adEvents: "বিজ্ঞাপন ইভেন্ট",
-  noAdEvents: "কোনো বিজ্ঞাপন ইভেন্ট নেই।",
   forfeit: "হার মানুন",
   yourTurn: "আপনার পালা – ছক্কা ছুঁড়ুন",
   theirTurn: "{name}-এর পালা",
@@ -185,8 +183,6 @@ export const bn: Record<TranslationKey, string> = {
   colStarted: "শুরু",
   colFinished: "সম্পন্ন",
   colForfeits: "হার মানা",
-  techErrors: "প্রযুক্তিগত ত্রুটি",
-  noErrors: "কোনো ত্রুটি রিপোর্ট হয়নি।",
 
   errConflict: "ম্যাচ একই সঙ্গে বদলে গেছে – আবার চেষ্টা করুন",
   errNameShort: "নাম কমপক্ষে ২ অক্ষরের হতে হবে",

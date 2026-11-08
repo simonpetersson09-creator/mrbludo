@@ -54,8 +54,6 @@ export const te: Record<TranslationKey, string> = {
   errorPageTitle: "పేజీ లోడ్ కాలేదు",
   errorPageBody: "మా వైపు ఏదో తప్పు జరిగింది. మళ్లీ ప్రయత్నించండి లేదా హోమ్‌కు తిరిగి వెళ్లండి.",
   tryAgain: "మళ్లీ ప్రయత్నించండి",
-  adEvents: "ప్రకటన ఈవెంట్‌లు",
-  noAdEvents: "ప్రకటన ఈవెంట్‌లు లేవు.",
   forfeit: "ఓటమి ఒప్పుకో",
   yourTurn: "నీ టర్న్ – పాచిక వేయి",
   theirTurn: "{name} టర్న్",
@@ -185,8 +183,6 @@ export const te: Record<TranslationKey, string> = {
   colStarted: "ప్రారంభించినవి",
   colFinished: "పూర్తయినవి",
   colForfeits: "ఓటమి ఒప్పుకున్నవి",
-  techErrors: "సాంకేతిక లోపాలు",
-  noErrors: "లోపాలేమీ నివేదించబడలేదు.",
 
   errConflict: "మ్యాచ్ ఏకకాలంలో మారింది – మళ్లీ ప్రయత్నించు",
   errNameShort: "పేరు కనీసం 2 అక్షరాలు ఉండాలి",

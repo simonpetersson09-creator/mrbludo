@@ -54,8 +54,6 @@ export const gu: Record<TranslationKey, string> = {
   errorPageTitle: "પેજ લોડ થયું નહીં",
   errorPageBody: "અમારી બાજુ કંઈક ખોટું થયું. ફરી પ્રયાસ કરો અથવા હોમ પર પાછા જાઓ.",
   tryAgain: "ફરી પ્રયાસ કરો",
-  adEvents: "જાહેરાત ઇવેન્ટ્સ",
-  noAdEvents: "કોઈ જાહેરાત ઇવેન્ટ નથી.",
   forfeit: "હાર માનો",
   yourTurn: "તમારો વારો – પાસો ફેંકો",
   theirTurn: "{name} નો વારો",
@@ -185,8 +183,6 @@ export const gu: Record<TranslationKey, string> = {
   colStarted: "શરૂ",
   colFinished: "પૂરી",
   colForfeits: "હાર માની",
-  techErrors: "તકનીકી ભૂલો",
-  noErrors: "કોઈ ભૂલ નોંધાઈ નથી.",
 
   errConflict: "મેચ એકસાથે બદલાઈ – ફરી પ્રયાસ કરો",
   errNameShort: "નામ ઓછામાં ઓછા 2 અક્ષરનું હોવું જોઈએ",

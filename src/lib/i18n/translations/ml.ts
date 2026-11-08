@@ -54,8 +54,6 @@ export const ml: Record<TranslationKey, string> = {
   errorPageTitle: "പേജ് ലോഡ് ആയില്ല",
   errorPageBody: "ഞങ്ങളുടെ ഭാഗത്ത് എന്തോ പിശക് സംഭവിച്ചു. വീണ്ടും ശ്രമിക്കുക അല്ലെങ്കിൽ ഹോമിലേക്ക് മടങ്ങുക.",
   tryAgain: "വീണ്ടും ശ്രമിക്കുക",
-  adEvents: "പരസ്യ ഇവന്റുകൾ",
-  noAdEvents: "പരസ്യ ഇവന്റുകളില്ല.",
   forfeit: "കീഴടങ്ങൂ",
   yourTurn: "നിന്റെ ടേൺ – പാചകം എറിയൂ",
   theirTurn: "{name}-ന്റെ ടേൺ",
@@ -185,8 +183,6 @@ export const ml: Record<TranslationKey, string> = {
   colStarted: "തുടങ്ങിയവ",
   colFinished: "പൂർത്തിയായവ",
   colForfeits: "കീഴടങ്ങിയവ",
-  techErrors: "സാങ്കേതിക പിശകുകൾ",
-  noErrors: "പിശകുകളൊന്നും റിപ്പോർട്ട് ചെയ്തിട്ടില്ല.",
 
   errConflict: "മത്സരം ഒരേസമയം മാറി – വീണ്ടും ശ്രമിക്കൂ",
   errNameShort: "പേരിന് കുറഞ്ഞത് 2 അക്ഷരങ്ങൾ വേണം",

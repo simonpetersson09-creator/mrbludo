@@ -54,8 +54,6 @@ export const ko: Record<TranslationKey, string> = {
   errorPageTitle: "페이지를 불러오지 못했습니다",
   errorPageBody: "문제가 발생했습니다. 다시 시도하거나 홈으로 돌아가세요.",
   tryAgain: "다시 시도",
-  adEvents: "광고 이벤트",
-  noAdEvents: "광고 이벤트가 없습니다.",
   forfeit: "포기",
   yourTurn: "당신의 차례 – 주사위를 굴리세요",
   theirTurn: "{name}의 차례",
@@ -185,8 +183,6 @@ export const ko: Record<TranslationKey, string> = {
   colStarted: "시작됨",
   colFinished: "완료됨",
   colForfeits: "포기",
-  techErrors: "기술 오류",
-  noErrors: "보고된 오류가 없습니다.",
 
   errConflict: "경기가 동시에 변경되었습니다 – 다시 시도하세요",
   errNameShort: "이름은 2자 이상이어야 합니다",

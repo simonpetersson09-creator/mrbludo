@@ -54,8 +54,6 @@ export const ja: Record<TranslationKey, string> = {
   errorPageTitle: "ページを読み込めませんでした",
   errorPageBody: "問題が発生しました。もう一度試すか、ホームに戻ってください。",
   tryAgain: "再試行",
-  adEvents: "広告イベント",
-  noAdEvents: "広告イベントはありません。",
   forfeit: "降参",
   yourTurn: "あなたの番 – サイコロを振ってください",
   theirTurn: "{name}の番",
@@ -185,8 +183,6 @@ export const ja: Record<TranslationKey, string> = {
   colStarted: "開始",
   colFinished: "完了",
   colForfeits: "降参",
-  techErrors: "技術エラー",
-  noErrors: "報告されたエラーはありません。",
 
   errConflict: "対局が同時に変更されました – もう一度お試しください",
   errNameShort: "名前は2文字以上必要です",

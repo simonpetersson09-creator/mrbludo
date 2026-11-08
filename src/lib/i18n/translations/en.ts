@@ -54,8 +54,6 @@ export const en: Record<TranslationKey, string> = {
   errorPageTitle: "This page didn't load",
   errorPageBody: "Something went wrong on our end. Try again or go back home.",
   tryAgain: "Try again",
-  adEvents: "Ad events",
-  noAdEvents: "No ad events.",
   forfeit: "Give up",
   yourTurn: "Your turn – roll the die",
   theirTurn: "{name}'s turn",
@@ -185,8 +183,6 @@ export const en: Record<TranslationKey, string> = {
   colStarted: "Started",
   colFinished: "Finished",
   colForfeits: "Forfeits",
-  techErrors: "Technical errors",
-  noErrors: "No reported errors.",
 
   errConflict: "The match changed at the same time – try again",
   errNameShort: "The name must be at least 2 characters",

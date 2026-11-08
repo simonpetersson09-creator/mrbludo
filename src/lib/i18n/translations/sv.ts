@@ -56,8 +56,6 @@ export const sv = {
   errorPageTitle: "Sidan kunde inte laddas",
   errorPageBody: "Något gick fel hos oss. Försök igen eller gå tillbaka till start.",
   tryAgain: "Försök igen",
-  adEvents: "Annonshändelser",
-  noAdEvents: "Inga annonshändelser.",
   forfeit: "Ge upp",
   yourTurn: "Din tur – kasta tärningen",
   theirTurn: "{name}s tur",
@@ -197,8 +195,6 @@ export const sv = {
   colStarted: "Startade",
   colFinished: "Avslutade",
   colForfeits: "Avhopp",
-  techErrors: "Tekniska fel",
-  noErrors: "Inga rapporterade fel.",
 
   // Serverfel (koder från online-funktionerna)
   errConflict: "Matchen ändrades samtidigt – försök igen",

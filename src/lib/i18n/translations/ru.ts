@@ -54,8 +54,6 @@ export const ru: Record<TranslationKey, string> = {
   errorPageTitle: "Не удалось загрузить страницу",
   errorPageBody: "У нас что-то пошло не так. Попробуй ещё раз или вернись на главную.",
   tryAgain: "Повторить",
-  adEvents: "События рекламы",
-  noAdEvents: "Нет событий рекламы.",
   forfeit: "Сдаться",
   yourTurn: "Твой ход – брось кубик",
   theirTurn: "Ход игрока {name}",
@@ -185,8 +183,6 @@ export const ru: Record<TranslationKey, string> = {
   colStarted: "Начато",
   colFinished: "Завершено",
   colForfeits: "Сдались",
-  techErrors: "Технические ошибки",
-  noErrors: "Ошибок не зарегистрировано.",
 
   errConflict: "Матч изменился одновременно – попробуй ещё раз",
   errNameShort: "Имя должно содержать минимум 2 символа",

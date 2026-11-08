@@ -54,8 +54,6 @@ export const th: Record<TranslationKey, string> = {
   errorPageTitle: "โหลดหน้านี้ไม่ได้",
   errorPageBody: "เกิดข้อผิดพลาดบางอย่าง ลองอีกครั้งหรือกลับไปหน้าแรก",
   tryAgain: "ลองอีกครั้ง",
-  adEvents: "เหตุการณ์โฆษณา",
-  noAdEvents: "ไม่มีเหตุการณ์โฆษณา",
   forfeit: "ยอมแพ้",
   yourTurn: "เทิร์นของคุณ – ทอยลูกเต๋า",
   theirTurn: "เทิร์นของ {name}",
@@ -185,8 +183,6 @@ export const th: Record<TranslationKey, string> = {
   colStarted: "เริ่ม",
   colFinished: "จบ",
   colForfeits: "ยอมแพ้",
-  techErrors: "ข้อผิดพลาดทางเทคนิค",
-  noErrors: "ไม่มีข้อผิดพลาดที่รายงาน",
 
   errConflict: "แมตช์เปลี่ยนแปลงพร้อมกัน – ลองอีกครั้ง",
   errNameShort: "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร",

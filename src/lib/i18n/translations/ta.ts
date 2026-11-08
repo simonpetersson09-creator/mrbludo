@@ -54,8 +54,6 @@ export const ta: Record<TranslationKey, string> = {
   errorPageTitle: "பக்கம் ஏற்றப்படவில்லை",
   errorPageBody: "எங்கள் பக்கத்தில் ஏதோ தவறு நடந்தது. மீண்டும் முயலவும் அல்லது முகப்புக்குத் திரும்பவும்.",
   tryAgain: "மீண்டும் முயல்க",
-  adEvents: "விளம்பர நிகழ்வுகள்",
-  noAdEvents: "விளம்பர நிகழ்வுகள் இல்லை.",
   forfeit: "சரணடை",
   yourTurn: "உன் சுற்று – பகடையை உருட்டு",
   theirTurn: "{name} சுற்று",
@@ -185,8 +183,6 @@ export const ta: Record<TranslationKey, string> = {
   colStarted: "தொடங்கியவை",
   colFinished: "முடிந்தவை",
   colForfeits: "சரணடைந்தவை",
-  techErrors: "தொழில்நுட்ப பிழைகள்",
-  noErrors: "பிழைகள் எதுவும் பதிவாகவில்லை.",
 
   errConflict: "போட்டி ஒரே நேரத்தில் மாறியது – மீண்டும் முயற்சி",
   errNameShort: "பெயர் குறைந்தது 2 எழுத்துகள் இருக்க வேண்டும்",

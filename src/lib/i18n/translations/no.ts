@@ -54,8 +54,6 @@ export const no: Record<TranslationKey, string> = {
   errorPageTitle: "Siden kunne ikke lastes",
   errorPageBody: "Noe gikk galt hos oss. Prøv igjen eller gå tilbake til start.",
   tryAgain: "Prøv igjen",
-  adEvents: "Annonsehendelser",
-  noAdEvents: "Ingen annonsehendelser.",
   forfeit: "Gi opp",
   yourTurn: "Din tur – kast terningen",
   theirTurn: "{name} sin tur",
@@ -185,8 +183,6 @@ export const no: Record<TranslationKey, string> = {
   colStarted: "Startet",
   colFinished: "Fullført",
   colForfeits: "Avhopp",
-  techErrors: "Tekniske feil",
-  noErrors: "Ingen rapporterte feil.",
 
   errConflict: "Kampen ble endret samtidig – prøv igjen",
   errNameShort: "Navnet må ha minst 2 tegn",

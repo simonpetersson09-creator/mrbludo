@@ -54,8 +54,6 @@ export const or: Record<TranslationKey, string> = {
   errorPageTitle: "ପୃଷ୍ଠା ଲୋଡ୍ ହେଲା ନାହିଁ",
   errorPageBody: "ଆମ ପକ୍ଷରୁ କିଛି ଭୁଲ ହେଲା। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ କିମ୍ବା ହୋମକୁ ଫେରନ୍ତୁ।",
   tryAgain: "ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ",
-  adEvents: "ବିଜ୍ଞାପନ ଇଭେଣ୍ଟ",
-  noAdEvents: "କୌଣସି ବିଜ୍ଞାପନ ଇଭେଣ୍ଟ ନାହିଁ।",
   forfeit: "ହାର ମାନନ୍ତୁ",
   yourTurn: "ତୁମର ପାଳି – ପାସା ଫିଙ୍ଗ",
   theirTurn: "{name}ଙ୍କ ପାଳି",
@@ -185,8 +183,6 @@ export const or: Record<TranslationKey, string> = {
   colStarted: "ଆରମ୍ଭ",
   colFinished: "ସମାପ୍ତ",
   colForfeits: "ହାର ମାନିଲେ",
-  techErrors: "ଯାନ୍ତ୍ରିକ ତ୍ରୁଟି",
-  noErrors: "କୌଣସି ତ୍ରୁଟି ରିପୋର୍ଟ ହୋଇନାହିଁ।",
 
   errConflict: "ମ୍ୟାଚ୍ ଏକାସାଙ୍ଗରେ ବଦଳିଗଲା – ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ",
   errNameShort: "ନାମ ଅତିକମରେ 2 ଅକ୍ଷରର ହେବା ଉଚିତ୍",
