@@ -7,6 +7,7 @@ import {
 
 // The service-role client is only loaded inside handlers, after the caller is authenticated.
 import { healthAlerts } from "./server-timing";
+import { adminPeriodStart } from "./admin-period";
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
 type Admin = Awaited<ReturnType<typeof admin>>;
 
@@ -619,17 +620,22 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
   const day = 86_400_000;
   const now = Date.now();
   const since30 = new Date(now - 30 * day).toISOString();
+  const { data: reset, error: resetError } = await db.from("app_events").select("created_at")
+    .eq("kind", "admin_statistics_reset").order("created_at", { ascending: false }).limit(1).maybeSingle();
+  if (resetError) throw resetError;
+  const periodStart = adminPeriodStart(now, reset?.created_at ?? null);
+  const sinceStats = new Date(periodStart).toISOString();
   const [matches, events, profiles, liveSeats] = await Promise.all([
-    db.from("matches").select("status, created_at, finished_at, max_players").gte("created_at", since30).limit(5000),
+    db.from("matches").select("status, created_at, finished_at, max_players").gte("created_at", sinceStats).limit(5000),
     db.from("app_events").select("kind, user_id, device_id, platform, detail, created_at").gte("created_at", since30).order("created_at", { ascending: false }).limit(10000),
     db.from("profiles").select("id, created_at, last_seen").limit(10000),
-    db.from("match_players").select("user_id, last_seen").gte("last_seen", new Date(now - 2 * 60_000).toISOString()),
+    db.from("match_players").select("user_id, last_seen").gte("last_seen", new Date(Math.max(periodStart, now - 2 * 60_000)).toISOString()),
   ]);
   const ev = events.data ?? [];
   const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; webDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
   for (let i = 29; i >= 0; i--) {
     const d = new Date(now - i * day).toISOString().slice(0, 10);
-    const dayEv = ev.filter((e) => e.created_at.startsWith(d));
+    const dayEv = ev.filter((e) => e.created_at.startsWith(d) && e.created_at >= sinceStats);
     const devs = (p: (x: string | null) => boolean) => new Set(dayEv.filter((e) => e.kind === "session" && e.device_id && p(e.platform)).map((e) => e.device_id)).size;
     const visits = dayEv.filter((e) => e.kind === "session_end" && (e.platform === "ios" || e.platform === "android"))
       .map((e) => Number((e.detail as { seconds?: number } | null)?.seconds) || 0).filter((x) => x > 0);
@@ -644,7 +650,8 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
       webDevices: devs((x) => x === "web"),
     });
   }
-  const profs = profiles.data ?? [];
+  // Keep existing identities/results intact; the player cohort restarts at the reset.
+  const profs = (profiles.data ?? []).filter((p) => !reset || p.created_at >= reset.created_at);
   const retention = (n: number) => {
     const cohort = profs.filter((p) => now - new Date(p.created_at).getTime() > n * day);
     if (!cohort.length) return null;

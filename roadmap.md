@@ -1,5 +1,9 @@
 # Roadmap: Nya onlineregler (spec 2026-11-04) — KLAR
 
+## Adminstatistik och tekniska fel (2026-11-08)
+- [x] Nollställ adminstatistik med ny mätstart 2026-11-08 09:43 UTC; spelarresultat och diagnostik bevarade, databasverifierat.
+- [x] Granska adminens tekniska fel: push-pluginets Promise-assimilering och Androids saknade randomUUID; äldre webbfel inte reproducerade. Endast granskat, inte åtgärdat.
+
 ## Implementerat och verifierat
 - [x] Privat match: endast värden startar, minst 2 människor, ingen AI-ifyllnad, ingen autostart vid full lobby
 - [x] Väninbjudan: accepterad inbjudan startar matchen direkt (separat flöde bevarat)

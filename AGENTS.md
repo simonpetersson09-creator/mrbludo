@@ -45,6 +45,7 @@
 - Friend requests follow Yatzy: only between players seated in the same started or finished online match (seat-card popup or result screen); there is no friend-code entry.
 - Native invite links are parsed only by pure `src/lib/native/deep-link.ts` (own domain + `mrbludo://`; foreign hosts ignored).
 - App errors and ad events reach the admin panel only via `src/lib/online/report.ts` → `app_events` (deduplicated, capped per session, short fields only; consent/tracking answers never leave the device).
+- Admin analytics resets use the latest server-owned `admin_statistics_reset` event as a reporting cutoff; never erase profiles, game results or diagnostic logs to reset charts.
 - The published website is download-only: `src/server.ts` asks `src/lib/web-redirect.ts` (pure rules in `src/lib/web-access.ts`) to send browsers on the live origin to `/join`, so the game, admin panel and the app's own API stay reachable while visitors never become players; preview hosts and native origins must never be gated.
 - A shared match code lives 6 hours (`CODE_TTL_MS`/`codeExpired` in `src/lib/online/match-logic.ts`): joining with a dead code closes the waiting match as abandoned instead of letting it sit open forever.
 - Database integration tests (`*.db.test.ts`, `bun run test:db`) run only on a throwaway local PostgreSQL+PostgREST; the server client and push are swapped by config aliases (module mocks were bypassed by concurrent imports and reached the live backend), and a fetch guard blocks every non-local call.
