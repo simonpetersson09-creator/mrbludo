@@ -1,7 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { adminPeriodStart, adminReportingDays, appPlayerIds } from "./admin-period";
+import { adminActivityEvents, adminPeriodStart, adminReportingDays, appPlayerIds } from "./admin-period";
 
 describe("admin statistics reset", () => {
+  it("excludes Simon's confirmed account and phone historically and on future events without mutating diagnostics", () => {
+    const user_id = "a2363dd5-85c2-4d56-9d73-ee9cc8efc550";
+    const device_id = "3c9af3a3-4f3f-4d19-a9ff-7e46304cd51e";
+    const events = [
+      { user_id, device_id: null, created_at: "2026-11-04T12:00:00Z" },
+      { user_id: "new-identity", device_id, created_at: "2026-11-09T12:00:00Z" },
+      { user_id: "other", device_id: "other-phone", created_at: "2026-11-08T12:00:00Z" },
+    ];
+    expect(adminActivityEvents(events, [{ user_id, device_id }])).toEqual([events[2]]);
+    expect(events).toHaveLength(3);
+    expect(adminActivityEvents(events, [])).toEqual(events);
+  });
   const now = Date.parse("2026-11-08T10:00:00Z");
   it("shows only November 8 after the November 8 reset, with no October rows", () => {
     expect(adminReportingDays(now, adminPeriodStart(now, "2026-11-08T09:43:00Z"))).toEqual(["2026-11-08"]);

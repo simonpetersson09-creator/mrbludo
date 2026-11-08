@@ -7,7 +7,7 @@ import {
 
 // The service-role client is only loaded inside handlers, after the caller is authenticated.
 import { healthAlerts } from "./server-timing";
-import { adminPeriodStart, adminReportingDays, appPlayerIds } from "./admin-period";
+import { adminActivityEvents, adminPeriodStart, adminReportingDays, appPlayerIds } from "./admin-period";
 import { withStepTiming } from "./step-timing";
 import { appOpenDiagnosticsSince, isAppOpenDiagnostic } from "./ad-diagnostics";
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
@@ -645,18 +645,21 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
   if (resetError) throw resetError;
   const periodStart = adminPeriodStart(now, reset?.created_at ?? null);
   const sinceStats = new Date(periodStart).toISOString();
-  const [matches, events, profiles, liveSeats] = await Promise.all([
+  const [matches, events, profiles, liveSeats, exclusions] = await Promise.all([
     db.from("matches").select("status, created_at, finished_at, max_players").gte("created_at", sinceStats).limit(5000),
     db.from("app_events").select("kind, user_id, device_id, platform, detail, created_at").gte("created_at", since30).order("created_at", { ascending: false }).limit(10000),
     db.from("profiles").select("id, created_at, last_seen").limit(10000),
     db.from("match_players").select("user_id, last_seen").gte("last_seen", new Date(Math.max(periodStart, now - 2 * 60_000)).toISOString()),
+    db.from("admin_activity_exclusions").select("user_id, device_id"),
   ]);
+  if (exclusions.error) throw exclusions.error;
   const ev = events.data ?? [];
-  const appUsers = appPlayerIds(ev, sinceStats);
-  const activeAppUsers = appPlayerIds(ev, new Date(Math.max(periodStart, now - day)).toISOString());
+  const activity = adminActivityEvents(ev, exclusions.data ?? []);
+  const appUsers = appPlayerIds(activity, sinceStats);
+  const activeAppUsers = appPlayerIds(activity, new Date(Math.max(periodStart, now - day)).toISOString());
   const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
   for (const d of adminReportingDays(now, periodStart)) {
-    const dayEv = ev.filter((e) => e.created_at.startsWith(d) && e.created_at >= sinceStats);
+    const dayEv = activity.filter((e) => e.created_at.startsWith(d) && e.created_at >= sinceStats);
     const devs = (p: (x: string | null) => boolean) => new Set(dayEv.filter((e) => e.kind === "session" && e.device_id && p(e.platform)).map((e) => e.device_id)).size;
     const visits = dayEv.filter((e) => e.kind === "session_end" && (e.platform === "ios" || e.platform === "android"))
       .map((e) => Number((e.detail as { seconds?: number } | null)?.seconds) || 0).filter((x) => x > 0);

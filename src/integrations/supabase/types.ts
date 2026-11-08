@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_activity_exclusions: {
+        Row: {
+          created_at: string
+          device_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       app_events: {
         Row: {
           created_at: string

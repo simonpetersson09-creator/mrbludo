@@ -134,6 +134,13 @@
       "when": 1793887380517,
       "tag": "0018_numbered_default_names",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1794142410080,
+      "tag": "0019_admin_activity_exclusions",
+      "breakpoints": true
     }
   ]
 }
