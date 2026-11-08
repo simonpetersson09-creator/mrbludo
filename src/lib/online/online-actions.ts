@@ -7,7 +7,7 @@ import {
 
 // The service-role client is only loaded inside handlers, after the caller is authenticated.
 import { healthAlerts } from "./server-timing";
-import { adminPeriodStart, appPlayerIds } from "./admin-period";
+import { adminPeriodStart, adminReportingDays, appPlayerIds } from "./admin-period";
 import { withStepTiming } from "./step-timing";
 import { appOpenDiagnosticsSince, isAppOpenDiagnostic } from "./ad-diagnostics";
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
@@ -655,8 +655,7 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
   const appUsers = appPlayerIds(ev, sinceStats);
   const activeAppUsers = appPlayerIds(ev, new Date(Math.max(periodStart, now - day)).toISOString());
   const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date(now - i * day).toISOString().slice(0, 10);
+  for (const d of adminReportingDays(now, periodStart)) {
     const dayEv = ev.filter((e) => e.created_at.startsWith(d) && e.created_at >= sinceStats);
     const devs = (p: (x: string | null) => boolean) => new Set(dayEv.filter((e) => e.kind === "session" && e.device_id && p(e.platform)).map((e) => e.device_id)).size;
     const visits = dayEv.filter((e) => e.kind === "session_end" && (e.platform === "ios" || e.platform === "android"))

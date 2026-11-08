@@ -9,3 +9,10 @@ export function adminPeriodStart(now: number, resetAt: string | null): number {
   const reset = resetAt === null ? NaN : Date.parse(resetAt);
   return Number.isFinite(reset) ? Math.max(windowStart, Math.min(now, reset)) : windowStart;
 }
+
+/** Only return calendar rows within the reporting period, never pre-reset zero rows. */
+export function adminReportingDays(now: number, periodStart: number): string[] {
+  const firstDate = new Date(periodStart).toISOString().slice(0, 10);
+  return Array.from({ length: 30 }, (_, i) => new Date(now - (29 - i) * 86_400_000).toISOString().slice(0, 10))
+    .filter((date) => date >= firstDate);
+}

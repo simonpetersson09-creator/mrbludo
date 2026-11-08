@@ -1,6 +1,7 @@
 # Roadmap: Nya onlineregler (spec 2026-11-04) — KLAR
 
 ## Adminstatistik och tekniska fel (2026-11-08)
+- [x] Datumrader i tabell och diagram börjar vid statistikens nollställning 8 november; inga tomma oktoberrader före mätstart.
 - [x] Dölj tekniska fel och annonshändelser i admin utan att radera loggar; appstartsdiagnostik börjar 8 november 2026 UTC, inom rullande 30 dagar.
 - [x] Rättat adminvyn efter Yatzys fullbreddstabell, kolumnkontroller, rekord och linjediagram. 12 tester godkända; riktig admin verifierad på dator/mobil, 509 diagnostikrader hämtade/kopierade. Ludos befintliga mätvärden används; saknade uppdelningar visas som —, UTC och rullande 30 dagar behålls. Utloggning ersätts av tillbaka för att bevara spelaridentiteten.
 - [x] Yatzys AdMob-diagnostiksektion i Ludo: utfällning, hämta 30 dagar, kopiera, samma loggruta och uppdatera-knapp; 509 riktiga rader hämtade/kopierade som admin. 357 tester och 34 isolerade databastester godkända. Övriga adminens dagstabell/diagram är fortsatt Ludos, inte kopior av hela Yatzy-admin.

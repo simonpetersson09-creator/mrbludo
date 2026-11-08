@@ -1,8 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { adminPeriodStart, appPlayerIds } from "./admin-period";
+import { adminPeriodStart, adminReportingDays, appPlayerIds } from "./admin-period";
 
 describe("admin statistics reset", () => {
   const now = Date.parse("2026-11-08T10:00:00Z");
+  it("shows only November 8 after the November 8 reset, with no October rows", () => {
+    expect(adminReportingDays(now, adminPeriodStart(now, "2026-11-08T09:43:00Z"))).toEqual(["2026-11-08"]);
+  });
+  it("adds subsequent days without restoring dates before November 8", () => {
+    const later = Date.parse("2026-11-10T10:00:00Z");
+    expect(adminReportingDays(later, adminPeriodStart(later, "2026-11-08T09:43:00Z"))).toEqual(["2026-11-08", "2026-11-09", "2026-11-10"]);
+  });
   it("counts only iOS and Android players, excluding web and pre-reset activity", () => {
     const created_at = "2026-11-08T09:50:00Z";
     expect([...appPlayerIds([
