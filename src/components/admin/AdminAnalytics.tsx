@@ -4,7 +4,7 @@ import { ArrowLeft, ChartLine, ChevronLeft, ChevronRight, RefreshCw } from "luci
 import { Button } from "@/components/ui/button";
 import AdminAdDiagnostics from "@/components/AdminAdDiagnostics";
 import AdminLineChart from "./AdminLineChart";
-import { adminRecordIndexes, adminReturningShare, adminRollingMean, adminValueIncomplete, buildRibbon, type AdminColumnKey, type AdminDayRow as DayRow, type StarPoint } from "@/lib/online/admin-records";
+import { adminRecordIndexes, adminReturningShare, adminValueIncomplete, buildRibbon, type AdminColumnKey, type AdminDayRow as DayRow, type StarPoint } from "@/lib/online/admin-records";
 import type { adminOverview } from "@/lib/online/online.functions";
 
 const COLUMNS: { key: AdminColumnKey; label: string }[] = [
@@ -36,10 +36,6 @@ export default function AdminAnalytics({ data, loading, onRefresh }: { data: Awa
   const rows = useMemo<DayRow[]>(() => [...data.days].reverse().map((r) => ({ day: r.date, devices: r.appDevices, ios: null, android: null, played: null, total: r.finished, cpu_finished: null, online_finished: null, forfeits: r.forfeits, issues: 0, incomplete_columns: ["issues"] })), [data.days]);
   const [collapsedColumns, setCollapsedColumns] = useState<AdminColumnKey[]>([]);
   const records = useMemo(() => adminRecordIndexes(rows, COLUMNS.map((c) => c.key)), [rows]);
-  const meanText = (day: string, key: AdminColumnKey) => {
-    const value = adminRollingMean(rows, day, key);
-    return value == null ? "—" : value.toLocaleString("sv-SE", { maximumFractionDigits: 1 });
-  };
   const wrapRef = useRef<HTMLDivElement>(null);
   const [lines, setLines] = useState<{ gold: StarPoint[]; red: StarPoint[]; w: number; h: number }>({
     gold: [],
@@ -100,7 +96,7 @@ export default function AdminAnalytics({ data, loading, onRefresh }: { data: Awa
         <div>
           <h1 className="text-xl font-semibold">{diagram ? "Linjediagram" : "Statistik per dag"}{data.days[0] ? ` – från ${fmtDay(data.days[0].date)}` : ""}</h1>
           <p className="text-sm text-muted-foreground">
-            Bara appen (iPhone/Android). Datum enligt befintliga loggar (UTC). Dagens rad är inte komplett. Parentes: dagsmedel för 30 dagar till och med radens datum; — när ett helt underlag saknas.
+            Bara appen (iPhone/Android). Datum enligt befintliga loggar (UTC). Dagens rad är inte komplett. — när ett helt underlag saknas.
           </p>
         </div>
         <div className="flex gap-2">
@@ -182,13 +178,11 @@ export default function AdminAnalytics({ data, loading, onRefresh }: { data: Awa
                     {!collapsedColumns.includes(c.key) &&
                     <span className="flex items-baseline justify-end gap-1 tabular-nums">
                       <span className="text-right">
-                        {c.key === "ios" ? <>{r.ios ?? "—"} <span className="text-muted-foreground">({meanText(r.day, "ios")})</span> / {r.android ?? "—"} <span className="text-muted-foreground">({meanText(r.day, "android")})</span></> : <>
+                        {c.key === "ios" ? <>{r.ios ?? "—"} / {r.android ?? "—"}</> : <>
                           {c.key === "avg_app_age_days" ? r[c.key] == null ? "—" : Number(r[c.key]).toLocaleString("sv-SE", { maximumFractionDigits: 0 }) : c.key === "total" ? r.total : adminValueIncomplete(r, c.key) ? "—" : r[c.key] ?? "—"}
-                          
-                          {" "}<span className="text-muted-foreground">({meanText(r.day, c.key)})</span>
-                          {c.key === "issues" && <><br /><span className="text-muted-foreground">{r.issue_devices ?? "—"} enheter ({meanText(r.day, "issue_devices")})</span></>}
+                          {c.key === "issues" && <><br /><span className="text-muted-foreground">{r.issue_devices ?? "—"} enheter</span></>}
                           {c.key === "returning_played" && <><br /><span className="text-muted-foreground">{adminReturningShare(r) == null ? "—" : `${adminReturningShare(r)?.toLocaleString("sv-SE", { maximumFractionDigits: 1 })} %`} av {r.played ?? "—"}</span></>}
-                          {c.key === "post_match_shown" && <> / {r.post_match_opportunities ?? "—"} <span className="text-muted-foreground">({meanText(r.day, "post_match_opportunities")})</span></>}
+                          {c.key === "post_match_shown" && <> / {r.post_match_opportunities ?? "—"}</>}
                           {c.key === "forfeits" && <><br /><span className="text-muted-foreground">av — · —</span></>}
                         </>}
                       </span>
@@ -228,7 +222,7 @@ export default function AdminAnalytics({ data, loading, onRefresh }: { data: Awa
           </tfoot>
         </table>
       </div>
-      <p className="text-xs text-muted-foreground mt-3">★ = högsta kända värdet i visad period. Avhopp och problem markeras med röd stjärna. Enheter summeras inte mellan dagar. Parenteser visar dagsmedel när fullständigt underlag finns.</p>
+      <p className="text-xs text-muted-foreground mt-3">★ = högsta kända värdet i visad period. Avhopp och problem markeras med röd stjärna. Enheter summeras inte mellan dagar.</p>
       </>}
     </section>
   );
