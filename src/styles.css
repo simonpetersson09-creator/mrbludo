@@ -93,8 +93,7 @@
   --game-info: hsl(200 65% 50%);
   --game-info-light: hsl(195 80% 70%);
   --game-info-dark: hsl(230 70% 45%);
-  /* Piece red sampled from the app icon's glossy pawn (icon body #cc0000). */
-  --ludo-red: hsl(0 100% 40%);
+  --ludo-red: hsl(350 65% 52%);
   --ludo-green: hsl(155 60% 42%);
   --ludo-yellow: hsl(42 85% 55%);
   --ludo-blue: hsl(210 70% 52%);
