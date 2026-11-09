@@ -1,3 +1,4 @@
+import { randomId } from "@/lib/random-id";
 /**
  * Google AdMob interstitial integration.
  *
@@ -587,7 +588,7 @@ async function showInterstitial(kind: 'optional' | 'postMatch', context?: { matc
   const generation = adGeneration;
   const startedAt = Date.now();
   const details = { ...context, loadId: interstitialLoadId, cacheAgeMs: preparedAt ? Date.now() - preparedAt : null };
-  const opportunityId = kind === 'postMatch' ? crypto.randomUUID() : undefined;
+  const opportunityId = kind === 'postMatch' ? randomId() : undefined;
   const opportunity = (result: 'skipped' | 'shown' | 'failed', reason?: string) => {
     if (kind === 'postMatch') trackAdOpportunity(kind, context?.action ?? 'exit', result, reason, opportunityId);
   };
@@ -930,7 +931,7 @@ function loadAppOpenOnce(mod: AdMobModule, adId: string, ms: number, label: stri
     return Promise.reject(new Error('app_open_retry_paused'));
   }
   if (!appOpenNativeLoad) {
-    const attemptId = adPlatform() === 'ios' ? crypto.randomUUID() : undefined;
+    const attemptId = adPlatform() === 'ios' ? randomId() : undefined;
     appOpenAttemptId = attemptId;
     const p = mod.AdMob.loadAppOpen({ adId, ...(attemptId ? { diagnosticAttemptId: attemptId, diagnosticTestMode: ADMOB_CONFIG.useTestAds, diagnosticSource: source } : {}) });
     appOpenNativeLoad = p;
@@ -1015,7 +1016,7 @@ export function preloadAppOpenAd(source: AppOpenLoadSource = 'preload'): Promise
  */
 export async function showAppOpenAd(canShow: () => boolean = () => true, source: AppOpenLoadSource = 'startup'): Promise<boolean> {
   const generation = adGeneration;
-  const opportunityId = crypto.randomUUID();
+  const opportunityId = randomId();
   let opportunityRecorded = false;
   const outcome = (result: 'skipped' | 'shown' | 'failed', reason?: string) => {
     if (opportunityRecorded) return;

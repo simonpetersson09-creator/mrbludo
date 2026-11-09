@@ -1,9 +1,10 @@
+import { randomId } from "@/lib/random-id";
 const DEVICE_KEY = "mrb-ludo:v1:device-id";
 
 export function deviceId(): string {
   try {
     let id = localStorage.getItem(DEVICE_KEY);
-    if (!id) { id = crypto.randomUUID(); localStorage.setItem(DEVICE_KEY, id); }
+    if (!id) { id = randomId(); localStorage.setItem(DEVICE_KEY, id); }
     return id;
   } catch { return "unknown"; }
 }
