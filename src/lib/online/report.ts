@@ -6,9 +6,9 @@
  */
 import { enqueue, parseQueue, type QueuedReport } from "./report-queue";
 
-const MAX_PER_SESSION = { error: 10, ad: 60 } as const;
+const MAX_PER_SESSION = { error: 10, ad: 60, local_game: 40 } as const;
 const QUEUE_KEY = "mrb-ludo:v1:report-queue";
-const sent = { error: 0, ad: 0 };
+const sent = { error: 0, ad: 0, local_game: 0 };
 const seenErrors = new Set<string>();
 
 function clean(data: Record<string, unknown>): Record<string, string | number | boolean> {
@@ -21,7 +21,7 @@ function clean(data: Record<string, unknown>): Record<string, string | number | 
 }
 
 let versionPromise: Promise<string> | null = null;
-function appVersion(): Promise<string> {
+export function appVersion(): Promise<string> {
   versionPromise ??= (async () => {
     try {
       const { Capacitor } = await import("@capacitor/core");
@@ -64,7 +64,7 @@ if (typeof window !== "undefined") {
   window.setTimeout(() => { void flushQueuedReports(); }, 5000);
 }
 
-async function send(kind: "error" | "ad", detail: Record<string, unknown>) {
+async function send(kind: QueuedReport["kind"], detail: Record<string, unknown>) {
   if (typeof window === "undefined" || sent[kind] >= MAX_PER_SESSION[kind]) return;
   sent[kind]++;
   const item: QueuedReport = { kind, detail, at: Date.now() };
@@ -84,4 +84,10 @@ export function reportAdEvent(name: string, data: Record<string, unknown> = {}):
   // Consent and tracking-permission answers stay on the device.
   if (/consent|att_|privacy/i.test(name)) return;
   void send("ad", { name: name.slice(0, 60), ...clean(data) });
+}
+
+/** A local game started or finished on this phone (admin counts all play, not only online). */
+export function reportLocalGame(phase: "start" | "finish", state: { variant?: string; players: { isBot: boolean }[] }): void {
+  const bots = state.players.filter((p) => p.isBot).length;
+  void send("local_game", { phase, variant: state.variant === "fia" ? "fia" : "classic", humans: state.players.length - bots, bots });
 }

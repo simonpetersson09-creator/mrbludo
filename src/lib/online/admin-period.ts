@@ -1,3 +1,4 @@
+import { stockholmDays } from "./activity-stats";
 /** Filter reporting only, never delete collected diagnostics or affect player results. */
 export function adminActivityEvents<T extends { user_id: string | null; device_id: string | null }>(
   events: T[], exclusions: { user_id: string; device_id: string | null }[],
@@ -19,9 +20,7 @@ export function adminPeriodStart(now: number, resetAt: string | null): number {
   return Number.isFinite(reset) ? Math.max(windowStart, Math.min(now, reset)) : windowStart;
 }
 
-/** Only return calendar rows within the reporting period, never pre-reset zero rows. */
+/** Only return Stockholm calendar rows within the reporting period, never pre-reset zero rows. */
 export function adminReportingDays(now: number, periodStart: number): string[] {
-  const firstDate = new Date(periodStart).toISOString().slice(0, 10);
-  return Array.from({ length: 30 }, (_, i) => new Date(now - (29 - i) * 86_400_000).toISOString().slice(0, 10))
-    .filter((date) => date >= firstDate);
+  return stockholmDays(now, periodStart);
 }

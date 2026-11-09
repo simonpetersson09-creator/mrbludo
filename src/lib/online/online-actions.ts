@@ -7,6 +7,7 @@ import {
 
 // The service-role client is only loaded inside handlers, after the caller is authenticated.
 import { healthAlerts } from "./server-timing";
+import { activityByDay, stockholmDate, type ActivityEvent } from "./activity-stats";
 import { adminActivityEvents, adminPeriodStart, adminReportingDays, appPlayerIds } from "./admin-period";
 import { withStepTiming } from "./step-timing";
 import { appOpenDiagnosticsSince, isAppOpenDiagnostic } from "./ad-diagnostics";
@@ -653,24 +654,35 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
     db.from("admin_activity_exclusions").select("user_id, device_id"),
   ]);
   if (exclusions.error) throw exclusions.error;
+  // Visit/local-game reports are read in full pages so busy diagnostics can never crowd them out.
+  const visitRows: ActivityEvent[] = [];
+  for (let offset = 0; offset < 100_000; offset += 1000) {
+    const { data: page, error } = await db.from("app_events").select("kind, user_id, device_id, platform, detail, created_at")
+      .in("kind", ["session", "heartbeat", "session_end", "local_game"]).gte("created_at", sinceStats)
+      .order("created_at").order("id").range(offset, offset + 999);
+    if (error) throw error;
+    visitRows.push(...(page ?? []));
+    if ((page?.length ?? 0) < 1000) break;
+  }
   const ev = events.data ?? [];
   const activity = adminActivityEvents(ev, exclusions.data ?? []);
-  const appUsers = appPlayerIds(activity, sinceStats);
-  const activeAppUsers = appPlayerIds(activity, new Date(Math.max(periodStart, now - day)).toISOString());
+  const allActivity = adminActivityEvents([...ev, ...visitRows] as typeof ev, exclusions.data ?? []);
+  const appUsers = appPlayerIds(allActivity, sinceStats);
+  const activeAppUsers = appPlayerIds(allActivity, new Date(Math.max(periodStart, now - day)).toISOString());
   const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
-  for (const d of adminReportingDays(now, periodStart)) {
-    const dayEv = activity.filter((e) => e.created_at.startsWith(d) && e.created_at >= sinceStats);
-    const devs = (p: (x: string | null) => boolean) => new Set(dayEv.filter((e) => e.kind === "session" && e.device_id && p(e.platform)).map((e) => e.device_id)).size;
-    const visits = dayEv.filter((e) => e.kind === "session_end" && (e.platform === "ios" || e.platform === "android"))
-      .map((e) => Number((e.detail as { seconds?: number } | null)?.seconds) || 0).filter((x) => x > 0);
+  const reportDays = adminReportingDays(now, periodStart);
+  const byDay = activityByDay(adminActivityEvents(visitRows as (ActivityEvent & { user_id: string | null })[], exclusions.data ?? []), reportDays);
+  for (const d of reportDays) {
+    const dayEv = activity.filter((e) => stockholmDate(e.created_at) === d && e.created_at >= sinceStats);
+    const a = byDay.get(d)!;
     days.push({
       date: d,
-      appSessions: visits.length,
-      avgMinutes: visits.length ? Math.round((visits.reduce((a, b) => a + b, 0) / visits.length / 60) * 10) / 10 : null,
-      started: dayEv.filter((e) => e.kind === "match_started").length,
-      finished: dayEv.filter((e) => e.kind === "match_finished").length,
+      appSessions: a.appSessions,
+      avgMinutes: a.avgMinutes,
+      started: dayEv.filter((e) => e.kind === "match_started").length + a.localStarted,
+      finished: dayEv.filter((e) => e.kind === "match_finished").length + a.localFinished,
       forfeits: dayEv.filter((e) => e.kind === "forfeit").length,
-      appDevices: devs((x) => x === "ios" || x === "android"),
+      appDevices: a.appDevices,
     });
   }
   // Keep existing identities/results intact; the player cohort restarts at the reset.

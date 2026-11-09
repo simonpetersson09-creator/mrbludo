@@ -54,12 +54,21 @@ export const inviteFriendInput = (d: { matchId: string; userId: string }) => ({ 
 export const respondInviteInput = (d: { id: string; accept: boolean }) => ({ id: String(d.id), accept: !!d.accept });
 export const getLeaderboardInput = (d: { sort: "wins" | "played" | "captures" }) => ({ sort: (["wins", "played", "captures"] as const).includes(d.sort) ? d.sort : "wins" });
 export const logEventInput = (d: { kind: string; deviceId?: string; platform?: string; detail?: Record<string, unknown> }) => {
-    const kind = ["session", "session_end", "error", "ad"].includes(d.kind) ? d.kind : "session";
+    const kind = ["session", "heartbeat", "session_end", "local_game", "error", "ad"].includes(d.kind) ? d.kind : "session";
     const platform = ["ios", "android", "web"].includes(String(d.platform)) ? String(d.platform) : "web";
-    // A visit length is only a whole number of seconds (5 s – 4 h); nothing else is kept.
-    const secs = Math.round(Number(d.detail?.["seconds"]));
-    if (kind === "session_end" && !(secs >= 5 && secs <= 4 * 3600)) throw new Error("err:missing");
-    const detail = kind === "session_end" ? { seconds: secs } : JSON.parse(JSON.stringify(d.detail ?? {}).slice(0, 2000) || "{}");
+    const raw = d.detail ?? {};
+    const v = typeof raw["v"] === "string" ? { v: raw["v"].slice(0, 30) } : {};
+    let detail: Record<string, unknown>;
+    if (kind === "session" || kind === "heartbeat" || kind === "session_end") {
+      // Visit reports keep only a visit id, whole foreground seconds (max 4 h) and the app version.
+      const secs = Math.round(Number(raw["seconds"]));
+      if (kind === "session_end" && !(secs >= 5 && secs <= 4 * 3600)) throw new Error("err:missing");
+      const sid = typeof raw["sid"] === "string" && /^[A-Za-z0-9-]{1,40}$/.test(raw["sid"]) ? { sid: raw["sid"] } : {};
+      detail = { ...sid, ...(Number.isFinite(secs) && secs >= 0 ? { seconds: Math.min(secs, 4 * 3600) } : {}), ...v };
+    } else if (kind === "local_game") {
+      const int = (x: unknown, max: number) => (Number.isInteger(x) && (x as number) >= 0 && (x as number) <= max ? (x as number) : 0);
+      detail = { phase: raw["phase"] === "finish" ? "finish" : "start", variant: raw["variant"] === "fia" ? "fia" : "classic", humans: int(raw["humans"], 4), bots: int(raw["bots"], 4), ...v };
+    } else detail = JSON.parse(JSON.stringify(raw).slice(0, 2000) || "{}");
     return { kind, platform, deviceId: String(d.deviceId ?? "").slice(0, 64) || null, detail };
   };
 export const deleteDataInput = (_d?: unknown) => ({ confirm: true as const });

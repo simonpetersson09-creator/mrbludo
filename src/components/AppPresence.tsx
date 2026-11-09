@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/auth/client";
-import { listFriends, logEvent, respondFriend } from "@/lib/online/online.functions";
-import { deviceId, platform } from "@/lib/online/telemetry";
+import { listFriends, respondFriend } from "@/lib/online/online.functions";
 import { RESUME_EVENT } from "@/lib/native/runtime";
 import { errorMessage, t as translate } from "@/lib/i18n";
 import { AppNotices } from "@/components/AppNotices";
@@ -13,7 +12,7 @@ const writeSeen = (ids: string[]) => { try { localStorage.setItem(SEEN_KEY, JSON
 
 /**
  * App-wide, for a signed-in player: shows new friend requests as an in-app notice (Yatzy)
- * and reports how long the app was in use each time it goes to the background (admin charts).
+ * (visit reporting for the admin panel lives in src/lib/online/activity.ts).
  */
 export function AppPresence({ enabled = true }: { enabled?: boolean }) {
   useEffect(() => {
@@ -51,21 +50,11 @@ export function AppPresence({ enabled = true }: { enabled?: boolean }) {
     const onResume = () => { void check(); };
     window.addEventListener(RESUME_EVENT, onResume);
 
-    // Foreground time per visit, sent when the app is hidden (only whole visits of 5 s – 4 h count).
-    let since = Date.now();
-    const onVisibility = () => {
-      if (document.visibilityState === "visible") { since = Date.now(); return; }
-      const seconds = Math.round((Date.now() - since) / 1000);
-      if (seconds < 5 || seconds > 4 * 3600) return;
-      void logEvent({ data: { kind: "session_end", deviceId: deviceId(), platform: platform(), detail: { seconds } } }).catch(() => {});
-    };
-    document.addEventListener("visibilitychange", onVisibility);
     return () => {
       stopped = true;
       if (channel) supabase.removeChannel(channel);
       sub.subscription.unsubscribe();
       window.removeEventListener(RESUME_EVENT, onResume);
-      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [enabled]);
   return <AppNotices enabled={enabled} />;

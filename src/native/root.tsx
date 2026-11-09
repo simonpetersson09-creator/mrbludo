@@ -7,8 +7,8 @@ import { AndroidBackButton } from "@/components/AndroidBackButton";
 import { NativeDeepLinks } from "@/components/NativeDeepLinks";
 import { SwipeBack } from "@/components/SwipeBack";
 import { AppPresence } from "@/components/AppPresence";
-import { logEvent } from "@/lib/online/online.functions";
-import { deviceId, platform } from "@/lib/online/telemetry";
+import { initDeviceId } from "@/lib/online/telemetry";
+import { startActivityTracking } from "@/lib/online/activity";
 import { reportAppError } from "@/lib/online/report";
 import { ensurePlayerSession } from "@/lib/auth/player";
 import { syncProfileName } from "@/lib/ludo/profile-name";
@@ -27,14 +27,16 @@ function NativeRoot() {
     const viewportCleanup = installViewportSync();
     nativeDiagnostic("startup", "ready");
     preloadDie();
+    const activity = startActivityTracking();
+    const deviceReady = initDeviceId();
     const connect = () => {
       if (!navigator.onLine) { nativeDiagnostic("session", "offline"); return; }
       nativeDiagnostic("session", "started");
       ensurePlayerSession().then(() => {
         nativeDiagnostic("session", "ready");
         void syncProfileName();
-        // Counts this phone as an app device for today in the admin panel (was missing in the app build).
-        void logEvent({ data: { kind: "session", deviceId: deviceId(), platform: platform() } }).catch(() => {});
+        // Counts this phone as an app device in the admin panel once its durable number is known.
+        void deviceReady.then(() => activity.ready());
         return router.invalidate();
       }).catch(() => nativeDiagnostic("session", "failed"));
     };
@@ -54,7 +56,7 @@ function NativeRoot() {
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });
-    return () => { stopped = true; cleanup?.(); pushCleanup?.(); viewportCleanup(); data.subscription.unsubscribe(); window.removeEventListener("online", connect); window.removeEventListener(RESUME_EVENT, connect); window.removeEventListener("error", onError); window.removeEventListener("unhandledrejection", onRejection); };
+    return () => { stopped = true; activity.stop(); cleanup?.(); pushCleanup?.(); viewportCleanup(); data.subscription.unsubscribe(); window.removeEventListener("online", connect); window.removeEventListener(RESUME_EVENT, connect); window.removeEventListener("error", onError); window.removeEventListener("unhandledrejection", onRejection); };
   }, [router, queryClient]);
   return <QueryClientProvider client={queryClient}><HeadContent /><AndroidBackButton /><SwipeBack /><NativeDeepLinks /><AppPresence /><Outlet /><Toaster position="top-center" duration={6000} className="toaster group mrb-toaster" offset={{ top: "calc(env(safe-area-inset-top, 0px) + 12px)" }} mobileOffset={{ top: "calc(env(safe-area-inset-top, 0px) + 12px)" }} /></QueryClientProvider>;
 }

@@ -17,6 +17,7 @@ import { playDiceLandHaptic, playLightHaptic, playSuccessHaptic, playTurnHaptic 
 import { pieceCenter } from "@/lib/ludo/board";
 import { AppOpenGameGate } from "@/components/AppOpenGameGate";
 import { usePostMatchExit } from "@/lib/ads/usePostMatchExit";
+import { reportLocalGame } from "@/lib/online/report";
 import { eventKey, localGiveUp, piecesInGoal } from "@/lib/ludo/local-result";
 import { clearGame, loadGame, loadSettings, loadStats, saveGame, saveStats } from "@/lib/ludo/storage";
 import { RollLabel } from "@/components/ludo/RollLabel";
@@ -66,7 +67,11 @@ function PlayPage() {
   useEffect(() => {
     const g = loadGame();
     if (!g) navigate({ to: "/setup" });
-    else { countedEvent.current = eventKey(g); setState(g); }
+    else {
+      countedEvent.current = eventKey(g);
+      if (g.turnCount === 0 && !g.lastEvent) reportLocalGame("start", g);
+      setState(g);
+    }
   }, [navigate]);
 
   useEffect(() => { if (state && state.phase !== "finished") saveGame(state); }, [state]);
@@ -132,6 +137,7 @@ function PlayPage() {
   useEffect(() => {
     if (!state || state.phase !== "finished" || statsDone.current) return;
     statsDone.current = true;
+    reportLocalGame("finish", state);
     if (state.winner === 0) void playSuccessHaptic();
     clearGame();
     const st = loadStats();
