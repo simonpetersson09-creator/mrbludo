@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Check, Copy, Smartphone } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { storeLinks } from "@/lib/app-links";
-import mrBDie from "@/assets/mr-b-die.png";
+import mrBHeader from "@/assets/mr-b-ludo-header.png";
 
 function AppleIcon() {
   return (
@@ -74,8 +74,8 @@ export function AppOnlyPage({ code }: { code?: string | undefined }) {
         <div className="home-bg-dice" />
       </div>
       <div className="home-stack items-center text-center">
-        <div className="brand-logo mx-auto mb-1 flex h-28 w-28 items-center justify-center self-center">
-          <img src={mrBDie} alt="" width={112} height={112} className="h-28 w-28 object-contain" />
+        <div className="mx-auto mb-1 w-full max-w-xs self-center">
+          <img src={mrBHeader} alt="Mr. B Ludo" width={1920} height={1280} className="h-auto w-full rounded-3xl object-cover shadow-lg" />
         </div>
         <h1 className="brand-title text-balance text-3xl">{code ? t("joinTitle") : t("webOnlyTitle")}</h1>
         <p className="mt-2 text-balance text-sm leading-relaxed text-muted-foreground">
