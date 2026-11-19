@@ -30,3 +30,14 @@ describe("admin activity", () => {
       .toEqual({ phase: "finish", variant: "fia", humans: 1, bots: 3, v: "1.0" });
   });
 });
+
+import { activityByDay as abd } from "./activity-stats";
+test("counts iPhone and Android devices separately per day", () => {
+  const ev = [
+    { kind: "session", device_id: "a1", platform: "android", detail: {}, created_at: "2026-11-19T11:00:00Z" },
+    { kind: "session", device_id: "i1", platform: "ios", detail: {}, created_at: "2026-11-19T12:00:00Z" },
+    { kind: "session", device_id: "i2", platform: "ios", detail: {}, created_at: "2026-11-19T13:00:00Z" },
+  ];
+  const r = abd(ev, ["2026-11-19"]).get("2026-11-19")!;
+  expect([r.appDevices, r.iosDevices, r.androidDevices]).toEqual([3, 2, 1]);
+});

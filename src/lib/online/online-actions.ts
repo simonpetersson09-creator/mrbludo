@@ -669,7 +669,7 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
   const allActivity = adminActivityEvents([...ev, ...visitRows] as typeof ev, exclusions.data ?? []);
   const appUsers = appPlayerIds(allActivity, sinceStats);
   const activeAppUsers = appPlayerIds(allActivity, new Date(Math.max(periodStart, now - day)).toISOString());
-  const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
+  const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; iosDevices: number; androidDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
   const reportDays = adminReportingDays(now, periodStart);
   const byDay = activityByDay(adminActivityEvents(visitRows as (ActivityEvent & { user_id: string | null })[], exclusions.data ?? []), reportDays);
   for (const d of reportDays) {
@@ -683,6 +683,8 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
       finished: dayEv.filter((e) => e.kind === "match_finished").length + a.localFinished,
       forfeits: dayEv.filter((e) => e.kind === "forfeit").length,
       appDevices: a.appDevices,
+      iosDevices: a.iosDevices,
+      androidDevices: a.androidDevices,
     });
   }
   // Keep existing identities/results intact; the player cohort restarts at the reset.

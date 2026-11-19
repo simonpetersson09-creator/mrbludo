@@ -20,10 +20,10 @@ const APP = (p: string | null) => p === "ios" || p === "android";
 const VISIT_KINDS = new Set(["session", "heartbeat", "session_end"]);
 const det = (e: ActivityEvent) => (e.detail && typeof e.detail === "object" ? e.detail : {}) as { sid?: unknown; seconds?: unknown; phase?: unknown };
 
-export type DayActivity = { appDevices: number; appSessions: number; avgMinutes: number | null; localStarted: number; localFinished: number };
+export type DayActivity = { appDevices: number; iosDevices: number; androidDevices: number; appSessions: number; avgMinutes: number | null; localStarted: number; localFinished: number };
 
 export function activityByDay(events: ActivityEvent[], days: string[]): Map<string, DayActivity> {
-  const out = new Map<string, DayActivity>(days.map((d) => [d, { appDevices: 0, appSessions: 0, avgMinutes: null, localStarted: 0, localFinished: 0 }]));
+  const out = new Map<string, DayActivity>(days.map((d) => [d, { appDevices: 0, iosDevices: 0, androidDevices: 0, appSessions: 0, avgMinutes: null, localStarted: 0, localFinished: 0 }]));
   const devices = new Map<string, Set<string>>();
   // visit key -> first day and longest reported foreground time
   const visits = new Map<string, { day: string; at: string; seconds: number }>();
@@ -32,7 +32,11 @@ export function activityByDay(events: ActivityEvent[], days: string[]): Map<stri
     const day = stockholmDate(e.created_at);
     const row = out.get(day);
     if (!row) return;
-    if (e.device_id && e.device_id !== "unknown") (devices.get(day) ?? devices.set(day, new Set()).get(day)!).add(e.device_id);
+    if (e.device_id && e.device_id !== "unknown") {
+      (devices.get(day) ?? devices.set(day, new Set()).get(day)!).add(e.device_id);
+      const pk = `${e.platform}:${day}`;
+      (devices.get(pk) ?? devices.set(pk, new Set()).get(pk)!).add(e.device_id);
+    }
     const x = det(e);
     if (e.kind === "local_game") {
       if (x.phase === "start") row.localStarted++;
@@ -50,7 +54,14 @@ export function activityByDay(events: ActivityEvent[], days: string[]): Map<stri
       if (e.created_at < v.at) { v.at = e.created_at; v.day = day; }
     }
   });
-  for (const [day, set] of devices) out.get(day)!.appDevices = set.size;
+  for (const [key, set] of devices) {
+    const [plat, day] = key.includes(":") ? key.split(":") : [null, key];
+    const row = out.get(day!);
+    if (!row) continue;
+    if (plat === "ios") row.iosDevices = set.size;
+    else if (plat === "android") row.androidDevices = set.size;
+    else row.appDevices = set.size;
+  }
   const perDay = new Map<string, number[]>();
   for (const v of visits.values()) (perDay.get(v.day) ?? perDay.set(v.day, []).get(v.day)!).push(v.seconds);
   for (const [day, secs] of perDay) {

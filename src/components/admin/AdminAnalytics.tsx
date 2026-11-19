@@ -33,7 +33,7 @@ function fmtDay(d: string) {
 
 export default function AdminAnalytics({ data, loading, onRefresh }: { data: Awaited<ReturnType<typeof adminOverview>>; loading: boolean; onRefresh: () => Promise<void> }) {
   const [diagram, setDiagram] = useState(false);
-  const rows = useMemo<DayRow[]>(() => [...data.days].reverse().map((r) => ({ day: r.date, devices: r.appDevices, ios: null, android: null, played: null, total: r.finished, cpu_finished: null, online_finished: null, forfeits: r.forfeits, issues: 0, incomplete_columns: ["issues"] })), [data.days]);
+  const rows = useMemo<DayRow[]>(() => [...data.days].reverse().map((r) => ({ day: r.date, devices: r.appDevices, ios: r.iosDevices ?? null, android: r.androidDevices ?? null, played: null, total: r.finished, cpu_finished: null, online_finished: null, forfeits: r.forfeits, issues: 0, incomplete_columns: ["issues"] })), [data.days]);
   const [collapsedColumns, setCollapsedColumns] = useState<AdminColumnKey[]>([]);
   const records = useMemo(() => adminRecordIndexes(rows, COLUMNS.map((c) => c.key)), [rows]);
   const wrapRef = useRef<HTMLDivElement>(null);
