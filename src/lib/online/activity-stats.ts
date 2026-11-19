@@ -73,3 +73,56 @@ export function activityByDay(events: ActivityEvent[], days: string[]): Map<stri
   }
   return out;
 }
+
+export type ExtraEvent = ActivityEvent & { user_id: string | null };
+export type DayExtras = { played: number; returning: number; newPlayers: number; avgAppAge: number | null; issues: number; postShown: number; postOpportunities: number; onlineFinished: number };
+
+const prevDay = (d: string) => new Date(Date.parse(d + "T12:00:00Z") - 86_400_000).toISOString().slice(0, 10);
+
+/**
+ * Per-day "who played" maths. A player is a device (or the account when no device id is known);
+ * local games come from local_game reports, online games from the player's own match seats.
+ */
+export function extrasByDay(
+  events: ExtraEvent[],
+  seats: { user_id: string; joined_at: string }[],
+  profileCreated: Map<string, string>,
+  days: string[],
+): Map<string, DayExtras> {
+  const app = events.filter((e) => APP(e.platform));
+  const deviceOf = new Map<string, string>();
+  for (const e of app) if (e.user_id && e.device_id && e.device_id !== "unknown") deviceOf.set(e.user_id, e.device_id);
+  const keyOf = (user: string | null, device: string | null) => (device && device !== "unknown" ? device : user ? deviceOf.get(user) ?? `u:${user}` : null);
+  const appUsers = new Set(app.map((e) => e.user_id).filter(Boolean) as string[]);
+  const played = new Map<string, Set<string>>();
+  const add = (day: string, k: string | null) => { if (k) (played.get(day) ?? played.set(day, new Set()).get(day)!).add(k); };
+  for (const e of app) if (e.kind === "local_game") add(stockholmDate(e.created_at), keyOf(e.user_id, e.device_id));
+  for (const s of seats) if (appUsers.has(s.user_id)) add(stockholmDate(s.joined_at), keyOf(s.user_id, null));
+  const firstPlay = new Map<string, string>();
+  for (const [day, set] of [...played].sort(([a], [b]) => a.localeCompare(b))) for (const k of set) if (!firstPlay.has(k)) firstPlay.set(k, day);
+  // Two newest app versions for problem counts.
+  const versions = [...new Set(app.map((e) => (det(e) as { v?: unknown }).v).filter((v): v is string => typeof v === "string" && v !== "web"))]
+    .sort((a, b) => b.localeCompare(a, undefined, { numeric: true })).slice(0, 2);
+  const out = new Map<string, DayExtras>();
+  for (const day of days) {
+    const today = played.get(day) ?? new Set<string>();
+    const yesterday = played.get(prevDay(day)) ?? new Set<string>();
+    const dayEv = app.filter((e) => stockholmDate(e.created_at) === day);
+    const ages = [...new Set(dayEv.map((e) => e.user_id).filter(Boolean) as string[])]
+      .map((u) => profileCreated.get(u)).filter(Boolean)
+      .map((c) => Math.max(0, (Date.parse(day + "T12:00:00Z") - Date.parse(c!)) / 86_400_000));
+    const post = dayEv.filter((e) => e.kind === "ad" && (det(e) as { name?: unknown }).name === "post_match_exit") as ExtraEvent[];
+    const pd = (e: ExtraEvent) => det(e) as { result?: unknown; completed?: unknown; matchKey?: unknown };
+    out.set(day, {
+      played: today.size,
+      returning: [...today].filter((k) => yesterday.has(k)).length,
+      newPlayers: [...today].filter((k) => firstPlay.get(k) === day).length,
+      avgAppAge: ages.length ? Math.round((ages.reduce((a, b) => a + b, 0) / ages.length) * 10) / 10 : null,
+      issues: dayEv.filter((e) => e.kind === "error" && versions.includes(String((det(e) as { v?: unknown }).v))).length,
+      postShown: post.filter((e) => pd(e).result === "shown").length,
+      postOpportunities: new Set(post.filter((e) => pd(e).result === "clicked" && pd(e).completed === true).map((e) => String(pd(e).matchKey))).size,
+      onlineFinished: 0,
+    });
+  }
+  return out;
+}

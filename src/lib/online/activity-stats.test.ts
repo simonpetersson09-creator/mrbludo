@@ -41,3 +41,12 @@ test("counts iPhone and Android devices separately per day", () => {
   const r = abd(ev, ["2026-11-19"]).get("2026-11-19")!;
   expect([r.appDevices, r.iosDevices, r.androidDevices]).toEqual([3, 2, 1]);
 });
+
+import { extrasByDay } from "./activity-stats";
+test("players, returning and new players per day", () => {
+  const e = (device: string, at: string, kind = "local_game", detail: object = { phase: "start" }) => ({ kind, device_id: device, user_id: "u" + device, platform: "android", detail, created_at: at });
+  const ev = [e("a", "2026-11-18T10:00:00Z"), e("a", "2026-11-19T10:00:00Z"), e("b", "2026-11-19T11:00:00Z"),
+    e("b", "2026-11-19T11:05:00Z", "error", { v: "1.2 (1)" })];
+  const r = extrasByDay(ev, [], new Map([["ua", "2026-11-17T12:00:00Z"]]), ["2026-11-18", "2026-11-19"]).get("2026-11-19")!;
+  expect([r.played, r.returning, r.newPlayers, r.issues, r.avgAppAge]).toEqual([2, 1, 1, 1, 2]);
+});

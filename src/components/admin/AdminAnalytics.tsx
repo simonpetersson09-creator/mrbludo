@@ -33,7 +33,14 @@ function fmtDay(d: string) {
 
 export default function AdminAnalytics({ data, loading, onRefresh }: { data: Awaited<ReturnType<typeof adminOverview>>; loading: boolean; onRefresh: () => Promise<void> }) {
   const [diagram, setDiagram] = useState(false);
-  const rows = useMemo<DayRow[]>(() => [...data.days].reverse().map((r) => ({ day: r.date, devices: r.appDevices, ios: r.iosDevices ?? null, android: r.androidDevices ?? null, played: null, total: r.finished, cpu_finished: null, online_finished: null, forfeits: r.forfeits, issues: 0, incomplete_columns: ["issues"] })), [data.days]);
+  const rows = useMemo<DayRow[]>(() => [...data.days].reverse().map((r) => ({
+    day: r.date, devices: r.appDevices, ios: r.iosDevices ?? null, android: r.androidDevices ?? null,
+    played: r.played ?? null, returning_played: r.returning ?? 0, new_players: r.newPlayers ?? 0, avg_app_age_days: r.avgAppAge ?? null,
+    total: r.finished, cpu_finished: r.localFinished ?? null, online_finished: r.onlineFinished ?? null, forfeits: r.forfeits,
+    issues: r.issues ?? 0, post_match_shown: r.postShown ?? 0, post_match_opportunities: r.postOpportunities ?? 0,
+    // Invite source is not recorded by the app, so that column stays unknown rather than a false 0.
+    incomplete_columns: ["referral_new_players"],
+  })), [data.days]);
   const [collapsedColumns, setCollapsedColumns] = useState<AdminColumnKey[]>([]);
   const records = useMemo(() => adminRecordIndexes(rows, COLUMNS.map((c) => c.key)), [rows]);
   const wrapRef = useRef<HTMLDivElement>(null);

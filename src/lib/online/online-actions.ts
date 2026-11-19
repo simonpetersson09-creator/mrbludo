@@ -7,7 +7,7 @@ import {
 
 // The service-role client is only loaded inside handlers, after the caller is authenticated.
 import { healthAlerts } from "./server-timing";
-import { activityByDay, stockholmDate, type ActivityEvent } from "./activity-stats";
+import { activityByDay, extrasByDay, stockholmDate, type ActivityEvent, type DayExtras, type ExtraEvent } from "./activity-stats";
 import { adminActivityEvents, adminPeriodStart, adminReportingDays, appPlayerIds } from "./admin-period";
 import { withStepTiming } from "./step-timing";
 import { appOpenDiagnosticsSince, isAppOpenDiagnostic } from "./ad-diagnostics";
@@ -653,6 +653,7 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
     db.from("match_players").select("user_id, last_seen").gte("last_seen", new Date(Math.max(periodStart, now - 2 * 60_000)).toISOString()),
     db.from("admin_activity_exclusions").select("user_id, device_id"),
   ]);
+  const { data: seatRows } = await db.from("match_players").select("user_id, joined_at").gte("joined_at", sinceStats).limit(10000);
   if (exclusions.error) throw exclusions.error;
   // Visit/local-game reports are read in full pages so busy diagnostics can never crowd them out.
   const visitRows: ActivityEvent[] = [];
@@ -669,9 +670,13 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
   const allActivity = adminActivityEvents([...ev, ...visitRows] as typeof ev, exclusions.data ?? []);
   const appUsers = appPlayerIds(allActivity, sinceStats);
   const activeAppUsers = appPlayerIds(allActivity, new Date(Math.max(periodStart, now - day)).toISOString());
-  const days: { date: string; finished: number; started: number; forfeits: number; appDevices: number; iosDevices: number; androidDevices: number; appSessions: number; avgMinutes: number | null }[] = [];
+  const days: ({ date: string; finished: number; started: number; forfeits: number; appDevices: number; iosDevices: number; androidDevices: number; appSessions: number; avgMinutes: number | null; localFinished: number } & DayExtras)[] = [];
   const reportDays = adminReportingDays(now, periodStart);
   const byDay = activityByDay(adminActivityEvents(visitRows as (ActivityEvent & { user_id: string | null })[], exclusions.data ?? []), reportDays);
+  const extras = extrasByDay(
+    adminActivityEvents([...ev.filter((e) => e.created_at >= sinceStats && e.kind !== "local_game"), ...visitRows] as ExtraEvent[], exclusions.data ?? []) as ExtraEvent[],
+    (seatRows ?? []) as { user_id: string; joined_at: string }[],
+    new Map((profiles.data ?? []).map((p) => [p.id, p.created_at])), reportDays);
   for (const d of reportDays) {
     const dayEv = activity.filter((e) => stockholmDate(e.created_at) === d && e.created_at >= sinceStats);
     const a = byDay.get(d)!;
@@ -685,6 +690,9 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
       appDevices: a.appDevices,
       iosDevices: a.iosDevices,
       androidDevices: a.androidDevices,
+      ...extras.get(d)!,
+      onlineFinished: dayEv.filter((e) => e.kind === "match_finished").length,
+      localFinished: a.localFinished,
     });
   }
   // Keep existing identities/results intact; the player cohort restarts at the reset.
