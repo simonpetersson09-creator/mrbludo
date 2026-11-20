@@ -13,12 +13,15 @@
 import { execFileSync } from "child_process";
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "fs";
 import { dirname, join, resolve } from "path";
+import { adaptiveIconArgs, ADAPTIVE_EDGE_BG } from "./android-icon-layout.mjs";
 
 const ROOT = process.cwd();
 const MASTER = join(ROOT, "resources", "icon.png");
 const ANDROID_RES = join(ROOT, "resources", "android", "res");
 const IOS = join(ROOT, "resources", "ios");
 const PUBLIC = join(ROOT, "public");
+const ANDROID_MASTER = join(ROOT, "resources", "android", "icon.png");
+const androidSource = existsSync(ANDROID_MASTER) ? ANDROID_MASTER : MASTER;
 const BG = "#06262B"; // Ludo dark teal
 
 const run = (args) => execFileSync("magick", args, { stdio: "inherit" });
@@ -41,28 +44,39 @@ function splash(out, w, h) {
   run(["-size", `${w}x${h}`, `xc:${BG}`, "(", MASTER, "-resize", `${s}x${s}`, ")", "-gravity", "center", "-composite", "-alpha", "off", "-depth", "8", out]);
 }
 
-const source = process.argv[2];
+const source = process.argv.slice(2).find((a) => !a.startsWith("--"));
 if (source) {
   mkdirSync(dirname(MASTER), { recursive: true });
   run([resolve(ROOT, source), "-colorspace", "sRGB", "-resize", "1024x1024!", "-alpha", "off", MASTER]);
 }
 if (!existsSync(MASTER)) { console.error("[icons] resources/icon.png missing."); process.exit(1); }
 
+// Targeted regeneration must not rewrite iOS, web icons or splash assets.
+if (process.argv.includes("--android-adaptive-only")) {
+  for (const [dpi, scale] of [["mdpi", 1], ["hdpi", 1.5], ["xhdpi", 2], ["xxhdpi", 3], ["xxxhdpi", 4]]) {
+    const out = join(ANDROID_RES, `mipmap-${dpi}`, "ic_launcher_foreground.png");
+    mkdirSync(dirname(out), { recursive: true });
+    run(adaptiveIconArgs(androidSource, out, scale));
+  }
+  console.log("[icons] Android adaptive foregrounds regenerated only.");
+  process.exit(0);
+}
+
 // Android
 rmSync(ANDROID_RES, { recursive: true, force: true });
 const DENSITIES = [["mdpi", 48, 1], ["hdpi", 72, 1.5], ["xhdpi", 96, 2], ["xxhdpi", 144, 3], ["xxxhdpi", 192, 4]];
 for (const [dpi, size, scale] of DENSITIES) {
   const dir = join(ANDROID_RES, `mipmap-${dpi}`);
-  render(MASTER, join(dir, "ic_launcher.png"), size);
-  render(MASTER, join(dir, "ic_launcher_round.png"), size, { circle: true, alpha: true });
-  render(MASTER, join(dir, "ic_launcher_foreground.png"), Math.round(size * 2.25), { alpha: true });
+  render(androidSource, join(dir, "ic_launcher.png"), size);
+  render(androidSource, join(dir, "ic_launcher_round.png"), size, { circle: true, alpha: true });
+  run(adaptiveIconArgs(androidSource, join(dir, "ic_launcher_foreground.png"), scale));
   splash(join(ANDROID_RES, `drawable-port-${dpi}`, "splash.png"), Math.round(320 * scale), Math.round(480 * scale));
   splash(join(ANDROID_RES, `drawable-land-${dpi}`, "splash.png"), Math.round(480 * scale), Math.round(320 * scale));
 }
 splash(join(ANDROID_RES, "drawable", "splash.png"), 480, 320);
 mkdirSync(join(ANDROID_RES, "values"), { recursive: true });
 writeFileSync(join(ANDROID_RES, "values", "ic_launcher_background.xml"),
-  `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">${BG}</color>\n</resources>\n`);
+  `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n    <color name="ic_launcher_background">${ADAPTIVE_EDGE_BG}</color>\n</resources>\n`);
 
 // iOS icons (same table as Yatzy)
 const SET = join(IOS, "AppIcon.appiconset");
