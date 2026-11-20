@@ -64,8 +64,8 @@ try {
   } else if (["sync", "open", "build"].includes(action) && ["ios", "android"].includes(platform)) {
     if (!existsSync("dist-native/index.html")) throw new Error("Run bun run native:web before sync or build");
     const patches = platform === "ios"
-      ? ["patch-admob-rewarded.js ios", "patch-admob-consent.js ios", "patch-admob-app-open.js", "patch-admob-privacy-cache.js ios", "patch-admob-fullscreen-loads.js ios", "patch-admob-ios-diagnostics.js", "patch-admob-ios-consent-lifecycle.js", "patch-admob-ios-app-open-generation.js"]
-      : ["patch-admob-rewarded.js android", "patch-admob-consent.js android", "patch-admob-privacy-cache.js android", "patch-admob-fullscreen-loads.js android", "patch-admob-app-open-android.js"];
+      ? ["patch-admob-rewarded.js ios", "patch-admob-consent.js ios", "patch-admob-app-open.js", "patch-admob-privacy-cache.js ios", "patch-admob-fullscreen-loads.js ios", "patch-admob-ios-diagnostics.js", "patch-admob-ios-consent-lifecycle.js", "patch-admob-ios-app-open-generation.js", "patch-admob-load-diagnostics.js ios"]
+      : ["patch-admob-rewarded.js android", "patch-admob-consent.js android", "patch-admob-privacy-cache.js android", "patch-admob-fullscreen-loads.js android", "patch-admob-app-open-android.js", "patch-admob-load-diagnostics.js android"];
     for (const p of patches) { const [file, ...args] = p.split(" "); run("node", [`scripts/${file}`, ...args]); }
     run("node", ["scripts/verify-admob-patches.js", platform]);
     run("bunx", ["cap", "sync", platform]);

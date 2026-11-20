@@ -910,7 +910,7 @@ export async function showOptionalRewarded(options: { waitForCompletion?: boolea
 /** Laddas annonsen inte inom denna tid (12 s) visas den inte alls denna start. */
 const APP_OPEN_LOAD_TIMEOUT_MS = 12_000;
 /** One minute avoids burst retries without a timer or changing presentation eligibility. iOS only. */
-export const APP_OPEN_NO_FILL_RETRY_MS = 60_000;
+export const APP_OPEN_NO_FILL_RETRY_MS = 20_000;
 export type AppOpenLoadSource = 'startup' | 'resume' | 'background' | 'preload' | 'after_presentation';
 let appOpenRetryAfter = 0;
 

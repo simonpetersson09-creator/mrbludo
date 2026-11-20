@@ -13,6 +13,12 @@ const ios = 'ios/Sources/AdMobPlugin/';
 const rewardedAndroid = 'android/src/main/java/com/getcapacitor/community/admob/rewarded/';
 const checks = {
   ios: [
+    ...['Banner/BannerExecutor.swift', 'Interstitial/AdInterstitialExecutor.swift'].map(file => [ios + file, [
+      ['MRB_AD_LOAD_DIAGNOSTICS', 'strukturerad annonsladdningsdiagnostik'],
+      ['"adLoadDiagnostic"', 'annonsdiagnostikhändelse'],
+      ['GADErrorUserInfoKeyResponseInfo', 'SDK-svarsinformation'],
+      ['reportLoadFailure(error, kind:', 'SDK-felkoppling'],
+    ]]),
     [ios + 'AdMobPlugin.swift', [
       ['CAPPluginMethod(name: "noteAppOpenDiagnostic", returnType: CAPPluginReturnPromise)', 'registrering av noteAppOpenDiagnostic'],
       ['@objc func noteAppOpenDiagnostic(_ call: CAPPluginCall)', 'implementation av noteAppOpenDiagnostic'],
@@ -49,8 +55,8 @@ const checks = {
       ['guard !self.privacyInvalidated else { invalidated(); return }', 'App Open SDK-/svarsgräns'],
       ['adDidRecordImpression', 'verklig App Open impression'],
       ['diagnostic("load_requested")', 'native App Open laddningsgräns'],
-      ['MRB_APP_OPEN_EXPIRY', "appstartsannonsens 4-timmarsutgång (patch-admob-app-open.js)"],
-      ['maxAdAge', '4-timmarsgräns för sparad appstartsannons'],
+      ['MRB_APP_OPEN_EXPIRY', "appstartsannonsens 45-minutersutgång (patch-admob-app-open.js)"],
+      ['private let maxAdAge: TimeInterval = 45 * 60', '45-minutersgräns för sparad appstartsannons'],
       ['discardExpiredAd', 'rensning av för gammal appstartsannons'],
       ['MRB_APP_OPEN_DIAGNOSTICS_V2', 'App Open livscykeldiagnostik V2'],
       ['"load_no_fill"', 'App Open no-fill klassificering'],
@@ -58,6 +64,12 @@ const checks = {
     ]],
   ],
   android: [
+    ...['banner/BannerExecutor.java', 'interstitial/AdInterstitialExecutor.java'].map(file => ['android/src/main/java/com/getcapacitor/community/admob/' + file, [
+      ['MRB_AD_LOAD_DIAGNOSTICS', 'strukturerad annonsladdningsdiagnostik'],
+      ['"adLoadDiagnostic"', 'annonsdiagnostikhändelse'],
+      ['getAdapterResponses()', 'SDK-svarsinformation'],
+      [file.startsWith('banner') ? 'reportLoadFailure(adError);' : 'reportLoadFailure(error);', 'SDK-felkoppling'],
+    ]]),
     ...['interstitial/AdInterstitialExecutor.java', 'rewarded/AdRewardExecutor.java'].map(file => ['android/src/main/java/com/getcapacitor/community/admob/' + file, [
       ['public void discardPrivacyCache()', 'cacherensning för helskärmsannons'],
       ['MRB_FULLSCREEN_LOAD_OWNER', 'SDK-laddningsägarskap'],
@@ -77,11 +89,11 @@ const checks = {
       ['public void discardPrivacyCaches(final PluginCall call)', 'implementation av discardPrivacyCaches'],
     ]],
     ['android/src/main/java/com/getcapacitor/community/admob/appopen/AppOpenAdManager.kt', [
-      ['MRB_APP_OPEN_EXPIRY', "appstartsannonsens 4-timmarsutgång (patch-admob-app-open-android.js)"],
-      ['maxAdAgeMs', '4-timmarsgräns för sparad appstartsannons'],
+      ['MRB_APP_OPEN_EXPIRY', "appstartsannonsens 45-minutersutgång (patch-admob-app-open-android.js)"],
+      ['maxAdAgeMs', '45-minutersgräns för sparad appstartsannons'],
       ['discardExpiredAd', 'rensning av för gammal appstartsannons'],
       ['age >= maxAdAgeMs', 'exakt utgångsvillkor'],
-      ['4L * 60L * 60L * 1000L', 'exakt fyratimmarsgräns'],
+      ['45L * 60L * 1000L', 'exakt 45-minutersgräns'],
       ['discardExpiredAd()\n        if (appOpenAd != null)', 'utgång före återbruk'],
       ['discardExpiredAd()\n        if (appOpenAd == null || isShowingAd)', 'utgång före presentation'],
       ['discardExpiredAd()\n            return appOpenAd != null', 'utgång före statusläsning'],
