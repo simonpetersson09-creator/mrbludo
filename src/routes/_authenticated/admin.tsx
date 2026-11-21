@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { adminOverview, adminTestPush } from "@/lib/online/online.functions";
+import { adminOverview } from "@/lib/online/online.functions";
 import { useTranslation } from "@/lib/i18n";
 import AdminAnalytics from "@/components/admin/AdminAnalytics";
-import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -46,7 +45,6 @@ function AdminPage() {
           <div className="grid grid-cols-3 gap-[7px]">
             {([["adminPlayers", d.totals.players], ["adminInMatch", d.totals.activeNow], ["adminActive24", d.totals.active24h], ["adminPlaying", d.totals.playing], ["adminWaiting", d.totals.waiting], ["adminFinished30", d.totals.finished30], ["adminRetD1", d.retention.d1], ["adminRetD7", d.retention.d7], ["adminRetD30", d.retention.d30]] as const).map(([label, value]) => <div key={label} className="py-2 text-center"><p className="text-lg font-bold text-gold">{value ?? "—"}</p><p className="text-xs text-muted-foreground">{t(label)}</p></div>)}
           </div>
-          <PushTest />
           <p className="mt-3 text-xs text-muted-foreground">{t("adminChartDevices")} · {t("adminChartMinutes")} · {t("adminChartMinutesNote")}</p>
           <details><summary className="cursor-pointer">{t("adminSessions")}</summary>
           <h2 className="mt-5 font-display text-lg font-bold">{t("last30Days")}</h2>
@@ -63,29 +61,5 @@ function AdminPage() {
         </>)}
       </div>
     </main>
-  );
-}
-
-/** Admin-only: sends a test notification to this admin's own registered iPhone(s). */
-function PushTest() {
-  const { t } = useTranslation();
-  const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
-  const send = async () => {
-    setBusy(true); setMsg(null);
-    try {
-      const r = await adminTestPush();
-      if (!r.configured) setMsg(t("adminPushOff"));
-      else if (!r.devices) setMsg(t("adminPushNone"));
-      else setMsg([t("adminPushSent", { sent: r.sent, devices: r.devices }), ...(r.reasons.length ? [t("adminPushFailed", { reason: r.reasons.join(", ") })] : [])].join(" "));
-    } catch { setMsg(t("noAdmin")); }
-    setBusy(false);
-  };
-  return (
-    <section className="mt-5">
-      <h2 className="font-display text-lg font-bold">{t("adminPushTitle")}</h2>
-      <Button className="mt-2" disabled={busy} onClick={send}>{t("adminPushSend")}</Button>
-      {msg && <p className="mt-2 text-xs text-muted-foreground">{msg}</p>}
-    </section>
   );
 }
