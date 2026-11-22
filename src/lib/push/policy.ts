@@ -8,7 +8,12 @@ export const isWatching = (lastSeenIso: string | null | undefined, nowMs: number
 /** The human whose turn just began, or null (same player rolls again, bot, finished, gave up). */
 export function turnRecipient(prev: GameState, next: GameState): string | null {
   if (next.phase === "finished") return null;
-  if (prev.phase === next.phase && prev.current === next.current && prev.turnCount === next.turnCount) return null;
+  if (
+    prev.phase === next.phase &&
+    prev.current === next.current &&
+    prev.turnCount === next.turnCount
+  )
+    return null;
   const p = next.players[next.current];
   if (!p || p.isBot || p.forfeited || p.id.startsWith("bot:")) return null;
   return p.id;
@@ -23,8 +28,10 @@ export const pushKey = {
   joined: (matchId: string, uid: string) => `joined:${matchId}:${uid}`,
   gaveUp: (matchId: string, leaver: string, to: string) => `gaveup:${matchId}:${leaver}:${to}`,
   /** At most one reminder per player and match in each 6-hour window. */
-  remind: (matchId: string, uid: string, nowMs: number) => `remind:${matchId}:${uid}:${Math.floor(nowMs / REMIND_EVERY_MS)}`,
-  weekly: (uid: string, nowMs: number) => `weekly:${uid}:${new Date(nowMs).toISOString().slice(0, 10)}`,
+  remind: (matchId: string, uid: string, nowMs: number) =>
+    `remind:${matchId}:${uid}:${Math.floor(nowMs / REMIND_EVERY_MS)}`,
+  weekly: (uid: string, nowMs: number) =>
+    `weekly:${uid}:${new Date(nowMs).toISOString().slice(0, 10)}`,
 };
 
 /** A paused friend match reminds the player whose turn it is after 30 minutes, then every 6 hours at most. */
@@ -32,7 +39,11 @@ export const REMIND_AFTER_MS = 30 * 60_000;
 export const REMIND_EVERY_MS = 6 * 3_600_000;
 
 /** The human who should get a "your turn is waiting" reminder, or null. */
-export function remindRecipient(state: GameState, turnStartedIso: string | null, nowMs: number): string | null {
+export function remindRecipient(
+  state: GameState,
+  turnStartedIso: string | null,
+  nowMs: number,
+): string | null {
   if (state.phase === "finished" || !turnStartedIso) return null;
   if (nowMs - new Date(turnStartedIso).getTime() < REMIND_AFTER_MS) return null;
   const p = state.players[state.current];
@@ -43,24 +54,36 @@ export function remindRecipient(state: GameState, turnStartedIso: string | null,
 /** Humans still in the match who should hear that `leaver` gave up (none if the seat went to a computer). */
 export function gaveUpRecipients(next: GameState, leaver: string): string[] {
   if (!next.players.find((p) => p.id === leaver)?.forfeited) return [];
-  return next.players.filter((p) => p.id !== leaver && !p.isBot && !p.forfeited && !p.id.startsWith("bot:")).map((p) => p.id);
+  return next.players
+    .filter((p) => p.id !== leaver && !p.isBot && !p.forfeited && !p.id.startsWith("bot:"))
+    .map((p) => p.id);
 }
 
 /** Where a tapped notification may lead. Anything else opens the home screen. */
 export function safePushPath(raw: unknown): string | null {
   if (typeof raw !== "string") return null;
   if (raw === "/online" || raw === "/friends") return raw;
-  if (/^\/online\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(raw)) return raw;
+  if (/^\/online\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(raw))
+    return raw;
   return null;
 }
 
 /** APNs device tokens are hex (64 today, Apple allows longer); FCM tokens are long URL-safe strings with ':'. */
-export function pushTokenInput(d: { token: unknown; locale?: unknown; platform?: unknown }, isLanguage: (v: string) => boolean) {
+export function pushTokenInput(
+  d: { token: unknown; locale?: unknown; platform?: unknown },
+  isLanguage: (v: string) => boolean,
+) {
   const platform: "ios" | "android" = d?.platform === "android" ? "android" : "ios";
   const raw = String(d?.token ?? "").trim();
   const token = platform === "ios" ? raw.toLowerCase() : raw;
-  const ok = platform === "ios" ? /^[0-9a-f]{64,200}$/.test(token) : /^[A-Za-z0-9_:-]{100,4096}$/.test(token);
+  const ok =
+    platform === "ios"
+      ? /^[0-9a-f]{64,200}$/.test(token)
+      : /^[A-Za-z0-9_:-]{100,4096}$/.test(token);
   if (!ok) throw new Error("err:bad_action");
   const locale = typeof d?.locale === "string" && isLanguage(d.locale) ? d.locale : "sv";
   return { token, locale, platform };
 }
+
+/** Push is on hold by owner decision: no notifications are sent until this is switched back on. */
+export const PUSH_PAUSED = true;
