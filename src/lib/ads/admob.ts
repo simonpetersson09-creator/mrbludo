@@ -456,6 +456,45 @@ export function ensureTrackingAuthorization(mod: AdMobModule): Promise<void> {
   return trackingAsked;
 }
 
+/** Resolves when the app is in the foreground (ATT is ignored by iOS otherwise). */
+async function whenAppActive(): Promise<void> {
+  try {
+    const { App } = await import('@capacitor/app');
+    const { isActive } = await App.getState();
+    if (isActive) return;
+    await new Promise<void>(resolve => {
+      let handle: { remove: () => Promise<void> } | undefined;
+      void App.addListener('appStateChange', ({ isActive: a }) => {
+        if (a) { void handle?.remove(); resolve(); }
+      }).then(h => { handle = h; });
+    });
+  } catch { /* plugin missing: fall through */ }
+}
+
+let startupPrivacyAsked = false;
+/**
+ * Fresh installs must see Google's consent form and then Apple's ATT prompt on
+ * first launch (App Review 2.1), independent of any ad opportunity. Only asks;
+ * never loads or shows an ad. Retries on the next activation if iOS returned
+ * without settling (e.g. app not yet active).
+ */
+export async function requestStartupPrivacy(): Promise<void> {
+  if (startupPrivacyAsked || !isAdMobAvailable()) return;
+  startupPrivacyAsked = true;
+  await whenAppActive();
+  try { await ensureInitialized(); } catch { /* ads stay off; gameplay unaffected */ }
+  if (adPlatform() === 'ios' && !trackingSettled) {
+    try {
+      const { App } = await import('@capacitor/app');
+      const h = await App.addListener('appStateChange', ({ isActive }) => {
+        if (!isActive || trackingSettled) return;
+        void h.remove();
+        void ensureInitialized().catch(() => {});
+      });
+    } catch { /* best effort */ }
+  }
+}
+
 async function ensureInitialized(): Promise<AdMobModule> {
   const generation = adGeneration;
   if (!adAllowed(generation)) throw new Error('privacy_transition');

@@ -4,7 +4,7 @@
  * - return: only when away ≥ 40 s and back on Home; not ready → skipped, never deferred;
  * - leaving Home or backgrounding invalidates the pending opportunity.
  */
-import { isAdMobAvailable, preloadAppOpenAd, showAppOpenAd, trackAdOpportunity } from "./admob";
+import { isAdMobAvailable, preloadAppOpenAd, requestStartupPrivacy, showAppOpenAd, trackAdOpportunity } from "./admob";
 import { trackEvent } from "./analytics";
 
 export const RESUME_AD_MIN_AWAY_MS = 40_000;
@@ -50,6 +50,8 @@ export function startHomeAds(): () => void {
   let cancelled = false;
   let timer: ReturnType<typeof setTimeout> | undefined;
   if (!startupAdChecked) {
+    // Consent + ATT on every cold start, before and independent of any ad rule.
+    void requestStartupPrivacy();
     void preloadAppOpenAd("startup");
     timer = setTimeout(async () => {
       if (startupAdChecked) return;
