@@ -53,7 +53,8 @@ export default {
       if (gated) return gated;
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return allowAdminFraming(request, normalized);
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
@@ -63,3 +64,16 @@ export default {
     }
   },
 };
+
+/** MrB. Admin hub embeds /admin in an iframe on another domain. */
+function allowAdminFraming(request: Request, response: Response): Response {
+  if (new URL(request.url).pathname !== "/admin") return response;
+  const headers = new Headers(response.headers);
+  headers.delete("X-Frame-Options");
+  headers.set("Content-Security-Policy", "frame-ancestors *");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}

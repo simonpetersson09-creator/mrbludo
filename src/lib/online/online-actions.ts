@@ -1309,6 +1309,11 @@ export const adminOverviewAction = async ({ context }: { context: OnlineContext 
     _role: "admin",
   });
   if (!isAdmin) throw new Error("err:forbidden");
+  return adminOverviewData();
+};
+
+/** Overview figures; callers must authorize first (admin role or a verified hub token). */
+export const adminOverviewData = async () => {
   const db = await admin();
   const day = 86_400_000;
   const now = Date.now();

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { adminOverview } from "@/lib/online/online.functions";
+import { adminOverview, adminOverviewHub } from "@/lib/online/online.functions";
 import { useTranslation } from "@/lib/i18n";
 import AdminAnalytics from "@/components/admin/AdminAnalytics";
 
@@ -26,11 +26,19 @@ function AdminPage() {
   const [d, setD] = useState<Data | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  // Hub token lives only in memory (iframes may block cookies/storage).
+  const [hubToken] = useState(() =>
+    typeof window === "undefined"
+      ? null
+      : new URLSearchParams(window.location.search).get("hub_token"),
+  );
   const load = async () => {
     setLoading(true);
     setErr(null);
     try {
-      setD(await adminOverview());
+      setD(
+        hubToken ? await adminOverviewHub({ data: { token: hubToken } }) : await adminOverview(),
+      );
     } catch {
       setErr("noAdmin");
     } finally {
@@ -49,9 +57,11 @@ function AdminPage() {
         {err && (
           <>
             <p className="text-sm text-destructive">{t("noAdmin")}</p>
-            <Link to="/admin-login" className="home-action">
-              {t("signIn")}
-            </Link>
+            {!hubToken && (
+              <Link to="/admin-login" className="home-action">
+                {t("signIn")}
+              </Link>
+            )}
           </>
         )}
         {!d && !err && <p className="text-sm text-muted-foreground">{t("loading")}</p>}

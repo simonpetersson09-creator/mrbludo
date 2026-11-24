@@ -50,3 +50,4 @@
 - A shared match code lives 6 hours (`CODE_TTL_MS`/`codeExpired` in `src/lib/online/match-logic.ts`): joining with a dead code closes the waiting match as abandoned instead of letting it sit open forever.
 - DB integration tests (`*.db.test.ts`, `bun run test:db`) run only on a throwaway local PostgreSQL+PostgREST; config aliases swap the server client/push and a fetch guard blocks non-local calls (module mocks leaked to the live backend).
 - Admin activity (Yatzy-style): durable device number, per-visit heartbeats, `local_game` reports, Stockholm days in pure `activity-stats.ts`.
+- MrB. Admin hub access: `/admin?hub_token=` is verified server-side on every admin call via `src/lib/admin/hub-token.ts` (HMAC with HUB_SHARED_SECRET), kept only in memory because cross-site iframes may block cookies; `/admin` responses allow framing.
