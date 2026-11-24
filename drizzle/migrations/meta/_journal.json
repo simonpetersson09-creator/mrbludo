@@ -148,6 +148,13 @@
       "when": 1794142844901,
       "tag": "0020_monthly_leaderboard_fresh_start",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1795529606753,
+      "tag": "0021_migration",
+      "breakpoints": true
     }
   ]
 }

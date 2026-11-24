@@ -1237,7 +1237,11 @@ export const getLeaderboardAction = async ({
     .order(data.sort, { ascending: false })
     .order("played")
     .limit(data.sort === "played" ? 200 : 50);
+  // Admin-marked test players never appear on leaderboards.
+  const { data: testers } = await db.from("admin_activity_exclusions").select("user_id");
+  const hidden = new Set((testers ?? []).map((x) => x.user_id));
   const done = (raw ?? [])
+    .filter((r) => !hidden.has(r.user_id))
     .map((r) => ({ ...r, played: Math.max(0, r.played - r.forfeits) }))
     .filter((r) => r.played > 0);
   if (data.sort === "played") done.sort((a, b) => b.played - a.played);
