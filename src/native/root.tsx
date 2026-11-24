@@ -16,6 +16,7 @@ import { supabase } from "@/lib/auth/client";
 import { startNativeRuntime, RESUME_EVENT } from "@/lib/native/runtime";
 import { installViewportSync } from "@/lib/native/viewport";
 import { nativeDiagnostic } from "@/lib/native/diagnostics";
+import { requestStartupPrivacy } from "@/lib/ads/admob";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({ component: NativeRoot });
 function NativeRoot() {
@@ -27,6 +28,8 @@ function NativeRoot() {
     const viewportCleanup = installViewportSync();
     nativeDiagnostic("startup", "ready");
     preloadDie();
+    // Consent + ATT on every cold start, whichever screen the app opens on (App Review 2.1).
+    window.setTimeout(() => void requestStartupPrivacy(), 1000);
     const activity = startActivityTracking();
     const deviceReady = initDeviceId();
     const connect = () => {
