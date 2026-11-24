@@ -51,4 +51,4 @@
 - DB integration tests (`*.db.test.ts`, `bun run test:db`) run only on a throwaway local PostgreSQL+PostgREST; config aliases swap the server client/push and a fetch guard blocks non-local calls (module mocks leaked to the live backend).
 - Admin activity (Yatzy-style): durable device number, per-visit heartbeats, `local_game` reports, Stockholm days in pure `activity-stats.ts`.
 - `/admin?hub_token=` (MrB. Admin iframe) is HMAC-verified server-side per call (`src/lib/admin/hub-token.ts`), held in memory since iframes may block cookies; `/admin` allows framing.
-- Test builds mark themselves: native `BuildChannel` plugin (iOS sandbox receipt/DEBUG, Android BuildConfig.DEBUG) adds `ch:"test"` to visit reports, and the server adds the caller to `admin_activity_exclusions` (add-only, never removed by the app).
+- Native `BuildChannel` (TestFlight/debug) tags visits `ch:"test"`; server add-only inserts caller into `admin_activity_exclusions`.
