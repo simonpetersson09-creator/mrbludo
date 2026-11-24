@@ -8,6 +8,7 @@ import { randomId } from "@/lib/random-id";
 import { logEvent } from "./online.functions";
 import { deviceId, platform } from "./telemetry";
 import { appVersion } from "./report";
+import { buildChannel } from "./build-channel";
 
 export const HEARTBEAT_MS = 60_000;
 export const NEW_VISIT_AFTER_MS = 30 * 60_000;
@@ -23,8 +24,8 @@ export function startActivityTracking() {
   const seconds = () => Math.min(MAX_SECONDS, Math.round((activeMs + (visibleSince ? Date.now() - visibleSince : 0)) / 1000));
   const send = async (kind: "session" | "heartbeat" | "session_end") => {
     if (!sid) return;
-    const v = await appVersion();
-    await logEvent({ data: { kind, deviceId: deviceId(), platform: platform(), detail: { sid, seconds: seconds(), v } } });
+    const [v, ch] = await Promise.all([appVersion(), buildChannel()]);
+    await logEvent({ data: { kind, deviceId: deviceId(), platform: platform(), detail: { sid, seconds: seconds(), v, ...(ch ? { ch } : {}) } } });
   };
   const begin = () => { sid = randomId(); activeMs = 0; visibleSince = Date.now(); started = false; };
   const sendStart = () => { if (started || !sid) return; send("session").then(() => { started = true; }).catch(() => {}); };

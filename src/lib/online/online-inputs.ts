@@ -64,7 +64,8 @@ export const logEventInput = (d: { kind: string; deviceId?: string; platform?: s
       const secs = Math.round(Number(raw["seconds"]));
       if (kind === "session_end" && !(secs >= 5 && secs <= 4 * 3600)) throw new Error("err:missing");
       const sid = typeof raw["sid"] === "string" && /^[A-Za-z0-9-]{1,40}$/.test(raw["sid"]) ? { sid: raw["sid"] } : {};
-      detail = { ...sid, ...(Number.isFinite(secs) && secs >= 0 ? { seconds: Math.min(secs, 4 * 3600) } : {}), ...v };
+      const ch = raw["ch"] === "test" || raw["ch"] === "store" ? { ch: raw["ch"] } : {};
+      detail = { ...sid, ...ch, ...(Number.isFinite(secs) && secs >= 0 ? { seconds: Math.min(secs, 4 * 3600) } : {}), ...v };
     } else if (kind === "local_game") {
       const int = (x: unknown, max: number) => (Number.isInteger(x) && (x as number) >= 0 && (x as number) <= max ? (x as number) : 0);
       detail = { phase: raw["phase"] === "finish" ? "finish" : "start", variant: raw["variant"] === "fia" ? "fia" : "classic", humans: int(raw["humans"], 4), bots: int(raw["bots"], 4), ...v };

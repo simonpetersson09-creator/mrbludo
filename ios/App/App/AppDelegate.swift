@@ -51,3 +51,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return config
     }
 }
+
+/// Reports whether this is a TestFlight or Xcode build (sandbox receipt / debug), so admin statistics can skip it.
+@objc(BuildChannelPlugin)
+public class BuildChannelPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "BuildChannelPlugin"
+    public let jsName = "BuildChannel"
+    public let pluginMethods: [CAPPluginMethod] = [CAPPluginMethod(name: "get", returnType: CAPPluginReturnPromise)]
+    @objc func get(_ call: CAPPluginCall) {
+        #if DEBUG
+        let test = true
+        #else
+        let test = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        #endif
+        call.resolve(["channel": test ? "test" : "store"])
+    }
+}
+
+class MainViewController: CAPBridgeViewController {
+    override open func capacitorDidLoad() {
+        bridge?.registerPluginInstance(BuildChannelPlugin())
+    }
+}

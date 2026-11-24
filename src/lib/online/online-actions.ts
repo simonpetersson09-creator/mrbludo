@@ -1,3 +1,4 @@
+import { isTestBuildReport } from "./build-channel";
 import {
   updateProfileInput,
   createMatchInput,
@@ -1269,6 +1270,10 @@ export const logEventAction = async ({
     platform: data.platform,
     detail: data.detail,
   });
+  if (isTestBuildReport(data)) {
+    // TestFlight/developer builds mark themselves once; the app can never remove a mark.
+    await db.from("admin_activity_exclusions").upsert({ user_id: context.userId, device_id: data.deviceId }, { onConflict: "user_id", ignoreDuplicates: true });
+  }
   return { ok: true };
 };
 export const adminAdDiagnosticsAction = async ({ context }: { context: OnlineContext }) => {
