@@ -33,3 +33,9 @@ it("does not turn a download-page visitor into a player", () => {
   expect(isDownloadOnlyVisitor({ hostname: "mrbludo.lovable.app", isNative: true })).toBe(false);
   expect(isPreviewHost("localhost")).toBe(true);
 });
+
+it("never sends server function calls to the download page, but still gates the game", () => {
+  const hostname = "mrbludo.lovable.app";
+  expect(webPlayBlocked({ hostname, pathname: "/_serverFn/abc" })).toBe(false);
+  expect(webPlayBlocked({ hostname, pathname: "/" })).toBe(true);
+});
