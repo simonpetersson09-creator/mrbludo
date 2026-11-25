@@ -50,3 +50,10 @@ test("players, returning and new players per day", () => {
   const r = extrasByDay(ev, [], new Map([["ua", "2026-11-17T12:00:00Z"]]), ["2026-11-18", "2026-11-19"]).get("2026-11-19")!;
   expect([r.played, r.returning, r.newPlayers, r.issues, r.avgAppAge]).toEqual([2, 1, 1, 1, 2]);
 });
+
+import { isPushError as _isPushError } from "./activity-stats";
+import { test as _t, expect as _e } from "vitest";
+_t("push plugin errors are not admin problem events", () => {
+  _e(_isPushError({ message: 'Error: "PushNotifications.then()" is not implemented on android' })).toBe(true);
+  _e(_isPushError({ message: "TypeError: x is undefined" })).toBe(false);
+});

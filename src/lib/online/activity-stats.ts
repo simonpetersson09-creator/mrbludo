@@ -118,11 +118,17 @@ export function extrasByDay(
       returning: [...today].filter((k) => yesterday.has(k)).length,
       newPlayers: [...today].filter((k) => firstPlay.get(k) === day).length,
       avgAppAge: ages.length ? Math.round((ages.reduce((a, b) => a + b, 0) / ages.length) * 10) / 10 : null,
-      issues: dayEv.filter((e) => e.kind === "error" && versions.includes(String((det(e) as { v?: unknown }).v))).length,
+      issues: dayEv.filter((e) => e.kind === "error" && !isPushError(det(e)) && versions.includes(String((det(e) as { v?: unknown }).v))).length,
       postShown: post.filter((e) => pd(e).result === "shown").length,
       postOpportunities: new Set(post.filter((e) => pd(e).result === "clicked" && pd(e).completed === true).map((e) => String(pd(e).matchKey))).size,
       onlineFinished: 0,
     });
   }
   return out;
+}
+
+/** Push is on hold: its plugin errors are not counted as admin problem events. */
+export function isPushError(detail: unknown): boolean {
+  const d = (detail ?? {}) as { message?: unknown; stack?: unknown };
+  return /pushnotification/i.test(`${String(d.message ?? "")} ${String(d.stack ?? "")}`);
 }

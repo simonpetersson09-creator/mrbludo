@@ -40,6 +40,7 @@ import {
   activityByDay,
   extrasByDay,
   stockholmDate,
+  isPushError,
   type ActivityEvent,
   type DayExtras,
   type ExtraEvent,
@@ -1490,7 +1491,7 @@ export const adminOverviewData = async () => {
       .slice(0, 30)
       .map((e) => ({ at: e.created_at, detail: e.detail })),
     errors: ev
-      .filter((e) => e.kind === "error")
+      .filter((e) => e.kind === "error" && !isPushError(e.detail))
       .slice(0, 30)
       .map((e) => ({ at: e.created_at, platform: e.platform, detail: e.detail })),
     ads: ev
