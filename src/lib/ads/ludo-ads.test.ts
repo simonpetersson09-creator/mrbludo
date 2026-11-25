@@ -37,8 +37,8 @@ describe("Mr. B Ludo ad configuration", () => {
   it("puts Ludo's App ID in Info.plist", () => {
     expect(readFileSync("ios/App/App/Info.plist", "utf8")).toContain("ca-app-pub-7448540924654868~5267706252");
   });
-  it("shows the return ad only after 40 seconds away", async () => {
+  it("shows the return ad only after 20 seconds away", async () => {
     const { RESUME_AD_MIN_AWAY_MS } = await import("./home-ads");
-    expect(RESUME_AD_MIN_AWAY_MS).toBe(40_000);
+    expect(RESUME_AD_MIN_AWAY_MS).toBe(20_000);
   });
 });

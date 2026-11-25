@@ -1,13 +1,13 @@
 /**
  * Yatzy HomePage App Open rules, ported unchanged:
  * - cold start: once per launch, preload immediately, try after 1.5 s, only on Home;
- * - return: only when away ≥ 40 s and back on Home; not ready → skipped, never deferred;
+ * - return: only when away ≥ 20 s and back on Home; not ready → skipped, never deferred;
  * - leaving Home or backgrounding invalidates the pending opportunity.
  */
 import { isAdMobAvailable, preloadAppOpenAd, requestStartupPrivacy, showAppOpenAd, trackAdOpportunity } from "./admob";
 import { trackEvent } from "./analytics";
 
-export const RESUME_AD_MIN_AWAY_MS = 40_000;
+export const RESUME_AD_MIN_AWAY_MS = 20_000;
 export const STARTUP_AD_DELAY_MS = 1500;
 
 let startupAdChecked = false;
