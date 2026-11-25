@@ -13,7 +13,9 @@ const platform = (): "ios" | "android" | null => {
 };
 const isIos = () => platform() !== null;
 const ANDROID_CHANNEL = "mrb-ludo";
-const plugin = async () => (await import("@capacitor/push-notifications")).PushNotifications;
+type PushPlugin = typeof import("@capacitor/push-notifications").PushNotifications;
+/** Wrapped in an object: awaiting the Capacitor proxy itself calls its missing `.then()` and throws. */
+const loadPlugin = async (): Promise<{ Push: PushPlugin }> => ({ Push: (await import("@capacitor/push-notifications")).PushNotifications });
 
 async function sendToken(token: string) {
   try { localStorage.setItem(TOKEN_KEY, token); } catch { /* storage full */ }
@@ -33,7 +35,7 @@ export async function syncPushPrefs(): Promise<void> {
  */
 export async function startPush(navigate: (path: string) => void): Promise<() => void> {
   if (!isIos()) return () => {};
-  const Push = await plugin();
+  const { Push } = await loadPlugin();
   if (platform() === "android") {
     // Android 8+ shows notifications in a named channel; matches the server's channel_id.
     try { await Push.createChannel({ id: ANDROID_CHANNEL, name: "Mr. B Ludo", importance: 4, visibility: 1, sound: "default" }); } catch { /* exists */ }
@@ -75,7 +77,7 @@ function explainFirst(): Promise<boolean> {
 export async function askPushPermission(): Promise<void> {
   if (!isIos()) return;
   try {
-    const status = (await (await plugin()).checkPermissions()).receive;
+    const status = (await (await loadPlugin()).Push.checkPermissions()).receive;
     if ((status === "prompt" || status === "prompt-with-rationale") && !(await explainFirst())) return;
   } catch { return; }
   await requestPush();
@@ -83,7 +85,7 @@ export async function askPushPermission(): Promise<void> {
 
 async function requestPush(): Promise<void> {
   try {
-    const Push = await plugin();
+    const { Push } = await loadPlugin();
     let status = (await Push.checkPermissions()).receive;
     if (status === "prompt" || status === "prompt-with-rationale") status = (await Push.requestPermissions()).receive;
     if (status === "granted") await Push.register();
@@ -96,7 +98,7 @@ export async function forgetPushToken(): Promise<void> {
   let token: string | null = null;
   try { token = localStorage.getItem(TOKEN_KEY); localStorage.removeItem(TOKEN_KEY); } catch { /* none */ }
   if (token) { try { await unregisterPushToken({ data: { token, platform: platform() ?? "ios" } }); } catch { /* server also deletes on erase */ } }
-  try { await (await plugin()).unregister(); } catch { /* unavailable */ }
+  try { await (await loadPlugin()).Push.unregister(); } catch { /* unavailable */ }
 }
 
 export type PushPermission = "granted" | "denied" | "prompt" | "unsupported";
@@ -105,7 +107,7 @@ export type PushPermission = "granted" | "denied" | "prompt" | "unsupported";
 export async function pushPermission(): Promise<PushPermission> {
   if (!isIos()) return "unsupported";
   try {
-    const s = (await (await plugin()).checkPermissions()).receive;
+    const s = (await (await loadPlugin()).Push.checkPermissions()).receive;
     return s === "granted" ? "granted" : s === "denied" ? "denied" : "prompt";
   } catch { return "unsupported"; }
 }
